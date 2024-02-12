@@ -12,9 +12,9 @@ export default function App() {
   
   return (
     <>
-    
+    <Header title="settings"/>
     <Screen>
-      <Header title="settings"/>
+      
     
     
 
