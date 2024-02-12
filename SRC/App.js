@@ -1,13 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
+
 import { StyleSheet, Text, View } from 'react-native';
 
+import Screen from './Components/Screen';
+import NavBar from './Components/NavBar';
+import ListItem from './Components/ListItem';
+import ListItemDeleteAction from './Components/ListItemDeleteAction';
 export default function App() {
-  console.log("App Executed");
+  
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+    <Screen>
+    <ListItem
+    chatName="My chat name"
+    chatMessage="My chat message"
+    image= {require("./assets/mosh.jpg")}
+    modelName="gpt"
+    renderRightActions={ListItemDeleteAction}/>
+      
+    
+
+      
+      
+      
+    </Screen>
+   
+    <NavBar/>
+    </>
+   
+    
+    
   );
 }
 
