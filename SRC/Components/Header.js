@@ -4,23 +4,24 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import colors from '../config/colors';
 import AppText from './AppText';
 import ListItemSeparator from './ListItemSeparator';
-
-function Header({ title }) {
+{/* setting the backButton arg to anything but an empty string will result in it showing up in the header */}
+function Header({ title,backButton}) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => console.log("Back pressed")} 
+        {backButton && <TouchableOpacity onPress={() => console.log("Back pressed")} 
           style={styles.iconContainer}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+          >
           <MaterialCommunityIcons name="chevron-left" size={30} color={colors.medium} />
         </TouchableOpacity>
+        }
         
         <View style={styles.titleContainer}>
           <AppText style={styles.titleText}>{title}</AppText>
         </View>
         
         {/* Spacer View */}
-        <View style={styles.iconContainer} />
+        {backButton && <View style={styles.iconContainer} />}
       </View>
       <ListItemSeparator />
     </SafeAreaView>

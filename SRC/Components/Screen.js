@@ -6,7 +6,7 @@ function Screen({ children, style }) {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={[styles.screen, style]}>
-        <View style={style}>{children}</View>
+        {children}
       </SafeAreaView>
     </GestureHandlerRootView>
 
