@@ -6,6 +6,8 @@ import Screen from './Components/Screen';
 import TermsAndConditionsScreen from './Screens/TermsAndConditionsScreen';
 import AppText from './Components/AppText';
 import ScrollableAppText from './Components/ScrollableAppText';
+import PrivacyPolicyScreen from './Screens/PrivacyPolicyScreen';
+import AboutUsScreen from './Screens/AboutUsScreen';
 
 
 
@@ -16,7 +18,7 @@ export default function App() {
     <>
     <Header title="test"/>
     <Screen>
-    <TermsAndConditionsScreen/>
+    <AboutUsScreen/>
     </Screen>
     <NavBar/>
 
