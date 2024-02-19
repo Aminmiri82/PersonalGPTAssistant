@@ -9,7 +9,7 @@ function TermsAndConditionsScreen(props) {
     
       
       <ScrollableAppText>
-      Terms and Conditions for [Your App Name]
+      {`Terms and Conditions for [Your App Name]
 
 Welcome to [Your App Name]! These terms and conditions outline the rules and regulations for the use of [Your Company Name]'s AI chatbot application, located at [Your App's URL or App Store Location].
 
@@ -46,7 +46,7 @@ Limit any of our or your liabilities in any way that is not permitted under appl
 Exclude any of our or your liabilities that may not be excluded under applicable law.
 The limitations and prohibitions of liability set in this Section and elsewhere in this disclaimer: (a) are subject to the preceding paragraph; (b) govern all liabilities arising under the disclaimer, including liabilities arising in contract, in tort, and for breach of statutory duty.
 
-As long as the app and the information and services on the app are provided free of charge, we will not be liable for any loss or damage of any nature.
+As long as the app and the information and services on the app are provided free of charge, we will not be liable for any loss or damage of any nature.`}
       </ScrollableAppText>
 
 
