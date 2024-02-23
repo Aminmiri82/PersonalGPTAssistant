@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
 
 import Screen from "./Components/Screen";
 import NavBar from "./Components/NavBar";
@@ -11,10 +12,18 @@ import AppTextInput from "./Components/AppTextInput";
 import AssistantsMenuItem from "./Components/AssistantsMenuItem";
 import ListItem from "./Components/ListItem";
 import ListItemDeleteAction from "./Components/ListItemDeleteAction";
-import OnBoardingScreen from "./Screens/OnBoardingScreen";
+import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
 import LinearGradientScreen from "./Screens/LinearGradinetScreen";
+import testOBS from "./Screens/OBS/testOBS";
+
 export default function App() {
-  return <OnBoardingScreen />;
+  return (
+    // <NavigationContainer>
+
+    // </NavigationContainer>
+
+    <OnBoardingScreen />
+  );
 }
 
 const styles = StyleSheet.create({});
