@@ -1,8 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 
-import Screen from "./Components/Screen";
-import NavBar from "./Components/NavBar";
+import { StyleSheet, Text, View } from "react-native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Header from "./Components/Header";
@@ -25,5 +24,3 @@ export default function App() {
     <OnBoardingScreen />
   );
 }
-
-const styles = StyleSheet.create({});
