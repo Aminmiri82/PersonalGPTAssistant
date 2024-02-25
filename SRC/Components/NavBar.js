@@ -2,11 +2,12 @@ import React from 'react';
 import { View, StyleSheet,TouchableOpacity,Text,SafeAreaView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import colors from '../config/colors';
+
 function NavBar(props) {
     return (
         
         <View style={styles.navbar}>
-            <TouchableOpacity style={styles.iconWrapper}>
+            <TouchableOpacity style={styles.iconWrapper} >
               <MaterialCommunityIcons name="chat" size={35}/> 
               <Text>Chat</Text> 
             </TouchableOpacity>
