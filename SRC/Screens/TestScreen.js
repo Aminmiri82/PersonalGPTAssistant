@@ -13,7 +13,7 @@ function TestScreen(props) {
           modelName="something"
           chatMessage="hi"
           chatName="thing"
-          image={require("./assets/mosh.jpg")}
+          image={require("../assets/mosh.jpg")}
           renderRightActions={ListItemDeleteAction}
         />
       </Screen>

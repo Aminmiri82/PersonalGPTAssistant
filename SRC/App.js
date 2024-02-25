@@ -12,8 +12,10 @@ import AssistantsMenuItem from "./Components/AssistantsMenuItem";
 import ListItem from "./Components/ListItem";
 import ListItemDeleteAction from "./Components/ListItemDeleteAction";
 import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
+import TestScreen from "./Screens/TestScreen";
 export default function App() {
-  return <OnBoardingScreen />;
+  // return <OnBoardingScreen next="Next" back="Back" />;
+  <TestScreen />;
 }
 
 const styles = StyleSheet.create({});

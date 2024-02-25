@@ -5,7 +5,7 @@ import Screen from "../../Components/Screen";
 import OBST from "../../Components/OBST";
 import colors from "../../config/colors";
 
-function OnBoardingScreen(props) {
+function OnBoardingScreen({ back, next }) {
   return (
     <Screen style={styles.container}>
       <View>
@@ -31,13 +31,26 @@ function OnBoardingScreen(props) {
         </View>
       </View>
       <View style={styles.AppContainer}>
-        <AppButton
-          style={styles.AppButton}
-          color="blue"
-          title="Next"
-          icon="arrowright"
-          iconStyle={styles.icon}
-        />
+        {back && (
+          <AppButton
+            style={styles.AppButtonBack}
+            color="blue"
+            title={back}
+            icon="arrowleft"
+            iconStyle={styles.iconBack}
+            textStyle={{ flex: 1, left: 50 }}
+          />
+        )}
+        <View style={{ width: 132 }} />
+        {next && (
+          <AppButton
+            style={styles.AppButton}
+            color="blue"
+            title={next}
+            icon="arrowright"
+            iconStyle={styles.iconNext}
+          />
+        )}
       </View>
       {/* <NavBar /> */}
     </Screen>
@@ -51,10 +64,20 @@ const styles = StyleSheet.create({
     height: 55,
     backgroundColor: colors.blue,
   },
+  AppButtonBack: {
+    alignContent: "center",
+    width: 140,
+    height: 55,
+    backgroundColor: colors.blue,
+    borderRadius: 0,
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
+  },
   AppContainer: {
     position: "absolute",
     bottom: 100,
     right: 0,
+    flexDirection: "row",
   },
   circle: {
     width: 10,
@@ -78,8 +101,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  icon: {
+  iconNext: {
     left: 30,
+  },
+  iconBack: {
+    right: 70,
   },
   middle: {
     flex: 1,
