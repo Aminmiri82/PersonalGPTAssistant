@@ -1,15 +1,15 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import ScrollableAppText from '../Components/ScrollableAppText';
-import EmailLink from '../Components/EmailLink';
-import Materialcomunityicons from 'react-native-vector-icons/MaterialCommunityIcons';
-import AppText from '../Components/AppText';
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import ScrollableAppText from "../../Components/ScrollableAppText";
+import EmailLink from "../../Components/EmailLink";
+import Materialcomunityicons from "react-native-vector-icons/MaterialCommunityIcons";
+import AppText from "../../Components/AppText";
 
 function AboutUsScreen(props) {
   return (
     <>
-    <ScrollableAppText>
-{`
+      <ScrollableAppText>
+        {`
 About Us
 
 Welcome to [Your App Name], a cutting-edge AI chatbot designed to revolutionize the way you communicate, learn, and interact online. Founded in [Year] by [Founder's Name], our mission is to harness the power of artificial intelligence to create a more connected and intelligent world.
@@ -36,19 +36,16 @@ Join Us on Our Journey
 
 We're just getting started, and we'd love for you to join us on this exciting journey. Whether you're a user, a developer, or an AI enthusiast, there's a place for you in the [Your App Name] community. Let's build the future of communication together.
 `}
-<EmailLink email="miri.amin96@gmail.com" emailSubject="Inquiry">
-        {<Materialcomunityicons name="email" size={30} color="black" />}
-</EmailLink>
-    </ScrollableAppText>
-
-
-      </>
-
+        <EmailLink email="miri.amin96@gmail.com" emailSubject="Inquiry">
+          {<Materialcomunityicons name="email" size={30} color="black" />}
+        </EmailLink>
+      </ScrollableAppText>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {}
+  container: {},
 });
 
 export default AboutUsScreen;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, StyleSheet,Text } from 'react-native';
 
-import AppText from '../Components/AppText';
-import ScrollableAppText from '../Components/ScrollableAppText';
+import AppText from '../../Components/AppText';
+import ScrollableAppText from '../../Components/ScrollableAppText';
 
 function TermsAndConditionsScreen(props) {
   return (
