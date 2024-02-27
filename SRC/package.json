@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.1.3",
-    "@react-navigation/native": "^6.1.10",
-    "@react-navigation/native-stack": "^6.9.18",
+    "@react-navigation/native": "^6.1.12",
+    "@react-navigation/native-stack": "^6.9.20",
     "expo": "^50.0.6",
     "expo-constants": "~15.4.5",
     "expo-linking": "~6.2.2",
