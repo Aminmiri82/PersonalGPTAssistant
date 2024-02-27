@@ -7,18 +7,19 @@ import Screen from "./Components/Screen";
 import ListItem from "./Components/ListItem";
 import ListItemDeleteAction from "./Components/ListItemDeleteAction";
 
-import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
+
 import TestScreen from "./Screens/TestScreen";
 import AboutUsScreen from "./Screens/SettingsScreen/AboutUsScreen";
+import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
 
 export default function App() {
   return (
     <>
-      <Header title="test" />
+      
       <Screen>
-        <AboutUsScreen />
+        <OnBoardingScreen back="back" next="next"/>
       </Screen>
-      <NavBar />
+      
     </>
   );
 }

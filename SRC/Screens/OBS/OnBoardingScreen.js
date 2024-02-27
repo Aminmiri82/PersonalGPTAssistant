@@ -41,7 +41,7 @@ function OnBoardingScreen({ back, next }) {
             textStyle={{ flex: 1, left: 50 }}
           />
         )}
-        <View style={{ width: 132 }} />
+        <View style={{ flex:1 }} />
         {next && (
           <AppButton
             style={styles.AppButton}
