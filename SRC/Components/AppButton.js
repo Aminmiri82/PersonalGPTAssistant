@@ -14,7 +14,10 @@ function AppButton({
   textStyle,
 }) {
   return (
-    <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.container, style, { backgroundColor: colors[color] }]}
+      onPress={onPress}
+    >
       <AppText style={[styles.text, textStyle]}>{title}</AppText>
       {icon && <Icon name={icon} iconColor={colors.black} style={iconStyle} />}
     </TouchableOpacity>
@@ -36,7 +39,7 @@ const styles = StyleSheet.create({
   //     left: 27,
   //   },
   text: {
-    left: 14,
+    // left: 14,
   },
 });
 
