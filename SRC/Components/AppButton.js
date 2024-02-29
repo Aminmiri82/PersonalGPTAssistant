@@ -12,6 +12,7 @@ function AppButton({
   style,
   iconStyle,
   textStyle,
+  iconSet,
 }) {
   return (
     <TouchableOpacity
@@ -19,7 +20,14 @@ function AppButton({
       onPress={onPress}
     >
       <AppText style={[styles.text, textStyle]}>{title}</AppText>
-      {icon && <Icon name={icon} iconColor={colors.black} style={iconStyle} />}
+      {icon && (
+        <Icon
+          iconSet={iconSet}
+          name={icon}
+          iconColor={colors.black}
+          style={iconStyle}
+        />
+      )}
     </TouchableOpacity>
   );
 }
