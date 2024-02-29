@@ -11,9 +11,10 @@ import TestScreen from "./Screens/TestScreen";
 import AboutUsScreen from "./Screens/SettingsScreen/AboutUsScreen";
 import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
 import BuildScreen from "./Screens/AssistantScreen/BuildScreen";
+import ChatMenuScreen from "./Screens/ChatScreen/ChatMenuScreen";
 
 export default function App() {
-  return <BuildScreen />;
+  return <ChatMenuScreen />;
 }
 
 const styles = StyleSheet.create({});

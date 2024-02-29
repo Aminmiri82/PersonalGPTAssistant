@@ -15,13 +15,13 @@
     "expo": "^50.0.6",
     "expo-constants": "~15.4.5",
     "expo-linking": "~6.2.2",
-    "expo-router": "~3.4.7",
+    "expo-router": "^3.4.7",
     "expo-status-bar": "~1.11.1",
     "expo-updates": "~0.24.10",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.73.2",
-    "react-native-gesture-handler": "^2.15.0",
+    "react-native-gesture-handler": "~2.14.0",
     "react-native-web": "^0.19.10"
   },
   "devDependencies": {
