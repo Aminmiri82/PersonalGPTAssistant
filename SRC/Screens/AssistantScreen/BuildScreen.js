@@ -4,6 +4,7 @@ import AppText from "../../Components/AppText";
 import AppButton from "../../Components/AppButton";
 import Header from "../../Components/Header";
 import Screen from "../../Components/Screen";
+import NavBar from "../../Components/NavBar";
 
 // Get the width and height of the device screen
 const { width, height } = Dimensions.get("window");
@@ -24,6 +25,8 @@ function BuildScreen(props) {
           color="blue"
         />
       </Screen>
+      <NavBar />
+
     </>
   );
 }

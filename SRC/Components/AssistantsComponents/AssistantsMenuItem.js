@@ -7,35 +7,26 @@ import {
   TouchableHighlight,
   Text,
 } from "react-native";
-import AppText from "./AppText";
+import AppText from "../AppText";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
-import colors from "../config/colors";
+import colors from "../../config/colors";
 
-function AssistantsMenuItem({
-  image,
-  modelName,
-}) {
+function AssistantsMenuItem({ image, modelName }) {
   return (
-    
-      
-        <View style={styles.TopContainer}>
-          <View style={styles.ImageContainer}>
-            <TouchableOpacity >
-              {image && <Image style={styles.image} source={image} />} 
-            </TouchableOpacity>
-          </View>
-          <View style={styles.modelTextContainer}>
-            <Text style={styles.modelText}>{modelName}</Text>
-          </View>
-          <TouchableOpacity>
-            <AppText style={styles.edit}>Edit</AppText>
-          </TouchableOpacity>
-          
-          
-        </View>
-      
-    
+    <View style={styles.TopContainer}>
+      <View style={styles.ImageContainer}>
+        <TouchableOpacity>
+          {image && <Image style={styles.image} source={image} />}
+        </TouchableOpacity>
+      </View>
+      <View style={styles.modelTextContainer}>
+        {<Text style={styles.modelText}>{modelName}</Text>}
+      </View>
+      <TouchableOpacity>
+        <AppText style={styles.edit}>edit</AppText>
+      </TouchableOpacity>
+    </View>
   );
 }
 
@@ -46,8 +37,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: colors.light,
-    width: '45%', // Set width to less than half to fit two items per row
-    margin: '2.5%', // Set margin to space items out
+    width: "45%", // Set width to less than half to fit two items per row
+    margin: "2.5%", // Set margin to space items out
     // Other styles...
   },
   image: {
@@ -55,7 +46,6 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     alignSelf: "center",
-    
   },
   edit: {
     color: colors.blue,
@@ -67,13 +57,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
-  
-
-
 });
 
-
-{/*
+{
+  /*
 style sheet for the actual screen in order to make the items appear in a grid:
 menuScreen: {
     flexDirection: "row",
@@ -83,6 +70,7 @@ menuScreen: {
     maxWidth: '100%', // Ensuring the container doesn't stretch too much
   },
 
-*/}
+*/
+}
 
 export default AssistantsMenuItem;

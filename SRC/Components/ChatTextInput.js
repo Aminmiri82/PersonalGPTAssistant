@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 import defaultStyles from "../config/Styles";
-function AppTextInput({placeholder}) {
+function ChatTextInput({placeholder}) {
     return (
         
         <View style={styles.container}>
@@ -78,4 +78,4 @@ function AppTextInput({placeholder}) {
     
 
 
-export default AppTextInput;
+export default ChatTextInput;
