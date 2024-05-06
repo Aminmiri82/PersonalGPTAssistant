@@ -1,19 +1,36 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Alert, Button } from "react-native";
 
 import NavBar from "./Components/NavBar";
 import Header from "./Components/Header";
 import Screen from "./Components/Screen";
-import ListItem from "./Components/ListItem";
-import ListItemDeleteAction from "./Components/ListItemDeleteAction";
 
-import TestScreen from "./Screens/TestScreen";
-import AboutUsScreen from "./Screens/SettingsScreen/AboutUsScreen";
-import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
 import BuildScreen from "./Screens/AssistantScreen/BuildScreen";
+import LanguagesPrompt from "./Components/SettingsComponents/LanguagesPrompt";
+import ChatTextInput from "./Components/ChatTextInput";
+import AssistantMakerScreen from "./Screens/AssistantScreen/AssistantMakerScreen";
+import AboutUsScreen from "./Screens/SettingsScreen/AboutUsScreen";
+import PrivacyPolicyScreen from "./Screens/SettingsScreen/PrivacyPolicyScreen";
+import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
+import OnboardingScreen2 from "./Screens/OBS/OnBoardingScreen2";
 
 export default function App() {
-  return <BuildScreen />;
+  return (
+    <>
+      <Header title="test" backButton=""/>
+      <Screen>
+        <OnBoardingScreen />
+        
+      </Screen>
+      <NavBar />
+    </>
+  );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+});
