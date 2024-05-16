@@ -12,19 +12,11 @@ import AssistantMakerScreen from "./Screens/AssistantScreen/AssistantMakerScreen
 import AboutUsScreen from "./Screens/SettingsScreen/AboutUsScreen";
 import PrivacyPolicyScreen from "./Screens/SettingsScreen/PrivacyPolicyScreen";
 import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
-import OnboardingScreen2 from "./Screens/OBS/OnBoardingScreen2";
+import BuildScreen from "./Screens/AssistantScreen/BuildScreen";
+import ChatMenuScreen from "./Screens/ChatScreen/ChatMenuScreen";
 
 export default function App() {
-  return (
-    <>
-      <Header title="test" backButton=""/>
-      <Screen>
-        <OnBoardingScreen />
-        
-      </Screen>
-      <NavBar />
-    </>
-  );
+  return <ChatMenuScreen />;
 }
 
 const styles = StyleSheet.create({

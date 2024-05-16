@@ -33,6 +33,7 @@ function OnBoardingScreen({ back, next }) {
       <View style={styles.AppContainer}>
         {back && (
           <AppButton
+            iconSet="AntDesign"
             style={styles.AppButtonBack}
             color="blue"
             title={back}
@@ -44,6 +45,7 @@ function OnBoardingScreen({ back, next }) {
         <View style={{ flex: 1 }} />
         {next && (
           <AppButton
+            iconSet="AntDesign"
             style={styles.AppButton}
             color="blue"
             title={next}
