@@ -6,11 +6,11 @@ import {
   TouchableOpacity,
   TouchableHighlight,
 } from "react-native";
-import AppText from "./AppText";
+import AppText from "../AppText";
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import colors from "../config/colors";
+import colors from "../../config/colors";
 
 function SettingsItem({
   title,
