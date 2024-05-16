@@ -1,22 +1,29 @@
 import React from "react";
 import { StyleSheet, Text, View, Alert, Button } from "react-native";
 
-import NavBar from "./Components/NavBar";
-import Header from "./Components/Header";
-import Screen from "./Components/Screen";
-
-import BuildScreen from "./Screens/AssistantScreen/BuildScreen";
-import LanguagesPrompt from "./Components/SettingsComponents/LanguagesPrompt";
-import ChatTextInput from "./Components/ChatTextInput";
-import AssistantMakerScreen from "./Screens/AssistantScreen/AssistantMakerScreen";
-import AboutUsScreen from "./Screens/SettingsScreen/AboutUsScreen";
-import PrivacyPolicyScreen from "./Screens/SettingsScreen/PrivacyPolicyScreen";
-import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BuildScreen from "./Screens/AssistantScreen/BuildScreen";
 import ChatMenuScreen from "./Screens/ChatScreen/ChatMenuScreen";
+import AssistantMakerScreen from "./Screens/AssistantScreen/AssistantMakerScreen";
+import Header from "./Components/Header";
 
+const Stack = createNativeStackNavigator();
 export default function App() {
-  return <ChatMenuScreen />;
+  return (
+    <NavigationContainer>
+      <Header />
+      <Stack.Navigator>
+        
+        <Stack.Screen
+          name="AssistantMakerScreen"
+          component={AssistantMakerScreen}
+        />
+        <Stack.Screen name="BuildScreen" component={BuildScreen} />
+        <Stack.Screen name="ChatMenuScreen" component={ChatMenuScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 const styles = StyleSheet.create({
