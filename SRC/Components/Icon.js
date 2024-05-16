@@ -36,9 +36,9 @@ function Icon({
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-    backgroundColor,
-    // alignItems: "center",
-    // flexDirection: "row",
+    backgroundColor: "#000",
+    alignItems: "center",
+    flexDirection: "row",
   },
 });
 

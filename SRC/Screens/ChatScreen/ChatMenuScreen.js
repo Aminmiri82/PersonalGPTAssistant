@@ -7,7 +7,7 @@ import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
 import Icon from "../../Components/Icon";
 import ListItemSeparator from "../../Components/ListItemSeparator";
-
+// note from amin : what the fuck is this shit? i thought this was supposed to be the chatmenuScreen wtf 
 const menuItems = [
   {
     title: "My listings",
@@ -31,7 +31,7 @@ function ChatMenuScreen(props) {
       <View style={styles.container}>
         <ChatItem
           title="Mosh Hamedani"
-          subTitle="aliradmard5@gmail.com"
+          subTitle="aliradmard5@gmail.com" 
           image={require("../../assets/mosh.jpg")}
         />
       </View>
