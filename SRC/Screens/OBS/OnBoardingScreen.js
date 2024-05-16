@@ -41,7 +41,7 @@ function OnBoardingScreen({ back, next }) {
             textStyle={{ flex: 1, left: 50 }}
           />
         )}
-        <View style={{ flex:1 }} />
+        <View style={{ flex: 1 }} />
         {next && (
           <AppButton
             style={styles.AppButton}
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     height: 55,
     backgroundColor: colors.blue,
     borderRadius: 0,
+
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
   },
