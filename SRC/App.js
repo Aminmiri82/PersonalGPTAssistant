@@ -3,12 +3,9 @@ import { StyleSheet, Text, View, Alert, Button } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import BuildScreen from "./Screens/AssistantScreen/BuildScreen";
-
-import ChatMenuScreen from "./Screens/ChatScreen/ChatMenuScreen";
-import AboutUsScreen from "./Screens/SettingsScreen/AboutUsScreen";
-import AssistantMakerScreen from "./Screens/AssistantScreen/AssistantMakerScreen";
+import SettingsScreen from "./Screens/SettingsScreen/SettingsScreen";
 import NavBar from "./Components/NavBar";
+import LanguagesPrompt from "./Components/SettingsComponents/LanguagesPrompt";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -16,10 +13,9 @@ export default function App() {
     <>
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name="Settings" component={SettingsScreen} />
         
         
-        <Stack.Screen name="AssistantMaker" component={AssistantMakerScreen} />
-        <Stack.Screen name="Build" component={BuildScreen} />
       </Stack.Navigator>
     </NavigationContainer>
     <NavBar />
