@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.1",
+    "@react-native-picker/picker": "2.7.5",
     "@react-navigation/native": "^6.1.12",
     "@react-navigation/native-stack": "^6.9.20",
     "expo": "^51.0.8",
@@ -22,6 +23,7 @@
     "react-dom": "18.2.0",
     "react-native": "^0.74.1",
     "react-native-gesture-handler": "~2.16.1",
+    "react-native-screens": "^3.31.1",
     "react-native-vector-icons": "^10.1.0",
     "react-native-web": "^0.19.10"
   },
