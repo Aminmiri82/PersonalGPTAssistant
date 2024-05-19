@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, FlatList } from "react-native";
-import ListItem from "../../Components/ListItem";
-import ChatItem from "../../Components/ChatItem";
+
+import ChatItem from "../../Components/ChatComponents/ChatItem";
 import Screen from "../../Components/Screen";
 
 import colors from "../../config/colors";

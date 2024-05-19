@@ -4,25 +4,28 @@ import { StyleSheet, Text, View, Alert, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BuildScreen from "./Screens/AssistantScreen/BuildScreen";
+
 import ChatMenuScreen from "./Screens/ChatScreen/ChatMenuScreen";
-import AssistantMakerScreen from "./Screens/AssistantScreen/AssistantMakerScreen";
-import Header from "./Components/Header";
+import AboutUsScreen from "./Screens/SettingsScreen/AboutUsScreen";
+import NavBar from "./Components/NavBar";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
-    <NavigationContainer>
-      <Header />
-      <Stack.Navigator>
+    <>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="ChatMenuScreen">
+          <Stack.Screen
+            name="ChatMenuScreen"
+            component={ChatMenuScreen}
+          />
+          <Stack.Screen name="AboutUsScreen" component={AboutUsScreen} />
+          <Stack.Screen name="BuildScreen" component={BuildScreen} />
         
-        <Stack.Screen
-          name="AssistantMakerScreen"
-          component={AssistantMakerScreen}
-        />
-        <Stack.Screen name="BuildScreen" component={BuildScreen} />
-        <Stack.Screen name="ChatMenuScreen" component={ChatMenuScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+        </Stack.Navigator>
+      </NavigationContainer>
+      <NavBar />
+    </>
   );
 }
 

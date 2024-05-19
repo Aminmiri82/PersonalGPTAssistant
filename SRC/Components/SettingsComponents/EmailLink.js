@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, Linking } from 'react-native';
-import AppText from './AppText';
+import AppText from '../AppText';
 
 
 function EmailLink({ email, emailSubject = '', children, style }) {

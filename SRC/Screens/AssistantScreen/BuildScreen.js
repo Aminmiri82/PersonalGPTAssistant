@@ -2,17 +2,19 @@ import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import AppText from "../../Components/AppText";
 import AppButton from "../../Components/AppButton";
-import Header from "../../Components/Header";
+
 import Screen from "../../Components/Screen";
-import NavBar from "../../Components/NavBar";
+
+
 
 // Get the width and height of the device screen
 const { width, height } = Dimensions.get("window");
 
-function BuildScreen(props) {
+function BuildScreen({}) {
+  
   return (
     <>
-      <Header title="Assistant" />
+      
       <Screen style={styles.container}>
         <AppText style={styles.text}>
           Build a new personal Chat GPT Assistant
@@ -24,8 +26,9 @@ function BuildScreen(props) {
           textStyle={styles.buttonText}
           color="blue"
         />
+       
       </Screen>
-      <NavBar />
+      
 
     </>
   );

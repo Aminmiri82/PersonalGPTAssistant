@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import AppText from "../../Components/AppText";
-import AppTextInput from "../../Components/ChatTextInput";
+import AppTextInput from "../../Components/ChatComponents/ChatTextInput";
 import AppButton from "../../Components/AppButton";
 import AssistantsMenuItem from "../../Components/AssistantsComponents/AssistantsMenuItem";
 
@@ -10,11 +10,13 @@ function AssistantMakerScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.top}>
         <AssistantsMenuItem
-          edit="upload a photo"
           image={require("../../assets/mosh.jpg")}
           title="Mosh"
         />
-        <AppButton title="Create Assistant" onPress={() => navigation.navigate("BuildScreen")} />
+        <AppButton
+          title="Create Assistant"
+          onPress={() => navigation.push('BuildScreen')}
+        />
       </View>
     </View>
   );
