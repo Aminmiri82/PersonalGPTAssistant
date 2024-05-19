@@ -19,7 +19,7 @@ function LanguagesPrompt({ visible, onClose, onSelectLanguage }) {
               onSelectLanguage("English");
             }}
           >
-            <AppText style={styles.menuItemAppText}>Java</AppText>
+            <AppText style={styles.menuItemAppText}>English</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.menuItem}
@@ -27,7 +27,7 @@ function LanguagesPrompt({ visible, onClose, onSelectLanguage }) {
               onSelectLanguage("Persian");
             }}
           >
-            <AppText style={styles.menuItemAppText}>JavaScript</AppText>
+            <AppText style={styles.menuItemAppText}>Persian</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.menuItem}
@@ -35,7 +35,7 @@ function LanguagesPrompt({ visible, onClose, onSelectLanguage }) {
               onSelectLanguage("French");
             }}
           >
-            <AppText style={styles.menuItemAppText}>Python</AppText>
+            <AppText style={styles.menuItemAppText}>French</AppText>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={onClose}>
             <AppText style={styles.menuItemAppText}>Cancel</AppText>
