@@ -1,7 +1,7 @@
 import React from "react";
 import { ScrollView, Text, View } from "react-native";
-import AppText from "./AppText"; // Ensure this import path is correct
-import defaultStyles from "../config/Styles"; // Ensure this import path is correct
+import AppText from "../AppText"; // Ensure this import path is correct
+import defaultStyles from "../../config/Styles"; // Ensure this import path is correct
 
 function ScrollableAppText({ children, style }) {
   return (

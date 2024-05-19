@@ -22,6 +22,7 @@ function Icon({
       {iconSet === "AntDesign" && (
         <AntDesign name={name} color={iconColor} size={size * 0.5} />
       )}
+      
       {iconSet === "MCI" && (
         <MaterialCommunityIcons
           name={name}
@@ -36,9 +37,9 @@ function Icon({
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-    backgroundColor: "#000",
-    alignItems: "center",
-    flexDirection: "row",
+    
+    // alignItems: "center",
+    // flexDirection: "row",
   },
 });
 

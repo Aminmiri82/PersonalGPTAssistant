@@ -3,8 +3,8 @@ import { View,StyleSheet,TextInput,TouchableOpacity } from 'react-native';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import defaultStyles from "../../config/Styles";
 
-import defaultStyles from "../config/Styles";
 function ChatTextInput({placeholder}) {
     return (
         

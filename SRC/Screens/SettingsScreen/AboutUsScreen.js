@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import ScrollableAppText from "../../Components/ScrollableAppText";
-import EmailLink from "../../Components/EmailLink";
+import ScrollableAppText from "../../Components/SettingsComponents/ScrollableAppText";
+import EmailLink from "../../Components/SettingsComponents/EmailLink";
 import Materialcomunityicons from "react-native-vector-icons/MaterialCommunityIcons";
 import AppText from "../../Components/AppText";
 
