@@ -9,7 +9,7 @@ function Icon({
   size = 40,
   iconColor = "#fff",
   backgroundColor = "#000",
-  style,
+  style=styles.container
 }) {
   return (
     <View
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     
-    // alignItems: "center",
-    // flexDirection: "row",
+    alignItems: "center",
+    flexDirection: "row",
   },
 });
 
