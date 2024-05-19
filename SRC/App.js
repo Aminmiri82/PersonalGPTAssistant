@@ -7,24 +7,22 @@ import BuildScreen from "./Screens/AssistantScreen/BuildScreen";
 
 import ChatMenuScreen from "./Screens/ChatScreen/ChatMenuScreen";
 import AboutUsScreen from "./Screens/SettingsScreen/AboutUsScreen";
+import AssistantMakerScreen from "./Screens/AssistantScreen/AssistantMakerScreen";
 import NavBar from "./Components/NavBar";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="ChatMenuScreen">
-          <Stack.Screen
-            name="ChatMenuScreen"
-            component={ChatMenuScreen}
-          />
-          <Stack.Screen name="AboutUsScreen" component={AboutUsScreen} />
-          <Stack.Screen name="BuildScreen" component={BuildScreen} />
+    <NavigationContainer>
+      <Stack.Navigator>
         
-        </Stack.Navigator>
-      </NavigationContainer>
-      <NavBar />
+        
+        <Stack.Screen name="AssistantMaker" component={AssistantMakerScreen} />
+        <Stack.Screen name="Build" component={BuildScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+    <NavBar />
     </>
   );
 }
