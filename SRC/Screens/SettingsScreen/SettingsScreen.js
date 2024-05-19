@@ -83,7 +83,10 @@ function SettingsScreen({navigation, route}) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+    backgroundColor: "#f8f8f8"
+  },
 });
 
 export default SettingsScreen;

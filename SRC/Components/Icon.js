@@ -1,34 +1,17 @@
-// Icon.js
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import colors from "../config/colors";
 
-function Icon({
-  iconSet,
-  name,
-  size = 40,
-  iconColor = "#fff",
-  backgroundColor = "#000",
-  style=styles.container
-}) {
+function Icon({ iconSet, name, size = 24, iconColor = colors.black, style }) {
   return (
-    <View
-      style={[
-        { justifyContent: "center", backgroundColor },
-        { width: size, height: size },
-        style,
-      ]}
-    >
+    <View style={[styles.container, style]}>
       {iconSet === "AntDesign" && (
-        <AntDesign name={name} color={iconColor} size={size * 0.5} />
+        <AntDesign name={name} color={iconColor} size={size} />
       )}
-      
+
       {iconSet === "MCI" && (
-        <MaterialCommunityIcons
-          name={name}
-          color={iconColor}
-          size={size * 0.5}
-        />
+        <MaterialCommunityIcons name={name} color={iconColor} size={size} />
       )}
     </View>
   );
@@ -37,9 +20,7 @@ function Icon({
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-    
     alignItems: "center",
-    flexDirection: "row",
   },
 });
 

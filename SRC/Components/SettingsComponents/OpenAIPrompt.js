@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Button,
   Modal,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   TextInput,
 } from "react-native";
 import { useState } from "react";
@@ -24,7 +24,9 @@ function OpenAIPrompt({ visible, onClose, onSumbit }) {
       visible={visible}
       onRequestClose={onClose}
     >
+      <TouchableWithoutFeedback onPress={onClose}>
       <View style={styles.modalBackground}>
+        <TouchableWithoutFeedback>
         <View style={styles.menuContainer}>
           <TextInput
             style={styles.input}
@@ -34,7 +36,9 @@ function OpenAIPrompt({ visible, onClose, onSumbit }) {
           />
           <Button title="Save" onPress={handleSubmit} />
         </View>
+        </TouchableWithoutFeedback>
       </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 }
