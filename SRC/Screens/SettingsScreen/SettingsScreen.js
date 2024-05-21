@@ -5,8 +5,7 @@ import LanguagesPrompt from "../../Components/SettingsComponents/LanguagesPrompt
 import OpenAIPrompt from "../../Components/SettingsComponents/OpenAIPrompt";
 import SettingsItem from "../../Components/SettingsComponents/SettingsItem";
 import Icon from "../../Components/Icon";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 
 
 
