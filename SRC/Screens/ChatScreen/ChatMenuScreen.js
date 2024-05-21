@@ -25,12 +25,12 @@ const menuItems = [
   },
 ];
 
-function ChatMenuScreen(props) {
+function ChatMenuScreen({navigation}) {
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ChatItem
-          title="Mosh Hamedani"
+          title="place holder"
           subTitle="aliradmard5@gmail.com" 
           image={require("../../assets/mosh.jpg")}
         />
@@ -57,6 +57,7 @@ function ChatMenuScreen(props) {
       <ChatItem
         title="Logout"
         IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
+        onPress={() => navigation.navigate("OnBoardingScreen")}
       />
     </Screen>
   );
