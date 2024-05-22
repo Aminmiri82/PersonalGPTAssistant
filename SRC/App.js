@@ -4,12 +4,8 @@ import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import ChatMenuScreen from "./Screens/ChatScreen/ChatMenuScreen";
 import BottomTabNav from "./Navigation/BottomTabNav";
-
-import AssistantMakerScreen from "./Screens/AssistantScreen/AssistantMakerScreen";
-
-import SettingsScreenNav from "./Navigation/SettingsScreenNav";
+import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,7 +18,11 @@ export default function App() {
           component={BottomTabNav}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="AssistantMakerScreen" component={AssistantMakerScreen} />
+        <Stack.Screen
+          name="OnBoarding"
+          component={OnBoardingScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
