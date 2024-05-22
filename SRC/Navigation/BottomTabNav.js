@@ -1,29 +1,27 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
-import SettingsScreen from "../Screens/SettingsScreen/SettingsScreen";
-import AssistantMakerScreen from "../Screens/AssistantScreen/AssistantMakerScreen";
+
 import SettingsScreenNav from "./SettingsScreenNav";
 import Icon from "../Components/Icon";
 import ChatScreenNav from "./ChatScreenNav";
 import AssistantsScreenNav from "./AssistantsScreenNav";
 
 const Tab = createBottomTabNavigator();
-function BottomTabNav(props) {
+function BottomTabNav() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
+        tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           let iconSet = "MCI"; // Assuming you have different icon sets to choose from
 
           if (route.name === "Chat") {
-            iconName = "chat";
+            iconName = focused ? "chat" : "chat-outline";
           } else if (route.name === "Assistants") {
-            iconName = "account-group";
+            iconName = focused ? "robot" : "robot-outline";
           } else if (route.name === "Settings") {
-            iconName = "cog";
+            iconName = focused ? "cog" : "cog-outline";
           }
 
           return (
