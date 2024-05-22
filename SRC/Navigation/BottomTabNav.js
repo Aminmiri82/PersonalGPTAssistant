@@ -30,9 +30,21 @@ function BottomTabNav() {
         },
       })}
     >
-      <Tab.Screen name="Chat" component={ChatScreenNav} />
-      <Tab.Screen name="Assistants" component={AssistantsScreenNav} />
-      <Tab.Screen name="Settings" component={SettingsScreenNav} />
+      <Tab.Screen
+        name="Chat"
+        component={ChatScreenNav}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Assistants"
+        component={AssistantsScreenNav}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreenNav}
+        options={{ headerShown: false }}
+      />
     </Tab.Navigator>
   );
 }

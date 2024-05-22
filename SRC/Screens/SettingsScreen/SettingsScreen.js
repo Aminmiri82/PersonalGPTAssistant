@@ -6,7 +6,7 @@ import OpenAIPrompt from "../../Components/SettingsComponents/OpenAIPrompt";
 import SettingsItem from "../../Components/SettingsComponents/SettingsItem";
 import Icon from "../../Components/Icon";
 
-
+import Screen from "../../Components/Screen";
 
 
 import { useState } from "react";
@@ -38,6 +38,7 @@ function SettingsScreen({navigation, route}) {
 
   return (
     <>
+      <Screen>
       <View style={styles.container}>
         <SettingsItem
           title="OpenAI API Key"
@@ -77,6 +78,7 @@ function SettingsScreen({navigation, route}) {
           onPress={() => navigation.navigate("AboutUsScreen")}
         />
       </View>
+      </Screen>
     </>
   );
 }
