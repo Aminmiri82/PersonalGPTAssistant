@@ -1,14 +1,16 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import ChatMenuScreen from "../../Screens/ChatScreen/ChatMenuScreen";
-import SettingsScreen from "../../Screens/SettingsScreen/SettingsScreen";
-import AssistantMakerScreen from "../../Screens/AssistantScreen/AssistantMakerScreen";
-
-import Icon from "../Icon";
+import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
+import SettingsScreen from "../Screens/SettingsScreen/SettingsScreen";
+import AssistantMakerScreen from "../Screens/AssistantScreen/AssistantMakerScreen";
+import SettingsScreenNav from "./SettingsScreenNav";
+import Icon from "../Components/Icon";
+import ChatScreenNav from "./ChatScreenNav";
+import AssistantsScreenNav from "./AssistantsScreenNav";
 
 const Tab = createBottomTabNavigator();
-function BottomTab(props) {
+function BottomTabNav(props) {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -30,9 +32,9 @@ function BottomTab(props) {
         },
       })}
     >
-      <Tab.Screen name="Chat" component={ChatMenuScreen} />
-      <Tab.Screen name="Assistants" component={AssistantMakerScreen} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen name="Chat" component={ChatScreenNav} />
+      <Tab.Screen name="Assistants" component={AssistantsScreenNav} />
+      <Tab.Screen name="Settings" component={SettingsScreenNav} />
     </Tab.Navigator>
   );
 }
@@ -41,4 +43,4 @@ const styles = StyleSheet.create({
   container: {},
 });
 
-export default BottomTab;
+export default BottomTabNav;

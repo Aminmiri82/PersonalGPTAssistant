@@ -13,7 +13,10 @@ function AssistantMakerScreen({ navigation }) {
           image={require("../../assets/mosh.jpg")}
           title="Mosh"
         />
-        
+        <AppButton
+          title="Build"
+          onPress={() => navigation.navigate("BuildScreen")}
+        />
       </View>
     </View>
   );
