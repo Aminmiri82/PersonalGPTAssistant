@@ -14,7 +14,7 @@ export default function SettingsScreenNav() {
   return (
     
         <SettingsStack.Navigator  >
-            <SettingsStack.Screen name="SettingsScreen" component={SettingsScreen}options={{ headerShown: false }}/>
+            <SettingsStack.Screen name="SettingsScreen" component={SettingsScreen}options={{}}/>
             <SettingsStack.Screen name="AboutUsScreen" component={AboutUsScreen} />
             <SettingsStack.Screen name="TermsAndConditionsScreen" component={TermsAndConditionsScreen} />
             <SettingsStack.Screen name="PrivacyPolicyScreen" component={PrivacyPolicyScreen} />
