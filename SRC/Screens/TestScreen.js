@@ -1,13 +1,12 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import Header from "../Components/Header";
+
 import ListItem from "../Components/ListItem";
 import Screen from "../Components/Screen";
 
 function TestScreen(props) {
   return (
     <>
-      <Header title="test title" backButton="" />
       <Screen style={styles.container}>
         <ListItem
           modelName="something"
@@ -17,8 +16,6 @@ function TestScreen(props) {
           renderRightActions={ListItemDeleteAction}
         />
       </Screen>
-
-      <NavBar />
     </>
   );
 }

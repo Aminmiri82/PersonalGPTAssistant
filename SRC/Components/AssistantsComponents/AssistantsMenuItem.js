@@ -1,29 +1,21 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  TouchableHighlight,
-  Text,
-} from "react-native";
+import { View, StyleSheet, Image, TouchableOpacity, Text } from "react-native";
 import AppText from "../AppText";
-import Swipeable from "react-native-gesture-handler/Swipeable";
 
 import colors from "../../config/colors";
 
-function AssistantsMenuItem({ image, modelName }) {
+function AssistantsMenuItem({ image, title, onPress }) {
   return (
     <View style={styles.TopContainer}>
       <View style={styles.ImageContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onPress}>
           {image && <Image style={styles.image} source={image} />}
         </TouchableOpacity>
       </View>
       <View style={styles.modelTextContainer}>
-        {<Text style={styles.modelText}>{modelName}</Text>}
+        <Text style={styles.modelText}>{title}</Text>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onPress}>
         <AppText style={styles.edit}>edit</AppText>
       </TouchableOpacity>
     </View>
@@ -39,12 +31,13 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.light,
     width: "45%", // Set width to less than half to fit two items per row
     margin: "2.5%", // Set margin to space items out
+
     // Other styles...
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 150,
+    height: 150,
+    borderRadius: 100,
     alignSelf: "center",
   },
   edit: {

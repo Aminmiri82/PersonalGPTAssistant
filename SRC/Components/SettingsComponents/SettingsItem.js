@@ -1,20 +1,18 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableHighlight,
-} from "react-native";
+import { View, StyleSheet, TouchableHighlight } from "react-native";
 import AppText from "../AppText";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+
 import colors from "../../config/colors";
+import Icon from "../Icon";
 
 function SettingsItem({ title, subTitle, IconComponent, onPress }) {
   return (
     <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
       <View style={styles.container}>
-        <View>{IconComponent}</View>
+        <View style={styles.iconContainer}>{IconComponent}</View>
 
         <View style={styles.detailsContainer}>
           <AppText style={styles.title}>{title}</AppText>
@@ -26,10 +24,12 @@ function SettingsItem({ title, subTitle, IconComponent, onPress }) {
         )}
 
         <View style={styles.arrow}>
-          <MaterialCommunityIcons
+          <Icon
+            iconSet="MCI"
             name="chevron-right"
             size={25}
             color={colors.medium}
+            style={styles.arrow}
           />
         </View>
       </View>
@@ -43,25 +43,29 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: colors.white,
     alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: colors.light,
+  },
+  iconContainer: {
+    marginRight: 15,
   },
   detailsContainer: {
-    marginLeft: 10,
-    justifyContent: "center",
     flex: 1,
-  },
-
-  subTitle: {
-    color: colors.medium,
+    justifyContent: "center",
   },
   title: {
     fontWeight: "500",
-  },
-  arrow: {
-    alignItems: "flex-end",
-    flex: 0,
+    fontSize: 16,
   },
   subTitleContainer: {
     marginRight: 10,
+  },
+  subTitle: {
+    color: colors.medium,
+    fontSize: 14,
+  },
+  arrow: {
+    alignSelf: "center",
   },
 });
 
