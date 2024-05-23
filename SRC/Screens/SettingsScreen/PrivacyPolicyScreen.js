@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import ScrollableAppText from '../../Components/ScrollableAppText';
+import ScrollableAppText from '../../Components/SettingsComponents/ScrollableAppText';
 
 function PrivacyPolicyScreen(props) {
   return (

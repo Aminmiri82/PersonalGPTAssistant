@@ -10,7 +10,7 @@ import Screen from "../../Components/Screen";
 // Get the width and height of the device screen
 const { width, height } = Dimensions.get("window");
 
-function BuildScreen({}) {
+function BuildScreen({navigation}) {
   
   return (
     <>

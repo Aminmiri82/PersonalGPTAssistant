@@ -1,25 +1,30 @@
 import React from "react";
-import { StyleSheet, Text, View, Alert, Button } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SettingsScreen from "./Screens/SettingsScreen/SettingsScreen";
-import NavBar from "./Components/NavBar";
-import LanguagesPrompt from "./Components/SettingsComponents/LanguagesPrompt";
+
+import BottomTabNav from "./Navigation/BottomTabNav";
+import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
 
 const Stack = createNativeStackNavigator();
+
 export default function App() {
   return (
-    <>
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-        
-        
+        <Stack.Screen
+          name="Home"
+          component={BottomTabNav}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="OnBoarding"
+          component={OnBoardingScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
-    <NavBar />
-    </>
   );
 }
 

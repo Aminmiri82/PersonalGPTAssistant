@@ -7,7 +7,7 @@ import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
 import Icon from "../../Components/Icon";
 import ListItemSeparator from "../../Components/ListItemSeparator";
-// note from amin : what the fuck is this shit? i thought this was supposed to be the chatmenuScreen wtf 
+// note from amin : what the fuck is this shit? i thought this was supposed to be the chatmenuScreen wtf
 const menuItems = [
   {
     title: "My listings",
@@ -25,13 +25,13 @@ const menuItems = [
   },
 ];
 
-function ChatMenuScreen(props) {
+function ChatMenuScreen({ navigation }) {
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ChatItem
-          title="Mosh Hamedani"
-          subTitle="aliradmard5@gmail.com" 
+          title="place holder"
+          subTitle="aliradmard5@gmail.com"
           image={require("../../assets/mosh.jpg")}
         />
       </View>
@@ -57,6 +57,7 @@ function ChatMenuScreen(props) {
       <ChatItem
         title="Logout"
         IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
+        onPress={() => navigation.navigate("OnBoardingScreen")} // temp for making sure the navigation thingy works
       />
     </Screen>
   );
