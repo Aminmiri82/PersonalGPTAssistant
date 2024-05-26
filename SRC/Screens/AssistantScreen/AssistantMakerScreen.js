@@ -1,13 +1,10 @@
 import React from "react";
-import { View, StyleSheet, ScrollView, Alert } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 
 import AssistantsMenuItem from "../../Components/AssistantsComponents/AssistantsMenuItem";
 import Screen from "../../Components/Screen";
 
 function AssistantMakerScreen({ navigation }) {
-  const showAlert = () =>
-    Alert.alert("Alert", "This feature is not yet implemented");
-
   return (
     <Screen>
       <View style={styles.container}>
@@ -15,31 +12,17 @@ function AssistantMakerScreen({ navigation }) {
           <View style={styles.top}>
             <AssistantsMenuItem
               image={require("../../assets/IMG_1706.jpeg")}
-              title="Mosh"
+              title="assistant1"
               onPress={() => {
                 {
                   navigation.navigate("BuildScreen");
-                  showAlert();
                 }
               }}
             />
             <AssistantsMenuItem
               image={require("../../assets/mosh.jpg")}
-              title="Mosh"
+              title="assistant2"
             />
-            <AssistantsMenuItem
-              image={require("../../assets/mosh.jpg")}
-              title="Mosh"
-            />
-            <AssistantsMenuItem
-              image={require("../../assets/mosh.jpg")}
-              title="Mosh"
-            />
-            <AssistantsMenuItem
-              image={require("../../assets/mosh.jpg")}
-              title="Mosh"
-            />
-
           </View>
         </ScrollView>
       </View>

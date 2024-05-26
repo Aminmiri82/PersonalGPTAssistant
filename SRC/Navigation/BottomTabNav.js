@@ -6,6 +6,7 @@ import SettingsScreenNav from "./SettingsScreenNav";
 import Icon from "../Components/Icon";
 import ChatScreenNav from "./ChatScreenNav";
 import AssistantsScreenNav from "./AssistantsScreenNav";
+import AssistantMakerScreen1 from "../Screens/AssistantScreen/AssistantMakerScreen1";
 
 const Tab = createBottomTabNavigator();
 function BottomTabNav() {
@@ -30,6 +31,10 @@ function BottomTabNav() {
         },
       })}
     >
+      <Tab.Screen
+        name="AssistantMakerScreen1"
+        component={AssistantMakerScreen1}
+      />
       <Tab.Screen
         name="Chat"
         component={ChatScreenNav}
