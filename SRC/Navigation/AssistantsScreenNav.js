@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AssistantMakerScreen from "../Screens/AssistantScreen/AssistantMakerScreen";
-import BuildScreen from "../Screens/AssistantScreen/BuildScreen";
+import BuildScreen from "../Screens/AssistantScreen/EmptyAssistantsMenuScreen";
 import AppButton from "../Components/AppButton";
 
 const AssistantsStack = createNativeStackNavigator();
