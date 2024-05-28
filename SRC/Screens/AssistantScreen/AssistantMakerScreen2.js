@@ -11,6 +11,7 @@ import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
 import Styles from "../../config/Styles";
 import { useState } from "react";
+import RNPickerSelect from 'react-native-picker-select';
 
 function AssistantMakerScreen2({ navigation }) {
   const [assistantName, setAssistantName] = useState("pick a model");
@@ -25,6 +26,10 @@ function AssistantMakerScreen2({ navigation }) {
         <AppText style={Styles.topTip}>
           choose a model for your assistant
         </AppText>
+        <RNPickerSelect
+          onValueChange={(value) => setAssistantName(value)}
+          items={assistantList}
+        />
 
         <AppText>your assistant is: {assistantName}</AppText>
       </View>
