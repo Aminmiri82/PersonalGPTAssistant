@@ -5,13 +5,16 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Alert,
+  Button,
 } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
 import Styles from "../../config/Styles";
 import { useState } from "react";
-import RNPickerSelect from 'react-native-picker-select';
+import RNPickerSelect from "react-native-picker-select";
+import * as DocumentPicker from "expo-document-picker";
 
 function AssistantMakerScreen2({ navigation }) {
   const [assistantName, setAssistantName] = useState("pick a model");
@@ -20,6 +23,12 @@ function AssistantMakerScreen2({ navigation }) {
     { label: "GPT-4", value: "gpt-4" },
     { label: "GPT-4 Turbo", value: "gpt-4-turbo" },
   ];
+
+  _pickDocument = async () => {
+    let result = await DocumentPicker.getDocumentAsync({});
+    alert(result.uri);
+    console.log(result);
+  };
   return (
     <Screen>
       <View style={styles.topContainer}>
@@ -49,6 +58,7 @@ function AssistantMakerScreen2({ navigation }) {
           <AppText style={styles.doneButtonText}>done</AppText>
         </View>
       </TouchableOpacity>
+      <Button title="Select Document" onPress={this._pickDocument} />
     </Screen>
   );
 }
