@@ -4,7 +4,7 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import AssistantsMenuItem from "../../Components/AssistantsComponents/AssistantsMenuItem";
 import Screen from "../../Components/Screen";
 
-function AssistantMakerScreen({ navigation }) {
+function AssistantMenuScreen({ navigation }) {
   return (
     <Screen>
       <View style={styles.container}>
@@ -42,4 +42,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AssistantMakerScreen;
+export default AssistantMenuScreen;

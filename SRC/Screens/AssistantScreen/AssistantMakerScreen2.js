@@ -32,26 +32,31 @@ function AssistantMakerScreen2({ navigation }) {
   return (
     <Screen>
       <View style={styles.topContainer}>
-        <AppText style={Styles.topTip}>
-          choose a model for your assistant
-        </AppText>
-        <RNPickerSelect
-          onValueChange={(value) => setAssistantName(value)}
-          items={assistantList}
-        />
+        <View style={styles.topTipContainer}>
+          <AppText style={styles.topTip}>
+            choose a model for your assistant
+          </AppText>
+        </View>
+        <View style={styles.topPickerContainer}>
+          <RNPickerSelect
+            onValueChange={(value) => setAssistantName(value)}
+            items={assistantList}
+          />
+        </View>
+        <View style={styles.gp4TipContainer}>
+          <AppText style={styles.middleTip}>
+            if you want to upload files fro the knowedlge base you need to
+            choose gpt 4 turbo preview
+          </AppText>
+        </View>
+      </View>
 
-        <AppText>your assistant is: {assistantName}</AppText>
-      </View>
-      <View style={styles.middleContainer}>
-        <AppText style={Styles.middleTip}>
-          if you want to upload files fro the knowedlge base you need to choose
-          gpt 4 turbo preview
-        </AppText>
-      </View>
       <View style={styles.bottomContainer}>
-        <AppText style={Styles.bottomTip}>
-          upload .pdf .docx and .txt files to your assistant
-        </AppText>
+        <View style={styles.bottomTipContainer}>
+          <AppText style={styles.bottomTip}>
+            upload .pdf .docx and .txt files to your assistant
+          </AppText>
+        </View>
       </View>
       <TouchableOpacity onPress={() => console.log("Next")}>
         <View style={styles.doneButtonContainer}>
@@ -71,14 +76,36 @@ const styles = StyleSheet.create({
     borderColor: "blue",
     borderWidth: 1,
   },
-
-  middleContainer: {
-    marginTop: 20,
+  topTipContainer: {
     width: "100%",
-    padding: 10,
+    justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
+    marginRight: 10,
+    padding: 10,
+  },
+  topTip: {
+    color: colors.dark,
+    fontSize: 30,
+    textAlign: "center",
+  },
+  topPickerContainer: {
+    width: "80%",
+    padding: 10,
     borderColor: colors.primary,
+    borderWidth: 1,
+  },
+
+  gp4TipContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+    padding: 10,
+  },
+  middleTip: {
+    color: colors.dark,
+    fontSize: 16,
+    textAlign: "center",
   },
 
   bottomContainer: {
@@ -88,6 +115,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderColor: "red",
+  },
+  bottomTipContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    
+  },
+  bottomTip: {
+    color: colors.dark,
+    fontSize: 18,
+    textAlign: "center",
   },
   doneButtonContainer: {
     marginTop: 20,
