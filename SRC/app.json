@@ -16,6 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "usesIcloudStorage": true,
       "bundleIdentifier": "com.amin04.SRC"
     },
     "android": {
@@ -40,7 +41,8 @@
       "url": "https://u.expo.dev/f36a631d-a4fc-4389-b325-84364c9deb7e"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-document-picker"
     ]
   }
 }

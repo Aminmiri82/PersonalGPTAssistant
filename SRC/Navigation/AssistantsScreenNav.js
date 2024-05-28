@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AssistantMakerScreen from "../Screens/AssistantScreen/AssistantMakerScreen";
+import AssistantMenuScreen from "../Screens/AssistantScreen/AssistantMenuScreen";
 import BuildScreen from "../Screens/AssistantScreen/EmptyAssistantsMenuScreen";
 import AppButton from "../Components/AppButton";
 
@@ -14,8 +14,8 @@ function AssistantsScreenNav(props) {
   return (
     <AssistantsStack.Navigator>
       <AssistantsStack.Screen
-        name="AssistantMakerScreen"
-        component={AssistantMakerScreen}
+        name="AssistantMenuScreen"
+        component={AssistantMenuScreen}
         options={({ navigation }) => ({
           headerRight: () => makeNewAssistantButton(navigation),
         })}
