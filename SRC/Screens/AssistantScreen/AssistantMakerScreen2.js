@@ -11,14 +11,13 @@ import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
 import Styles from "../../config/Styles";
 import { useState } from "react";
-import RNPickerSelect from "react-native-picker-select";
 
 function AssistantMakerScreen2({ navigation }) {
   const [assistantName, setAssistantName] = useState("pick a model");
   const assistantList = [
     { label: "GPT-3", value: "gpt-3" },
     { label: "GPT-4", value: "gpt-4" },
-    { label: "GPT-4 Turbo", value: "gpt-4-turbo" }
+    { label: "GPT-4 Turbo", value: "gpt-4-turbo" },
   ];
   return (
     <Screen>
@@ -26,13 +25,8 @@ function AssistantMakerScreen2({ navigation }) {
         <AppText style={Styles.topTip}>
           choose a model for your assistant
         </AppText>
-        <RNPickerSelect
-          onValueChange={(value) => setAssistantName(value)}
-          items={assistantList}
-         
-          
-        />
-        <AppText>your assistant is:  {assistantName}</AppText>
+
+        <AppText>your assistant is: {assistantName}</AppText>
       </View>
       <View style={styles.middleContainer}>
         <AppText style={Styles.middleTip}>
@@ -45,11 +39,11 @@ function AssistantMakerScreen2({ navigation }) {
           upload .pdf .docx and .txt files to your assistant
         </AppText>
       </View>
-      <View style={styles.doneButtonContainer}>
-        <TouchableOpacity onPress={() => console.log("Next")}>
+      <TouchableOpacity onPress={() => console.log("Next")}>
+        <View style={styles.doneButtonContainer}>
           <AppText style={styles.doneButtonText}>done</AppText>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
     </Screen>
   );
 }
