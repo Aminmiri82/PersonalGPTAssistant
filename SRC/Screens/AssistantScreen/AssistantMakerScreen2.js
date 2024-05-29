@@ -1,18 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
   Image,
   TouchableOpacity,
-  TextInput,
-  Alert,
-  Button,
+  FlatList,
+  Text,
 } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
 import Styles from "../../config/Styles";
-import { useState } from "react";
 import RNPickerSelect from "react-native-picker-select";
 import * as DocumentPicker from "expo-document-picker";
 
@@ -24,11 +22,31 @@ function AssistantMakerScreen2({ navigation }) {
     { label: "GPT-4 Turbo", value: "gpt-4-turbo" },
   ];
 
-  _pickDocument = async () => {
-    let result = await DocumentPicker.getDocumentAsync({});
-    alert(result.uri);
-    console.log(result);
+  const [files, setFiles] = useState([]);
+
+  const pickDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync();
+
+      if (result.canceled === false) {
+        console.log("Picked file:", result);
+        // Use a placeholder image for the thumbnail
+        const fileWithPlaceholder = {
+          ...result,
+          thumbnail: "https://via.placeholder.com/80",
+        };
+        setFiles((prevFiles) => [...prevFiles, fileWithPlaceholder]);
+      }
+    } catch (err) {
+      console.error("Error picking document: ", err);
+    }
   };
+
+  const removeFile = (index) => {
+    const newFiles = files.filter((file, i) => i !== index);
+    setFiles(newFiles);
+  };
+
   return (
     <Screen>
       <View style={styles.topContainer}>
@@ -57,13 +75,36 @@ function AssistantMakerScreen2({ navigation }) {
             upload .pdf .docx and .txt files to your assistant
           </AppText>
         </View>
+        <FlatList
+          data={files}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal
+          renderItem={({ item, index }) => (
+            <View style={styles.fileContainer}>
+              <Image
+                source={{ uri: item.thumbnail }}
+                style={styles.thumbnail}
+              />
+              <Text style={styles.fileName}>{item.name}</Text>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => removeFile(index)}
+              >
+                <Text style={styles.deleteButtonText}>X</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+        <TouchableOpacity style={styles.addButton} onPress={pickDocument}>
+          <Text style={styles.addButtonText}>+</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => console.log("Next")}>
+          <View style={styles.doneButtonContainer}>
+            <AppText style={styles.doneButtonText}>done</AppText>
+          </View>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => console.log("Next")}>
-        <View style={styles.doneButtonContainer}>
-          <AppText style={styles.doneButtonText}>done</AppText>
-        </View>
-      </TouchableOpacity>
-      <Button title="Select Document" onPress={this._pickDocument} />
     </Screen>
   );
 }
@@ -120,7 +161,6 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    
   },
   bottomTip: {
     color: colors.dark,
@@ -138,6 +178,61 @@ const styles = StyleSheet.create({
   doneButtonText: {
     color: colors.white,
     fontSize: 16,
+  },
+  container: {
+    padding: 20,
+    alignItems: "center",
+  },
+  instructions: {
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  fileContainer: {
+    margin: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    borderRadius: 5,
+    position: "relative",
+    width: 100,
+    height: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  thumbnail: {
+    width: 80,
+    height: 80,
+  },
+  fileName: {
+    textAlign: "center",
+    marginTop: 5,
+  },
+  deleteButton: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+    backgroundColor: "red",
+    borderRadius: 10,
+    width: 20,
+    height: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  deleteButtonText: {
+    color: "white",
+    fontSize: 12,
+  },
+  addButton: {
+    marginTop: 20,
+    backgroundColor: "#ccc",
+    padding: 10,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  addButtonText: {
+    fontSize: 24,
   },
 });
 
