@@ -99,7 +99,7 @@ function AssistantMakerScreen2({ navigation }) {
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => console.log("Next")}>
+        <TouchableOpacity onPress={() => navigation.popToTop("AssistantMenuScreen")}>
           <View style={styles.doneButtonContainer}>
             <AppText style={styles.doneButtonText}>done</AppText>
           </View>

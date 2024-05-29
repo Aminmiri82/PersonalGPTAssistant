@@ -9,7 +9,6 @@ import {
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
-import Styles from "../../config/Styles";
 import { useState } from "react";
 
 function AssistantMakerScreen1({ navigation }) {
@@ -61,7 +60,7 @@ function AssistantMakerScreen1({ navigation }) {
         />
       </View>
       <View style={styles.nextButtonContainer}>
-        <TouchableOpacity onPress={() => console.log("Next")}>
+        <TouchableOpacity onPress={() => navigation.push("AssistantMakerScreen2")}>
           <AppText style={styles.nextButtonText}>Next</AppText>
         </TouchableOpacity>
       </View>
