@@ -10,6 +10,9 @@ import {
 
 import * as DocumentPicker from "expo-document-picker";
 
+
+// dont delete without my permission
+
 const FilePickerComponent = () => {
   const [files, setFiles] = useState([]);
 
