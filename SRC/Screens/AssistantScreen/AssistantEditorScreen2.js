@@ -13,8 +13,8 @@ import colors from "../../config/colors";
 import Styles from "../../config/Styles";
 import RNPickerSelect from "react-native-picker-select";
 import * as DocumentPicker from "expo-document-picker";
-
-function AssistantMakerScreen2({ navigation }) {
+//info is the stuff that is saved in the database and you edit it here
+function AssistantEditorScreen2({ navigation, info }) {
   const [assistantName, setAssistantName] = useState("pick a model");
   const assistantList = [
     { label: "GPT-3", value: "gpt-3" },
@@ -98,16 +98,21 @@ function AssistantMakerScreen2({ navigation }) {
         <TouchableOpacity style={styles.addButton} onPress={pickDocument}>
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
-        
       </View>
       <View style={styles.ButtonContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.popToTop("AssistantMenuScreen")}
-            style={styles.doneButton}
-          >
-            <AppText style={styles.doneButtonText}>Done</AppText>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          onPress={() => console.log("delete")}
+          style={styles.deleteAssistantButton}
+        >
+          <AppText style={styles.deleteButtonText}>delete</AppText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.popToTop("AssistantMenuScreen")}
+          style={styles.doneButton}
+        >
+          <AppText style={styles.doneButtonText}>Done</AppText>
+        </TouchableOpacity>
+      </View>
     </Screen>
   );
 }
@@ -241,6 +246,21 @@ const styles = StyleSheet.create({
     margin: 20,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
+  },
+  deleteAssistantButton: {
+    backgroundColor: "#DC3545", // Changed to a red color for delete
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    elevation: 2, // For a slight shadow effect
+    marginRight: 10, // Add margin to the right for spacing
+  },
+  deleteButtonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   doneButton: {
     backgroundColor: "#007BFF",
@@ -248,6 +268,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     elevation: 2, // For a slight shadow effect
+    marginLeft: 10, // Add margin to the left for spacing
   },
   doneButtonText: {
     color: colors.white,
@@ -257,4 +278,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AssistantMakerScreen2;
+export default AssistantEditorScreen2;

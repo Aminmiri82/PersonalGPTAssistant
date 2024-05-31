@@ -11,8 +11,8 @@ import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
 import { useState } from "react";
-
-function AssistantMakerScreen1({ navigation }) {
+//info is the stuff that is saved in the database and you edit it here
+function AssistantEditorScreen1({ navigation, info }) {
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
   return (
@@ -62,12 +62,19 @@ function AssistantMakerScreen1({ navigation }) {
       </View>
       <View style={styles.ButtonContainer}>
         <TouchableOpacity
-          onPress={() => navigation.push("AssistantMakerScreen2")}
+          onPress={() => console.log("delete")}
+          style={styles.deleteAssistantButton}
+        >
+          <AppText style={styles.deleteButtonText}>delete</AppText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.push("AssistantEditorScreen2")}
           style={styles.nextButton}
         >
           <AppText style={styles.nextButtonText}>Next</AppText>
         </TouchableOpacity>
       </View>
+      
     </Screen>
   );
 }
@@ -163,22 +170,38 @@ const styles = StyleSheet.create({
   },
   ButtonContainer: {
     margin: 20,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
-  nextButton: {
-    backgroundColor: "#007BFF",
+  deleteAssistantButton: {
+    backgroundColor: '#DC3545', 
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-    elevation: 2, // For a slight shadow effect
+    elevation: 2,
+    marginRight: 10, 
+  },
+  deleteButtonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  nextButton: {
+    backgroundColor: '#007BFF',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    elevation: 2,
+    marginLeft: 10, 
   },
   nextButtonText: {
     color: colors.white,
     fontSize: 16,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
-export default AssistantMakerScreen1;
+export default AssistantEditorScreen1;

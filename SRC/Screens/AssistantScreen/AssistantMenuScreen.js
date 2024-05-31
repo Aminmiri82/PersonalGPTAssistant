@@ -15,7 +15,7 @@ function AssistantMenuScreen({ navigation }) {
               title="assistant1"
               onPress={() => {
                 {
-                  navigation.navigate("AssistantMakerScreen1");
+                  navigation.navigate("AssistantEditorScreen1");
                 }
               }}
             />
