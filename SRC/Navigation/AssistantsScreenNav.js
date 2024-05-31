@@ -6,6 +6,8 @@ import BuildScreen from "../Screens/AssistantScreen/EmptyAssistantsMenuScreen";
 import AppButton from "../Components/AppButton";
 import AssistantMakerScreen1 from "../Screens/AssistantScreen/AssistantMakerScreen1";
 import AssistantMakerScreen2 from "../Screens/AssistantScreen/AssistantMakerScreen2";
+import AssistantEditorScreen1 from "../Screens/AssistantScreen/AssistantEditorScreen1";
+import AssistantEditorScreen2 from "../Screens/AssistantScreen/AssistantEditorScreen2";
 
 const AssistantsStack = createNativeStackNavigator();
 const makeNewAssistantButton = (navigation) => (
@@ -18,7 +20,6 @@ const makeNewAssistantButton = (navigation) => (
 function AssistantsScreenNav(props) {
   return (
     <AssistantsStack.Navigator>
-      
       <AssistantsStack.Screen
         name="AssistantMenuScreen"
         component={AssistantMenuScreen}
@@ -31,8 +32,16 @@ function AssistantsScreenNav(props) {
         component={AssistantMakerScreen1}
       />
       <AssistantsStack.Screen
-      name="AssistantMakerScreen2"
-      component={AssistantMakerScreen2}
+        name="AssistantMakerScreen2"
+        component={AssistantMakerScreen2}
+      />
+      <AssistantsStack.Screen
+        name="AssistantEditorScreen1"
+        component={AssistantEditorScreen1}
+      />
+      <AssistantsStack.Screen
+        name="AssistantEditorScreen2"
+        component={AssistantEditorScreen2}
       />
       <AssistantsStack.Screen name="BuildScreen" component={BuildScreen} />
     </AssistantsStack.Navigator>

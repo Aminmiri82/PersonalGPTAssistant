@@ -3,12 +3,12 @@ PODS:
   - DoubleConversion (1.1.6)
   - EASClient (0.12.0):
     - ExpoModulesCore
-  - EXConstants (16.0.1):
+  - EXConstants (16.0.2):
     - ExpoModulesCore
   - EXJSONUtils (0.13.1)
   - EXManifests (0.14.3):
     - ExpoModulesCore
-  - Expo (51.0.8):
+  - Expo (51.0.9):
     - ExpoModulesCore
   - ExpoAsset (10.0.6):
     - ExpoModulesCore
@@ -16,13 +16,13 @@ PODS:
     - ExpoModulesCore
   - ExpoFileSystem (17.0.1):
     - ExpoModulesCore
-  - ExpoFont (12.0.5):
+  - ExpoFont (12.0.6):
     - ExpoModulesCore
   - ExpoHead (3.5.14):
     - ExpoModulesCore
   - ExpoKeepAwake (13.0.2):
     - ExpoModulesCore
-  - ExpoModulesCore (1.12.11):
+  - ExpoModulesCore (1.12.12):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -68,7 +68,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - EXStructuredHeaders (3.8.0)
-  - EXUpdates (0.25.14):
+  - EXUpdates (0.25.15):
     - DoubleConversion
     - EASClient
     - EXManifests
@@ -1578,20 +1578,20 @@ SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   EASClient: 1509a9a6b48b932ec61667644634daf2562983b8
-  EXConstants: 9a008dbf262550884e6280dea95b81b51f65ea6f
+  EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
   EXJSONUtils: 30c17fd9cc364d722c0946a550dfbf1be92ef6a4
   EXManifests: c1fab4c3237675e7b0299ea8df0bcb14baca4f42
-  Expo: c99f14ca53381d5399b88684c88e20ff7928d3c7
+  Expo: 6381470c669c3f31c8ac0ebd8e88686f925146ad
   ExpoAsset: 9b7433ecc5f1b608ccbb823492e062bde944abd2
   ExpoDocumentPicker: 326d1d098a574d621ed2cc05296c9895f10eea44
   ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
-  ExpoFont: 690b76008be824e47907f200cb0764870108dfd1
+  ExpoFont: c84702079267ae51161c20bb8b925670907ffa2f
   ExpoHead: 28ccee5977648d15f6a62b9a680a4bd169a1515b
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
-  ExpoModulesCore: 4eb2165cde325c8c121d495bb8beb0da9b30c92e
+  ExpoModulesCore: 828d63de45d4fbacabe2963fc406a8e9daeed992
   EXSplashScreen: d439ca817211886dc80a00f3761e3b6d861d7205
   EXStructuredHeaders: cb8d1f698e144f4c5547b4c4963e1552f5d2b457
-  EXUpdates: daf96ee6568c68e17e0bbfb635d43cdc6588ed91
+  EXUpdates: e2fb1affdc20bb2c30961de109aafed6f2f2f036
   EXUpdatesInterface: 996527fd7d1a5d271eb523258d603f8f92038f24
   FBLazyVector: 898d14d17bf19e2435cafd9ea2a1033efe445709
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
