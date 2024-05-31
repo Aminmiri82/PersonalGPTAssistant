@@ -13,6 +13,7 @@ import colors from "../../config/colors";
 import Styles from "../../config/Styles";
 import RNPickerSelect from "react-native-picker-select";
 import * as DocumentPicker from "expo-document-picker";
+
 //info is the stuff that is saved in the database and you edit it here
 function AssistantEditorScreen2({ navigation, info }) {
   const [assistantName, setAssistantName] = useState("pick a model");
@@ -28,14 +29,12 @@ function AssistantEditorScreen2({ navigation, info }) {
     try {
       const result = await DocumentPicker.getDocumentAsync();
 
-      if (result.canceled === false) {
+      if (!result.canceled) {
         console.log("Picked file:", result);
-        // Use a placeholder image for the thumbnail
-        const fileWithPlaceholder = {
-          ...result,
-          thumbnail: "https://via.placeholder.com/80",
-        };
-        setFiles((prevFiles) => [...prevFiles, fileWithPlaceholder]);
+        // Extracting the file information from the assets array
+        const pickedFile = result.assets[0];
+
+        setFiles((prevFiles) => [...prevFiles, pickedFile]);
       }
     } catch (err) {
       console.error("Error picking document: ", err);
@@ -45,6 +44,16 @@ function AssistantEditorScreen2({ navigation, info }) {
   const removeFile = (index) => {
     const newFiles = files.filter((file, i) => i !== index);
     setFiles(newFiles);
+  };
+  const renderThumbnail = (file) => {
+    console.log("File MIME Type:", file.mimeType);
+    console.log("File URI:", file.uri);
+
+    if (file.mimeType && file.mimeType.startsWith("image/")) {
+      return <Image source={{ uri: file.uri }} style={styles.thumbnail} />;
+    } else {
+      return <Text style={styles.fileIcon}>📄 FILE</Text>;
+    }
   };
 
   return (
@@ -75,26 +84,26 @@ function AssistantEditorScreen2({ navigation, info }) {
             upload .pdf .docx and .txt files to your assistant
           </AppText>
         </View>
-        <FlatList
-          data={files}
-          keyExtractor={(item, index) => index.toString()}
-          horizontal
-          renderItem={({ item, index }) => (
-            <View style={styles.fileContainer}>
-              <Image
-                source={{ uri: item.thumbnail }}
-                style={styles.thumbnail}
-              />
-              <Text style={styles.fileName}>{item.name}</Text>
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => removeFile(index)}
-              >
-                <Text style={styles.deleteButtonText}>X</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        />
+        <View style={styles.generalFileContainer}>
+          <FlatList
+            data={files}
+            keyExtractor={(item, index) => index.toString()}
+            horizontal
+            renderItem={({ item, index }) => (
+              <View style={styles.fileContainer}>
+                {renderThumbnail(item)}
+                <Text style={styles.fileName}>{item.name}</Text>
+
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => removeFile(index)}
+                >
+                  <Text style={styles.deleteButtonText}>X</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+        </View>
         <TouchableOpacity style={styles.addButton} onPress={pickDocument}>
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
@@ -163,7 +172,7 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "red",
+    borderColor: "green",
   },
   bottomTipContainer: {
     width: "100%",
@@ -195,6 +204,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
     textAlign: "center",
+  },
+  generalFileContainer: {
+    width: "90%",
+    height: "40%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "red",
+    borderWidth: 1,
   },
   fileContainer: {
     margin: 10,
@@ -234,8 +253,9 @@ const styles = StyleSheet.create({
   addButton: {
     marginTop: 20,
     backgroundColor: "#ccc",
-    padding: 10,
-    borderRadius: 50,
+    width: "10%",
+    height: "10%",
+    borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
   },
