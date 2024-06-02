@@ -25,11 +25,23 @@ function AssistantMakerScreen1({ navigation }) {
             </AppText>
           </View>
           <View style={styles.pictureWrapper}>
-            <Image
+          <TouchableOpacity
               style={styles.picture}
-              source={require("../../assets/IMG_1706.jpeg")}
-            />
-            <TouchableOpacity style={styles.pictureButton}>
+              onPress={() => {
+                console.log("edit");
+              }}
+            >
+              <Image
+                style={styles.picture}
+                source={require("../../assets/IMG_1706.jpeg")}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.pictureButton}
+              onPress={() => {
+                console.log("edit");
+              }}
+            >
               <AppText style={styles.pictureButtonText}>edit</AppText>
             </TouchableOpacity>
           </View>
