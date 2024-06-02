@@ -13,6 +13,7 @@ import colors from "../../config/colors";
 import Styles from "../../config/Styles";
 import RNPickerSelect from "react-native-picker-select";
 import * as DocumentPicker from "expo-document-picker";
+import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocumentPicker";
 
 //info is the stuff that is saved in the database and you edit it here
 function AssistantEditorScreen2({ navigation, info }) {
@@ -23,38 +24,7 @@ function AssistantEditorScreen2({ navigation, info }) {
     { label: "GPT-4 Turbo", value: "gpt-4-turbo" },
   ];
 
-  const [files, setFiles] = useState([]);
-
-  const pickDocument = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync();
-
-      if (!result.canceled) {
-        console.log("Picked file:", result);
-        // Extracting the file information from the assets array
-        const pickedFile = result.assets[0];
-
-        setFiles((prevFiles) => [...prevFiles, pickedFile]);
-      }
-    } catch (err) {
-      console.error("Error picking document: ", err);
-    }
-  };
-
-  const removeFile = (index) => {
-    const newFiles = files.filter((file, i) => i !== index);
-    setFiles(newFiles);
-  };
-  const renderThumbnail = (file) => {
-    console.log("File MIME Type:", file.mimeType);
-    console.log("File URI:", file.uri);
-
-    if (file.mimeType && file.mimeType.startsWith("image/")) {
-      return <Image source={{ uri: file.uri }} style={styles.thumbnail} />;
-    } else {
-      return <Text style={styles.fileIcon}>📄 FILE</Text>;
-    }
-  };
+  
 
   return (
     <Screen>
@@ -84,29 +54,7 @@ function AssistantEditorScreen2({ navigation, info }) {
             upload .pdf .docx and .txt files to your assistant
           </AppText>
         </View>
-        <View style={styles.generalFileContainer}>
-          <FlatList
-            data={files}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            renderItem={({ item, index }) => (
-              <View style={styles.fileContainer}>
-                {renderThumbnail(item)}
-                <Text style={styles.fileName}>{item.name}</Text>
-
-                <TouchableOpacity
-                  style={styles.deleteButton}
-                  onPress={() => removeFile(index)}
-                >
-                  <Text style={styles.deleteButtonText}>X</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          />
-        </View>
-        <TouchableOpacity style={styles.addButton} onPress={pickDocument}>
-          <Text style={styles.addButtonText}>+</Text>
-        </TouchableOpacity>
+        <AppDocumentPicker/>
       </View>
       <View style={styles.ButtonContainer}>
         <TouchableOpacity

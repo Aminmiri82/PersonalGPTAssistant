@@ -7,9 +7,11 @@ import Icon from "../Components/Icon";
 import ChatScreenNav from "./ChatScreenNav";
 import AssistantsScreenNav from "./AssistantsScreenNav";
 
+
 const Tab = createBottomTabNavigator();
 function BottomTabNav() {
   return (
+
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
@@ -30,6 +32,7 @@ function BottomTabNav() {
         },
       })}
     >
+
       <Tab.Screen
         name="Chat"
         component={ChatScreenNav}
