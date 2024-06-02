@@ -10,8 +10,7 @@ import AppText from "../AppText";
 import colors from "../../config/colors";
 import * as DocumentPicker from "expo-document-picker";
 
-function AppDocumentPicker(props) {
-  const [files, setFiles] = useState([]);
+function AppDocumentPicker({ files, onAddFile, onRemoveFile }) {
 
   const pickDocument = async () => {
     try {
@@ -19,45 +18,42 @@ function AppDocumentPicker(props) {
 
       if (!result.canceled) {
         console.log("Picked file:", result);
-        // Extracting the file information from the assets array
         const pickedFile = result.assets[0];
-
-        setFiles((prevFiles) => [...prevFiles, pickedFile]);
+        onAddFile(pickedFile);
       }
     } catch (err) {
       console.error("Error picking document: ", err);
     }
   };
 
-  const removeFile = (index) => {
-    const newFiles = files.filter((file, i) => i !== index);
-    setFiles(newFiles);
-  };
   const renderThumbnail = (file) => {
     console.log("File MIME Type:", file.mimeType);
     console.log("File URI:", file.uri);
 
-    if (file.mimeType && file.mimeType.startsWith("image/")) {
+    if (file.mimeType.startsWith("image/")) {
       return <Image source={{ uri: file.uri }} style={styles.thumbnail} />;
     } else {
-      return <AppText style={styles.fileIcon}>📄 FILE</AppText>;
+      return <Image source={require("../../assets/mosh.jpg")} style={styles.thumbnail} />;
     }
   };
+
   return (
     <>
       <View style={styles.generalFileContainer}>
         <FlatList
           data={files}
           keyExtractor={(item, index) => index.toString()}
-          horizontal
+          numColumns={3} // Adjust the number of columns as needed
           renderItem={({ item, index }) => (
             <View style={styles.fileContainer}>
               {renderThumbnail(item)}
-              <AppText style={styles.fileName}>{item.name}</AppText>
+              <AppText style={styles.fileName} numberOfLines={2} ellipsizeMode="tail">
+                {item.name}
+              </AppText>
 
               <TouchableOpacity
                 style={styles.deleteButton}
-                onPress={() => removeFile(index)}
+                onPress={() => onRemoveFile(index)}
               >
                 <AppText style={styles.deleteButtonText}>X</AppText>
               </TouchableOpacity>
@@ -75,13 +71,20 @@ function AppDocumentPicker(props) {
 const styles = StyleSheet.create({
   generalFileContainer: {
     width: "90%",
-    height: "40%",
+    height: "50%",
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    alignItems: "center",
-    borderColor: "red",
+    alignItems: "flex-start",
+    borderColor: "#ccc",
     borderWidth: 1,
+    borderRadius:10,
+    backgroundColor:colors.light,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 5,
   },
   fileContainer: {
     margin: 10,
@@ -89,19 +92,24 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     padding: 10,
     borderRadius: 5,
-    position: "relative",
     width: 100,
-    height: 100,
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: colors.fileBackground,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   thumbnail: {
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
+    borderRadius: 5,
   },
   fileName: {
     textAlign: "center",
-    marginTop: 5,
+    marginTop: 1,
   },
   deleteButton: {
     position: "absolute",
@@ -121,34 +129,14 @@ const styles = StyleSheet.create({
   addButton: {
     marginTop: 20,
     backgroundColor: "#ccc",
-    width: "10%",
-    height: "10%",
-    borderRadius: 100,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
   },
   addButtonText: {
     fontSize: 24,
-  },
-  ButtonContainer: {
-    margin: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-  },
-  deleteAssistantButton: {
-    backgroundColor: "#DC3545", // Changed to a red color for delete
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    elevation: 2, // For a slight shadow effect
-    marginRight: 10, // Add margin to the right for spacing
-  },
-  deleteButtonText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: "center",
   },
 });
 

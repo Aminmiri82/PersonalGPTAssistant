@@ -23,8 +23,15 @@ function AssistantEditorScreen2({ navigation, info }) {
     { label: "GPT-4", value: "gpt-4" },
     { label: "GPT-4 Turbo", value: "gpt-4-turbo" },
   ];
+  const [files, setFiles] = useState([]);
 
-  
+  const handleAddFile = (file) => {
+    setFiles((prevFiles) => [...prevFiles, file]);
+  };
+
+  const handleRemoveFile = (index) => {
+    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
 
   return (
     <Screen>
@@ -54,9 +61,12 @@ function AssistantEditorScreen2({ navigation, info }) {
             upload .pdf .docx and .txt files to your assistant
           </AppText>
         </View>
-        <AppDocumentPicker/>
-      </View>
-      <View style={styles.ButtonContainer}>
+        <AppDocumentPicker
+          files={files}
+          onAddFile={handleAddFile}
+          onRemoveFile={handleRemoveFile}
+        />
+        <View style={styles.ButtonContainer}>
         <TouchableOpacity
           onPress={() => console.log("delete")}
           style={styles.deleteAssistantButton}
@@ -70,6 +80,8 @@ function AssistantEditorScreen2({ navigation, info }) {
           <AppText style={styles.doneButtonText}>Done</AppText>
         </TouchableOpacity>
       </View>
+      </View>
+      
     </Screen>
   );
 }
@@ -153,63 +165,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
   },
-  generalFileContainer: {
-    width: "90%",
-    height: "40%",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "red",
-    borderWidth: 1,
-  },
-  fileContainer: {
-    margin: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    borderRadius: 5,
-    position: "relative",
-    width: 100,
-    height: 100,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  thumbnail: {
-    width: 80,
-    height: 80,
-  },
-  fileName: {
-    textAlign: "center",
-    marginTop: 5,
-  },
-  deleteButton: {
-    position: "absolute",
-    top: 5,
-    right: 5,
-    backgroundColor: "red",
-    borderRadius: 10,
-    width: 20,
-    height: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  deleteButtonText: {
-    color: "white",
-    fontSize: 12,
-  },
-  addButton: {
-    marginTop: 20,
-    backgroundColor: "#ccc",
-    width: "10%",
-    height: "10%",
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  addButtonText: {
-    fontSize: 24,
-  },
   ButtonContainer: {
     margin: 20,
     alignItems: "center",
@@ -217,7 +172,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   deleteAssistantButton: {
-    backgroundColor: "#DC3545", // Changed to a red color for delete
+    backgroundColor: colors.deleteRed,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -231,12 +186,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   doneButton: {
-    backgroundColor: "#007BFF",
+    backgroundColor: colors.niceBlue,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-    elevation: 2, // For a slight shadow effect
-    marginLeft: 10, // Add margin to the left for spacing
+    elevation: 2, 
+    marginLeft: 10, 
   },
   doneButtonText: {
     color: colors.white,
