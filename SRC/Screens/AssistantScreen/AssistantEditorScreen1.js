@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   deleteAssistantButton: {
-    backgroundColor: '#DC3545', 
+    backgroundColor: colors.deleteRed,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   nextButton: {
-    backgroundColor: '#007BFF',
+    backgroundColor: colors.niceBlue,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
