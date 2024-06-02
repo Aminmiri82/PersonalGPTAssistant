@@ -25,11 +25,23 @@ function AssistantEditorScreen1({ navigation, info }) {
             </AppText>
           </View>
           <View style={styles.pictureWrapper}>
-            <Image
+            <TouchableOpacity
               style={styles.picture}
-              source={require("../../assets/IMG_1706.jpeg")}
-            />
-            <TouchableOpacity style={styles.pictureButton}>
+              onPress={() => {
+                console.log("edit");
+              }}
+            >
+              <Image
+                style={styles.picture}
+                source={require("../../assets/IMG_1706.jpeg")}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.pictureButton}
+              onPress={() => {
+                console.log("edit");
+              }}
+            >
               <AppText style={styles.pictureButtonText}>edit</AppText>
             </TouchableOpacity>
           </View>
@@ -74,7 +86,6 @@ function AssistantEditorScreen1({ navigation, info }) {
           <AppText style={styles.nextButtonText}>Next</AppText>
         </TouchableOpacity>
       </View>
-      
     </Screen>
   );
 }
@@ -170,9 +181,9 @@ const styles = StyleSheet.create({
   },
   ButtonContainer: {
     margin: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
   },
   deleteAssistantButton: {
     backgroundColor: colors.deleteRed,
@@ -180,13 +191,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     elevation: 2,
-    marginRight: 10, 
+    marginRight: 10,
   },
   deleteButtonText: {
     color: colors.white,
     fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   nextButton: {
     backgroundColor: colors.niceBlue,
@@ -194,13 +205,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     elevation: 2,
-    marginLeft: 10, 
+    marginLeft: 10,
   },
   nextButtonText: {
     color: colors.white,
     fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 
