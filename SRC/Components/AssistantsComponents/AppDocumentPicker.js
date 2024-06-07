@@ -11,7 +11,6 @@ import colors from "../../config/colors";
 import * as DocumentPicker from "expo-document-picker";
 
 function AppDocumentPicker({ files, onAddFile, onRemoveFile }) {
-
   const pickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync();
@@ -33,7 +32,12 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile }) {
     if (file.mimeType.startsWith("image/")) {
       return <Image source={{ uri: file.uri }} style={styles.thumbnail} />;
     } else {
-      return <Image source={require("../../assets/mosh.jpg")} style={styles.thumbnail} />;
+      return (
+        <Image
+          source={require("../../assets/mosh.jpg")}
+          style={styles.thumbnail}
+        />
+      );
     }
   };
 
@@ -47,7 +51,11 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile }) {
           renderItem={({ item, index }) => (
             <View style={styles.fileContainer}>
               {renderThumbnail(item)}
-              <AppText style={styles.fileName} numberOfLines={2} ellipsizeMode="tail">
+              <AppText
+                style={styles.fileName}
+                numberOfLines={2}
+                ellipsizeMode="tail"
+              >
                 {item.name}
               </AppText>
 
@@ -70,16 +78,16 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile }) {
 
 const styles = StyleSheet.create({
   generalFileContainer: {
+    flex: 1,
     width: "90%",
-    height: "50%",
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "flex-start",
     borderColor: "#ccc",
     borderWidth: 1,
-    borderRadius:10,
-    backgroundColor:colors.light,
+    borderRadius: 10,
+    backgroundColor: colors.light,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,

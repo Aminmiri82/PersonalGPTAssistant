@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   Text,
+  ScrollView,
 } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
@@ -66,7 +67,8 @@ function AssistantEditorScreen2({ navigation, info }) {
           onAddFile={handleAddFile}
           onRemoveFile={handleRemoveFile}
         />
-        <View style={styles.ButtonContainer}>
+      </View>
+      <View style={styles.ButtonContainer}>
         <TouchableOpacity
           onPress={() => console.log("delete")}
           style={styles.deleteAssistantButton}
@@ -80,8 +82,6 @@ function AssistantEditorScreen2({ navigation, info }) {
           <AppText style={styles.doneButtonText}>Done</AppText>
         </TouchableOpacity>
       </View>
-      </View>
-      
     </Screen>
   );
 }
@@ -89,7 +89,6 @@ function AssistantEditorScreen2({ navigation, info }) {
 const styles = StyleSheet.create({
   topContainer: {
     alignItems: "center",
-    marginTop: 20,
     padding: 10,
     borderColor: "blue",
     borderWidth: 1,
@@ -125,10 +124,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
   },
-
   bottomContainer: {
-    marginTop: 20,
     width: "100%",
+    marginTop: 10,
+    height: "50%",
     padding: 10,
     alignItems: "center",
     borderWidth: 1,
@@ -145,7 +144,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   doneButtonContainer: {
-    marginTop: 20,
+    marginTop: 10,
     backgroundColor: colors.primary,
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -166,7 +165,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   ButtonContainer: {
-    margin: 20,
+    margin: 10,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
@@ -190,8 +189,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-    elevation: 2, 
-    marginLeft: 10, 
+    elevation: 2,
+    marginLeft: 10,
   },
   doneButtonText: {
     color: colors.white,

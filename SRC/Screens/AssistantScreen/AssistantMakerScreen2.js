@@ -65,7 +65,8 @@ function AssistantMakerScreen2({ navigation }) {
           onAddFile={handleAddFile}
           onRemoveFile={handleRemoveFile}
         />
-        <View style={styles.ButtonContainer}>
+      </View>
+      <View style={styles.ButtonContainer}>
         <TouchableOpacity
           onPress={() => navigation.popToTop("AssistantMenuScreen")}
           style={styles.doneButton}
@@ -73,8 +74,6 @@ function AssistantMakerScreen2({ navigation }) {
           <AppText style={styles.doneButtonText}>Done</AppText>
         </TouchableOpacity>
       </View>
-      </View>
-      
     </Screen>
   );
 }
@@ -82,7 +81,6 @@ function AssistantMakerScreen2({ navigation }) {
 const styles = StyleSheet.create({
   topContainer: {
     alignItems: "center",
-    marginTop: 20,
     padding: 10,
     borderColor: "blue",
     borderWidth: 1,
@@ -118,14 +116,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
   },
-
   bottomContainer: {
-    marginTop: 20,
     width: "100%",
+    marginTop: 10,
+    height: "50%",
     padding: 10,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "red",
+    borderColor: "green",
   },
   bottomTipContainer: {
     width: "100%",
@@ -138,7 +136,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   doneButtonContainer: {
-    marginTop: 20,
+    marginTop: 10,
     backgroundColor: colors.primary,
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -159,18 +157,32 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   ButtonContainer: {
-    margin: 20,
+    margin: 10,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
+  },
+  deleteAssistantButton: {
+    backgroundColor: colors.deleteRed,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    elevation: 2, // For a slight shadow effect
+    marginRight: 10, // Add margin to the right for spacing
+  },
+  deleteButtonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   doneButton: {
     backgroundColor: colors.niceBlue,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-    elevation: 2, // For a slight shadow effect
-    marginLeft: 10, // Add margin to the left for spacing
+    elevation: 2,
+    marginLeft: 10,
   },
   doneButtonText: {
     color: colors.white,
