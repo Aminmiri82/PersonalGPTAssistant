@@ -3,6 +3,8 @@ export default {
   secondary: "#4ecdc4",
   black: "#000",
   white: "#fff",
+  niceBlue: "#007BFF",
+  deleteRed: "#DC3545",
   medium: "#6e6969",
   light: "#f8f4f4",
   danger: "#ff5252",
@@ -11,4 +13,5 @@ export default {
   lightGrey: "#eee",
   blue: "#17c3ce",
   danger: "#ff5252",
+  fileBackground: "#f9f9f9",
 };
