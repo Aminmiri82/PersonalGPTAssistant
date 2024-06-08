@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Image, TouchableOpacity, Text } from "react-native";
+import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import AppText from "../AppText";
 
 import colors from "../../config/colors";
@@ -13,7 +13,7 @@ function AssistantsMenuItem({ image, title, onPress }) {
         </TouchableOpacity>
       </View>
       <View style={styles.modelTextContainer}>
-        <Text style={styles.modelText}>{title}</Text>
+        <AppText style={styles.modelText}>{title}</AppText>
       </View>
       <TouchableOpacity onPress={onPress}>
         <AppText style={styles.edit}>edit</AppText>

@@ -5,16 +5,12 @@ import AppButton from "../../Components/AppButton";
 
 import Screen from "../../Components/Screen";
 
-
-
 // Get the width and height of the device screen
 const { width, height } = Dimensions.get("window");
 
-function BuildScreen({navigation}) {
-  
+function EmptyAssistantsMenuScreen({ navigation }) {
   return (
     <>
-      
       <Screen style={styles.container}>
         <AppText style={styles.text}>
           Build a new personal Chat GPT Assistant
@@ -26,10 +22,7 @@ function BuildScreen({navigation}) {
           textStyle={styles.buttonText}
           color="blue"
         />
-       
       </Screen>
-      
-
     </>
   );
 }
@@ -68,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BuildScreen;
+export default EmptyAssistantsMenuScreen;
