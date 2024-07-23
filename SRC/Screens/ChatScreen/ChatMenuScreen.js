@@ -1,75 +1,42 @@
-import React from "react";
-import { StyleSheet, View, FlatList } from "react-native";
-
+import React, { useEffect, useState } from "react";
+import { View, FlatList, Text } from "react-native";
+import { initDB, getDB } from "../../database";
 import ChatItem from "../../Components/ChatComponents/ChatItem";
-import Screen from "../../Components/Screen";
 
-import colors from "../../config/colors";
-import Icon from "../../Components/Icon";
-import ListItemSeparator from "../../Components/ListItemSeparator";
-// note from amin : what the fuck is this shit? i thought this was supposed to be the chatmenuScreen wtf
-const menuItems = [
-  {
-    title: "My listings",
-    icon: {
-      name: "format-list-bulleted",
-      backgroundColor: colors.primary,
-    },
-  },
-  {
-    title: "My message",
-    icon: {
-      name: "email",
-      backgroundColor: colors.secondary,
-    },
-  },
-];
+const ChatMenuScreen = () => {
+  const [chatItems, setChatItems] = useState([]);
 
-function ChatMenuScreen({ navigation }) {
+  useEffect(() => {
+    const fetchData = async () => {
+      const db = await initDB();
+      db.transaction((tx) => {
+        tx.executeSql("SELECT * FROM ChatItems", [], (tx, results) => {
+          let items = [];
+          for (let i = 0; i < results.rows.length; i++) {
+            items.push(results.rows.item(i));
+          }
+          setChatItems(items);
+        });
+      });
+    };
+    fetchData();
+  }, []);
+
   return (
-    <Screen style={styles.screen}>
-      <View style={styles.container}>
-        <ChatItem
-          title="place holder"
-          subTitle="aliradmard5@gmail.com"
-          image={require("../../assets/mosh.jpg")}
-        />
-      </View>
-      <View style={styles.container}>
-        <FlatList
-          data={menuItems}
-          keyExtractor={(menuItem) => menuItem.title}
-          ItemSeparatorComponent={ListItemSeparator}
-          renderItem={({ item }) => (
-            <ChatItem
-              title={item.title}
-              IconComponent={
-                <Icon
-                  iconSet="MCI" //shortened for MaterialCommunityIcons
-                  name={item.icon.name}
-                  backgroundColor={item.icon.backgroundColor} //FIXME - backgroundColor in Icon
-                />
-              }
-            />
-          )}
-        />
-      </View>
-      <ChatItem
-        title="Logout"
-        IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
-        onPress={() => navigation.navigate("OnBoardingScreen")} // temp for making sure the navigation thingy works
+    <View>
+      <FlatList
+        data={chatItems}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <ChatItem
+            title={item.title}
+            lastMessage={item.lastMessage}
+            timestamp={item.timestamp}
+          />
+        )}
       />
-    </Screen>
+    </View>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    marginVertical: 20,
-  },
-  screen: {
-    backgroundColor: colors.light,
-  },
-});
+};
 
 export default ChatMenuScreen;

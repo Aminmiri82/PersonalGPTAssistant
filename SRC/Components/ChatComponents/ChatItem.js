@@ -16,21 +16,24 @@ function ChatItem({
   image,
   IconComponent,
   onPress,
-  renderRightActions,
+  modelname,
 }) {
   return (
-    <Swipeable renderRightActions={renderRightActions}>
-      <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
-        <View style={styles.container}>
+    <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
+      <View style={styles.container}>
+        <View style={styles.visualcontainer}>
           {IconComponent}
           {image && <Image style={styles.image} source={image} />}
-          <View style={styles.detailContainer}>
-            <AppText style={styles.title}>{title}</AppText>
-            {subTitle && <AppText style={styles.subTitle}>{subTitle}</AppText>}
-          </View>
+          {modelname && (
+            <AppText style={styles.modelstyle}> {modelname} </AppText>
+          )}
         </View>
-      </TouchableHighlight>
-    </Swipeable> // FIXME - fix the dependancy problem with the react-native-gesture-handler
+        <View style={styles.detailContainer}>
+          <AppText style={styles.title}>{title}</AppText>
+          {subTitle && <AppText style={styles.subTitle}>{subTitle}</AppText>}
+        </View>
+      </View>
+    </TouchableHighlight>
   );
 }
 
@@ -55,6 +58,12 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     color: colors.medium,
+  },
+  visualcontainer: {
+    flexDirection: "column",
+  },
+  modelstyle: {
+    alignSelf: "center",
   },
 });
 export default ChatItem;
