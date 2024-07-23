@@ -24,6 +24,7 @@ const ChatMenuScreen = () => {
 
   return (
     <View>
+      <Text>first commit</Text>
       <FlatList
         data={chatItems}
         keyExtractor={(item) => item.id.toString()}
