@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import { View, Button, TextInput } from "react-native";
+import { View, StyleSheet, Text,FlatList } from "react-native";
 import { getDB } from "../../database";
+import Textinput from "../../Components/ChatComponents/Textinput";
+import Screen from "../../Components/Screen";
+import Chatbubble from "../../Components/ChatComponents/Chatbubble";
 
 const ChatScreen = ({ navigation }) => {
+  const messages = [{id:1,text:"Hello"}, {id:2,text:"World"}, {id:3,text:"!"}];
   const [newChatTitle, setNewChatTitle] = useState("");
 
   const addChatItem = () => {
@@ -24,16 +28,35 @@ const ChatScreen = ({ navigation }) => {
     );
   };
 
+  const handleSubmit = (text) => {
+    console.log("Submitted text:", text);
+  };
+
   return (
-    <View>
-      <TextInput
-        placeholder="Enter chat title"
-        value={newChatTitle}
-        onChangeText={setNewChatTitle}
+    <Screen>
+      <FlatList
+        data={messages}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <Chatbubble text={item.text} />
+        )}
       />
-      <Button title="Add Chat" onPress={addChatItem} />
-    </View>
+      
+        
+        
+      
+      <Textinput onSubmit={handleSubmit} />
+    </Screen>
   );
 };
+
+const styles = StyleSheet.create({
+  
+  content: {
+    flex: 1,
+    justifyContent: "center", // Adjust this as needed to position other content
+    alignItems: "center", // Adjust this as needed to position other content
+  },
+});
 
 export default ChatScreen;
