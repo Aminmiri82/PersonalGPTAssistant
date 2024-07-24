@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { View, Button, TextInput, StyleSheet, Text } from "react-native";
-
-import { getDB } from "../../database";
+import { View, Button, StyleSheet, FlatList } from "react-native";
+import OpenAI from "openai";
 import { OPENAI_API_KEY } from "@env";
 import AppTextInput from "../../Components/ChatComponents/AppTextInput";
 import Screen from "../../Components/Screen";
-
-import OpenAI from "openai";
+import Chatbubble from "../../Components/ChatComponents/Chatbubble";
 
 const ChatScreen = ({ navigation }) => {
   const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
@@ -48,23 +46,20 @@ const ChatScreen = ({ navigation }) => {
 
   return (
     <Screen>
-      <View style={styles.stuff}>
-        <Button
-          title="Add Chat"
-          onPress={() => call(messages[messages.length - 1])}
-        />
-        {conversation.map((msg, index) => (
-          <Text key={index}>{msg.content}</Text>
-        ))}
-      </View>
+      <FlatList
+        data={conversation}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => <Chatbubble message={item} />}
+        contentContainerStyle={styles.flatListContent}
+      />
       <AppTextInput onSubmit={handleSetMessage} />
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  stuff: {
-    
+  flatListContent: {
+    padding: 10,
   },
 });
 
