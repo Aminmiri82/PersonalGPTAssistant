@@ -1,8 +1,10 @@
+// Textinput.js
 import React, { useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
   TextInput,
+  Button,
   View,
   TouchableOpacity,
 } from "react-native";
@@ -39,6 +41,7 @@ const Textinput = ({ onSubmit }) => {
             color={defaultStyles.colors.medium}
             style={styles.icon}
           />
+          {/* FIXME: use the Icon components rather than MaterialCommunityIcons */}
         </TouchableOpacity>
       </View>
       <View style={styles.button}>
