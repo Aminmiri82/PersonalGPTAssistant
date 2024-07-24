@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, Text,Button } from "react-native";
+import { View, FlatList, Text } from "react-native";
 import { initDB, getDB } from "../../database";
 import ChatItem from "../../Components/ChatComponents/ChatItem";
 
-const ChatMenuScreen = ({ navigation }) => {
+const ChatMenuScreen = () => {
   const [chatItems, setChatItems] = useState([]);
 
   useEffect(() => {
@@ -25,10 +25,6 @@ const ChatMenuScreen = ({ navigation }) => {
   return (
     <View>
       <Text>first commit</Text>
-      <Button
-        title="New Chat"
-        onPress={() => navigation.navigate("ChatScreen")}
-      />
       <FlatList
         data={chatItems}
         keyExtractor={(item) => item.id.toString()}
