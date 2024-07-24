@@ -1,4 +1,3 @@
-// server.js
 const express = require("express");
 const OpenAI = require("openai");
 require("dotenv").config();
@@ -9,48 +8,52 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.use(express.json());
 
-app.post("/initialize-assistant", async (req, res) => {
-  try {
-    console.log("Initializing assistant...");
-    const assistant = await openai.beta.assistants.create({
-      name: "Code Interpreter",
-      instructions: "You are a code interpreter. Answer code-related questions.",
-      tools: [{ type: "code_interpreter" }],
-      model: "gpt-4o",
-    });
-
-    console.log("Assistant created:", assistant);
-    res.json({ assistantId: assistant.id });
-  } catch (error) {
-    console.error("Error initializing assistant:", error);
-    res.status(500).json({ error: "Failed to initialize assistant" });
-  }
-});
+const assistantId = "asst_jXuxiNUluiU49j6qFPJtDlQm"; // Use the preset assistant ID
 
 app.post("/call-assistant", async (req, res) => {
-  const { assistantId, message } = req.body;
+  const { message } = req.body;
+
+  if (!assistantId) {
+    console.error("Assistant ID is not set");
+    return res.status(500).json({ error: "Assistant not initialized" });
+  }
 
   try {
     console.log("Creating thread...");
     const thread = await openai.beta.threads.create();
+    console.log("Thread created:", thread.id);
 
     console.log("Sending message to thread...");
     await openai.beta.threads.messages.create(thread.id, {
       role: "user",
       content: message,
     });
+    console.log("Message sent to thread:", message);
 
     console.log("Running assistant...");
     const run = await openai.beta.threads.runs.createAndPoll(thread.id, {
       assistant_id: assistantId,
-      instructions:"Please address the user as Jane Doe. The user has a premium account.",
+      instructions:
+        "Please address the user as Jane Doe. The user has a premium account.",
     });
 
     if (run.status === "completed") {
+      console.log("Assistant run completed");
       const messages = await openai.beta.threads.messages.list(run.thread_id);
-      const assistantMessage = messages.data[0]?.content[0]?.text?.value;
-      res.json({ message: assistantMessage });
+      console.log("Messages received from thread:", messages.data);
+      console.log("THIS Messages received from thread:", messages.data[0].content[0].text.value);
+
+      const assistantMessage = messages.data[0].content[0].text.value;
+
+      if (assistantMessage) {
+        console.log("Assistant message:", assistantMessage);
+        res.json({ message: assistantMessage });
+      } else {
+        console.error("No assistant message found in the response");
+        res.status(500).json({ error: "No assistant message found" });
+      }
     } else {
+      console.error("Assistant run failed:", run);
       res.status(500).json({ error: "Assistant run failed" });
     }
   } catch (error) {

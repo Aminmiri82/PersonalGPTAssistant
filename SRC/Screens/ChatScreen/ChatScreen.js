@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, FlatList, Text } from "react-native";
 import AppTextInput from "../../Components/ChatComponents/AppTextInput";
 import Screen from "../../Components/Screen";
@@ -7,80 +7,47 @@ import axios from "axios";
 
 const ChatScreen = ({ navigation }) => {
   const [conversation, setConversation] = useState([]);
-  const [assistantId, setAssistantId] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const initializeAssistant = async () => {
-      try {
-        const response = await axios.post(
-          "http://localhost:3000/initialize-assistant"
-        );
-        setAssistantId(response.data.assistantId);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error initializing assistant:", error);
-        setLoading(false);
-      }
-    };
-
-    initializeAssistant();
-  }, []);
-
-  const callAssistant = async (newMessage) => {
-    if (!assistantId) {
-      console.error("Assistant not initialized");
-      return;
-    }
-
+  const callAssistant = async (message) => {
+    setLoading(true);
     try {
       const response = await axios.post(
         "http://localhost:3000/call-assistant",
-        {
-          assistantId,
-          message: newMessage,
-        }
+        { message }
       );
-
-      const assistantMessage = response.data.message;
-      handleSetAns(assistantMessage);
+      addMessageToConversation("assistant", response.data.message);
     } catch (error) {
       console.error("Error calling assistant:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleSetAns = (newAns) => {
-    setConversation((prevAns) => [
-      ...prevAns,
-      { role: "assistant", content: newAns },
+  const addMessageToConversation = (role, content) => {
+    setConversation((prevConversation) => [
+      ...prevConversation,
+      { role, content },
     ]);
   };
 
   const handleSetMessage = (newMessage) => {
     if (loading) {
-      console.error("Still loading assistant, please wait");
+      console.error("Still loading, please wait");
       return;
     }
 
-    setConversation((prevMessages) => [
-      ...prevMessages,
-      { role: "user", content: newMessage },
-    ]);
+    addMessageToConversation("user", newMessage);
     callAssistant(newMessage);
   };
 
-  if (loading) {
-    return (
-      <Screen>
-        <View style={styles.loadingContainer}>
-          <Text>Loading assistant...</Text>
-        </View>
-      </Screen>
-    );
-  }
-
   return (
     <Screen>
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <Text>Loading...</Text>
+        </View>
+      )}
       <FlatList
         data={conversation}
         keyExtractor={(item, index) => index.toString()}
