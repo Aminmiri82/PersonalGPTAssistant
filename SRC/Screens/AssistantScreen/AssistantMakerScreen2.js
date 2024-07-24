@@ -23,6 +23,7 @@ function AssistantMakerScreen2({ navigation, route }) {
   // const [assistantName, setAssistantName] = useState("pick a model");
   const [files, setFiles] = useState([]);
   const [model, setModel] = useState("GPT-3");
+
   const assistantList = [
     { label: "GPT-3", value: "gpt-3" },
     { label: "GPT-4", value: "gpt-4" },
@@ -47,6 +48,10 @@ function AssistantMakerScreen2({ navigation, route }) {
   };
 
   const handleSave = () => {
+    if (!name || !instructions) {
+      console.log("Name or instructions are missing");
+      return;
+    }
     insertAssistant(name, instructions, model, files)
       .then(() => {
         navigation.navigate("AssistantMenuScreen"); // Navigate back to the assistant menu
