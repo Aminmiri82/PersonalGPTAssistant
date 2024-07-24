@@ -7,26 +7,28 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNav from "./Navigation/BottomTabNav";
 import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
 
+import { DatabaseProvider } from "./DatabaseProvidor";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        
-        <Stack.Screen
-          name="Home"
-          component={BottomTabNav}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="OnBoarding"
-          component={OnBoardingScreen}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <DatabaseProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={BottomTabNav}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="OnBoarding"
+            component={OnBoardingScreen}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </DatabaseProvider>
   );
 }
 
