@@ -1,35 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, FlatList, Text } from "react-native";
-import OpenAI from "openai";
-import { OPENAI_API_KEY } from "@env";
 import AppTextInput from "../../Components/ChatComponents/AppTextInput";
 import Screen from "../../Components/Screen";
 import Chatbubble from "../../Components/ChatComponents/Chatbubble";
+import axios from "axios";
 
 const ChatScreen = ({ navigation }) => {
-  const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
-
   const [conversation, setConversation] = useState([]);
-  const [assistant, setAssistant] = useState(null);
-  const [thread, setThread] = useState(null);
+  const [assistantId, setAssistantId] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const initializeAssistant = async () => {
       try {
-        const assistant = await openai.beta.assistants.create({
-          name: "Math Tutor",
-          instructions:
-            "You are a personal math tutor. Write and run code to answer math questions.",
-          tools: [{ type: "code_interpreter" }],
-          model: "gpt-4o",
-        });
-        setAssistant(assistant);
-        const newThread = await openai.beta.threads.create();
-        setThread(newThread);
+        const response = await axios.post(
+          "http://localhost:3000/initialize-assistant"
+        );
+        setAssistantId(response.data.assistantId);
         setLoading(false);
       } catch (error) {
-        console.error("Error initializing assistant or thread:", error);
+        console.error("Error initializing assistant:", error);
         setLoading(false);
       }
     };
@@ -38,33 +28,24 @@ const ChatScreen = ({ navigation }) => {
   }, []);
 
   const callAssistant = async (newMessage) => {
-    if (!assistant || !thread) {
-      console.error("Assistant or thread not initialized");
+    if (!assistantId) {
+      console.error("Assistant not initialized");
       return;
     }
 
     try {
-      await openai.beta.threads.messages.create(thread.id, {
-        role: "user",
-        content: newMessage,
-      });
+      const response = await axios.post(
+        "http://localhost:3000/call-assistant",
+        {
+          assistantId,
+          message: newMessage,
+        }
+      );
 
-      const run = await openai.beta.threads.runs.createAndPoll(thread.id, {
-        assistant_id: assistant.id,
-        instructions:
-          "Please address the user as Jane Doe. The user has a premium account.",
-      });
-
-      if (run.status === "completed") {
-        const messages = await openai.beta.threads.messages.list(run.thread_id);
-
-        console.log("testing", messages.data[0].content[0].text.value);
-        handleSetAns(messages.data[0].content[0].text.value);
-      } else {
-        console.log(run.status);
-      }
+      const assistantMessage = response.data.message;
+      handleSetAns(assistantMessage);
     } catch (error) {
-      console.error("Error calling OpenAI API:", error);
+      console.error("Error calling assistant:", error);
     }
   };
 
@@ -77,7 +58,7 @@ const ChatScreen = ({ navigation }) => {
 
   const handleSetMessage = (newMessage) => {
     if (loading) {
-      console.error("Still loading assistant and thread, please wait");
+      console.error("Still loading assistant, please wait");
       return;
     }
 
@@ -85,14 +66,14 @@ const ChatScreen = ({ navigation }) => {
       ...prevMessages,
       { role: "user", content: newMessage },
     ]);
-    callAssistant(newMessage); // Call the function with the new message
+    callAssistant(newMessage);
   };
 
   if (loading) {
     return (
       <Screen>
         <View style={styles.loadingContainer}>
-          <Text>Loading assistant and thread...</Text>
+          <Text>Loading assistant...</Text>
         </View>
       </Screen>
     );

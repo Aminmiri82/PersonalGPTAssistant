@@ -42,7 +42,8 @@
     },
     "plugins": [
       "expo-router",
-      "expo-document-picker"
+      "expo-document-picker",
+      "expo-asset"
     ]
   }
 }
