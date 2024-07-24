@@ -7,6 +7,7 @@ import OnBoardingScreen from "../Screens/OBS/OnBoardingScreen";
 import AppButton from "../Components/AppButton";
 import Icon from "../Components/Icon";
 
+
 const ChatStack = createNativeStackNavigator();
 
 const makeNewChatButton = (navigation) => (
@@ -18,6 +19,11 @@ const makeNewChatButton = (navigation) => (
 function ChatScreenNav(props) {
   return (
     <ChatStack.Navigator>
+      <ChatStack.Screen
+        name="ChatScreen"
+        component={ChatScreen}
+        options={{ headerTitle: "Chat" }}
+      />
       <ChatStack.Screen
         name="ChatMenuScreen"
         // component={ChatScreen}
