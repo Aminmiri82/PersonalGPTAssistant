@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Text } from "react-native";
 
 import AssistantsMenuItem from "../../Components/AssistantsComponents/AssistantsMenuItem";
 import Screen from "../../Components/Screen";
@@ -53,8 +53,10 @@ function AssistantMenuScreen({ navigation }) {
     <Screen>
       <View style={styles.container}>
         <ScrollView bounces={false}>
-          <View styles={styles.top}>
-            {assistants.map((assistant) => (
+          {assistants.length === 0 ? (
+            <Text>No assistants available. Please add a new assistant.</Text>
+          ) : (
+            assistants.map((assistant) => (
               <AssistantsMenuItem
                 key={assistant.id}
                 image={require("../../assets/IMG_1706.jpeg")}
@@ -65,8 +67,8 @@ function AssistantMenuScreen({ navigation }) {
                   })
                 }
               />
-            ))}
-          </View>
+            ))
+          )}
         </ScrollView>
       </View>
     </Screen>
