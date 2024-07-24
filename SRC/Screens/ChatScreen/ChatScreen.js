@@ -1,56 +1,61 @@
 import React, { useState } from "react";
-import { View, Button, TextInput } from "react-native";
+import { View, Button, TextInput, StyleSheet, Text } from "react-native";
+
 import { getDB } from "../../database";
 import { OPENAI_API_KEY } from "@env";
+import AppTextInput from "../../Components/ChatComponents/AppTextInput";
+import Screen from "../../Components/Screen";
 
 import OpenAI from "openai";
 
 const ChatScreen = ({ navigation }) => {
+  
   const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
-  async function call() {
+  async function call(newMessage) {
     const completion = await openai.chat.completions.create({
       messages: [
         { role: "system", content: "You are a helpful assistant." },
-        { role: "user", content: "What is a LLM?" },
+        { role: "user", content: newMessage },
       ],
       model: "gpt-4o-mini",
     });
 
     console.log(completion.choices[0]);
+    handleSetAns(completion.choices[0]);
   }
-  
-  const [newChatTitle, setNewChatTitle] = useState("");
 
-  const addChatItem = () => {
-    const db = getDB();
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "INSERT INTO ChatItems (title, lastMessage, timestamp) VALUES (?, ?, ?)",
-          [newChatTitle, "", new Date().toISOString()]
-        );
-      },
-      (error) => {
-        console.log("Transaction error: ", error);
-      },
-      () => {
-        console.log("Chat item added successfully");
-        navigation.goBack();
-      }
-    );
+  const [ans, setAns] = useState([]);
+  const handleSetAns = (newAns) => {
+    setAns((prevAns) => {
+      return [...prevAns, newAns];
+    });
+  };
+
+  const [messages, setMessages] = useState([]);
+  const handleSetMessage = (newMessage) => {
+    setMessages((prevMessages) => {
+      const updatedMessages = [...prevMessages, newMessage];
+      call(newMessage); // Call the function with the new message
+      return updatedMessages;
+    });
   };
 
   return (
-    <View>
-      <TextInput
-        placeholder="Enter chat title"
-        value={newChatTitle}
-        onChangeText={setNewChatTitle}
-      />
-      <Button title="Add Chat" onPress={call} />
-    </View>
+    <Screen>
+      <Button title="Add Chat" onPress={() => call(messages[messages.length - 1])} />
+      {messages.map((msg, index) => (
+        <Text key={index}>{msg}</Text>
+      ))}
+      {ans.map((ans, index) => (
+        <Text key={index}>{ans.message.content}</Text>
+      ))}
+
+      <AppTextInput onSubmit={handleSetMessage} />
+    </Screen>
   );
 };
+
+const styles = StyleSheet.create({});
 
 export default ChatScreen;

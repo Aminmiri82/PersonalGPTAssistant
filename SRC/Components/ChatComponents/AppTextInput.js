@@ -1,10 +1,8 @@
-// Textinput.js
 import React, { useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
   TextInput,
-  Button,
   View,
   TouchableOpacity,
 } from "react-native";
@@ -12,7 +10,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import defaultStyles from "../../config/Styles";
 
-const Textinput = ({ onSubmit }) => {
+const AppTextInput = ({ onSubmit }) => {
   const [text, setText] = useState("");
 
   const handleSend = () => {
@@ -41,7 +39,6 @@ const Textinput = ({ onSubmit }) => {
             color={defaultStyles.colors.medium}
             style={styles.icon}
           />
-          {/* FIXME: use the Icon components rather than MaterialCommunityIcons */}
         </TouchableOpacity>
       </View>
       <View style={styles.button}>
@@ -106,4 +103,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Textinput;
+export default AppTextInput;
