@@ -9,8 +9,9 @@ import Screen from "../../Components/Screen";
 import OpenAI from "openai";
 
 const ChatScreen = ({ navigation }) => {
-  
   const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+
+  const [conversation, setConversation] = useState([]);
 
   async function call(newMessage) {
     const completion = await openai.chat.completions.create({
@@ -25,17 +26,21 @@ const ChatScreen = ({ navigation }) => {
     handleSetAns(completion.choices[0]);
   }
 
-  const [ans, setAns] = useState([]);
   const handleSetAns = (newAns) => {
-    setAns((prevAns) => {
-      return [...prevAns, newAns];
+    setConversation((prevAns) => {
+      return [
+        ...prevAns,
+        { role: "assistant", content: newAns.message.content },
+      ];
     });
   };
 
-  const [messages, setMessages] = useState([]);
   const handleSetMessage = (newMessage) => {
-    setMessages((prevMessages) => {
-      const updatedMessages = [...prevMessages, newMessage];
+    setConversation((prevMessages) => {
+      const updatedMessages = [
+        ...prevMessages,
+        { role: "user", content: newMessage },
+      ];
       call(newMessage); // Call the function with the new message
       return updatedMessages;
     });
@@ -43,19 +48,24 @@ const ChatScreen = ({ navigation }) => {
 
   return (
     <Screen>
-      <Button title="Add Chat" onPress={() => call(messages[messages.length - 1])} />
-      {messages.map((msg, index) => (
-        <Text key={index}>{msg}</Text>
-      ))}
-      {ans.map((ans, index) => (
-        <Text key={index}>{ans.message.content}</Text>
-      ))}
-
+      <View style={styles.stuff}>
+        <Button
+          title="Add Chat"
+          onPress={() => call(messages[messages.length - 1])}
+        />
+        {conversation.map((msg, index) => (
+          <Text key={index}>{msg.content}</Text>
+        ))}
+      </View>
       <AppTextInput onSubmit={handleSetMessage} />
     </Screen>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  stuff: {
+    
+  },
+});
 
 export default ChatScreen;
