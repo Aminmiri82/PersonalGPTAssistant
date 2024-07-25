@@ -36,10 +36,19 @@ function AssistantMakerScreen2({ navigation, route }) {
     });
   }, []);
 
+  // const handleAddFile = async () => {
+  //   let result = await DocumentPicker.getDocumentAsync({});
+  //   if (result.type === "success") {
+  //     setFiles([...files, result]);
+  //   }
+  // };
   const handleAddFile = async () => {
     let result = await DocumentPicker.getDocumentAsync({});
-    if (result.type === "success") {
-      setFiles([...files, result]);
+    console.log(result);
+    if (!result.canceled) {
+      setFiles([...files, result.assets[0]]); // Correctly update the state
+    } else {
+      console.log("User canceled document picker");
     }
   };
 

@@ -17,12 +17,6 @@ function AssistantMakerScreen1({ navigation }) {
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
 
-  // useEffect(() => {
-  //   initDB().catch((error) => {
-  //     console.log("Error initializing database: ", error);
-  //   });
-  // }, []);
-
   const handleNext = () => {
     if (!name || !instructions) {
       console.log("Name or instructions are missing");
@@ -99,7 +93,7 @@ function AssistantMakerScreen1({ navigation }) {
           <AppText style={styles.nextButtonText}>Next</AppText>
         </TouchableOpacity>
       </View> */}
-      <AppButton title="next" onPress={handleNext} />
+      <AppButton title="next" onPress={handleNext} color={colors.danger} />
     </Screen>
   );
 }

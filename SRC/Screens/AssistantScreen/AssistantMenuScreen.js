@@ -53,22 +53,24 @@ function AssistantMenuScreen({ navigation }) {
     <Screen>
       <View style={styles.container}>
         <ScrollView bounces={false}>
-          {assistants.length === 0 ? (
-            <Text>No assistants available. Please add a new assistant.</Text>
-          ) : (
-            assistants.map((assistant) => (
-              <AssistantsMenuItem
-                key={assistant.id}
-                image={require("../../assets/IMG_1706.jpeg")}
-                title={assistant.name}
-                onPress={() =>
-                  navigation.navigate("AssistantEditorScreen1", {
-                    id: assistant.id,
-                  })
-                }
-              />
-            ))
-          )}
+          <View style={styles.top}>
+            {assistants.length === 0 ? (
+              <Text>No assistants available. Please add a new assistant.</Text>
+            ) : (
+              assistants.map((assistant) => (
+                <AssistantsMenuItem
+                  key={assistant.id}
+                  image={require("../../assets/IMG_1706.jpeg")}
+                  title={assistant.name}
+                  onPress={() =>
+                    navigation.navigate("AssistantEditorScreen1", {
+                      id: assistant.id,
+                    })
+                  }
+                />
+              ))
+            )}
+          </View>
         </ScrollView>
       </View>
     </Screen>
