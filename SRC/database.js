@@ -67,3 +67,61 @@ export const fetchAssistants = async () => {
     }
   });
 };
+
+export const fetchAssistantById = async (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!db) {
+        throw new Error("Database is not initialized");
+      }
+      const result = await db.getFirstAsync(
+        "SELECT * FROM Assistants WHERE id = ?",
+        [id]
+      );
+      console.log("Fetched assistant successfully");
+      resolve(result);
+    } catch (error) {
+      console.log("Error fetching assistant: ", error);
+      reject(error);
+    }
+  });
+};
+
+export const updateAssistant = async (id, name, instructions, model, files) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!db) {
+        throw new Error("Database is not initialized");
+      }
+      await db.runAsync(
+        "UPDATE Assistants SET name = ?, instructions = ?, model = ?, files = ? WHERE id = ?",
+        name,
+        instructions,
+        model,
+        JSON.stringify(files),
+        id
+      );
+      console.log("Assistant updated successfully");
+      resolve();
+    } catch (error) {
+      console.log("Error updating assistant: ", error);
+      reject(error);
+    }
+  });
+};
+
+export const deleteAssistantById = async (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!db) {
+        throw new Error("Database is not initialized");
+      }
+      await db.runAsync("DELETE FROM Assistants WHERE id = ?", [id]);
+      console.log("Assistant Deleted successfully");
+      resolve();
+    } catch (error) {
+      console.log("Error deleting Assistant: ", error);
+      reject(error);
+    }
+  });
+};
