@@ -8,7 +8,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.use(express.json());
 
-const assistantId = "asst_jXuxiNUluiU49j6qFPJtDlQm"; // Use the preset assistant ID
+const assistantId = "asst_40ROFN9nKe2V6Eka6bYXSZ2y"; // Use the preset assistant ID
 
 app.post("/call-assistant", async (req, res) => {
   const { message } = req.body;
@@ -33,15 +33,16 @@ app.post("/call-assistant", async (req, res) => {
     console.log("Running assistant...");
     const run = await openai.beta.threads.runs.createAndPoll(thread.id, {
       assistant_id: assistantId,
-      instructions:
-        "Please address the user as Jane Doe. The user has a premium account.",
     });
 
     if (run.status === "completed") {
       console.log("Assistant run completed");
       const messages = await openai.beta.threads.messages.list(run.thread_id);
       console.log("Messages received from thread:", messages.data);
-      console.log("THIS Messages received from thread:", messages.data[0].content[0].text.value);
+      console.log(
+        "THIS Messages received from thread:",
+        messages.data[0].content[0].text.value
+      );
 
       const assistantMessage = messages.data[0].content[0].text.value;
 
