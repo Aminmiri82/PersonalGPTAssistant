@@ -1,9 +1,10 @@
+// ChatScreen.js
 import React, { useState } from "react";
 import { View, StyleSheet, FlatList, Text } from "react-native";
 import AppTextInput from "../../Components/ChatComponents/AppTextInput";
 import Screen from "../../Components/Screen";
 import Chatbubble from "../../Components/ChatComponents/Chatbubble";
-import axios from "axios";
+import ApiBackEnd from "../../openai-backend/ApiBackEnd";
 
 const ChatScreen = ({ navigation }) => {
   const [conversation, setConversation] = useState([]);
@@ -12,11 +13,8 @@ const ChatScreen = ({ navigation }) => {
   const callAssistant = async (message) => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:3000/call-assistant",
-        { message }
-      );
-      addMessageToConversation("assistant", response.data.message);
+      const assistantMessage = await ApiBackEnd(message);
+      addMessageToConversation("assistant", assistantMessage);
     } catch (error) {
       console.error("Error calling assistant:", error);
     } finally {
