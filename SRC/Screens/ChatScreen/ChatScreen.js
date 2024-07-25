@@ -1,19 +1,22 @@
 // ChatScreen.js
 import React, { useState } from "react";
-import { View, StyleSheet, FlatList, Text } from "react-native";
+import { View, StyleSheet, FlatList, Text, Button } from "react-native";
 import AppTextInput from "../../Components/ChatComponents/AppTextInput";
 import Screen from "../../Components/Screen";
 import Chatbubble from "../../Components/ChatComponents/Chatbubble";
-import ApiBackEnd from "../../openai-backend/ApiBackEnd";
+import {
+  callAssistantApi,
+  initializeAssistant,
+} from "../../openai-backend/ApiBackEnd";
 
-const ChatScreen = ({ navigation }) => {
+const ChatScreen = ({ navigation, threadId, assistantId }) => {
   const [conversation, setConversation] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const callAssistant = async (message) => {
     setLoading(true);
     try {
-      const assistantMessage = await ApiBackEnd(message);
+      const assistantMessage = await callAssistantApi(message);
       addMessageToConversation("assistant", assistantMessage);
     } catch (error) {
       console.error("Error calling assistant:", error);
@@ -38,6 +41,14 @@ const ChatScreen = ({ navigation }) => {
     addMessageToConversation("user", newMessage);
     callAssistant(newMessage);
   };
+  const doTest = async () => {
+    const assistant = await initializeAssistant({
+      name: "Test Assistant",
+      instructions: "You say onion to every question",
+      model: "gpt-4o",
+    });
+    console.log("Assistant initialized:", assistant, "onions !");
+  };
 
   return (
     <Screen>
@@ -46,6 +57,7 @@ const ChatScreen = ({ navigation }) => {
           <Text>Loading...</Text>
         </View>
       )}
+      <Button title="Test" onPress={doTest} />
       <FlatList
         data={conversation}
         keyExtractor={(item, index) => index.toString()}

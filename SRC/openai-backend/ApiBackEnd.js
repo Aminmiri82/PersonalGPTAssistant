@@ -4,6 +4,24 @@ import { OPENAI_API_KEY } from "@env";
 
 const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
+
+const initializeAssistant = async ({ name, instructions, model }) => {
+    try {
+      console.log("Initializing assistant...");
+      const assistant = await openai.beta.assistants.create({
+        name: name,
+        instructions: instructions,
+        tools: [{ type: "file_search" }],
+        model: model,
+      });
+      console.log("Assistant created:", assistant);
+      return { assistantId: assistant.id }; // Return the assistant ID
+    } catch (error) {
+      console.error("Error initializing assistant:", error);
+      return { error: "Failed to initialize assistant" }; // Return the error message
+    }
+  };
+  
 const callAssistantApi = async (message) => {
   try {
     console.log("Creating thread...");
@@ -44,4 +62,4 @@ const callAssistantApi = async (message) => {
   }
 };
 
-export default callAssistantApi;
+export {callAssistantApi,initializeAssistant};
