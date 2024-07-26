@@ -214,7 +214,7 @@ export const fetchChatHistory = async (assistantId) => {
         throw new Error("Database is not initialized");
       }
       const allRows = await db.getAllAsync(
-        "SELECT Chats.id, Chats.assistantId, Chats.message, Chats.timestamp, ChatItems.id FROM Chats JOIN ChatItems ON ChatItems.id = Chats.chatId WHERE Chats.assistantId = ? ORDER BY timestamp ASC",
+        "SELECT Chats.id, Chats.assistantId, Chats.message, Chats.timestamp, ChatItems.Id FROM Chats JOIN ChatItems ON ChatItems.Id = Chats.id WHERE Chats.assistantId = ? ORDER BY timestamp ASC",
         [assistantId]
       );
       console.log("Fetched chat history successfully");
