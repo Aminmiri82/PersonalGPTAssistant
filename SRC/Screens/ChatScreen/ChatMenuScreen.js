@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { View, FlatList, Text } from "react-native";
-import { initDB, getDB } from "../../database";
+import React, { useEffect, useState, useCallback } from "react";
+import { View, FlatList, Text, ScrollView } from "react-native";
 import ChatItem from "../../Components/ChatComponents/ChatItem";
+import { fetchChatItems, deleteChatItemById, initDB } from "../../database";
+import { useFocusEffect } from "@react-navigation/native";
+import Screen from "../../Components/Screen";
 
 // const ChatMenuScreen = () => {
 //   // const [chatItems, setChatItems] = useState([]);
@@ -38,16 +40,48 @@ import ChatItem from "../../Components/ChatComponents/ChatItem";
 //     </View>
 //   );
 // };
+
 function ChatMenuScreen({ navigation }) {
+  const [chatItems, setChatItems] = useState([]);
+
+  useEffect(() => {
+    initDB().catch((error) => {
+      console.log("Error initializing database: ", error);
+    });
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchChatItems()
+        .then((data) => {
+          setChatItems(data);
+        })
+        .catch((error) => {
+          console.log("Error fetching ChatItems: ", error);
+        });
+    }, [])
+  );
+
   return (
-    <View>
-      <ChatItem
-        title="auto generated name"
-        subTitle="last message in thread"
-        image="../../assets/IMG_1706.jpeg"
-        modelname="gpt"
-      />
-    </View>
+    <Screen>
+      <View>
+        <ScrollView bounces={false}>
+          {chatItems.length === 0 ? (
+            <Text>No chats available. please add a new chat.</Text>
+          ) : (
+            chatItems.map((chat) => (
+              <ChatItem
+                key={chat.id}
+                title={chat.assistantName}
+                subTitle={chat.lmit}
+                image="../../assets/IMG_1706.jpeg"
+                modelname={chat.modelname}
+              />
+            ))
+          )}
+        </ScrollView>
+      </View>
+    </Screen>
   );
 }
 
