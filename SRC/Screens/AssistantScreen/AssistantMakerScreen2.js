@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity, Text, Button } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
@@ -7,22 +7,60 @@ import Styles from "../../config/Styles";
 import RNPickerSelect from "react-native-picker-select";
 import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocumentPicker";
 import { addFile } from "../../openai-backend/ApiBackEnd";
+import { Button } from "react-native-web";
+import AppButton from "../../Components/AppButton";
+import { insertAssistant, initDB } from "../../database";
 
-function AssistantMakerScreen2({ navigation }) {
-  const [assistantName, setAssistantName] = useState("pick a model");
+function AssistantMakerScreen2({ navigation, route }) {
+  const { name, instructions } = route.params;
+  // const [assistantName, setAssistantName] = useState("pick a model");
+  const [files, setFiles] = useState([]);
+  const [model, setModel] = useState("GPT-3");
+
   const assistantList = [
     { label: "GPT-3", value: "gpt-3" },
     { label: "GPT-4", value: "gpt-4" },
     { label: "GPT-4 Turbo", value: "gpt-4-turbo" },
   ];
-  const [files, setFiles] = useState([]);
 
-  const handleAddFile = (file) => {
-    setFiles((prevFiles) => [...prevFiles, file]);
+  useEffect(() => {
+    initDB().catch((error) => {
+      console.log("Error initializing database: ", error);
+    });
+  }, []);
+
+  // const handleAddFile = async () => {
+  //   let result = await DocumentPicker.getDocumentAsync({});
+  //   if (result.type === "success") {
+  //     setFiles([...files, result]);
+  //   }
+  // };
+  const handleAddFile = async () => {
+    let result = await DocumentPicker.getDocumentAsync({});
+    console.log(result);
+    if (!result.canceled) {
+      setFiles([...files, result.assets[0]]); // Correctly update the state
+    } else {
+      console.log("User canceled document picker");
+    }
   };
 
   const handleRemoveFile = (index) => {
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setFiles(files.filter((_, i) => i !== index));
+  };
+
+  const handleSave = () => {
+    if (!name || !instructions) {
+      console.log("Name or instructions are missing");
+      return;
+    }
+    insertAssistant(name, instructions, model, files)
+      .then(() => {
+        navigation.navigate("AssistantMenuScreen"); // Navigate back to the assistant menu
+      })
+      .catch((error) => {
+        console.log("Error saving assistant: ", error);
+      });
   };
 
   const handleUploadFiles = async () => {
@@ -34,6 +72,8 @@ function AssistantMakerScreen2({ navigation }) {
     }
   };
 
+  
+
   return (
     <Screen>
       <View style={styles.topContainer}>
@@ -44,7 +84,7 @@ function AssistantMakerScreen2({ navigation }) {
         </View>
         <View style={styles.topPickerContainer}>
           <RNPickerSelect
-            onValueChange={(value) => setAssistantName(value)}
+            onValueChange={(value) => setModel(value)}
             items={assistantList}
           />
         </View>
@@ -70,14 +110,15 @@ function AssistantMakerScreen2({ navigation }) {
           onRemoveFile={handleRemoveFile}
         />
       </View>
-      <View style={styles.ButtonContainer}>
+      {/* <View style={styles.ButtonContainer}>
         <TouchableOpacity
           onPress={() => navigation.popToTop("AssistantMenuScreen")}
           style={styles.doneButton}
         >
           <AppText style={styles.doneButtonText}>Done</AppText>
         </TouchableOpacity>
-      </View>
+      </View> */}
+      <AppButton title="Save Assistant" onPress={handleSave} />
     </Screen>
   );
 }

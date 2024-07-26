@@ -4,7 +4,7 @@ import AppText from "../AppText";
 
 import colors from "../../config/colors";
 
-function AssistantsMenuItem({ image, title, onPress }) {
+function AssistantsMenuItem({ image, title, onPress, ShowEditButton = true }) {
   return (
     <View style={styles.TopContainer}>
       <View style={styles.ImageContainer}>
@@ -15,9 +15,11 @@ function AssistantsMenuItem({ image, title, onPress }) {
       <View style={styles.modelTextContainer}>
         <AppText style={styles.modelText}>{title}</AppText>
       </View>
-      <TouchableOpacity onPress={onPress}>
-        <AppText style={styles.edit}>edit</AppText>
-      </TouchableOpacity>
+      {ShowEditButton && (
+        <TouchableOpacity onPress={onPress}>
+          <AppText style={styles.edit}>edit</AppText>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

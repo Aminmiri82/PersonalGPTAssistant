@@ -44,7 +44,8 @@
     "react-native-web": "^0.19.12",
     "rn-fetch-blob": "^0.12.0",
     "semver": "7.6.2",
-    "xml2js": "^0.6.2"
+    "xml2js": "^0.6.2",
+    "expo-sqlite": "~14.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.24.6",
