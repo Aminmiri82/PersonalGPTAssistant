@@ -4,7 +4,7 @@ import { View, StyleSheet, ScrollView, Text } from "react-native";
 import AssistantsMenuItem from "../../Components/AssistantsComponents/AssistantsMenuItem";
 import Screen from "../../Components/Screen";
 
-import { fetchAssistants, initDB } from "../../database";
+import { fetchAssistants, initDB, insertChat } from "../../database";
 import { useFocusEffect } from "@react-navigation/native";
 
 function ChooseChatScreen({ navigation }) {
@@ -42,8 +42,10 @@ function ChooseChatScreen({ navigation }) {
                   image={require("../../assets/IMG_1706.jpeg")}
                   title={assistant.name}
                   onPress={() =>
-                    navigation.navigate("ChatScreen", {
-                      assistantId: assistant.id,
+                    insertChat(assistant.name, assistant.model).then(() => {
+                      navigation.navigate("ChatScreen", {
+                        assistantId: assistant.id,
+                      });
                     })
                   }
                   ShowEditButton={false}

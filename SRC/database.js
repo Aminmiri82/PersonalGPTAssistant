@@ -9,7 +9,7 @@ export const initDB = async () => {
       await db.execAsync(`
         PRAGMA journal_mode = WAL;
         CREATE TABLE IF NOT EXISTS ChatItems (
-          id INTEGER PRIMARY KEY AUTOINCREMENT, 
+          Id INTEGER PRIMARY KEY AUTOINCREMENT, 
           assistantName TEXT, 
           modelName TEXT,
           lmit TEXT
@@ -193,9 +193,10 @@ export const insertChatMessage = async (assistantId, message) => {
         throw new Error("Database is not initialized");
       }
       await db.runAsync(
-        "INSERT INTO Chats (assistantId, message) VALUES (?, ?)",
+        "INSERT INTO Chats (assistantId, message) SELECT ?, ? FROM Chats JOIN ChatItems ON Chats.id = ChatItems.Id WHERE Chats.assistantId = ?",
         assistantId,
-        message
+        message,
+        assistantId
       );
       console.log("Chat message inserted successfully");
       resolve();
@@ -213,7 +214,7 @@ export const fetchChatHistory = async (assistantId) => {
         throw new Error("Database is not initialized");
       }
       const allRows = await db.getAllAsync(
-        "SELECT * FROM Chats WHERE assistantId = ? ORDER BY timestamp ASC",
+        "SELECT Chats.id, Chats.assistantId, Chats.message, Chats.timestamp, ChatItems.id FROM Chats JOIN ChatItems ON ChatItems.id = Chats.chatId WHERE Chats.assistantId = ? ORDER BY timestamp ASC",
         [assistantId]
       );
       console.log("Fetched chat history successfully");
@@ -224,3 +225,22 @@ export const fetchChatHistory = async (assistantId) => {
     }
   });
 };
+
+// export const fetchChatItems = async (assistantId) => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       if (!db) {
+//         throw new Error("Database is not initialized");
+//       }
+//       const allRows = await db.getAllAsync(
+//         "SELECT Chats.id AS chatId, Assistants.name AS assistantName, Assistants.model AS modelName, Chats.message, Chats.timestamp FROM Chats JOIN Assistants ON Chats.assistantId = Assistants.id WHERE assistantId = ? ORDER BY Chats.timestamp DESC",
+//         [assistantId]
+//       );
+//       console.log("Fetched ChatItems successfully");
+//       resolve(allRows);
+//     } catch (error) {
+//       console.log("Error fetching ChatItems: ", error);
+//       reject(error);
+//     }
+//   });
+// };

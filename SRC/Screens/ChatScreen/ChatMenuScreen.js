@@ -62,6 +62,10 @@ function ChatMenuScreen({ navigation }) {
     }, [])
   );
 
+  const handlePress = (id) => {
+    navigation.navigate("ChatScreen", { chatId: id });
+  };
+
   return (
     <Screen>
       <View>
@@ -76,6 +80,7 @@ function ChatMenuScreen({ navigation }) {
                 subTitle={chat.lmit}
                 image="../../assets/IMG_1706.jpeg"
                 modelname={chat.modelname}
+                onPress={() => handlePress(chat.chatId)}
               />
             ))
           )}
