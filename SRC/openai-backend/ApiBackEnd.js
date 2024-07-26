@@ -16,19 +16,29 @@ const initializeAssistant = async ({ name, instructions, model }) => {
       temperature: 0.75,
     });
     console.log("Assistant created:", assistant);
-    return { assistantId: assistant.id }; // Return the assistant ID
+    const thread = await createThread();
+    return { assistantId: assistant.id, thread: thread }; // Return the assistant ID
   } catch (error) {
     console.error("Error initializing assistant:", error);
     return { error: "Failed to initialize assistant" }; // Return the error message
   }
 };
 
-const callAssistantApi = async (message) => {
+const createThread = async () => {
   try {
     console.log("Creating thread...");
     const thread = await openai.beta.threads.create();
-    console.log("Thread created:", thread.id);
+    console.log("Thread created:", thread);
+    return thread;
+  } catch (error) {
+    console.error("Error creating thread:", error);
+    return null;
+  }
+};
 
+const callAssistantApi = async (message, threadID) => {
+  try {
+    const thread = {id : threadID};
     console.log("Sending message to thread...");
     await openai.beta.threads.messages.create(thread.id, {
       role: "user",
@@ -39,7 +49,7 @@ const callAssistantApi = async (message) => {
 
     console.log("Running assistant...");
     const run = await openai.beta.threads.runs.createAndPoll(thread.id, {
-      assistant_id: "asst_40ROFN9nKe2V6Eka6bYXSZ2y", // Use your assistant ID
+      assistant_id: "asst_nJBFpCJoez6OzWPioTiAUS63", // Use your assistant ID
     });
 
     if (run.status === "completed") {
@@ -110,4 +120,4 @@ const addFile = async (
   }
 };
 
-export { callAssistantApi, initializeAssistant, addFile };
+export { callAssistantApi, initializeAssistant, addFile, createThread };
