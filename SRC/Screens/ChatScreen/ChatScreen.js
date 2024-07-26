@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View, Button, TextInput, StyleSheet, FlatList,Text,Button } from "react-native";
+import { View, Button, TextInput, StyleSheet, FlatList,Text } from "react-native";
 
 import ChatItem from "../../Components/ChatComponents/ChatItem";
-import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
 import Icon from "../../Components/Icon";
 import ListItemSeparator from "../../Components/ListItemSeparator";
-import Textinput from "../../Components/ChatComponents/Textinput";
 import ChatBubble from "../../Components/ChatComponents/Chatbubble";
 import AppTextInput from "../../Components/ChatComponents/AppTextInput";
 import Screen from "../../Components/Screen";
@@ -47,7 +45,7 @@ const ChatScreen = ({ navigation, threadId, assistantId,route }) => {
     addMessageToConversation("user", newMessage);
     callAssistant(newMessage);
   };
-  const { assistantId } = route.params;
+  const { NOTassistantId } = route.params;
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
 
@@ -58,22 +56,22 @@ const ChatScreen = ({ navigation, threadId, assistantId,route }) => {
   }, []);
 
   useEffect(() => {
-    fetchChatHistory(assistantId)
+    fetchChatHistory(NOTassistantId)
       .then((history) => {
         setChatHistory(history);
       })
       .catch((error) => {
         console.log("Error fetching chat history: ", error);
       });
-  }, [assistantId]);
+  }, [NOTassistantId]);
 
   const handleSend = () => {
     if (message.trim() === "") return;
-    insertChatMessage(assistantId, message)
+    insertChatMessage(NOTassistantId, message)
       .then(() => {
         setChatHistory([
           ...chatHistory,
-          { assistantId, message, timestamp: new Date() },
+          { NOTassistantId, message, timestamp: new Date() },
         ]);
         setMessage("");
       })

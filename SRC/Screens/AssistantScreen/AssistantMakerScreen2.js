@@ -7,7 +7,6 @@ import Styles from "../../config/Styles";
 import RNPickerSelect from "react-native-picker-select";
 import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocumentPicker";
 import { addFile } from "../../openai-backend/ApiBackEnd";
-import { Button } from "react-native-web";
 import AppButton from "../../Components/AppButton";
 import { insertAssistant, initDB } from "../../database";
 
@@ -35,14 +34,8 @@ function AssistantMakerScreen2({ navigation, route }) {
   //     setFiles([...files, result]);
   //   }
   // };
-  const handleAddFile = async () => {
-    let result = await DocumentPicker.getDocumentAsync({});
-    console.log(result);
-    if (!result.canceled) {
-      setFiles([...files, result.assets[0]]); // Correctly update the state
-    } else {
-      console.log("User canceled document picker");
-    }
+  const handleAddFile = (file) => {
+    setFiles((prevFiles) => [...prevFiles, file]);
   };
 
   const handleRemoveFile = (index) => {
