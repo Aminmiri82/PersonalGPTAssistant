@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, AppRegistry } from "react-native";
+import { name as appName } from "./app.json";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -7,14 +8,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNav from "./Navigation/BottomTabNav";
 import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
 
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        
         <Stack.Screen
           name="Home"
           component={BottomTabNav}
@@ -37,3 +36,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+AppRegistry.registerComponent(appName, () => App);
