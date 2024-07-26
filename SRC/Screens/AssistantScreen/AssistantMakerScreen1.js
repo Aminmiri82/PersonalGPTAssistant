@@ -10,11 +10,24 @@ import {
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import AppButton from "../../Components/AppButton";
 
 function AssistantMakerScreen1({ navigation }) {
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
+
+  const handleNext = () => {
+    if (!name || !instructions) {
+      console.log("Name or instructions are missing");
+      return;
+    }
+    navigation.navigate("AssistantMakerScreen2", {
+      name,
+      instructions,
+    });
+  };
+
   return (
     <Screen>
       <View style={styles.topContainer}>
@@ -25,7 +38,7 @@ function AssistantMakerScreen1({ navigation }) {
             </AppText>
           </View>
           <View style={styles.pictureWrapper}>
-          <TouchableOpacity
+            <TouchableOpacity
               style={styles.picture}
               onPress={() => {
                 console.log("edit");
@@ -72,14 +85,15 @@ function AssistantMakerScreen1({ navigation }) {
           scrollEnabled
         />
       </View>
-      <View style={styles.ButtonContainer}>
+      {/* <View style={styles.ButtonContainer}>
         <TouchableOpacity
           onPress={() => navigation.push("AssistantMakerScreen2")}
           style={styles.nextButton}
         >
           <AppText style={styles.nextButtonText}>Next</AppText>
         </TouchableOpacity>
-      </View>
+      </View> */}
+      <AppButton title="next" onPress={handleNext} color={colors.danger} />
     </Screen>
   );
 }
