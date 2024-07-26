@@ -95,7 +95,6 @@ function ChatMenuScreen({ navigation }) {
       </View>
     </Screen>
   );
-}
 };
 
 const styles = StyleSheet.create({
