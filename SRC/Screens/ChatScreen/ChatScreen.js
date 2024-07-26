@@ -4,10 +4,7 @@ import { View, StyleSheet, FlatList, Text, Button } from "react-native";
 import AppTextInput from "../../Components/ChatComponents/AppTextInput";
 import Screen from "../../Components/Screen";
 import Chatbubble from "../../Components/ChatComponents/Chatbubble";
-import {
-  callAssistantApi,
-  initializeAssistant,
-} from "../../openai-backend/ApiBackEnd";
+import { callAssistantApi } from "../../openai-backend/ApiBackEnd";
 
 const ChatScreen = ({ navigation, threadId, assistantId }) => {
   const [conversation, setConversation] = useState([]);
@@ -41,14 +38,6 @@ const ChatScreen = ({ navigation, threadId, assistantId }) => {
     addMessageToConversation("user", newMessage);
     callAssistant(newMessage);
   };
-  const doTest = async () => {
-    const assistant = await initializeAssistant({
-      name: "Test Assistant",
-      instructions: "You say onion to every question",
-      model: "gpt-4o",
-    });
-    console.log("Assistant initialized:", assistant, "onions !");
-  };
 
   return (
     <Screen>
@@ -57,7 +46,7 @@ const ChatScreen = ({ navigation, threadId, assistantId }) => {
           <Text>Loading...</Text>
         </View>
       )}
-      <Button title="Test" onPress={doTest} />
+     
       <FlatList
         data={conversation}
         keyExtractor={(item, index) => index.toString()}
