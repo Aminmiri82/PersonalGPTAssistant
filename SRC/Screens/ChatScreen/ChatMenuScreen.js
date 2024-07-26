@@ -1,6 +1,6 @@
 import React, { useEffect, useState,useCallback } from "react";
-import { View, FlatList, Text,ScrollView,StyleSheet, ScrollView } from "react-native";
-import { initDB, getDB } from "../../database";
+import { View, FlatList, Text,ScrollView,StyleSheet } from "react-native";
+
 import ChatItem from "../../Components/ChatComponents/ChatItem";
 import { initializeAssistant } from "../../openai-backend/ApiBackEnd";
 import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocumentPicker";

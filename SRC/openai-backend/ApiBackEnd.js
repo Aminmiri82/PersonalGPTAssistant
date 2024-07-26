@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "@env";
-import * as RNFS from "@dr.pogodin/react-native-fs";
+
 import { Buffer } from "buffer";
 
 const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
