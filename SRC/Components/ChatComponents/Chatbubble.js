@@ -1,24 +1,33 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-
 import colors from "../../config/colors";
 
-const Chatbubble = ({ text }) => {
+const Chatbubble = ({ message }) => {
+  const isUser = message.role === 'user';
+
   return (
-    <View style={styles.bubble}>
-      <Text style={styles.text}>{text}</Text>
+    <View style={[styles.bubble, isUser ? styles.userBubble : styles.assistantBubble]}>
+      <Text style={styles.text}>{message.content}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   bubble: {
-    backgroundColor: colors.secondary,
     padding: 10,
     borderRadius: 20,
     marginVertical: 5,
-    alignSelf: "flex-end", // or 'flex-end' based on the message sender
+    maxWidth: '80%',
+  },
+  userBubble: {
+    backgroundColor: colors.secondary,
+    alignSelf: "flex-end",
     borderBottomRightRadius: 0,
+  },
+  assistantBubble: {
+    backgroundColor: colors.light,
+    alignSelf: "flex-start",
+    borderBottomLeftRadius: 0,
   },
   text: {
     color: colors.dark,

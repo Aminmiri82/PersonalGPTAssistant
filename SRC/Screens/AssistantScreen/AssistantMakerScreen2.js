@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  Text,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text, Button } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
 import Styles from "../../config/Styles";
 import RNPickerSelect from "react-native-picker-select";
-import * as DocumentPicker from "expo-document-picker";
 import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocumentPicker";
+import { addFile } from "../../openai-backend/ApiBackEnd";
 import { Button } from "react-native-web";
 import AppButton from "../../Components/AppButton";
 import { insertAssistant, initDB } from "../../database";
@@ -70,6 +63,17 @@ function AssistantMakerScreen2({ navigation, route }) {
       });
   };
 
+ 
+
+  const handleUploadFiles = async () => {
+    try {
+      await addFile(files);
+      console.log("Files uploaded successfully");
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
+  };
+
   return (
     <Screen>
       <View style={styles.topContainer}>
@@ -86,11 +90,13 @@ function AssistantMakerScreen2({ navigation, route }) {
         </View>
         <View style={styles.gp4TipContainer}>
           <AppText style={styles.middleTip}>
-            if you want to upload files fro the knowedlge base you need to
+            if you want to upload files for the knowledge base you need to
             choose gpt 4 turbo preview
           </AppText>
         </View>
       </View>
+      <Text> this many files {files.length}</Text>
+      <Button onPress={handleUploadFiles} title="Add Files" />
 
       <View style={styles.bottomContainer}>
         <View style={styles.bottomTipContainer}>
@@ -142,7 +148,6 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     borderWidth: 1,
   },
-
   gp4TipContainer: {
     width: "100%",
     justifyContent: "center",
