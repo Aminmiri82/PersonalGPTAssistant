@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -15,23 +15,66 @@ import Styles from "../../config/Styles";
 import RNPickerSelect from "react-native-picker-select";
 import * as DocumentPicker from "expo-document-picker";
 import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocumentPicker";
+import {
+  fetchAssistantById,
+  updateAssistant,
+  deleteAssistantById,
+} from "../../database";
 
 //info is the stuff that is saved in the database and you edit it here
-function AssistantEditorScreen2({ navigation, info }) {
-  const [assistantName, setAssistantName] = useState("pick a model");
+function AssistantEditorScreen2({ navigation, info, route }) {
+  const { id, name, instructions } = route.params;
+  const [model, setModel] = useState("pick a model");
+  const [files, setFiles] = useState([]);
   const assistantList = [
     { label: "GPT-3", value: "gpt-3" },
     { label: "GPT-4", value: "gpt-4" },
     { label: "GPT-4 Turbo", value: "gpt-4-turbo" },
   ];
-  const [files, setFiles] = useState([]);
 
-  const handleAddFile = (file) => {
-    setFiles((prevFiles) => [...prevFiles, file]);
+  useEffect(() => {
+    fetchAssistantById(id)
+      .then((assistant) => {
+        setModel(assistant.model);
+        setFiles(JSON.parse(assistant.files));
+      })
+      .catch((error) => {
+        console.log("Error fetching Assistant: ", error);
+      });
+  }, [id]);
+
+  const handleSave = () => {
+    updateAssistant(id, name, instructions, model, files)
+      .then(() => {
+        navigation.navigate("AssistantMenuScreen");
+      })
+      .catch((error) => {
+        console.log("Error updating assistant: ", error);
+      });
+  };
+
+  const handleAddFile = async () => {
+    let result = await DocumentPicker.getDocumentAsync({});
+    console.log(result);
+    if (!result.canceled) {
+      setFiles([...files, result.assets[0]]); // Correctly update the state
+    } else {
+      console.log("User canceled document picker");
+    }
   };
 
   const handleRemoveFile = (index) => {
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setFiles(files.filter((_, i) => i !== index));
+  };
+
+  const handleDelete = () => {
+    deleteAssistantById(id)
+      .then(() => {
+        navigation.navigate("AssistantMenuScreen"); // Navigate back to the assistant menu
+      })
+      .catch((error) => {
+        console.log("Error deleting assistant: ", error);
+      });
   };
 
   return (
@@ -44,7 +87,7 @@ function AssistantEditorScreen2({ navigation, info }) {
         </View>
         <View style={styles.topPickerContainer}>
           <RNPickerSelect
-            onValueChange={(value) => setAssistantName(value)}
+            onValueChange={(value) => setModel(value)}
             items={assistantList}
           />
         </View>
@@ -70,15 +113,12 @@ function AssistantEditorScreen2({ navigation, info }) {
       </View>
       <View style={styles.ButtonContainer}>
         <TouchableOpacity
-          onPress={() => console.log("delete")}
+          onPress={handleDelete}
           style={styles.deleteAssistantButton}
         >
           <AppText style={styles.deleteButtonText}>delete</AppText>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.popToTop("AssistantMenuScreen")}
-          style={styles.doneButton}
-        >
+        <TouchableOpacity onPress={handleSave} style={styles.doneButton}>
           <AppText style={styles.doneButtonText}>Done</AppText>
         </TouchableOpacity>
       </View>
