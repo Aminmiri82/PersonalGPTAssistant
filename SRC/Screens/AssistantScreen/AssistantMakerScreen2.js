@@ -63,6 +63,8 @@ function AssistantMakerScreen2({ navigation, route }) {
       });
   };
 
+ 
+
   const handleUploadFiles = async () => {
     try {
       await addFile(files);
@@ -71,8 +73,6 @@ function AssistantMakerScreen2({ navigation, route }) {
       console.error("Error uploading files:", error);
     }
   };
-
-  
 
   return (
     <Screen>
