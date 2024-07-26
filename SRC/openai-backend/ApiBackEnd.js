@@ -1,27 +1,29 @@
-// assistantApi.js
+// ApiBackEnd.js
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "@env";
+import RNFS from "react-native-fs";
+import { Buffer } from "buffer";
 
 const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
-
 const initializeAssistant = async ({ name, instructions, model }) => {
-    try {
-      console.log("Initializing assistant...");
-      const assistant = await openai.beta.assistants.create({
-        name: name,
-        instructions: instructions,
-        tools: [{ type: "file_search" }],
-        model: model,
-      });
-      console.log("Assistant created:", assistant);
-      return { assistantId: assistant.id }; // Return the assistant ID
-    } catch (error) {
-      console.error("Error initializing assistant:", error);
-      return { error: "Failed to initialize assistant" }; // Return the error message
-    }
-  };
-  
+  try {
+    console.log("Initializing assistant...");
+    const assistant = await openai.beta.assistants.create({
+      name: name,
+      instructions: instructions,
+      tools: [{ type: "file_search" }],
+      model: model,
+      temperature: 0.75,
+    });
+    console.log("Assistant created:", assistant);
+    return { assistantId: assistant.id }; // Return the assistant ID
+  } catch (error) {
+    console.error("Error initializing assistant:", error);
+    return { error: "Failed to initialize assistant" }; // Return the error message
+  }
+};
+
 const callAssistantApi = async (message) => {
   try {
     console.log("Creating thread...");
@@ -62,4 +64,44 @@ const callAssistantApi = async (message) => {
   }
 };
 
-export {callAssistantApi,initializeAssistant};
+const addFile = async (
+  files,
+  assistantId = "asst_OOxeDr8gfBcBK0AUuXH4M68c"
+) => {
+  try {
+    const fileStreams = await Promise.all(
+      files.map(async (file) => {
+        const filePath = file.uri.replace("file://", "");
+        console.log("in the middle of file stream");
+        console.log("filePath", filePath);
+        return RNFS.readFile(filePath, "base64");
+      })
+    );
+    console.log("creating VectorStore");
+    // Create a vector store including our files.
+    let vectorStore = await openai.beta.vectorStores.create({
+      name: "Financial Statement",
+    });
+    console.log("vectorStore", vectorStore);
+
+    console.log("doing file steam and buffer");
+    // Convert base64 strings back to buffers before uploading
+    const buffers = fileStreams.map((stream) => Buffer.from(stream, "base64"));
+
+    console.log("uploading files");
+    await openai.beta.vectorStores.fileBatches.uploadAndPoll(
+      vectorStore.id,
+      buffers
+    );
+
+    console.log("updating assistant");
+    await openai.beta.assistants.update(assistantId, {
+      tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } },
+    });
+    console.log("Assistant updated:", assistantId);
+  } catch (error) {
+    console.error("Error adding file:", error);
+  }
+};
+
+export { callAssistantApi, initializeAssistant, addFile };
