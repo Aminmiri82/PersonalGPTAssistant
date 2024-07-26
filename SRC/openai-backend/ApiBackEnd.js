@@ -1,7 +1,6 @@
-// ApiBackEnd.js
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "@env";
-import RNFS from "react-native-fs";
+import * as RNFS from "@dr.pogodin/react-native-fs";
 import { Buffer } from "buffer";
 
 const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
@@ -69,31 +68,38 @@ const addFile = async (
   assistantId = "asst_OOxeDr8gfBcBK0AUuXH4M68c"
 ) => {
   try {
+    // Step 1: Read files as base64 strings and convert to buffers
     const fileStreams = await Promise.all(
       files.map(async (file) => {
         const filePath = file.uri.replace("file://", "");
         console.log("in the middle of file stream");
         console.log("filePath", filePath);
-        return RNFS.readFile(filePath, "base64");
+        const fileContent = await RNFS.readFile(filePath, "base64");
+        console.log("fileContent length:", fileContent.length); // Add logging to check the file content length
+        return Buffer.from(fileContent, "base64");
       })
     );
+
+    // Step 2: Create a vector store
     console.log("creating VectorStore");
-    // Create a vector store including our files.
     let vectorStore = await openai.beta.vectorStores.create({
       name: "Financial Statement",
     });
     console.log("vectorStore", vectorStore);
 
-    console.log("doing file steam and buffer");
-    // Convert base64 strings back to buffers before uploading
-    const buffers = fileStreams.map((stream) => Buffer.from(stream, "base64"));
-
+    // Step 3: Upload files
     console.log("uploading files");
-    await openai.beta.vectorStores.fileBatches.uploadAndPoll(
-      vectorStore.id,
-      buffers
-    );
+    if (fileStreams.length > 0) {
+      const result = await openai.beta.vectorStores.fileBatches.uploadAndPoll(
+        vectorStore.id,
+        fileStreams
+      );
+      console.log("upload result:", result); // Log the result of the upload
+    } else {
+      throw new Error("No file streams available to upload.");
+    }
 
+    // Step 4: Update assistant with the vector store ID
     console.log("updating assistant");
     await openai.beta.assistants.update(assistantId, {
       tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } },
