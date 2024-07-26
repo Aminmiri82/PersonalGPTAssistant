@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Button, TextInput, StyleSheet, FlatList } from "react-native";
+import { View, Button, TextInput, StyleSheet, FlatList,Text,Button } from "react-native";
 
 import ChatItem from "../../Components/ChatComponents/ChatItem";
 import Screen from "../../Components/Screen";
@@ -8,42 +8,45 @@ import Icon from "../../Components/Icon";
 import ListItemSeparator from "../../Components/ListItemSeparator";
 import Textinput from "../../Components/ChatComponents/Textinput";
 import ChatBubble from "../../Components/ChatComponents/Chatbubble";
+import AppTextInput from "../../Components/ChatComponents/AppTextInput";
+import Screen from "../../Components/Screen";
+import Chatbubble from "../../Components/ChatComponents/Chatbubble";
+import { callAssistantApi } from "../../openai-backend/ApiBackEnd";
 import { fetchChatHistory, insertChatMessage, initDB } from "../../database";
 
-// const ChatScreen = ({ navigation }) => {
-//   const [newChatTitle, setNewChatTitle] = useState("");
+const ChatScreen = ({ navigation, threadId, assistantId,route }) => {
+  const [conversation, setConversation] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-//   const addChatItem = () => {
-//     const db = getDB();
-//     db.transaction(
-//       (tx) => {
-//         tx.executeSql(
-//           "INSERT INTO ChatItems (title, lastMessage, timestamp) VALUES (?, ?, ?)",
-//           [newChatTitle, "", new Date().toISOString()]
-//         );
-//       },
-//       (error) => {
-//         console.log("Transaction error: ", error);
-//       },
-//       () => {
-//         console.log("Chat item added successfully");
-//         navigation.goBack();
-//       }
-//     );
-//   };
+  const callAssistant = async (message) => {
+    setLoading(true);
+    try {
+      const assistantMessage = await callAssistantApi(message);
+      addMessageToConversation("assistant", assistantMessage);
+    } catch (error) {
+      console.error("Error calling assistant:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   return (
-//     <View>
-//       <TextInput
-//         placeholder="Enter chat title"
-//         value={newChatTitle}
-//         onChangeText={setNewChatTitle}
-//       />
-//       <Button title="Add Chat" onPress={addChatItem} />
-//     </View>
-//   );
-// };
-function ChatScreen({ navigation, route }) {
+  const addMessageToConversation = (role, content) => {
+    setConversation((prevConversation) => [
+      ...prevConversation,
+      { role, content },
+    ]);
+  };
+
+  const handleSetMessage = (newMessage) => {
+    if (loading) {
+      console.error("Still loading, please wait");
+      return;
+    }
+
+
+    addMessageToConversation("user", newMessage);
+    callAssistant(newMessage);
+  };
   const { assistantId } = route.params;
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
