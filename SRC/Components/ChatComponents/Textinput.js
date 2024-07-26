@@ -12,7 +12,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import defaultStyles from "../../config/Styles";
 
-const Textinput = ({ onSubmit }) => {
+const Textinput = ({ onSubmit, value, onChangeText }) => {
   const [text, setText] = useState("");
 
   const handleSend = () => {

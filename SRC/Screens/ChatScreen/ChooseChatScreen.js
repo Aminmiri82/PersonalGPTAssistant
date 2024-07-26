@@ -7,7 +7,7 @@ import Screen from "../../Components/Screen";
 import { fetchAssistants, initDB } from "../../database";
 import { useFocusEffect } from "@react-navigation/native";
 
-function AssistantMenuScreen({ navigation }) {
+function ChooseChatScreen({ navigation }) {
   const [assistants, setAssistants] = useState([]);
 
   useEffect(() => {
@@ -29,27 +29,6 @@ function AssistantMenuScreen({ navigation }) {
   );
 
   return (
-    // <Screen>
-    //   <View style={styles.container}>
-    //     <ScrollView bounces={false}>
-    //       <View style={styles.top}>
-    //         <AssistantsMenuItem
-    //           image={require("../../assets/IMG_1706.jpeg")}
-    //           title="assistant1"
-    //           onPress={() => {
-    //             {
-    //               navigation.navigate("AssistantEditorScreen1");
-    //             }
-    //           }}
-    //         />
-    //         <AssistantsMenuItem
-    //           image={require("../../assets/mosh.jpg")}
-    //           title="assistant2"
-    //         />
-    //       </View>
-    //     </ScrollView>
-    //   </View>
-    // </Screen>
     <Screen>
       <View style={styles.container}>
         <ScrollView bounces={false}>
@@ -63,11 +42,11 @@ function AssistantMenuScreen({ navigation }) {
                   image={require("../../assets/IMG_1706.jpeg")}
                   title={assistant.name}
                   onPress={() =>
-                    navigation.navigate("AssistantEditorScreen1", {
-                      id: assistant.id,
+                    navigation.navigate("ChatScreen", {
+                      assistantId: assistant.id,
                     })
                   }
-                  ShowEditButton={true}
+                  ShowEditButton={false}
                 />
               ))
             )}
@@ -90,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AssistantMenuScreen;
+export default ChooseChatScreen;
