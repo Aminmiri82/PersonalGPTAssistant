@@ -10,11 +10,46 @@ import {
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { fetchAssistantById, deleteAssistantById } from "../../database";
 //info is the stuff that is saved in the database and you edit it here
-function AssistantEditorScreen1({ navigation, info }) {
+function AssistantEditorScreen1({ navigation, info, route }) {
+  const { id } = route.params;
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
+
+  useEffect(() => {
+    fetchAssistantById(id)
+      .then((assistant) => {
+        setName(assistant.name);
+        setInstructions(assistant.instructions);
+      })
+      .catch((error) => {
+        console.log("Error fetching assistant: ", error);
+      });
+  }, [id]);
+
+  const handleNext = () => {
+    if (!name || !instructions) {
+      console.log("Name or instructions are missing");
+      return;
+    }
+    navigation.push("AssistantEditorScreen2", {
+      name,
+      instructions,
+    });
+  };
+
+  const handleDelete = () => {
+    deleteAssistantById(id)
+      .then(() => {
+        navigation.navigate("AssistantMenuScreen"); // Navigate back to the assistant menu
+      })
+      .catch((error) => {
+        console.log("Error deleting assistant: ", error);
+      });
+  };
+
   return (
     <Screen>
       <View style={styles.topContainer}>
@@ -74,15 +109,12 @@ function AssistantEditorScreen1({ navigation, info }) {
       </View>
       <View style={styles.ButtonContainer}>
         <TouchableOpacity
-          onPress={() => console.log("delete")}
+          onPress={handleDelete}
           style={styles.deleteAssistantButton}
         >
           <AppText style={styles.deleteButtonText}>delete</AppText>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.push("AssistantEditorScreen2")}
-          style={styles.nextButton}
-        >
+        <TouchableOpacity onPress={handleNext} style={styles.nextButton}>
           <AppText style={styles.nextButtonText}>Next</AppText>
         </TouchableOpacity>
       </View>
