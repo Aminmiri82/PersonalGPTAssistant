@@ -22,7 +22,7 @@ export const initDB = async () => {
           files TEXT
         );
         CREATE TABLE IF NOT EXISTS Chats (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id TEXT PRIMARY KEY ,
           assistantId INTEGER,
           message TEXT,
           timestamp DATETIME DEFAULT CURRENT_TIMESTAMP

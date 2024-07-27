@@ -8,10 +8,11 @@ import {
   createThread,
 } from "../../openai-backend/ApiBackEnd";
 
-const ChatScreen = ({ navigation, threadId, assistantId }) => {
+const ChatScreen = ({ navigation,route }) => {
   const [conversation, setConversation] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const assistantId = route.params.assistantId;
+  console.log("in chat screen", assistantId);// this is undefined
   const threadRef = useRef(null);
 
   useEffect(() => {
@@ -25,18 +26,20 @@ const ChatScreen = ({ navigation, threadId, assistantId }) => {
     initializeThread();
   }, []);
 
-  const callAssistant = async (message) => {
+  const callAssistant = async (message, assistantId) => {
     setLoading(true);
     if (threadRef.current === null) {
       console.log("Thread not initialized yet.");
       setLoading(false);
       return;
     }
+    console.log("in chat screen call assistant", assistantId);
     try {
       console.log("Calling assistant with thread:", threadRef.current.id);
       const assistantMessage = await callAssistantApi(
         message,
-        threadRef.current.id
+        threadRef.current.id,
+        assistantId
       );
       addMessageToConversation("assistant", assistantMessage);
     } catch (error) {
@@ -59,9 +62,8 @@ const ChatScreen = ({ navigation, threadId, assistantId }) => {
       return;
     }
 
-    
     addMessageToConversation("user", newMessage);
-    callAssistant(newMessage);
+    callAssistant(newMessage, assistantId);
   };
 
   return (
