@@ -43,6 +43,10 @@ function ChooseChatScreen({ navigation }) {
                   title={assistant.name}
                   onPress={() =>
                     insertChat(assistant.name, assistant.model).then(() => {
+                      console.log(
+                        "in choose chat screen insert chat",
+                        assistant.id
+                      );
                       navigation.navigate("ChatScreen", {
                         assistantId: assistant.id,
                       });
