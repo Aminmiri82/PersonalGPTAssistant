@@ -15,7 +15,7 @@ export const initDB = async () => {
           lmit TEXT
         );
         CREATE TABLE IF NOT EXISTS Assistants (
-          id INTEGER PRIMARY KEY AUTOINCREMENT, 
+          id TEXT PRIMARY KEY, 
           name TEXT, 
           instructions TEXT, 
           model TEXT, 
@@ -90,18 +90,15 @@ export const deleteChatItemById = async (id) => {
   });
 };
 
-export const insertAssistant = async (name, instructions, model, files) => {
+export const insertAssistant = async (id, name, instructions, model, files) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!db) {
         throw new Error("Database is not initialized");
       }
       const result = await db.runAsync(
-        "INSERT INTO Assistants (name, instructions, model, files) VALUES (?, ?, ?, ?)",
-        name,
-        instructions,
-        model,
-        JSON.stringify(files)
+        "INSERT INTO Assistants (id, name, instructions, model, files) VALUES (?, ?, ?, ?, ?)",
+        [id, name, instructions, model, JSON.stringify(files)] // Use an array for parameters
       );
       console.log("Assistant inserted successfully");
       resolve(result);

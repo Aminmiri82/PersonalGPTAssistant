@@ -16,8 +16,8 @@ const initializeAssistant = async ({ name, instructions, model }) => {
       temperature: 0.75,
     });
     console.log("Assistant created:", assistant);
-    const thread = await createThread();
-    return { assistantId: assistant.id, thread: thread }; // Return the assistant ID
+    
+    return { assistantId: assistant.id}; // Return the assistant ID
   } catch (error) {
     console.error("Error initializing assistant:", error);
     return { error: "Failed to initialize assistant" }; // Return the error message
