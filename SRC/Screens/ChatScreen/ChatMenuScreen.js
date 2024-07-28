@@ -59,7 +59,7 @@ function ChatMenuScreen({ navigation }) {
     <ChatItem
       title={item.title || "Placeholder Title"}
       subTitle={item.lastMessage}
-      image={require("../../assets/IMG_1706.jpeg")}
+      image={item.assistantId === "asst_40ROFN9nKe2V6Eka6bYXSZ2y" ? require("../../assets/logo.jpg") : require("../../assets/assistant.jpg")}
       modelname={item.modelname}
       onPress={() => handlePress(item)}
       showDelete={editMode}

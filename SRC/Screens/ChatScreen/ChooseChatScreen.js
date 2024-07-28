@@ -33,7 +33,6 @@ function ChooseChatScreen({ navigation }) {
     navigation.navigate("ChatScreen", {
       assistantId: assistant_id,
       threadId: newThread.id,
-      
     });
   };
 
@@ -44,7 +43,7 @@ function ChooseChatScreen({ navigation }) {
   const renderItem = ({ item }) => (
     <AssistantsMenuItem
       key={item.id}
-      image={require("../../assets/IMG_1706.jpeg")}
+      image={require("../../assets/assistant.jpg")}
       title={item.name}
       onPress={() => {
         createAndInstertNewThread(item.id);
@@ -57,24 +56,20 @@ function ChooseChatScreen({ navigation }) {
     <Screen>
       <View style={styles.container}>
         <AssistantsMenuItem
-          image={require("../../assets/IMG_1706.jpeg")}
-          title = "persian law guide"
+          image={require("../../assets/logo.jpg")}
+          title="persian law guide"
           onPress={() => {
             createAndInstertNewThread("asst_40ROFN9nKe2V6Eka6bYXSZ2y");
           }}
           ShowEditButton={false}
         />
-        {assistants.length === 0 ? (
-          <Text>No assistants available. Please add a new assistant.</Text>
-        ) : (
-          <FlatList
-            data={assistants}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderItem}
-            numColumns={2}
-            contentContainerStyle={styles.top}
-          />
-        )}
+        <FlatList
+          data={assistants}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          numColumns={2}
+          contentContainerStyle={styles.top}
+        />
       </View>
     </Screen>
   );
