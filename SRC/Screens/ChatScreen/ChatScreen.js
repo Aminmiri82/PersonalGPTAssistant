@@ -1,29 +1,24 @@
-import React, { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, FlatList, Text, Button } from "react-native";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { View, StyleSheet, FlatList, Text } from "react-native";
 import AppTextInput from "../../Components/ChatComponents/AppTextInput";
 import Screen from "../../Components/Screen";
 import Chatbubble from "../../Components/ChatComponents/Chatbubble";
-import {
-  callAssistantApi,
-  createThread,
-} from "../../openai-backend/ApiBackEnd";
-import {
-  insertChatMessage,
-  fetchChatHistory,
-  insertChat,
-} from "../../database";
+import { callAssistantApi, createThread } from "../../openai-backend/ApiBackEnd";
+import { insertChatMessage, fetchChatHistory, insertChat } from "../../database";
+import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
 
 const ChatScreen = ({ navigation, route }) => {
+  const { dbInitialized } = useContext(DatabaseContext);
   const [conversation, setConversation] = useState([]);
   const [loading, setLoading] = useState(false);
   const assistantId = route.params.assistantId;
   const threadId = route.params.threadId; // this can be null
-  console.log("in chat screen", assistantId);
-  console.log("in chat screen threadID recieved", threadId);
   const threadRef = useRef(null);
 
   useEffect(() => {
     const initializeThread = async () => {
+      if (!dbInitialized) return; // Wait for the database to be initialized
+
       if (threadId === null) {
         console.log("Creating new thread...");
         try {
@@ -51,7 +46,7 @@ const ChatScreen = ({ navigation, route }) => {
     };
 
     initializeThread();
-  }, [threadId]);
+  }, [threadId, dbInitialized]); // Add dbInitialized as a dependency
 
   const callAssistant = async (message, assistantId) => {
     setLoading(true);
@@ -80,7 +75,7 @@ const ChatScreen = ({ navigation, route }) => {
     setConversation((prevConversation) => [
       ...prevConversation,
       {
-        threadId: threadRef.current.id,
+        threadId: threadRef.current,
         content: content,
         role: role,
         timestamp: new Date(),
@@ -99,6 +94,10 @@ const ChatScreen = ({ navigation, route }) => {
     addMessageToConversationAndDB("user", newMessage);
     callAssistant(newMessage, assistantId);
   };
+
+  if (!dbInitialized) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <Screen>
