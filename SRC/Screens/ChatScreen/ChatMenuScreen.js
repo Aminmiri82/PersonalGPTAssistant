@@ -27,6 +27,7 @@ function ChatMenuScreen({ navigation }) {
         }
       };
 
+      console.log("loading chat items");
       loadChatItems();
     }, [dbInitialized])
   );
@@ -36,6 +37,7 @@ function ChatMenuScreen({ navigation }) {
     navigation.navigate("ChatScreen", {
       threadId: chat.threadId,
       assistantId: chat.assistantId,
+      chatId: chat.Id,
     });
   };
 
