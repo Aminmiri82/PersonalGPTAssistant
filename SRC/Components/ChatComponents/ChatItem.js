@@ -10,7 +10,7 @@ import AppText from "../AppText";
 import colors from "../../config/colors";
 import Icon from "../Icon";
 import { Ionicons } from "@expo/vector-icons";
-// import { Swipeable } from "react-native-gesture-handler";
+import { Swipeable, GestureHandlerRootView } from "react-native-gesture-handler";
 
 function ChatItem({
   title,
@@ -22,27 +22,32 @@ function ChatItem({
   showDelete,
   onDelete,
 }) {
+  const renderRightActions = () => (
+    <TouchableOpacity onPress={onDelete} style={styles.deleteButton}>
+      <Ionicons name="trash-bin" size={24} color="red" />
+    </TouchableOpacity>
+  );
+
   return (
-    <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
-      <View style={styles.container}>
-        <View style={styles.visualcontainer}>
-          {IconComponent}
-          {image && <Image style={styles.image} source={image} />}
-          {modelname && (
-            <AppText style={styles.modelstyle}> {modelname} </AppText>
-          )}
-        </View>
-        <View style={styles.detailContainer}>
-          <AppText style={styles.title}>{title}</AppText>
-          {subTitle && <AppText style={styles.subTitle}>{subTitle}</AppText>}
-        </View>
-        {showDelete && (
-          <TouchableOpacity onPress={onDelete} style={styles.deleteButton}>
-            <Ionicons name="trash-bin" size={24} color="red" />
-          </TouchableOpacity>
-        )}
-      </View>
-    </TouchableHighlight>
+    <GestureHandlerRootView>
+      <Swipeable renderRightActions={renderRightActions}>
+        <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
+          <View style={styles.container}>
+            <View style={styles.visualcontainer}>
+              {IconComponent}
+              {image && <Image style={styles.image} source={image} />}
+              {modelname && (
+                <AppText style={styles.modelstyle}> {modelname} </AppText>
+              )}
+            </View>
+            <View style={styles.detailContainer}>
+              <AppText style={styles.title}>{title}</AppText>
+              {subTitle && <AppText style={styles.subTitle}>{subTitle}</AppText>}
+            </View>
+          </View>
+        </TouchableHighlight>
+      </Swipeable>
+    </GestureHandlerRootView>
   );
 }
 
@@ -74,5 +79,12 @@ const styles = StyleSheet.create({
   modelstyle: {
     alignSelf: "center",
   },
+  deleteButton: {
+    backgroundColor: colors.light,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 70,
+  },
 });
+
 export default ChatItem;

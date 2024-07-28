@@ -3,8 +3,16 @@ import { View, StyleSheet, FlatList, Text } from "react-native";
 import AppTextInput from "../../Components/ChatComponents/AppTextInput";
 import Screen from "../../Components/Screen";
 import Chatbubble from "../../Components/ChatComponents/Chatbubble";
-import { callAssistantApi, createThread } from "../../openai-backend/ApiBackEnd";
-import { insertChatMessage, fetchChatHistory, insertChat, updateChatItemById } from "../../database";
+import {
+  callAssistantApi,
+  createThread,
+} from "../../openai-backend/ApiBackEnd";
+import {
+  insertChatMessage,
+  fetchChatHistory,
+  insertChat,
+  updateChatItemById,
+} from "../../database";
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
 
 const ChatScreen = ({ navigation, route }) => {
@@ -13,7 +21,7 @@ const ChatScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const assistantId = route.params.assistantId;
   const threadId = route.params.threadId; // this can be null
-  const chatId = route.params.chatId;
+  
   const threadRef = useRef(null);
 
   useEffect(() => {
@@ -85,7 +93,8 @@ const ChatScreen = ({ navigation, route }) => {
     insertChatMessage(threadRef.current, content, role).catch(console.error);
     console.log("Message added to conversation and DB");
     console.log("Updating chatItem in DB, content:", content);
-    updateChatItemById(chatId, content).catch(console.error);
+    
+    updateChatItemById(threadRef.current, content.slice(0, 25)+"...").catch(console.error);
     console.log("ChatItem updated in DB");
   };
 
@@ -105,24 +114,30 @@ const ChatScreen = ({ navigation, route }) => {
 
   return (
     <Screen>
-      {loading && (
-        <View style={styles.loadingContainer}>
-          <Text>Loading...</Text>
-        </View>
-      )}
+      <View style={styles.container}>
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <Text>Loading...</Text>
+          </View>
+        )}
 
-      <FlatList
-        data={conversation}
-        keyExtractor={(item) => item.timestamp.toString()}
-        renderItem={({ item }) => <Chatbubble message={item} />}
-        contentContainerStyle={styles.flatListContent}
-      />
+        <FlatList
+          data={conversation}
+          keyExtractor={(item) => item.timestamp.toString()}
+          renderItem={({ item }) => <Chatbubble message={item} />}
+          contentContainerStyle={styles.flatListContent}
+        />
+      </View>
+
       <AppTextInput onSubmit={handleSetMessage} />
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   flatListContent: {
     padding: 10,
   },

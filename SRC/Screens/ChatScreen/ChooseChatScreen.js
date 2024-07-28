@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
-import { View, StyleSheet, ScrollView, Text } from "react-native";
+import { View, StyleSheet, FlatList, Text } from "react-native";
 import AssistantsMenuItem from "../../Components/AssistantsComponents/AssistantsMenuItem";
 import Screen from "../../Components/Screen";
 import { fetchAssistants, insertChat } from "../../database";
@@ -33,6 +33,7 @@ function ChooseChatScreen({ navigation }) {
     navigation.navigate("ChatScreen", {
       assistantId: assistant_id,
       threadId: newThread.id,
+      
     });
   };
 
@@ -40,28 +41,40 @@ function ChooseChatScreen({ navigation }) {
     return <Text>Loading...</Text>;
   }
 
+  const renderItem = ({ item }) => (
+    <AssistantsMenuItem
+      key={item.id}
+      image={require("../../assets/IMG_1706.jpeg")}
+      title={item.name}
+      onPress={() => {
+        createAndInstertNewThread(item.id);
+      }}
+      ShowEditButton={false}
+    />
+  );
+
   return (
     <Screen>
       <View style={styles.container}>
-        <ScrollView bounces={false}>
-          <View style={styles.top}>
-            {assistants.length === 0 ? (
-              <Text>No assistants available. Please add a new assistant.</Text>
-            ) : (
-              assistants.map((assistant) => (
-                <AssistantsMenuItem
-                  key={assistant.id}
-                  image={require("../../assets/IMG_1706.jpeg")}
-                  title={assistant.name}
-                  onPress={() => {
-                    createAndInstertNewThread(assistant.id);
-                  }}
-                  ShowEditButton={false}
-                />
-              ))
-            )}
-          </View>
-        </ScrollView>
+        <AssistantsMenuItem
+          image={require("../../assets/IMG_1706.jpeg")}
+          title = "persian law guide"
+          onPress={() => {
+            createAndInstertNewThread("asst_40ROFN9nKe2V6Eka6bYXSZ2y");
+          }}
+          ShowEditButton={false}
+        />
+        {assistants.length === 0 ? (
+          <Text>No assistants available. Please add a new assistant.</Text>
+        ) : (
+          <FlatList
+            data={assistants}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderItem}
+            numColumns={2}
+            contentContainerStyle={styles.top}
+          />
+        )}
       </View>
     </Screen>
   );
@@ -73,8 +86,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   top: {
-    flexDirection: "row",
-    flexWrap: "wrap",
     justifyContent: "space-between",
   },
 });

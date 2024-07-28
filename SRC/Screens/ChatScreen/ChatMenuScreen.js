@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import ChatItem from "../../Components/ChatComponents/ChatItem";
 import AppText from "../../Components/AppText";
 import colors from "../../config/colors";
@@ -20,7 +20,7 @@ function ChatMenuScreen({ navigation }) {
         if (dbInitialized) {
           try {
             const data = await fetchChatItems();
-            setChatItems(data);
+            setChatItems(data.reverse());
           } catch (error) {
             console.log("Error fetching ChatItems: ", error);
           }
@@ -37,15 +37,15 @@ function ChatMenuScreen({ navigation }) {
     navigation.navigate("ChatScreen", {
       threadId: chat.threadId,
       assistantId: chat.assistantId,
-      chatId: chat.Id,
+      
     });
   };
 
-  const handleDelete = (chat) => {
-    deleteChatItemById(chat.threadId)
+  const handleDelete = (chatId) => {
+    deleteChatItemById(chatId)
       .then(() => {
         setChatItems((prevChatItems) =>
-          prevChatItems.filter((item) => item.id !== chat.threadId)
+          prevChatItems.filter((item) => item.Id !== chatId)
         );
       })
       .catch((error) => {
@@ -53,9 +53,19 @@ function ChatMenuScreen({ navigation }) {
       });
   };
 
-  const toggleEditMode = () => {
-    setEditMode((prevEditMode) => !prevEditMode);
-  };
+  
+
+  const renderItem = ({ item }) => (
+    <ChatItem
+      title={item.title || "Placeholder Title"}
+      subTitle={item.lastMessage}
+      image={require("../../assets/IMG_1706.jpeg")}
+      modelname={item.modelname}
+      onPress={() => handlePress(item)}
+      showDelete={editMode}
+      onDelete={() => handleDelete(item.Id)}
+    />
+  );
 
   if (!dbInitialized) {
     return <Text>Loading...</Text>;
@@ -63,47 +73,26 @@ function ChatMenuScreen({ navigation }) {
 
   return (
     <Screen>
-      <AppButton title={editMode ? "Done" : "Edit"} onPress={toggleEditMode} />
-      <ChatItem
-        title="placeholder"
-        subTitle="placeholder"
-        image={require("../../assets/IMG_1706.jpeg")}
-        modelname="placeholder"
-        onPress={() => {
-          console.log("in chat menu screen doing thing");
-          navigation.navigate("ChatScreen", {
-            assistantId: "asst_skHPpH0WHoCY6DdgHkdWmU9s",
-            threadId: "thread_ed4b20gRQSNjNrGgheMSE5iD",
-          });
-        }}
-        showDelete={editMode}
-        onDelete={() => handleDelete(chat)}
-      />
-      <View>
-        <ScrollView bounces={false}>
-          {chatItems.length === 0 ? (
-            <Text>No chats available. Please add a new chat.</Text>
-          ) : (
-            chatItems.map((chat) => (
-              <ChatItem
-                key={chat.Id}
-                title="placeholder"
-                subTitle={chat.lastMessage}
-                image={require("../../assets/IMG_1706.jpeg")}
-                modelname={chat.modelname}
-                onPress={() => handlePress(chat)}
-                showDelete={editMode}
-                onDelete={() => handleDelete(chat)}
-              />
-            ))
-          )}
-        </ScrollView>
+
+      <View style={styles.container}>
+        {chatItems.length === 0 ? (
+          <Text>No chats available. Please add a new chat.</Text>
+        ) : (
+          <FlatList
+            data={chatItems}
+            keyExtractor={(item) => item.Id.toString()}
+            renderItem={renderItem}
+          />
+        )}
       </View>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   bottomContainer: {
     width: "100%",
     marginTop: 10,

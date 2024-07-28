@@ -11,7 +11,6 @@ import {
   Keyboard,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-
 import defaultStyles from "../../config/Styles";
 
 const AppTextInput = ({ onSubmit }) => {
@@ -26,94 +25,45 @@ const AppTextInput = ({ onSubmit }) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.AppTextInput}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.container}
-          keyboardVerticalOffset={Platform.select({ ios: 150, android: 80 })}
-        >
-          <View style={styles.innerContainer}>
-            {/* Other content here */}
+        <View style={styles.textInputContainer}>
+          <TextInput
+            style={styles.input}
+            onChangeText={setText}
+            value={text}
+            placeholder="Type here"
+            multiline
+            blurOnSubmit={false}
+          />
+          <View style={styles.button}>
+            <TouchableOpacity onPress={handleSend}>
+              <MaterialCommunityIcons
+                name="send"
+                size={30}
+                color={defaultStyles.colors.white}
+                style={{ alignSelf: "center" }}
+              />
+            </TouchableOpacity>
           </View>
-          <View style={styles.textInputContainer}>
-            <View style={styles.textContainer}>
-              <View style={styles.textbox}>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={setText}
-                  value={text}
-                  placeholder="Type here"
-                />
-              </View>
-              <TouchableOpacity>
-                <MaterialCommunityIcons
-                  name="microphone"
-                  size={25}
-                  color={defaultStyles.colors.medium}
-                  style={styles.icon}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.button}>
-              <TouchableOpacity onPress={handleSend}>
-                <MaterialCommunityIcons
-                  name="send"
-                  size={30}
-                  color={defaultStyles.colors.white}
-                  style={{ alignSelf: "center" }}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </KeyboardAvoidingView>
+        </View>
       </TouchableWithoutFeedback>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "white",
-  },
-  container: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  innerContainer: {
-    flex: 1,
-  },
   textInputContainer: {
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
     backgroundColor: "white",
   },
-  textContainer: {
-    backgroundColor: defaultStyles.colors.light,
-    borderRadius: 25,
-    flexDirection: "row",
-    padding: 15,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    shadowOpacity: 0.1,
-    elevation: 3,
-    flex: 1,
-    marginLeft: 30,
-  },
-  icon: {
-    marginRight: 10,
-  },
-  textbox: {
-    flex: 1,
-  },
   button: {
     backgroundColor: defaultStyles.colors.blue,
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 10,
@@ -124,7 +74,17 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   input: {
-    width: "100%",
+    maxHeight: 100,
+    backgroundColor: defaultStyles.colors.light,
+    borderRadius: 25,
+    padding: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    shadowOpacity: 0.1,
+    elevation: 3,
+    flex: 1,
+    marginLeft: 10,
   },
 });
 
