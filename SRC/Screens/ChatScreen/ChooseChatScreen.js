@@ -41,19 +41,14 @@ function ChooseChatScreen({ navigation }) {
                   key={assistant.id}
                   image={require("../../assets/IMG_1706.jpeg")}
                   title={assistant.name}
-                  onPress={() =>
-                    insertChat(assistant.name, assistant.model).then(() => {
-                      console.log(
-                        "in choose chat screen",
-                        assistant.id
-                      );
-                      console.log ("threadID being passed to chat screen", null);
-                      navigation.navigate("ChatScreen", {
-                        assistantId: assistant.id,
-                        threadId: null,
-                      });
-                    })
-                  }
+                  onPress={() => {
+                    console.log("in choose chat screen", assistant.id);
+                    console.log("threadID being passed to chat screen", null);
+                    navigation.navigate("ChatScreen", {
+                      assistantId: assistant.id,
+                      threadId: null,
+                    });
+                  }}
                   ShowEditButton={false}
                 />
               ))

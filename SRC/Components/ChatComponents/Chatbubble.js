@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import colors from "../../config/colors";
 
 const Chatbubble = ({ message }) => {
-  const isUser = message.sender === "user";
+  const isUser = message.role === "user";
 
   return (
     <View

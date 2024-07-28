@@ -7,12 +7,15 @@ import {
   callAssistantApi,
   createThread,
 } from "../../openai-backend/ApiBackEnd";
-import { insertChatMessage, fetchChatHistory } from "../../database";
+import {
+  insertChatMessage,
+  fetchChatHistory,
+  insertChat,
+} from "../../database";
 
 const ChatScreen = ({ navigation, route }) => {
   const [conversation, setConversation] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [chatHistory, setChatHistory] = useState([]);
   const assistantId = route.params.assistantId;
   const threadId = route.params.threadId; // this can be null
   console.log("in chat screen", assistantId);
@@ -32,7 +35,10 @@ const ChatScreen = ({ navigation, route }) => {
         fetchChatHistory(threadId).then(setConversation).catch(console.error);
       }
     };
-    initializeThread();
+    initializeThread()
+      .then(() => insertChat(threadRef.current.id, assistantId, null))
+      .then(() => console.log("inserted chat", threadRef.current.id, assistantId, null))
+      .catch(console.error);
   }, [threadId]);
 
   const callAssistant = async (message, assistantId) => {
@@ -50,7 +56,7 @@ const ChatScreen = ({ navigation, route }) => {
         threadRef.current.id,
         assistantId
       );
-      addMessageToConversation("assistant", assistantMessage);
+      addMessageToConversationAndDB("assistant", assistantMessage);
     } catch (error) {
       console.error("Error calling assistant:", error);
     } finally {
@@ -58,10 +64,15 @@ const ChatScreen = ({ navigation, route }) => {
     }
   };
 
-  const addMessageToConversation = (role, content) => {
+  const addMessageToConversationAndDB = (role, content) => {
     setConversation((prevConversation) => [
       ...prevConversation,
-      { role, content },
+      {
+        threadId: threadRef.current.id,
+        content: content,
+        role: role,
+        timestamp: new Date(),
+      },
     ]);
     insertChatMessage(threadRef.current.id, content, role).catch(console.error);
   };
@@ -72,7 +83,7 @@ const ChatScreen = ({ navigation, route }) => {
       return;
     }
 
-    addMessageToConversation("user", newMessage);
+    addMessageToConversationAndDB("user", newMessage);
     callAssistant(newMessage, assistantId);
   };
 
@@ -86,7 +97,7 @@ const ChatScreen = ({ navigation, route }) => {
 
       <FlatList
         data={conversation}
-        keyExtractor={(item) => item.role}
+        keyExtractor={(item) => item.timestamp.toString()}
         renderItem={({ item }) => <Chatbubble message={item} />}
         contentContainerStyle={styles.flatListContent}
       />
