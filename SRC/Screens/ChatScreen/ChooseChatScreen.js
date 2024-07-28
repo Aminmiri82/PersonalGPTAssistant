@@ -44,11 +44,13 @@ function ChooseChatScreen({ navigation }) {
                   onPress={() =>
                     insertChat(assistant.name, assistant.model).then(() => {
                       console.log(
-                        "in choose chat screen insert chat",
+                        "in choose chat screen",
                         assistant.id
                       );
+                      console.log ("threadID being passed to chat screen", null);
                       navigation.navigate("ChatScreen", {
                         assistantId: assistant.id,
+                        threadId: null,
                       });
                     })
                   }

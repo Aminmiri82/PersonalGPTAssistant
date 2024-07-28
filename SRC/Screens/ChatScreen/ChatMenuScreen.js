@@ -36,14 +36,14 @@ function ChatMenuScreen({ navigation }) {
   );
 
   const handlePress = (id) => {
-    navigation.navigate("ChatScreen", { chatId: id });
+    navigation.navigate("ChatScreen", { threadId: id });
   };
 
-  const handleDelete = (chatId) => {
-    deleteChatItemById(chatId)
+  const handleDelete = (threadId) => {
+    deleteChatItemById(threadId)
       .then(() => {
         setChatItems((prevChatItems) =>
-          prevChatItems.filter((item) => item.id !== chatId)
+          prevChatItems.filter((item) => item.id !== threadId)
         );
       })
       .catch((error) => {

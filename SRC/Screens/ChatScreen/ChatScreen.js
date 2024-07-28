@@ -7,32 +7,33 @@ import {
   callAssistantApi,
   createThread,
 } from "../../openai-backend/ApiBackEnd";
-import { insertChatMessage } from "../../database";
+import { insertChatMessage, fetchChatHistory } from "../../database";
 
 const ChatScreen = ({ navigation, route }) => {
   const [conversation, setConversation] = useState([]);
   const [loading, setLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState([]);
   const assistantId = route.params.assistantId;
-  const { chatId } = route.params;
-  console.log("in chat screen", assistantId); // this is undefined
-  console.log("in chat screen", chatId); // this is undefined
+  const threadId = route.params.threadId; // this can be null
+  console.log("in chat screen", assistantId);
+  console.log("in chat screen threadID recieved", threadId);
   const threadRef = useRef(null);
 
   useEffect(() => {
-    fetchChatHistory(chatId).then(setChatHistory).catch(console.error);
-  }, [chatId]);
-
-  useEffect(() => {
     const initializeThread = async () => {
-      if (threadRef.current === null) {
+      if (threadId === null) {
         console.log("Creating new thread...");
         threadRef.current = await createThread();
         console.log("Thread created:", threadRef.current);
+      } else {
+        threadRef.current = threadId;
+        console.log("Using existing thread:", threadRef.current);
+        console.log("Fetching chat history...");
+        fetchChatHistory(threadId).then(setConversation).catch(console.error);
       }
     };
     initializeThread();
-  }, []);
+  }, [threadId]);
 
   const callAssistant = async (message, assistantId) => {
     setLoading(true);
@@ -62,26 +63,8 @@ const ChatScreen = ({ navigation, route }) => {
       ...prevConversation,
       { role, content },
     ]);
-    insertChatMessage(chatId, content, role)
-      .then(() => {
-        setChatHistory((prevHistory) => [
-          ...prevHistory,
-          { chatItemId: chatId, content, role, timestap: new Date() },
-        ]);
-      })
-      .catch(console.error);
+    insertChatMessage(threadRef.current.id, content, role).catch(console.error);
   };
-
-  // const addMessageToConversation = (message, sender) => {
-  //   insertChatMessage(chatId, message, sender)
-  //     .then(() => {
-  //       setChatHistory(prevHistory => [
-  //         ...prevHistory,
-  //         { chatItemId: chatId, message, sender, timestamp: new Date() }
-  //       ]);
-  //     })
-  //     .catch(console.error);
-  // };
 
   const handleSetMessage = (newMessage) => {
     if (loading) {
@@ -102,8 +85,8 @@ const ChatScreen = ({ navigation, route }) => {
       )}
 
       <FlatList
-        data={chatHistory}
-        keyExtractor={(item) => item.timestamp.toString()}
+        data={conversation}
+        keyExtractor={(item) => item.role}
         renderItem={({ item }) => <Chatbubble message={item} />}
         contentContainerStyle={styles.flatListContent}
       />
