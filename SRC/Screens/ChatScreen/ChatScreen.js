@@ -26,19 +26,30 @@ const ChatScreen = ({ navigation, route }) => {
     const initializeThread = async () => {
       if (threadId === null) {
         console.log("Creating new thread...");
-        threadRef.current = await createThread();
-        console.log("Thread created:", threadRef.current);
+        try {
+          const newThread = await createThread();
+          threadRef.current = newThread.id;
+          console.log("Thread created:", threadRef.current);
+
+          await insertChat(threadRef.current, assistantId, null);
+          console.log("Inserted chat", threadRef.current, assistantId, null);
+        } catch (error) {
+          console.error("Error initializing thread:", error);
+        }
       } else {
         threadRef.current = threadId;
         console.log("Using existing thread:", threadRef.current);
         console.log("Fetching chat history...");
-        fetchChatHistory(threadId).then(setConversation).catch(console.error);
+        try {
+          const chatHistory = await fetchChatHistory(threadRef.current);
+          setConversation(chatHistory);
+        } catch (error) {
+          console.error("Error fetching chat history:", error);
+        }
       }
     };
-    initializeThread()
-      .then(() => insertChat(threadRef.current.id, assistantId, null))
-      .then(() => console.log("inserted chat", threadRef.current.id, assistantId, null))
-      .catch(console.error);
+
+    initializeThread();
   }, [threadId]);
 
   const callAssistant = async (message, assistantId) => {
@@ -50,10 +61,10 @@ const ChatScreen = ({ navigation, route }) => {
     }
     console.log("in chat screen call assistant", assistantId);
     try {
-      console.log("Calling assistant with thread:", threadRef.current.id);
+      console.log("Calling assistant with thread:", threadRef.current);
       const assistantMessage = await callAssistantApi(
         message,
-        threadRef.current.id,
+        threadRef.current,
         assistantId
       );
       addMessageToConversationAndDB("assistant", assistantMessage);

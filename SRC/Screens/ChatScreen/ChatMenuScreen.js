@@ -37,7 +37,10 @@ function ChatMenuScreen({ navigation }) {
 
   const handlePress = (chat) => {
     console.log("in chat menu screen", chat.threadId, chat.assistantId);
-    navigation.navigate("ChatScreen", { threadId: threadId , assistantId: chat.assistantId });
+    navigation.navigate("ChatScreen", {
+      threadId: threadId,
+      assistantId: chat.assistantId,
+    });
   };
 
   const handleDelete = (chat) => {
@@ -59,6 +62,21 @@ function ChatMenuScreen({ navigation }) {
   return (
     <Screen>
       <AppButton title={editMode ? "Done" : "Edit"} onPress={toggleEditMode} />
+      <ChatItem
+        title="placeholder"
+        subTitle="placeholder"
+        image="../../assets/IMG_1706.jpeg"
+        modelname="placeholder"
+        onPress={() => {
+          console.log("in chat menu screen doing thing");
+          navigation.navigate("ChatScreen", {
+            assistantId: "asst_skHPpH0WHoCY6DdgHkdWmU9s",
+            threadId: "thread_ed4b20gRQSNjNrGgheMSE5iD",
+          });
+        }}
+        showDelete={editMode}
+        onDelete={() => handleDelete(chat)}
+      />
       <View>
         <ScrollView bounces={false}>
           {chatItems.length === 0 ? (
