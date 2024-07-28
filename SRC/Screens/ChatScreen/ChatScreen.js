@@ -4,7 +4,7 @@ import AppTextInput from "../../Components/ChatComponents/AppTextInput";
 import Screen from "../../Components/Screen";
 import Chatbubble from "../../Components/ChatComponents/Chatbubble";
 import { callAssistantApi, createThread } from "../../openai-backend/ApiBackEnd";
-import { insertChatMessage, fetchChatHistory, insertChat } from "../../database";
+import { insertChatMessage, fetchChatHistory, insertChat, updateChatItemById } from "../../database";
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
 
 const ChatScreen = ({ navigation, route }) => {
@@ -13,6 +13,7 @@ const ChatScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const assistantId = route.params.assistantId;
   const threadId = route.params.threadId; // this can be null
+  const chatId = route.params.chatId;
   const threadRef = useRef(null);
 
   useEffect(() => {
@@ -83,6 +84,9 @@ const ChatScreen = ({ navigation, route }) => {
     ]);
     insertChatMessage(threadRef.current, content, role).catch(console.error);
     console.log("Message added to conversation and DB");
+    console.log("Updating chatItem in DB, content:", content);
+    updateChatItemById(chatId, content).catch(console.error);
+    console.log("ChatItem updated in DB");
   };
 
   const handleSetMessage = (newMessage) => {

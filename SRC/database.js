@@ -77,7 +77,7 @@ export const fetchChatItems = async () => {
     }
   });
 };
-
+//not working
 export const deleteChatItemById = async (id) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -94,6 +94,24 @@ export const deleteChatItemById = async (id) => {
   });
 };
 
+export const updateChatItemById = async (Id, lastMessage) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!db) {
+        throw new Error("Database is not initialized");
+      }
+      await db.runAsync("UPDATE ChatItems SET lastMessage = ? WHERE Id = ?", [
+        lastMessage,
+        Id,
+      ]);
+      console.log("ChatItem really successfully");
+      resolve();
+    } catch (error) {
+      console.log("Error updating ChatItem: ", error);
+      reject(error);
+    }
+  });
+};
 export const insertAssistant = async (id, name, instructions, model, files) => {
   return new Promise(async (resolve, reject) => {
     try {
