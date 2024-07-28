@@ -1,14 +1,11 @@
 import React from "react";
-import { StyleSheet, AppRegistry } from "react-native";
+import { StyleSheet, AppRegistry, Text } from "react-native";
 import { name as appName } from "./app.json";
-
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import BottomTabNav from "./Navigation/BottomTabNav";
 import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
-
-import { DatabaseProvider } from "./DatabaseProvidor";
+import { DatabaseProvider } from "./DatabaseProvider"; // Adjust the import path
 
 const Stack = createNativeStackNavigator();
 

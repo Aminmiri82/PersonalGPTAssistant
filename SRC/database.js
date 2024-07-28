@@ -2,6 +2,11 @@ import * as SQLite from "expo-sqlite";
 
 let db;
 
+// to delete tables
+// Drop TABLE IF EXISTS ChatItems;
+// Drop TABLE IF EXISTS Assistants;
+// Drop TABLE IF EXISTS Chats;
+
 export const initDB = async () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -10,21 +15,22 @@ export const initDB = async () => {
         PRAGMA journal_mode = WAL;
         CREATE TABLE IF NOT EXISTS ChatItems (
           Id INTEGER PRIMARY KEY AUTOINCREMENT, 
-          assistantName TEXT, 
-          modelName TEXT,
-          lmit TEXT
+          threadId TEXT,
+          assistantId TEXT,
+          lastMessage TEXT
         );
         CREATE TABLE IF NOT EXISTS Assistants (
-          id INTEGER PRIMARY KEY AUTOINCREMENT, 
+          id TEXT PRIMARY KEY, 
           name TEXT, 
           instructions TEXT, 
           model TEXT, 
           files TEXT
         );
         CREATE TABLE IF NOT EXISTS Chats (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          assistantId INTEGER,
-          message TEXT,
+          id TEXT PRIMARY KEY,
+          threadId TEXT,
+          content TEXT,
+          role TEXT,
           timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
         );
       `);
@@ -37,17 +43,15 @@ export const initDB = async () => {
   });
 };
 
-export const insertChat = async (assistantName, modelName, lmit) => {
+export const insertChat = async (threadId, assistantId, lastMessage) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!db) {
         throw new Error("Database is not initialized");
       }
       const result = await db.runAsync(
-        "INSERT INTO ChatItems (assistantName, modelName, lmit) VALUES (?, ?, ?)",
-        assistantName,
-        modelName,
-        lmit
+        "INSERT INTO ChatItems (threadId, assistantId, lastMessage) VALUES (?, ?, ?)",
+        [threadId, assistantId, lastMessage]
       );
       console.log("ChatItem created successfully");
       resolve(result);
@@ -73,7 +77,7 @@ export const fetchChatItems = async () => {
     }
   });
 };
-
+//not working
 export const deleteChatItemById = async (id) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -90,18 +94,33 @@ export const deleteChatItemById = async (id) => {
   });
 };
 
-export const insertAssistant = async (name, instructions, model, files) => {
+export const updateChatItemById = async (Id, lastMessage) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!db) {
+        throw new Error("Database is not initialized");
+      }
+      await db.runAsync("UPDATE ChatItems SET lastMessage = ? WHERE Id = ?", [
+        lastMessage,
+        Id,
+      ]);
+      console.log("ChatItem really successfully");
+      resolve();
+    } catch (error) {
+      console.log("Error updating ChatItem: ", error);
+      reject(error);
+    }
+  });
+};
+export const insertAssistant = async (id, name, instructions, model, files) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!db) {
         throw new Error("Database is not initialized");
       }
       const result = await db.runAsync(
-        "INSERT INTO Assistants (name, instructions, model, files) VALUES (?, ?, ?, ?)",
-        name,
-        instructions,
-        model,
-        JSON.stringify(files)
+        "INSERT INTO Assistants (id, name, instructions, model, files) VALUES (?, ?, ?, ?, ?)",
+        [id, name, instructions, model, JSON.stringify(files)]
       );
       console.log("Assistant inserted successfully");
       resolve(result);
@@ -155,11 +174,7 @@ export const updateAssistant = async (id, name, instructions, model, files) => {
       }
       await db.runAsync(
         "UPDATE Assistants SET name = ?, instructions = ?, model = ?, files = ? WHERE id = ?",
-        name,
-        instructions,
-        model,
-        JSON.stringify(files),
-        id
+        [name, instructions, model, JSON.stringify(files), id]
       );
       console.log("Assistant updated successfully");
       resolve();
@@ -186,38 +201,37 @@ export const deleteAssistantById = async (id) => {
   });
 };
 
-export const insertChatMessage = async (assistantId, message) => {
+export const insertChatMessage = async (threadId, content, role) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!db) {
         throw new Error("Database is not initialized");
       }
-      await db.runAsync(
-        "INSERT INTO Chats (assistantId, message) SELECT ?, ? FROM Chats JOIN ChatItems ON Chats.id = ChatItems.Id WHERE Chats.assistantId = ?",
-        assistantId,
-        message,
-        assistantId
+      const result = await db.runAsync(
+        "INSERT INTO Chats (threadId, content, role) VALUES (?, ?, ?)",
+        [threadId, content, role]
       );
       console.log("Chat message inserted successfully");
-      resolve();
+      resolve(result);
     } catch (error) {
-      console.log("Error inserting chat message: ", error);
+      console.log("Error inserting chat content: ", error);
       reject(error);
     }
   });
 };
 
-export const fetchChatHistory = async (assistantId) => {
+export const fetchChatHistory = async (threadId) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!db) {
         throw new Error("Database is not initialized");
       }
       const allRows = await db.getAllAsync(
-        "SELECT Chats.id, Chats.assistantId, Chats.message, Chats.timestamp, ChatItems.Id FROM Chats JOIN ChatItems ON ChatItems.Id = Chats.id WHERE Chats.assistantId = ? ORDER BY timestamp ASC",
-        [assistantId]
+        "SELECT threadId, content, role, timestamp FROM Chats WHERE threadId = ? ORDER BY timestamp ASC",
+        [threadId]
       );
       console.log("Fetched chat history successfully");
+
       resolve(allRows);
     } catch (error) {
       console.log("Error fetching chat history: ", error);

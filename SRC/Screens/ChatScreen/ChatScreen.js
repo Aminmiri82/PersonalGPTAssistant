@@ -1,26 +1,70 @@
-import React, { useState, useEffect } from "react";
-import { View, Button, TextInput, StyleSheet, FlatList,Text } from "react-native";
-
-import ChatItem from "../../Components/ChatComponents/ChatItem";
-import colors from "../../config/colors";
-import Icon from "../../Components/Icon";
-import ListItemSeparator from "../../Components/ListItemSeparator";
-import ChatBubble from "../../Components/ChatComponents/Chatbubble";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { View, StyleSheet, FlatList, Text } from "react-native";
 import AppTextInput from "../../Components/ChatComponents/AppTextInput";
 import Screen from "../../Components/Screen";
 import Chatbubble from "../../Components/ChatComponents/Chatbubble";
-import { callAssistantApi } from "../../openai-backend/ApiBackEnd";
-import { fetchChatHistory, insertChatMessage, initDB } from "../../database";
+import { callAssistantApi, createThread } from "../../openai-backend/ApiBackEnd";
+import { insertChatMessage, fetchChatHistory, insertChat, updateChatItemById } from "../../database";
+import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
 
-const ChatScreen = ({ navigation, threadId, assistantId,route }) => {
+const ChatScreen = ({ navigation, route }) => {
+  const { dbInitialized } = useContext(DatabaseContext);
   const [conversation, setConversation] = useState([]);
   const [loading, setLoading] = useState(false);
+  const assistantId = route.params.assistantId;
+  const threadId = route.params.threadId; // this can be null
+  const chatId = route.params.chatId;
+  const threadRef = useRef(null);
 
-  const callAssistant = async (message) => {
+  useEffect(() => {
+    const initializeThread = async () => {
+      if (!dbInitialized) return; // Wait for the database to be initialized
+
+      if (threadId === null) {
+        console.log("Creating new thread...");
+        try {
+          const newThread = await createThread();
+          threadRef.current = newThread.id;
+          console.log("Thread created:", threadRef.current);
+
+          await insertChat(threadRef.current, assistantId, null);
+          console.log("Inserted chat", threadRef.current, assistantId, null);
+        } catch (error) {
+          console.error("Error initializing thread:", error);
+        }
+      } else {
+        threadRef.current = threadId;
+        console.log("Using existing thread:", threadRef.current);
+        console.log("Fetching chat history...");
+        try {
+          const chatHistory = await fetchChatHistory(threadRef.current);
+          console.log("Chat history fetched:", chatHistory);
+          setConversation(chatHistory);
+        } catch (error) {
+          console.error("Error fetching chat history:", error);
+        }
+      }
+    };
+
+    initializeThread();
+  }, [threadId, dbInitialized]); // Add dbInitialized as a dependency
+
+  const callAssistant = async (message, assistantId) => {
     setLoading(true);
+    if (threadRef.current === null) {
+      console.log("Thread not initialized yet.");
+      setLoading(false);
+      return;
+    }
+    console.log("in chat screen call assistant", assistantId);
     try {
-      const assistantMessage = await callAssistantApi(message);
-      addMessageToConversation("assistant", assistantMessage);
+      console.log("Calling assistant with thread:", threadRef.current);
+      const assistantMessage = await callAssistantApi(
+        message,
+        threadRef.current,
+        assistantId
+      );
+      addMessageToConversationAndDB("assistant", assistantMessage);
     } catch (error) {
       console.error("Error calling assistant:", error);
     } finally {
@@ -28,11 +72,21 @@ const ChatScreen = ({ navigation, threadId, assistantId,route }) => {
     }
   };
 
-  const addMessageToConversation = (role, content) => {
+  const addMessageToConversationAndDB = (role, content) => {
     setConversation((prevConversation) => [
       ...prevConversation,
-      { role, content },
+      {
+        threadId: threadRef.current,
+        content: content,
+        role: role,
+        timestamp: new Date(),
+      },
     ]);
+    insertChatMessage(threadRef.current, content, role).catch(console.error);
+    console.log("Message added to conversation and DB");
+    console.log("Updating chatItem in DB, content:", content);
+    updateChatItemById(chatId, content).catch(console.error);
+    console.log("ChatItem updated in DB");
   };
 
   const handleSetMessage = (newMessage) => {
@@ -41,87 +95,41 @@ const ChatScreen = ({ navigation, threadId, assistantId,route }) => {
       return;
     }
 
-
-    addMessageToConversation("user", newMessage);
-    callAssistant(newMessage);
+    addMessageToConversationAndDB("user", newMessage);
+    callAssistant(newMessage, assistantId);
   };
-  const { NOTassistantId } = route.params;
-  const [message, setMessage] = useState("");
-  const [chatHistory, setChatHistory] = useState([]);
 
-  useEffect(() => {
-    initDB().catch((error) => {
-      console.log("Error initializing database: ", error);
-    });
-  }, []);
-
-  useEffect(() => {
-    fetchChatHistory(NOTassistantId)
-      .then((history) => {
-        setChatHistory(history);
-      })
-      .catch((error) => {
-        console.log("Error fetching chat history: ", error);
-      });
-  }, [NOTassistantId]);
-
-  const handleSend = () => {
-    if (message.trim() === "") return;
-    insertChatMessage(NOTassistantId, message)
-      .then(() => {
-        setChatHistory([
-          ...chatHistory,
-          { NOTassistantId, message, timestamp: new Date() },
-        ]);
-        setMessage("");
-      })
-      .catch((error) => {
-        console.log("Error sending message: ", error);
-      });
-  };
+  if (!dbInitialized) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
-    <Screen style={styles.screen}>
+    <Screen>
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <Text>Loading...</Text>
+        </View>
+      )}
+
       <FlatList
-        data={chatHistory}
+        data={conversation}
         keyExtractor={(item) => item.timestamp.toString()}
-        renderItem={({ item }) => <ChatBubble text={item.message} />}
-        contentContainerStyle={styles.chatContainer}
+        renderItem={({ item }) => <Chatbubble message={item} />}
+        contentContainerStyle={styles.flatListContent}
       />
-      {/* <Textinput onSubmit={handleSend} /> */}
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Type a message"
-          value={message}
-          onChangeText={setMessage}
-        />
-        <Button title="Send" onPress={handleSend} />
-      </View>
+      <AppTextInput onSubmit={handleSetMessage} />
     </Screen>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  screen: {
-    backgroundColor: colors.light,
-    flex: 1,
-  },
-  chatContainer: {
-    padding: 16,
-    paddingBottom: 50, // Add some padding to avoid being covered by the TextInput
-  },
-  inputContainer: {
-    flexDirection: "row",
+  flatListContent: {
     padding: 10,
-    borderTopWidth: 1,
-    borderTopColor: "#ccc",
   },
-  input: {
+  loadingContainer: {
     flex: 1,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
