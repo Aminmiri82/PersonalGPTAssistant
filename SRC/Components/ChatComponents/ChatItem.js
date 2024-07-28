@@ -8,7 +8,9 @@ import {
 } from "react-native";
 import AppText from "../AppText";
 import colors from "../../config/colors";
-import Swipeable from "react-native-gesture-handler/Swipeable";
+import Icon from "../Icon";
+import { Ionicons } from "@expo/vector-icons";
+// import { Swipeable } from "react-native-gesture-handler";
 
 function ChatItem({
   title,
@@ -17,6 +19,8 @@ function ChatItem({
   IconComponent,
   onPress,
   modelname,
+  showDelete,
+  onDelete,
 }) {
   return (
     <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
@@ -32,6 +36,11 @@ function ChatItem({
           <AppText style={styles.title}>{title}</AppText>
           {subTitle && <AppText style={styles.subTitle}>{subTitle}</AppText>}
         </View>
+        {showDelete && (
+          <TouchableOpacity onPress={onDelete} style={styles.deleteButton}>
+            <Ionicons name="trash-bin" size={24} color="red" />
+          </TouchableOpacity>
+        )}
       </View>
     </TouchableHighlight>
   );

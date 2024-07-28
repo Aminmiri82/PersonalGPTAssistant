@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import AppText from "../../Components/AppText";
 import LanguagesPrompt from "../../Components/SettingsComponents/LanguagesPrompt";
 import OpenAIPrompt from "../../Components/SettingsComponents/OpenAIPrompt";
 import SettingsItem from "../../Components/SettingsComponents/SettingsItem";
 import Icon from "../../Components/Icon";
 import { OPENAI_API_KEY } from "@env";
+import * as SecureStore from 'expo-secure-store';
 
 import Screen from "../../Components/Screen";
 
@@ -17,9 +18,20 @@ function SettingsScreen({ navigation, route }) {
   const [apiKey, setApiKey] = useState("Enter API Key");
 
   useEffect(() => {
-    if (OPENAI_API_KEY) {
-      setApiKey(OPENAI_API_KEY.slice(-6));
-    }
+    const fetchApiKey = async () => {
+      try {
+        let storedKey = await SecureStore.getItemAsync("apiKey");
+        if (storedKey) {
+          setApiKey(storedKey);
+        } else if (OPENAI_API_KEY) {
+          setApiKey(OPENAI_API_KEY.slice(-6));
+        }
+      } catch (error) {
+        console.error("Error retrieving API key", error);
+      }
+    };
+
+    fetchApiKey();
   }, []);
 
   const toggleLanguagePrompt = () => {
@@ -35,9 +47,22 @@ function SettingsScreen({ navigation, route }) {
     setLanguagePromptVisible(false);
   };
 
+  const saveApiKey = async (key) => {
+    try {
+      await SecureStore.setItemAsync("apiKey", key);
+      console.log("API key saved successfully");
+      console.log(key);
+      console.log(await SecureStore.getItemAsync("apiKey"));
+    } catch (error) {
+      console.error("Error saving API key", error);
+      Alert.alert("Error", "Failed to save API key");
+    }
+  };
+
   const handleSetAPIKey = (key) => {
     setApiKey(key);
-    setAPIPromptVisible(false);
+    saveApiKey(key);
+    console.log(key);
   };
 
   return (

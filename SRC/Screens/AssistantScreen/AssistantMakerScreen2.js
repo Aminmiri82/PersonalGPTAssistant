@@ -3,10 +3,10 @@ import { View, StyleSheet, TouchableOpacity, Text, Button } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
-import Styles from "../../config/Styles";
+
 import RNPickerSelect from "react-native-picker-select";
 import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocumentPicker";
-import { addFile } from "../../openai-backend/ApiBackEnd";
+import { addFile, initializeAssistant } from "../../openai-backend/ApiBackEnd";
 import AppButton from "../../Components/AppButton";
 import { insertAssistant, initDB } from "../../database";
 
@@ -17,9 +17,11 @@ function AssistantMakerScreen2({ navigation, route }) {
   const [model, setModel] = useState("GPT-3");
 
   const assistantList = [
-    { label: "GPT-3", value: "gpt-3" },
-    { label: "GPT-4", value: "gpt-4" },
+    { label: "GPT-4o-mini", value: "gpt-4o-mini" },
+    { label: "GPT-4o", value: "gpt-4o" },
     { label: "GPT-4 Turbo", value: "gpt-4-turbo" },
+    { label: "GPT-4", value: "gpt-4" },
+    { label: "GPT-3.5", value: "gpt-3.5-turbo" },
   ];
 
   useEffect(() => {
@@ -42,21 +44,24 @@ function AssistantMakerScreen2({ navigation, route }) {
     setFiles(files.filter((_, i) => i !== index));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!name || !instructions) {
       console.log("Name or instructions are missing");
       return;
     }
-    insertAssistant(name, instructions, model, files)
+    const assistant = await initializeAssistant({ name, instructions, model });
+    if (assistant.error) {
+      console.log("Error initializing assistant:", assistant.error);
+      return;
+    }
+    insertAssistant(assistant.assistantId, name, instructions, model, files)
       .then(() => {
         navigation.navigate("AssistantMenuScreen"); // Navigate back to the assistant menu
       })
       .catch((error) => {
-        console.log("Error saving assistant: ", error);
+        console.log("Error saving assistant:", error);
       });
   };
-
- 
 
   const handleUploadFiles = async () => {
     try {
@@ -88,8 +93,7 @@ function AssistantMakerScreen2({ navigation, route }) {
           </AppText>
         </View>
       </View>
-      <Text> this many files {files.length}</Text>
-      <Button onPress={handleUploadFiles} title="Add Files" />
+      
 
       <View style={styles.bottomContainer}>
         <View style={styles.bottomTipContainer}>
