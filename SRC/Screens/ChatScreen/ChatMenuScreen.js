@@ -1,44 +1,40 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { View, FlatList, Text, ScrollView, StyleSheet } from "react-native";
-
+import React, { useEffect, useState, useCallback, useContext } from "react";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
 import ChatItem from "../../Components/ChatComponents/ChatItem";
-import { initializeAssistant } from "../../openai-backend/ApiBackEnd";
-import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocumentPicker";
 import AppText from "../../Components/AppText";
 import colors from "../../config/colors";
-import axios from "axios";
-import { fetchChatItems, deleteChatItemById, initDB } from "../../database";
+import { fetchChatItems, deleteChatItemById } from "../../database";
 import { useFocusEffect } from "@react-navigation/native";
 import Screen from "../../Components/Screen";
 import AppButton from "../../Components/AppButton";
+import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
 
 function ChatMenuScreen({ navigation }) {
+  const { dbInitialized } = useContext(DatabaseContext);
   const [chatItems, setChatItems] = useState([]);
-  const [files, setFiles] = useState([]);
   const [editMode, setEditMode] = useState(false);
-
-  useEffect(() => {
-    initDB().catch((error) => {
-      console.log("Error initializing database: ", error);
-    });
-  }, []);
 
   useFocusEffect(
     useCallback(() => {
-      fetchChatItems()
-        .then((data) => {
-          setChatItems(data);
-        })
-        .catch((error) => {
-          console.log("Error fetching ChatItems: ", error);
-        });
-    }, [])
+      const loadChatItems = async () => {
+        if (dbInitialized) {
+          try {
+            const data = await fetchChatItems();
+            setChatItems(data);
+          } catch (error) {
+            console.log("Error fetching ChatItems: ", error);
+          }
+        }
+      };
+
+      loadChatItems();
+    }, [dbInitialized])
   );
 
   const handlePress = (chat) => {
     console.log("in chat menu screen", chat.threadId, chat.assistantId);
     navigation.navigate("ChatScreen", {
-      threadId: threadId,
+      threadId: chat.threadId,
       assistantId: chat.assistantId,
     });
   };
@@ -47,7 +43,7 @@ function ChatMenuScreen({ navigation }) {
     deleteChatItemById(chat.threadId)
       .then(() => {
         setChatItems((prevChatItems) =>
-          prevChatItems.filter((item) => item.id !== threadId)
+          prevChatItems.filter((item) => item.id !== chat.threadId)
         );
       })
       .catch((error) => {
@@ -58,6 +54,10 @@ function ChatMenuScreen({ navigation }) {
   const toggleEditMode = () => {
     setEditMode((prevEditMode) => !prevEditMode);
   };
+
+  if (!dbInitialized) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <Screen>
@@ -80,7 +80,7 @@ function ChatMenuScreen({ navigation }) {
       <View>
         <ScrollView bounces={false}>
           {chatItems.length === 0 ? (
-            <Text>No chats available. please add a new chat.</Text>
+            <Text>No chats available. Please add a new chat.</Text>
           ) : (
             chatItems.map((chat) => (
               <ChatItem
