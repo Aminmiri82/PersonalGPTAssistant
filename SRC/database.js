@@ -94,15 +94,15 @@ export const deleteChatItemById = async (id) => {
   });
 };
 
-export const updateChatItemById = async (Id, lastMessage) => {
+export const updateChatItemById = async (threadId, lastMessage) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!db) {
         throw new Error("Database is not initialized");
       }
-      await db.runAsync("UPDATE ChatItems SET lastMessage = ? WHERE Id = ?", [
+      await db.runAsync("UPDATE ChatItems SET lastMessage = ? WHERE threadId = ?", [
         lastMessage,
-        Id,
+        threadId,
       ]);
       console.log("ChatItem really successfully");
       resolve();
