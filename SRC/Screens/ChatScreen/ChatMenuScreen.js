@@ -67,7 +67,7 @@ function ChatMenuScreen({ navigation }) {
       <ChatItem
         title="placeholder"
         subTitle="placeholder"
-        image="../../assets/IMG_1706.jpeg"
+        image={require("../../assets/IMG_1706.jpeg")}
         modelname="placeholder"
         onPress={() => {
           console.log("in chat menu screen doing thing");
@@ -89,7 +89,7 @@ function ChatMenuScreen({ navigation }) {
                 key={chat.Id}
                 title="placeholder"
                 subTitle={chat.lastMessage}
-                image="../../assets/IMG_1706.jpeg"
+                image={require("../../assets/IMG_1706.jpeg")}
                 modelname={chat.modelname}
                 onPress={() => handlePress(chat)}
                 showDelete={editMode}
