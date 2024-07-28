@@ -2,6 +2,11 @@ import * as SQLite from "expo-sqlite";
 
 let db;
 
+// to delete tables
+// Drop TABLE IF EXISTS ChatItems;
+// Drop TABLE IF EXISTS Assistants;
+// Drop TABLE IF EXISTS Chats;
+
 export const initDB = async () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -23,8 +28,9 @@ export const initDB = async () => {
         );
         CREATE TABLE IF NOT EXISTS Chats (
           id TEXT PRIMARY KEY ,
-          assistantId INTEGER,
+          chatItemId TEXT,
           message TEXT,
+          sender TEXT,
           timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
         );
       `);
@@ -183,17 +189,15 @@ export const deleteAssistantById = async (id) => {
   });
 };
 
-export const insertChatMessage = async (assistantId, message) => {
+export const insertChatMessage = async (chatItemId, message, sender) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!db) {
         throw new Error("Database is not initialized");
       }
       await db.runAsync(
-        "INSERT INTO Chats (assistantId, message) SELECT ?, ? FROM Chats JOIN ChatItems ON Chats.id = ChatItems.Id WHERE Chats.assistantId = ?",
-        assistantId,
-        message,
-        assistantId
+        "INSERT INTO Chats (chatItemId, message, sender) VALUES (?, ?, ?)",
+        [chatItemId, message, sender]
       );
       console.log("Chat message inserted successfully");
       resolve();
@@ -204,15 +208,15 @@ export const insertChatMessage = async (assistantId, message) => {
   });
 };
 
-export const fetchChatHistory = async (chatId) => {
+export const fetchChatHistory = async (chatItemId) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!db) {
         throw new Error("Database is not initialized");
       }
       const allRows = await db.getAllAsync(
-        "SELECT Chats.id, Chats.assistantId, Chats.message, Chats.timestamp, ChatItems.Id FROM Chats JOIN ChatItems ON ChatItems.Id = Chats.id WHERE ChatItems.Id = ? ORDER BY timestamp ASC",
-        [chatId]
+        "SELECT * FROM Chats WHERE chatItemId = ? ORDER BY timestamp ASC",
+        [chatItemId]
       );
       console.log("Fetched chat history successfully");
       resolve(allRows);
