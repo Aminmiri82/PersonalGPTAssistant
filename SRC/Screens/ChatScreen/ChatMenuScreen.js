@@ -12,42 +12,6 @@ import { useFocusEffect } from "@react-navigation/native";
 import Screen from "../../Components/Screen";
 import AppButton from "../../Components/AppButton";
 
-// const ChatMenuScreen = ({ navigation }) => {
-//   // const [chatItems, setChatItems] = useState([]);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       const db = await initDB();
-//       db.transaction((tx) => {
-//         tx.executeSql("SELECT * FROM ChatItems", [], (tx, results) => {
-//           let items = [];
-//           for (let i = 0; i < results.rows.length; i++) {
-//             items.push(results.rows.item(i));
-//           }
-//           setChatItems(items);
-//         });
-//       });
-//     };
-//     fetchData();
-//   }, []);
-
-//   return (
-//     <View>
-//       <FlatList
-//         data={chatItems}
-//         keyExtractor={(item) => item.id.toString()}
-//         renderItem={({ item }) => (
-//           <ChatItem
-//             title={item.title}
-//             lastMessage={item.lastMessage}
-//             timestamp={item.timestamp}
-//           />
-//         )}
-//       />
-//     </View>
-//   );
-// };
-
 function ChatMenuScreen({ navigation }) {
   const [chatItems, setChatItems] = useState([]);
   const [files, setFiles] = useState([]);
@@ -106,7 +70,7 @@ function ChatMenuScreen({ navigation }) {
                 subTitle={chat.lmit}
                 image="../../assets/IMG_1706.jpeg"
                 modelname={chat.modelname}
-                onPress={() => handlePress(chat.chatId)}
+                onPress={() => handlePress(chat.id)}
                 showDelete={editMode}
                 onDelete={() => handleDelete(chat.id)}
               />
