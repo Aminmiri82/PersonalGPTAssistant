@@ -35,12 +35,13 @@ function ChatMenuScreen({ navigation }) {
     }, [])
   );
 
-  const handlePress = (id) => {
-    navigation.navigate("ChatScreen", { threadId: id });
+  const handlePress = (chat) => {
+    console.log("in chat menu screen", chat.threadId, chat.assistantId);
+    navigation.navigate("ChatScreen", { threadId: threadId , assistantId: chat.assistantId });
   };
 
-  const handleDelete = (threadId) => {
-    deleteChatItemById(threadId)
+  const handleDelete = (chat) => {
+    deleteChatItemById(chat.threadId)
       .then(() => {
         setChatItems((prevChatItems) =>
           prevChatItems.filter((item) => item.id !== threadId)
@@ -65,14 +66,14 @@ function ChatMenuScreen({ navigation }) {
           ) : (
             chatItems.map((chat) => (
               <ChatItem
-                key={chat.id}
-                title={chat.assistantName}
-                subTitle={chat.lmit}
+                key={chat.Id}
+                title="placeholder"
+                subTitle={chat.lastMessage}
                 image="../../assets/IMG_1706.jpeg"
                 modelname={chat.modelname}
-                onPress={() => handlePress(chat.id)}
+                onPress={() => handlePress(chat)}
                 showDelete={editMode}
-                onDelete={() => handleDelete(chat.id)}
+                onDelete={() => handleDelete(chat)}
               />
             ))
           )}
