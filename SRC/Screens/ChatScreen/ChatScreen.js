@@ -8,11 +8,12 @@ import {
   createThread,
 } from "../../openai-backend/ApiBackEnd";
 
-const ChatScreen = ({ navigation,route }) => {
+const ChatScreen = ({ navigation, route }) => {
   const [conversation, setConversation] = useState([]);
   const [loading, setLoading] = useState(false);
   const assistantId = route.params.assistantId;
-  console.log("in chat screen", assistantId);// this is undefined
+  const chatId = route.params;
+  console.log("in chat screen", assistantId); // this is undefined
   const threadRef = useRef(null);
 
   useEffect(() => {
