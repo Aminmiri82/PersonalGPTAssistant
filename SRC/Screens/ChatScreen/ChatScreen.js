@@ -42,6 +42,7 @@ const ChatScreen = ({ navigation, route }) => {
         console.log("Fetching chat history...");
         try {
           const chatHistory = await fetchChatHistory(threadRef.current);
+          console.log("Chat history fetched:", chatHistory);
           setConversation(chatHistory);
         } catch (error) {
           console.error("Error fetching chat history:", error);
@@ -85,7 +86,8 @@ const ChatScreen = ({ navigation, route }) => {
         timestamp: new Date(),
       },
     ]);
-    insertChatMessage(threadRef.current.id, content, role).catch(console.error);
+    insertChatMessage(threadRef.current, content, role).catch(console.error);
+    console.log("Message added to conversation and DB");
   };
 
   const handleSetMessage = (newMessage) => {
