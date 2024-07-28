@@ -204,15 +204,15 @@ export const insertChatMessage = async (assistantId, message) => {
   });
 };
 
-export const fetchChatHistory = async (assistantId) => {
+export const fetchChatHistory = async (chatId) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!db) {
         throw new Error("Database is not initialized");
       }
       const allRows = await db.getAllAsync(
-        "SELECT Chats.id, Chats.assistantId, Chats.message, Chats.timestamp, ChatItems.Id FROM Chats JOIN ChatItems ON ChatItems.Id = Chats.id WHERE Chats.assistantId = ? ORDER BY timestamp ASC",
-        [assistantId]
+        "SELECT Chats.id, Chats.assistantId, Chats.message, Chats.timestamp, ChatItems.Id FROM Chats JOIN ChatItems ON ChatItems.Id = Chats.id WHERE ChatItems.Id = ? ORDER BY timestamp ASC",
+        [chatId]
       );
       console.log("Fetched chat history successfully");
       resolve(allRows);

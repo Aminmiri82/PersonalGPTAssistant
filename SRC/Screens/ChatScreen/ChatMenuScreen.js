@@ -1,5 +1,5 @@
-import React, { useEffect, useState,useCallback } from "react";
-import { View, FlatList, Text,ScrollView,StyleSheet } from "react-native";
+import React, { useEffect, useState, useCallback } from "react";
+import { View, FlatList, Text, ScrollView, StyleSheet } from "react-native";
 
 import ChatItem from "../../Components/ChatComponents/ChatItem";
 import { initializeAssistant } from "../../openai-backend/ApiBackEnd";
@@ -10,6 +10,7 @@ import axios from "axios";
 import { fetchChatItems, deleteChatItemById, initDB } from "../../database";
 import { useFocusEffect } from "@react-navigation/native";
 import Screen from "../../Components/Screen";
+import AppButton from "../../Components/AppButton";
 
 // const ChatMenuScreen = ({ navigation }) => {
 //   // const [chatItems, setChatItems] = useState([]);
@@ -50,6 +51,7 @@ import Screen from "../../Components/Screen";
 function ChatMenuScreen({ navigation }) {
   const [chatItems, setChatItems] = useState([]);
   const [files, setFiles] = useState([]);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     initDB().catch((error) => {
@@ -73,8 +75,25 @@ function ChatMenuScreen({ navigation }) {
     navigation.navigate("ChatScreen", { chatId: id });
   };
 
+  const handleDelete = (chatId) => {
+    deleteChatItemById(chatId)
+      .then(() => {
+        setChatItems((prevChatItems) =>
+          prevChatItems.filter((item) => item.id !== chatId)
+        );
+      })
+      .catch((error) => {
+        console.log("Error deleting chat item: ", error);
+      });
+  };
+
+  const toggleEditMode = () => {
+    setEditMode((prevEditMode) => !prevEditMode);
+  };
+
   return (
     <Screen>
+      <AppButton title={editMode ? "Done" : "Edit"} onPress={toggleEditMode} />
       <View>
         <ScrollView bounces={false}>
           {chatItems.length === 0 ? (
@@ -88,6 +107,8 @@ function ChatMenuScreen({ navigation }) {
                 image="../../assets/IMG_1706.jpeg"
                 modelname={chat.modelname}
                 onPress={() => handlePress(chat.chatId)}
+                showDelete={editMode}
+                onDelete={() => handleDelete(chat.id)}
               />
             ))
           )}
@@ -95,7 +116,7 @@ function ChatMenuScreen({ navigation }) {
       </View>
     </Screen>
   );
-};
+}
 
 const styles = StyleSheet.create({
   bottomContainer: {
