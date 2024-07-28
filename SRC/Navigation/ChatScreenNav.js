@@ -6,8 +6,7 @@ import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
 import OnBoardingScreen from "../Screens/OBS/OnBoardingScreen";
 import ChooseChatScreen from "../Screens/ChatScreen/ChooseChatScreen";
 import AppButton from "../Components/AppButton";
-import Icon from "../Components/Icon";
-import App from "../App";
+
 
 const ChatStack = createNativeStackNavigator();
 
