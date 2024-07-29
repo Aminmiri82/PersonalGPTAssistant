@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { View, StyleSheet, FlatList, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Text,
+  ImageBackground,
+} from "react-native";
 import AppTextInput from "../../Components/ChatComponents/AppTextInput";
 import Screen from "../../Components/Screen";
 import Chatbubble from "../../Components/ChatComponents/Chatbubble";
@@ -115,23 +121,28 @@ const ChatScreen = ({ navigation, route }) => {
   }
 
   return (
-    <Screen text="Persian Legal guide" textStyle={styles.top}>
-      <View style={styles.container}>
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <Text>Loading...</Text>
-          </View>
-        )}
+    <Screen>
+      <ImageBackground
+        source={require("../../assets/background.jpg")}
+        style={styles.background}
+      >
+        <View style={styles.container}>
+          {loading && (
+            <View style={styles.loadingContainer}>
+              <Text>Loading...</Text>
+            </View>
+          )}
 
-        <FlatList
-          data={conversation}
-          keyExtractor={(item) => item.timestamp.toString()}
-          renderItem={({ item }) => <Chatbubble message={item} />}
-          contentContainerStyle={styles.flatListContent}
-        />
-      </View>
+          <FlatList
+            data={conversation}
+            keyExtractor={(item) => item.timestamp.toString()}
+            renderItem={({ item }) => <Chatbubble message={item} />}
+            contentContainerStyle={styles.flatListContent}
+          />
+        </View>
 
-      <AppTextInput onSubmit={handleSetMessage} />
+        <AppTextInput onSubmit={handleSetMessage} />
+      </ImageBackground>
     </Screen>
   );
 };
@@ -149,10 +160,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   top: {
-    bottom: 20,
     alignSelf: "center",
-    fontSize: 20,
-    flex: 0.3,
+    fontSize: 15,
+  },
+  background: {
+    flex: 1,
+    resizeMode: "cover",
   },
 });
 
