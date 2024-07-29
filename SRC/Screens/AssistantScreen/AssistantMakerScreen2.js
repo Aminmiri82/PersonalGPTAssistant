@@ -93,7 +93,6 @@ function AssistantMakerScreen2({ navigation, route }) {
           </AppText>
         </View>
       </View>
-      
 
       <View style={styles.bottomContainer}>
         <View style={styles.bottomTipContainer}>
@@ -124,8 +123,8 @@ const styles = StyleSheet.create({
   topContainer: {
     alignItems: "center",
     padding: 10,
-    borderColor: "blue",
-    borderWidth: 1,
+    // borderColor: "blue",
+    // borderWidth: 1,
   },
   topTipContainer: {
     width: "100%",
@@ -163,8 +162,8 @@ const styles = StyleSheet.create({
     height: "50%",
     padding: 10,
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "green",
+    // borderWidth: 1,
+    // borderColor: "green",
   },
   bottomTipContainer: {
     width: "100%",

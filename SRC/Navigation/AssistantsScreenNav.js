@@ -12,7 +12,7 @@ import AssistantEditorScreen2 from "../Screens/AssistantScreen/AssistantEditorSc
 const AssistantsStack = createNativeStackNavigator();
 const makeNewAssistantButton = (navigation) => (
   <AppButton
-    title="new ass"
+    title="new assistant"
     onPress={() => navigation.navigate("AssistantMakerScreen1")}
   />
 );

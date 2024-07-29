@@ -46,7 +46,7 @@ function AssistantMakerScreen1({ navigation }) {
             >
               <Image
                 style={styles.picture}
-                source={require("../../assets/IMG_1706.jpeg")}
+                source={require("../../assets/assistant.jpg")}
               />
             </TouchableOpacity>
             <TouchableOpacity
@@ -103,8 +103,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     padding: 10,
-    borderColor: "blue",
-    borderWidth: 1,
+    // borderColor: "blue",
+    // borderWidth: 1,
   },
   pictureContainer: {
     flexDirection: "row",
@@ -146,8 +146,8 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: colors.primary,
+    // borderWidth: 1,
+    // borderColor: colors.primary,
   },
   midTitle: {
     fontSize: 20,
@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "red",
+    // borderWidth: 1,
+    // borderColor: "red",
   },
   bottomTitle: {
     fontSize: 20,
