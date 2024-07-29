@@ -1,0 +1,56 @@
+{
+  "cli": {
+    "version": ">= 2.7.1"
+  },
+  "build": {
+    "base": {
+      "node": "20.14.0",
+      "android": {
+        "image": "latest"
+      },
+      "ios": {
+        "image": "latest"
+      }
+    },
+    "development": {
+      "extends": "base",
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "buildConfiguration": "Debug"
+      }
+    },
+    "preview": {
+      "extends": "base",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios":{
+        "simulator": true
+      }
+    },
+    "preview2": {
+      "extends": "base",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      }
+    },
+    "preview3": {
+      "extends": "base",
+      "developmentClient": true
+    },
+    "preview4": {
+      "extends": "base",
+      "distribution": "internal"
+    },
+    "production": {
+      "extends": "base"
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
