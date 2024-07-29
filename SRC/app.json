@@ -3,6 +3,7 @@
     "name": "SRC",
     "slug": "SRC",
     "version": "1.0.0",
+    "runtimeVersion": "1.0.0",  
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -34,9 +35,6 @@
         "projectId": "f36a631d-a4fc-4389-b325-84364c9deb7e"
       }
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
     "updates": {
       "url": "https://u.expo.dev/f36a631d-a4fc-4389-b325-84364c9deb7e"
     },
@@ -45,6 +43,7 @@
       "expo-document-picker",
       "expo-asset",
       "expo-secure-store"
-    ]
+    ],
+    "owner": "alirad"
   }
 }
