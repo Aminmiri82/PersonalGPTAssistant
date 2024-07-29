@@ -35,17 +35,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 10,
     width: 100,
-    borderRadius: 10,
-    borderBottomRightRadius: 0,
-    borderTopRightRadius: 0,
     flexDirection: "row",
   },
   //   icon: {
   //     left: 27,
   //   },
-  text: {
-    left: 14,
-  },
 });
 
 export default AppButton;

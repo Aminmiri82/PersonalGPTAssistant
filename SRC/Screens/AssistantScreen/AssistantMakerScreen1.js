@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   TextInput,
   Button,
+  KeyboardAvoidingView,
+  ScrollView,
 } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
@@ -30,81 +32,87 @@ function AssistantMakerScreen1({ navigation }) {
 
   return (
     <Screen>
-      <View style={styles.topContainer}>
-        <View style={styles.pictureContainer}>
-          <View style={styles.pictureTipContainer}>
-            <AppText style={styles.pictureTip}>
-              you can choose a photo for your assistant
+      <KeyboardAvoidingView
+        behavior="padding"
+        keyboardVerticalOffset={50} // Adjust the offset as needed
+      >
+        <ScrollView contentContainerStyle={styles.container}>
+          <View style={styles.topContainer}>
+            <View style={styles.pictureContainer}>
+              <View style={styles.pictureTipContainer}>
+                <AppText style={styles.pictureTip}>
+                  you can choose a photo for your assistant
+                </AppText>
+              </View>
+              <View style={styles.pictureWrapper}>
+                <TouchableOpacity
+                  style={styles.picture}
+                  onPress={() => {
+                    console.log("edit");
+                  }}
+                >
+                  <Image
+                    style={styles.picture}
+                    source={require("../../assets/assistant.jpg")}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.pictureButton}
+                  onPress={() => {
+                    console.log("edit");
+                  }}
+                >
+                  <AppText style={styles.pictureButtonText}>edit</AppText>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          <View style={styles.middleContainer}>
+            <AppText style={styles.midTitle}>
+              choose a name for your assistant
             </AppText>
+            <TextInput
+              style={styles.midInput}
+              placeholder="Enter name"
+              value={name}
+              onChangeText={setName}
+            />
           </View>
-          <View style={styles.pictureWrapper}>
-            <TouchableOpacity
-              style={styles.picture}
-              onPress={() => {
-                console.log("edit");
-              }}
-            >
-              <Image
-                style={styles.picture}
-                source={require("../../assets/assistant.jpg")}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.pictureButton}
-              onPress={() => {
-                console.log("edit");
-              }}
-            >
-              <AppText style={styles.pictureButtonText}>edit</AppText>
-            </TouchableOpacity>
+          <View style={styles.bottomContainer}>
+            <AppText style={styles.bottomTitle}>
+              give your assistant instructions on how it should behave
+            </AppText>
+            <TextInput
+              style={styles.bottomInput}
+              placeholder="Enter instructions"
+              value={instructions}
+              onChangeText={setInstructions}
+              multiline
+              numberOfLines={5}
+              scrollEnabled
+            />
           </View>
-        </View>
-      </View>
-      <View style={styles.middleContainer}>
-        <AppText style={styles.midTitle}>
-          choose a name for your assistant
-        </AppText>
-        <TextInput
-          style={styles.midInput}
-          placeholder="Enter name"
-          value={name}
-          onChangeText={setName}
-        />
-      </View>
-      <View style={styles.bottomContainer}>
-        <AppText style={styles.bottomTitle}>
-          give your assistant insutructions on how it should behave
-        </AppText>
-        <TextInput
-          style={styles.bottomInput}
-          placeholder="Enter instructions"
-          value={instructions}
-          onChangeText={setInstructions}
-          multiline
-          numberOfLines={5}
-          scrollEnabled
-        />
-      </View>
-      {/* <View style={styles.ButtonContainer}>
-        <TouchableOpacity
-          onPress={() => navigation.push("AssistantMakerScreen2")}
-          style={styles.nextButton}
-        >
-          <AppText style={styles.nextButtonText}>Next</AppText>
-        </TouchableOpacity>
-      </View> */}
-      <AppButton title="next" onPress={handleNext} color={colors.danger} />
+          <AppButton
+            title="next"
+            onPress={handleNext}
+            style={styles.nextButton}
+            textStyle={styles.nextButtonText}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    justifyContent: "center",
+  },
   topContainer: {
     alignItems: "center",
     marginTop: 20,
     padding: 10,
-    // borderColor: "blue",
-    // borderWidth: 1,
   },
   pictureContainer: {
     flexDirection: "row",
@@ -146,8 +154,6 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     alignItems: "center",
-    // borderWidth: 1,
-    // borderColor: colors.primary,
   },
   midTitle: {
     fontSize: 20,
@@ -168,8 +174,6 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     alignItems: "center",
-    // borderWidth: 1,
-    // borderColor: "red",
   },
   bottomTitle: {
     fontSize: 20,
@@ -187,17 +191,15 @@ const styles = StyleSheet.create({
     width: "80%",
     textAlignVertical: "top",
   },
-  ButtonContainer: {
-    margin: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   nextButton: {
-    backgroundColor: "#007BFF",
+    backgroundColor: colors.niceBlue,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-    elevation: 2, // For a slight shadow effect
+    elevation: 2,
+    marginLeft: 10,
+    position: "relative",
+    left: "28%",
   },
   nextButtonText: {
     color: colors.white,

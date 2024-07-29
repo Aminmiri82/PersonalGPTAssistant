@@ -34,7 +34,7 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile }) {
     } else {
       return (
         <Image
-          source={require("../../assets/mosh.jpg")}
+          source={require("../../assets/file.png")}
           style={styles.thumbnail}
         />
       );

@@ -23,19 +23,26 @@ import {
 
 //info is the stuff that is saved in the database and you edit it here
 function AssistantEditorScreen2({ navigation, info, route }) {
-  const { id, name, instructions } = route.params;
+  const { id } = route.params;
+  const { name } = route.params;
+  const { instructions } = route.params;
+  // console.log(id);
+  // console.log(name);
   const [model, setModel] = useState("pick a model");
   const [files, setFiles] = useState([]);
   const assistantList = [
-    { label: "GPT-3", value: "gpt-3" },
-    { label: "GPT-4", value: "gpt-4" },
+    { label: "GPT-4o-mini", value: "gpt-4o-mini" },
+    { label: "GPT-4o", value: "gpt-4o" },
     { label: "GPT-4 Turbo", value: "gpt-4-turbo" },
+    { label: "GPT-4", value: "gpt-4" },
+    { label: "GPT-3.5", value: "gpt-3.5-turbo" },
   ];
 
   useEffect(() => {
     fetchAssistantById(id)
       .then((assistant) => {
         setModel(assistant.model);
+        console.log(assistant.model);
         setFiles(JSON.parse(assistant.files));
       })
       .catch((error) => {
@@ -83,6 +90,7 @@ function AssistantEditorScreen2({ navigation, info, route }) {
           <RNPickerSelect
             onValueChange={(value) => setModel(value)}
             items={assistantList}
+            value={model}
           />
         </View>
         <View style={styles.gp4TipContainer}>
