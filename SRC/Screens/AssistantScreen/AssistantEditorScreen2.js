@@ -124,8 +124,8 @@ const styles = StyleSheet.create({
   topContainer: {
     alignItems: "center",
     padding: 10,
-    borderColor: "blue",
-    borderWidth: 1,
+    // borderColor: "blue",
+    // borderWidth: 1,
   },
   topTipContainer: {
     width: "100%",
