@@ -21,7 +21,7 @@ const ChatScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const assistantId = route.params.assistantId;
   const threadId = route.params.threadId; // this can be null
-  
+
   const threadRef = useRef(null);
 
   useEffect(() => {
@@ -93,8 +93,10 @@ const ChatScreen = ({ navigation, route }) => {
     insertChatMessage(threadRef.current, content, role).catch(console.error);
     console.log("Message added to conversation and DB");
     console.log("Updating chatItem in DB, content:", content);
-    
-    updateChatItemById(threadRef.current, content.slice(0, 25)+"...").catch(console.error);
+
+    updateChatItemById(threadRef.current, content.slice(0, 25) + "...").catch(
+      console.error
+    );
     console.log("ChatItem updated in DB");
   };
 
@@ -113,7 +115,7 @@ const ChatScreen = ({ navigation, route }) => {
   }
 
   return (
-    <Screen>
+    <Screen text="Persian Legal guide" textStyle={styles.top}>
       <View style={styles.container}>
         {loading && (
           <View style={styles.loadingContainer}>
@@ -145,6 +147,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  top: {
+    bottom: 20,
+    alignSelf: "center",
+    fontSize: 20,
+    flex: 0.3,
   },
 });
 

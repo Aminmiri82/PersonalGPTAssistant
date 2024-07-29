@@ -35,6 +35,7 @@ function AssistantEditorScreen1({ navigation, info, route }) {
       return;
     }
     navigation.push("AssistantEditorScreen2", {
+      id,
       name,
       instructions,
     });

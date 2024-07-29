@@ -68,7 +68,11 @@ export const fetchChatItems = async () => {
       if (!db) {
         throw new Error("Database is not initialized");
       }
-      const allRows = await db.getAllAsync("SELECT * FROM ChatItems");
+      const allRows = await db.getAllAsync(`
+        SELECT ChatItems.*, Assistants.name AS assistantName, Assistants.model AS assistantModel
+        FROM ChatItems
+        LEFT JOIN Assistants ON ChatItems.assistantId = Assistants.id
+      `);
       console.log("Fetched ChatItems successfully");
       resolve(allRows);
     } catch (error) {
@@ -100,10 +104,10 @@ export const updateChatItemById = async (threadId, lastMessage) => {
       if (!db) {
         throw new Error("Database is not initialized");
       }
-      await db.runAsync("UPDATE ChatItems SET lastMessage = ? WHERE threadId = ?", [
-        lastMessage,
-        threadId,
-      ]);
+      await db.runAsync(
+        "UPDATE ChatItems SET lastMessage = ? WHERE threadId = ?",
+        [lastMessage, threadId]
+      );
       console.log("ChatItem really successfully");
       resolve();
     } catch (error) {
@@ -192,6 +196,7 @@ export const deleteAssistantById = async (id) => {
         throw new Error("Database is not initialized");
       }
       await db.runAsync("DELETE FROM Assistants WHERE id = ?", [id]);
+      // await db.runAsync("DELETE FROM ChatItems WHERE assistantId = ?", [id]);
       console.log("Assistant Deleted successfully");
       resolve();
     } catch (error) {

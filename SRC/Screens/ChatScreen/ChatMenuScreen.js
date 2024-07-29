@@ -37,7 +37,6 @@ function ChatMenuScreen({ navigation }) {
     navigation.navigate("ChatScreen", {
       threadId: chat.threadId,
       assistantId: chat.assistantId,
-      
     });
   };
 
@@ -53,14 +52,16 @@ function ChatMenuScreen({ navigation }) {
       });
   };
 
-  
-
   const renderItem = ({ item }) => (
     <ChatItem
-      title={item.title || "Placeholder Title"}
+      title={item.assistantName || "Legal Guide"}
       subTitle={item.lastMessage}
-      image={item.assistantId === "asst_40ROFN9nKe2V6Eka6bYXSZ2y" ? require("../../assets/logo.jpg") : require("../../assets/assistant.jpg")}
-      modelname={item.modelname}
+      image={
+        item.assistantId === "asst_40ROFN9nKe2V6Eka6bYXSZ2y"
+          ? require("../../assets/logo.jpg")
+          : require("../../assets/assistant.jpg")
+      }
+      modelname={item.assistantModel}
       onPress={() => handlePress(item)}
       showDelete={editMode}
       onDelete={() => handleDelete(item.Id)}
@@ -73,7 +74,6 @@ function ChatMenuScreen({ navigation }) {
 
   return (
     <Screen>
-
       <View style={styles.container}>
         {chatItems.length === 0 ? (
           <Text>No chats available. Please add a new chat.</Text>

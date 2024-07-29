@@ -10,7 +10,10 @@ import AppText from "../AppText";
 import colors from "../../config/colors";
 import Icon from "../Icon";
 import { Ionicons } from "@expo/vector-icons";
-import { Swipeable, GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  Swipeable,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 
 function ChatItem({
   title,
@@ -42,7 +45,9 @@ function ChatItem({
             </View>
             <View style={styles.detailContainer}>
               <AppText style={styles.title}>{title}</AppText>
-              {subTitle && <AppText style={styles.subTitle}>{subTitle}</AppText>}
+              {subTitle && (
+                <AppText style={styles.subTitle}>{subTitle}</AppText>
+              )}
             </View>
           </View>
         </TouchableHighlight>
@@ -56,6 +61,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 10,
     backgroundColor: colors.white,
+    borderBottomColor: colors.dark,
+    borderBottomWidth: 0.5,
   },
   detailContainer: {
     marginLeft: 10,
@@ -78,6 +85,7 @@ const styles = StyleSheet.create({
   },
   modelstyle: {
     alignSelf: "center",
+    fontSize: 13,
   },
   deleteButton: {
     backgroundColor: colors.light,

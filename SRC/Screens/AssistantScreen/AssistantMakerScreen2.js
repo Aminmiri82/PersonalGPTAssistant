@@ -114,7 +114,12 @@ function AssistantMakerScreen2({ navigation, route }) {
           <AppText style={styles.doneButtonText}>Done</AppText>
         </TouchableOpacity>
       </View> */}
-      <AppButton title="Save Assistant" onPress={handleSave} />
+      <AppButton
+        title="Save Assistant"
+        onPress={handleSave}
+        style={styles.nextButton}
+        textStyle={styles.nextButtonText}
+      />
     </Screen>
   );
 }
@@ -225,6 +230,24 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   doneButtonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  nextButton: {
+    backgroundColor: colors.niceBlue,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    elevation: 2,
+    marginLeft: 10,
+    position: "relative",
+    width: "30%",
+    left: "40%",
+    bottom: "10%",
+  },
+  nextButtonText: {
     color: colors.white,
     fontSize: 16,
     fontWeight: "bold",
