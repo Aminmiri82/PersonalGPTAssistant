@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "Persian Legal Guide",
-    "slug": "SRC",
+    "slug": "Persian-Legal-Guide",
     "version": "1.0.0",
     "runtimeVersion": "1.0.2",  
     "orientation": "portrait",
-    "icon": "./assets/logo.jpg",
+    "icon": "./assets/icon.png", 
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
