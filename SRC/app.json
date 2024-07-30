@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "Persian Legal Guide",
-    "slug": "Persian-Legal-Guide",
+    "slug": "persian-legal-guide",
     "version": "1.0.0",
-    "runtimeVersion": "1.0.2",  
+    "runtimeVersion": "1.0.3",
     "orientation": "portrait",
-    "icon": "./assets/icon.png", 
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -32,7 +32,10 @@
     },
     "extra": {
       "eas": {
-        "projectId": "f36a631d-a4fc-4389-b325-84364c9deb7e"
+        "projectId": "37368c89-9a1c-4b62-ac73-447f85b72c40"
+      },
+      "router": {
+        "origin": false
       }
     },
     "updates": {
