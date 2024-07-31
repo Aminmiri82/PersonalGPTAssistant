@@ -1,6 +1,6 @@
-import OpenAI from 'openai';
-import { OPENAI_API_KEY } from '@env';
-import * as SecureStore from 'expo-secure-store';
+import OpenAI from "openai";
+import { OPENAI_API_KEY } from "@env";
+import * as SecureStore from "expo-secure-store";
 
 let openai = null;
 
@@ -37,7 +37,7 @@ const initializeAssistant = async ({ name, instructions, model }) => {
     const assistant = await openaiInstance.beta.assistants.create({
       name: name,
       instructions: instructions,
-      tools: [{ type: 'file_search' }],
+      tools: [{ type: "file_search" }],
       model: model,
       temperature: 0.75,
     });
@@ -46,7 +46,7 @@ const initializeAssistant = async ({ name, instructions, model }) => {
     return { assistantId: assistant.id }; // Return the assistant ID
   } catch (error) {
     console.error("Error initializing assistant:", error);
-    return { error: 'Failed to initialize assistant' }; // Return the error message
+    return { error: "Failed to initialize assistant" }; // Return the error message
   }
 };
 
@@ -69,20 +69,25 @@ const callAssistantApi = async (message, threadID, assistantId) => {
     const thread = { id: threadID };
     console.log("Sending message to thread...");
     await openaiInstance.beta.threads.messages.create(thread.id, {
-      role: 'user',
+      role: "user",
       content: message,
     });
 
     console.log("Message sent to thread:", message);
     console.log("in call assistant api", assistantId);
     console.log("Running assistant...");
-    const run = await openaiInstance.beta.threads.runs.createAndPoll(thread.id, {
-      assistant_id: assistantId, // Use your assistant ID
-    });
+    const run = await openaiInstance.beta.threads.runs.createAndPoll(
+      thread.id,
+      {
+        assistant_id: assistantId, // Use your assistant ID
+      }
+    );
 
     if (run.status === "completed") {
       console.log("Assistant run completed");
-      const messages = await openaiInstance.beta.threads.messages.list(run.thread_id);
+      const messages = await openaiInstance.beta.threads.messages.list(
+        run.thread_id
+      );
       console.log("Messages received from thread:", messages.data);
       const assistantMessage = messages.data[0].content[0].text.value;
 
@@ -100,50 +105,87 @@ const callAssistantApi = async (message, threadID, assistantId) => {
     throw error;
   }
 };
-
-const addFile = async (files, assistantId = 'asst_OOxeDr8gfBcBK0AUuXH4M68c') => {
+const UPLOAD_URL = "https://api.openai.com/v1/uploads";
+const COMPLETE_UPLOAD_URL =
+  "https://api.openai.com/v1/uploads/{upload_id}/complete";
+const uploadFiles = async (file) => {
   try {
-    const openaiInstance = await getOpenAIInstance();
-    // Step 1: Read files as base64 strings and convert to buffers
-    const fileStreams = await Promise.all(
-      files.map(async (file) => {
-        const filePath = file.uri.replace('file://', '');
-        console.log('in the middle of file stream');
-        console.log('filePath', filePath);
-        const fileContent = await RNFS.readFile(filePath, 'base64');
-        console.log('fileContent length:', fileContent.length); // Add logging to check the file content length
-        return Buffer.from(fileContent, 'base64');
-      })
-    );
-
-    // Step 2: Create a vector store
-    console.log('creating VectorStore');
-    let vectorStore = await openaiInstance.beta.vectorStores.create({
-      name: 'Financial Statement',
-    });
-    console.log('vectorStore', vectorStore);
-
-    // Step 3: Upload files
-    console.log('uploading files');
-    if (fileStreams.length > 0) {
-      const result = await openaiInstance.beta.vectorStores.fileBatches.uploadAndPoll(
-        vectorStore.id,
-        fileStreams
-      );
-      console.log('upload result:', result); // Log the result of the upload
-    } else {
-      throw new Error('No file streams available to upload.');
+    const apiKey = await SecureStore.getItemAsync("apiKey");
+    const { name, size, mimeType, uri } = file[0];
+    const upload = await createUpload(name, size, mimeType, apiKey);
+    if (!upload.id) {
+      throw new Error("Failed to create upload");
     }
 
-    // Step 4: Update assistant with the vector store ID
-    console.log('updating assistant');
-    await openaiInstance.beta.assistants.update(assistantId, {
-      tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } },
-    });
-    console.log('Assistant updated:', assistantId);
+    const partResponse = await uploadFile(
+      upload.id,
+      uri,
+      mimeType,
+      name,
+      apiKey
+    );
+    const partIds = [partResponse.id];
+
+    if (!partResponse.id) {
+      throw new Error("Failed to upload part");
+    }
+
+    const completion = await completeUpload(upload.id, partIds, apiKey);
+    console.log("Upload Complete", `File ID: ${completion.file.id}`);
+    return completion.file.id;
   } catch (error) {
-    console.error('Error adding file:', error);
+    console.error("Error uploading files:", error);
+    throw error;
   }
 };
 
-export { callAssistantApi, initializeAssistant, addFile, createThread };
+const createUpload = async (filename, fileSize, mimeType, apiKey) => {
+  const response = await fetch(UPLOAD_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      filename,
+      purpose: "fine-tune",
+      bytes: fileSize,
+      mime_type: mimeType,
+    }),
+  });
+  return response.json();
+};
+const uploadFile = async (uploadId, fileUri, mimeType, filename, apiKey) => {
+  const formData = new FormData();
+  formData.append("data", {
+    uri: fileUri,
+    type: mimeType,
+    name: filename,
+  });
+
+  const response = await fetch(`${UPLOAD_URL}/${uploadId}/parts`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "multipart/form-data",
+    },
+    body: formData,
+  });
+  return response.json();
+};
+const completeUpload = async (uploadId, partIds, apiKey) => {
+  const response = await fetch(
+    COMPLETE_UPLOAD_URL.replace("{upload_id}", uploadId),
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ part_ids: partIds }),
+    }
+  );
+  return response.json();
+};
+
+export { callAssistantApi, initializeAssistant, uploadFiles, createThread };

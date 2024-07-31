@@ -6,7 +6,7 @@ import colors from "../../config/colors";
 
 import RNPickerSelect from "react-native-picker-select";
 import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocumentPicker";
-import { addFile, initializeAssistant } from "../../openai-backend/ApiBackEnd";
+import { uploadFiles, initializeAssistant } from "../../openai-backend/ApiBackEnd";
 import AppButton from "../../Components/AppButton";
 import { insertAssistant, initDB } from "../../database";
 
@@ -30,12 +30,6 @@ function AssistantMakerScreen2({ navigation, route }) {
     });
   }, []);
 
-  // const handleAddFile = async () => {
-  //   let result = await DocumentPicker.getDocumentAsync({});
-  //   if (result.type === "success") {
-  //     setFiles([...files, result]);
-  //   }
-  // };
   const handleAddFile = (file) => {
     setFiles((prevFiles) => [...prevFiles, file]);
   };
@@ -64,12 +58,9 @@ function AssistantMakerScreen2({ navigation, route }) {
   };
 
   const handleUploadFiles = async () => {
-    try {
-      await addFile(files);
-      console.log("Files uploaded successfully");
-    } catch (error) {
-      console.error("Error uploading files:", error);
-    }
+    console.log("files", files);
+    const fileId = await uploadFiles(files);
+    console.log("fileId", fileId);
   };
 
   return (
@@ -93,6 +84,7 @@ function AssistantMakerScreen2({ navigation, route }) {
           </AppText>
         </View>
       </View>
+      <Button title="Upload Files" onPress={handleUploadFiles} />
 
       <View style={styles.bottomContainer}>
         <View style={styles.bottomTipContainer}>
