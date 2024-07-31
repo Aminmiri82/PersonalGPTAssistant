@@ -108,10 +108,10 @@ const callAssistantApi = async (message, threadID, assistantId) => {
 const UPLOAD_URL = "https://api.openai.com/v1/uploads";
 const COMPLETE_UPLOAD_URL =
   "https://api.openai.com/v1/uploads/{upload_id}/complete";
-const uploadFiles = async (file) => {
+const uploadIndividualFiles = async (file) => {
   try {
     const apiKey = await SecureStore.getItemAsync("apiKey");
-    const { name, size, mimeType, uri } = file[0];
+    const { name, size, mimeType, uri } = file;
     const upload = await createUpload(name, size, mimeType, apiKey);
     if (!upload.id) {
       throw new Error("Failed to create upload");
@@ -188,4 +188,48 @@ const completeUpload = async (uploadId, partIds, apiKey) => {
   return response.json();
 };
 
-export { callAssistantApi, initializeAssistant, uploadFiles, createThread };
+async function createVectorStore(openaiInstance, fileIds) {
+  const vectorStore = await openaiInstance.beta.vectorStores.create({
+    name: "my-vector-store",
+    file_ids: fileIds,
+  });
+  return vectorStore.id;
+}
+async function pollVectorStoreStatus(openaiInstance, vectorStoreId) {
+  let isCompleted = false;
+  while (!isCompleted) {
+    const vectorStore = await openaiInstance.beta.vectorStores.retrieve(
+      vectorStoreId
+    );
+    if (vectorStore.status === "completed") {
+      isCompleted = true;
+    } else {
+      console.log("Vector store status:", vectorStore.status);
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    }
+  }
+}
+async function updateAssistantWithVectorStore(
+  openaiInstance,
+  assistantId,
+  vectorStoreId
+) {
+  await openaiInstance.beta.assistants.update(assistantId, {
+    tool_resources: { file_search: { vector_store_ids: [vectorStoreId] } },
+  });
+}
+const addFilesToAssistant = async (assistantId, fileIds) => {
+  const openaiInstance = await getOpenAIInstance();
+  const vectorStoreId = await createVectorStore(openaiInstance, fileIds);
+  await pollVectorStoreStatus(openaiInstance, vectorStoreId);
+  await updateAssistantWithVectorStore(openaiInstance, assistantId, vectorStoreId);
+  console.log(`Assistant ${assistantId} is now updated with Vector Store ${vectorStoreId}`);
+}
+
+export {
+  callAssistantApi,
+  initializeAssistant,
+  uploadIndividualFiles,
+  createThread,
+  addFilesToAssistant,
+};

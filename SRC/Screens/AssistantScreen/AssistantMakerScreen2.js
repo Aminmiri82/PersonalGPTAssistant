@@ -6,15 +6,21 @@ import colors from "../../config/colors";
 
 import RNPickerSelect from "react-native-picker-select";
 import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocumentPicker";
-import { uploadFiles, initializeAssistant } from "../../openai-backend/ApiBackEnd";
+import {
+  uploadIndividualFiles,
+  initializeAssistant,
+  addFilesToAssistant,
+} from "../../openai-backend/ApiBackEnd";
 import AppButton from "../../Components/AppButton";
 import { insertAssistant, initDB } from "../../database";
+import Spinner from "react-native-loading-spinner-overlay";
 
 function AssistantMakerScreen2({ navigation, route }) {
   const { name, instructions } = route.params;
-  // const [assistantName, setAssistantName] = useState("pick a model");
   const [files, setFiles] = useState([]);
-  const [model, setModel] = useState("GPT-3");
+  const [model, setModel] = useState("GPT-4o-mini");
+  const [isUploading, setIsUploading] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(false);
 
   const assistantList = [
     { label: "GPT-4o-mini", value: "gpt-4o-mini" },
@@ -43,9 +49,28 @@ function AssistantMakerScreen2({ navigation, route }) {
       console.log("Name or instructions are missing");
       return;
     }
+    let fileIds = null;
+
     const assistant = await initializeAssistant({ name, instructions, model });
+    if (files.length > 0) {
+      setIsUploading(true);
+      fileIds = await handleUploadFiles();
+      console.log(
+        "uploading files",
+        fileIds,
+        "to assistant",
+        assistant.assistantId
+      );
+      setIsUploading(false);
+    }
+    setIsInitializing(true);
+    if (fileIds!=null) {
+      await addFilesToAssistant(assistant.assistantId, fileIds);
+    }
+
     if (assistant.error) {
       console.log("Error initializing assistant:", assistant.error);
+      setIsInitializing(false);
       return;
     }
     insertAssistant(assistant.assistantId, name, instructions, model, files)
@@ -54,17 +79,35 @@ function AssistantMakerScreen2({ navigation, route }) {
       })
       .catch((error) => {
         console.log("Error saving assistant:", error);
+      })
+      .finally(() => {
+        setIsInitializing(false);
       });
   };
 
   const handleUploadFiles = async () => {
-    console.log("files", files);
-    const fileId = await uploadFiles(files);
-    console.log("fileId", fileId);
+    setIsUploading(true);
+    try {
+      const uploadPromises = files.map((file) => uploadIndividualFiles(file));
+      const fileIds = await Promise.all(uploadPromises);
+      console.log("fileIds", fileIds);
+      return fileIds;
+    } catch (error) {
+      console.log("Error uploading files:", error);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
     <Screen>
+      <Spinner
+        visible={isUploading || isInitializing}
+        textContent={
+          isUploading ? "Uploading files..." : "Initializing assistant..."
+        }
+        textStyle={styles.spinnerTextStyle}
+      />
       <View style={styles.topContainer}>
         <View style={styles.topTipContainer}>
           <AppText style={styles.topTip}>
@@ -84,8 +127,7 @@ function AssistantMakerScreen2({ navigation, route }) {
           </AppText>
         </View>
       </View>
-      <Button title="Upload Files" onPress={handleUploadFiles} />
-
+    
       <View style={styles.bottomContainer}>
         <View style={styles.bottomTipContainer}>
           <AppText style={styles.bottomTip}>
@@ -98,14 +140,6 @@ function AssistantMakerScreen2({ navigation, route }) {
           onRemoveFile={handleRemoveFile}
         />
       </View>
-      {/* <View style={styles.ButtonContainer}>
-        <TouchableOpacity
-          onPress={() => navigation.popToTop("AssistantMenuScreen")}
-          style={styles.doneButton}
-        >
-          <AppText style={styles.doneButtonText}>Done</AppText>
-        </TouchableOpacity>
-      </View> */}
       <AppButton
         title="Save Assistant"
         onPress={handleSave}
@@ -120,8 +154,6 @@ const styles = StyleSheet.create({
   topContainer: {
     alignItems: "center",
     padding: 10,
-    // borderColor: "blue",
-    // borderWidth: 1,
   },
   topTipContainer: {
     width: "100%",
@@ -159,8 +191,6 @@ const styles = StyleSheet.create({
     height: "50%",
     padding: 10,
     alignItems: "center",
-    // borderWidth: 1,
-    // borderColor: "green",
   },
   bottomTipContainer: {
     width: "100%",
@@ -244,6 +274,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  spinnerTextStyle: {
+    color: "#FFF",
   },
 });
 
