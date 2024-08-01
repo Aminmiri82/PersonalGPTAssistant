@@ -12,7 +12,10 @@ const initializeOpenAI = async () => {
       apiKey = OPENAI_API_KEY;
     }
     console.log("API Key:", apiKey);
-    openai = new OpenAI({ apiKey: apiKey, basePath: 'https://api.openai.com/v1' });
+    openai = new OpenAI({
+      apiKey: apiKey,
+      basePath: "https://api.openai.com/v1",
+    });
   } catch (error) {
     console.error("Error initializing OpenAI:", error);
     throw error;
@@ -29,7 +32,6 @@ const getOpenAIInstance = async () => {
   }
   return openai;
 };
-
 
 const initializeAssistant = async ({ name, instructions, model }) => {
   try {
@@ -64,11 +66,98 @@ const createThread = async () => {
   }
 };
 
-const callAssistantApi = async (message, threadID, assistantId, onChunk) => {
+const addMessageToThread = async (threadId, message) => {
+  try {
+    let apiKey = await SecureStore.getItemAsync("apiKey");
+    const messageResponse = await fetch(
+      `https://api.openai.com/v1/threads/${threadId}/messages`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+          "OpenAI-Beta": "assistants=v2",
+        },
+        body: JSON.stringify({ role: "user", content: message }),
+      }
+    );
+    const messageData = await messageResponse.json();
+    console.log("Message added:", messageData);
+    return messageData;
+  } catch (error) {
+    console.error("Error adding message:", error);
+    throw error;
+  }
+};
+
+const runThreadWithStreaming = async (
+  threadId,
+  assistantId,
+  
+  handleStreamedEvent,
+  setIsLoading
+) => {
+  try {
+    let apiKey = await SecureStore.getItemAsync("apiKey");
+    const runResponse = await fetch(
+      `https://api.openai.com/v1/threads/${threadId}/runs`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+          "OpenAI-Beta": "assistants=v2",
+        },
+        body: JSON.stringify({ assistant_id: assistantId, stream: true }),
+      }
+    );
+
+    if (!runResponse.ok) {
+      throw new Error(`HTTP error! status: ${runResponse.status}`);
+    }
+
+    const responseText = await runResponse.text();
+
+    const handleStreamedResponse = (value) => {
+      const lines = value.split("\n");
+      for (const line of lines) {
+        if (line.trim().startsWith("data:")) {
+          const data = line.trim().slice(5).trim();
+          if (data === "[DONE]") {
+            setIsLoading(false);
+          } else {
+            try {
+              const event = JSON.parse(data);
+              handleStreamedEvent(event);
+            } catch (error) {
+              console.error("Error parsing streamed response:", error);
+            }
+          }
+        }
+      }
+    };
+
+    const simulateStream = async (text) => {
+      const lines = text.split("\n");
+      for (const line of lines) {
+        if (line) {
+          handleStreamedResponse(line);
+          await new Promise((resolve) => setTimeout(resolve, 100)); // Simulate delay between chunks
+        }
+      }
+    };
+
+    await simulateStream(responseText);
+  } catch (error) {
+    console.error("Error running thread:", error);
+    setIsLoading(false);
+  }
+};
+
+const callAssistantApi = async (message, threadID, assistantId) => {
   try {
     const openaiInstance = await getOpenAIInstance();
     const thread = { id: threadID };
-
     console.log("Sending message to thread...");
     await openaiInstance.beta.threads.messages.create(thread.id, {
       role: "user",
@@ -76,32 +165,38 @@ const callAssistantApi = async (message, threadID, assistantId, onChunk) => {
     });
 
     console.log("Message sent to thread:", message);
+    console.log("in call assistant api", assistantId);
     console.log("Running assistant...");
-
-    const stream = openaiInstance.beta.threads.runs.stream(thread.id, {
-      assistant_id: assistantId,
-    });
-
-    stream.on("data", (data) => {
-      const content = data.choices[0]?.delta?.content || "";
-      if (onChunk) {
-        onChunk(content);
+    const run = await openaiInstance.beta.threads.runs.createAndPoll(
+      thread.id,
+      {
+        assistant_id: assistantId, // Use your assistant ID
       }
-    });
+    );
 
-    stream.on("end", () => {
-      console.log("Streaming ended");
-    });
+    if (run.status === "completed") {
+      console.log("Assistant run completed");
+      const messages = await openaiInstance.beta.threads.messages.list(
+        run.thread_id
+      );
+      console.log("Messages received from thread:", messages.data);
+      const assistantMessage = messages.data[0].content[0].text.value;
 
-    stream.on("error", (error) => {
-      console.error("Error during streaming:", error);
-      throw error;
-    });
+      if (assistantMessage) {
+        console.log("Assistant message:", assistantMessage);
+        return assistantMessage;
+      } else {
+        throw new Error("No assistant message found in the response");
+      }
+    } else {
+      throw new Error("Assistant run failed");
+    }
   } catch (error) {
     console.error("Error calling assistant:", error);
     throw error;
   }
 };
+
 const UPLOAD_URL = "https://api.openai.com/v1/uploads";
 const COMPLETE_UPLOAD_URL =
   "https://api.openai.com/v1/uploads/{upload_id}/complete";
@@ -235,5 +330,6 @@ export {
   uploadIndividualFiles,
   createThread,
   addFilesToAssistant,
-  getOpenAIInstance,
+  addMessageToThread,
+  
 };
