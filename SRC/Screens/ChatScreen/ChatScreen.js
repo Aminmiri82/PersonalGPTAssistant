@@ -68,6 +68,7 @@ const ChatScreen = ({ navigation, route }) => {
 
   const handleStreamedEvent = (event) => {
     console.log("Streamed event received:", event); // Debugging
+    console.log("event.object:", event.object);
     switch (event.object) {
       case "thread.message.delta":
         if (event.delta.content) {
@@ -76,13 +77,16 @@ const ChatScreen = ({ navigation, route }) => {
           console.log("Updated streamedChunks:", streamedChunks + content); // Debugging
         }
         break;
-      case "thread.message.completed":
-        const finalMessage = event.content[0].text.value;
-        setCompleteResponse(finalMessage);
-        setLoading(false);
-        addFinalMessageToConversation(finalMessage);
-        setStreamedChunks(""); // Clear the streamed chunks
-        console.log("Final message received:", finalMessage); // Debugging
+      case "thread.message":
+        if (event.status === "completed") {
+          const finalMessage = event.content[0].text.value;
+          console.log("finalMessage********", finalMessage);
+          setCompleteResponse(finalMessage);
+          setLoading(false);
+          addFinalMessageToConversation(finalMessage);
+          setStreamedChunks(""); // Clear the streamed chunks
+          console.log("Final message received:", finalMessage); // Debugging
+        }
         break;
       default:
         break;
@@ -180,11 +184,9 @@ const ChatScreen = ({ navigation, route }) => {
   };
 
   const addMessageToConversationAndDB = (role, content) => {
-    const messageId = `msg_${Date.now()}`;
     setConversation((prevConversation) => [
       ...prevConversation,
       {
-        id: messageId,
         threadId: threadRef.current,
         content: content,
         role: role,
@@ -202,11 +204,9 @@ const ChatScreen = ({ navigation, route }) => {
   };
 
   const addFinalMessageToConversation = (content) => {
-    const messageId = `msg_${Date.now()}`;
     setConversation((prevConversation) => [
       ...prevConversation,
       {
-        id: messageId,
         threadId: threadRef.current,
         content: content,
         role: "assistant",
@@ -241,36 +241,29 @@ const ChatScreen = ({ navigation, route }) => {
 
   return (
     <Screen>
-      <ImageBackground
-        source={require("../../assets/background.jpg")}
-        style={styles.background}
-      >
+      
         <View style={styles.container}>
-          {loading && (
-            <View style={styles.loadingContainer}>
-              <Text>Loading...</Text>
-            </View>
-          )}
-
           <FlatList
             data={conversation}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <Chatbubble message={item} />}
             contentContainerStyle={styles.flatListContent}
+            
+            ListFooterComponent={
+              streamedChunks && !completeResponse ? (
+                <Chatbubble
+                  message={{
+                    content: streamedChunks,
+                    role: "assistant",
+                    timestamp: new Date(),
+                  }}
+                />
+              ) : null
+            }
           />
-          {streamedChunks && !completeResponse && (
-            <Chatbubble
-              message={{
-                content: streamedChunks,
-                role: "assistant",
-                timestamp: new Date(),
-              }}
-            />
-          )}
+          <AppTextInput onSubmit={handleSetMessage} />
         </View>
-
-        <AppTextInput onSubmit={handleSetMessage} />
-      </ImageBackground>
+      
     </Screen>
   );
 };
@@ -281,15 +274,6 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     padding: 10,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  top: {
-    alignSelf: "center",
-    fontSize: 15,
   },
   background: {
     flex: 1,
