@@ -83,7 +83,7 @@ const addMessageToThread = async (threadId, message) => {
     );
     const messageData = await messageResponse.json();
     console.log("Message added:", messageData);
-    return messageData;
+    //return messageData;    i think this is not needed
   } catch (error) {
     console.error("Error adding message:", error);
     throw error;
