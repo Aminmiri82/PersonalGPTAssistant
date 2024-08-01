@@ -1,98 +1,139 @@
-import React from "react";
-import { View, Button, Alert } from "react-native";
-import * as DocumentPicker from "expo-document-picker";
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, ScrollView } from 'react-native';
 
-const UPLOAD_URL = "https://api.openai.com/v1/uploads";
-const COMPLETE_UPLOAD_URL =
-  "https://api.openai.com/v1/uploads/{upload_id}/complete";
-const API_KEY = "fuck no";
-
-const createUpload = async (filename, fileSize, mimeType) => {
-  const response = await fetch(UPLOAD_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      filename,
-      purpose: "fine-tune",
-      bytes: fileSize,
-      mime_type: mimeType,
-    }),
-  });
-  return response.json();
-};
-
-const uploadFile = async (uploadId, fileUri, mimeType, filename) => {
-  const formData = new FormData();
-  formData.append("data", {
-    uri: fileUri,
-    type: mimeType,
-    name: filename,
-  });
-
-  const response = await fetch(`${UPLOAD_URL}/${uploadId}/parts`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-      "Content-Type": "multipart/form-data",
-    },
-    body: formData,
-  });
-  return response.json();
-};
-
-const completeUpload = async (uploadId, partIds) => {
-  const response = await fetch(
-    COMPLETE_UPLOAD_URL.replace("{upload_id}", uploadId),
-    {
-      method: "POST",
+const addMessageToThread = async (threadId, message, apiKey) => {
+  try {
+    const messageResponse = await fetch(`https://api.openai.com/v1/threads/${threadId}/messages`, {
+      method: 'POST',
       headers: {
-        Authorization: `Bearer ${API_KEY}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'OpenAI-Beta': 'assistants=v2',
       },
-      body: JSON.stringify({ part_ids: partIds }),
-    }
-  );
-  return response.json();
+      body: JSON.stringify({ role: "user", content: message }),
+    });
+    const messageData = await messageResponse.json();
+    console.log('Message added:', messageData);
+    return messageData;
+  } catch (error) {
+    console.error("Error adding message:", error);
+    throw error;
+  }
 };
 
-export default function App() {
-  const handleFileUpload = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({});
-      if (
-        result.type === "cancel" ||
-        !result.assets ||
-        result.assets.length === 0
-      )
-        return;
+const runThreadWithStreaming = async (threadId, assistantId, apiKey, handleStreamedEvent, setIsLoading) => {
+  try {
+    const runResponse = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'OpenAI-Beta': 'assistants=v2',
+      },
+      body: JSON.stringify({ assistant_id: assistantId, stream: true }),
+    });
 
-      const { name, size, mimeType, uri } = result.assets[0];
-      const upload = await createUpload(name, size, mimeType);
-
-      if (!upload.id) {
-        throw new Error("Failed to create upload");
-      }
-
-      const partResponse = await uploadFile(upload.id, uri, mimeType, name);
-      const partIds = [partResponse.id];
-
-      if (!partResponse.id) {
-        throw new Error("Failed to upload part");
-      }
-
-      const completion = await completeUpload(upload.id, partIds);
-      Alert.alert("Upload Complete", `File ID: ${completion.file.id}`);
-    } catch (error) {
-      Alert.alert("Upload Failed", error.message);
+    if (!runResponse.ok) {
+      throw new Error(`HTTP error! status: ${runResponse.status}`);
     }
+
+    const responseText = await runResponse.text();
+    
+    const handleStreamedResponse = (value) => {
+      const lines = value.split('\n');
+      for (const line of lines) {
+        if (line.trim().startsWith('data:')) {
+          const data = line.trim().slice(5).trim();
+          if (data === '[DONE]') {
+            setIsLoading(false);
+          } else {
+            try {
+              const event = JSON.parse(data);
+              handleStreamedEvent(event);
+            } catch (error) {
+              console.error('Error parsing streamed response:', error);
+            }
+          }
+        }
+      }
+    };
+
+    const simulateStream = async (text) => {
+      const lines = text.split('\n');
+      for (const line of lines) {
+        if (line) {
+          handleStreamedResponse(line);
+          await new Promise(resolve => setTimeout(resolve, 100)); // Simulate delay between chunks
+        }
+      }
+    };
+
+    await simulateStream(responseText);
+
+  } catch (error) {
+    console.error("Error running thread:", error);
+    setIsLoading(false);
+  }
+};
+
+const handleStreamedEvent = (event, setStreamedChunks, setCompleteResponse, setIsLoading) => {
+  switch (event.object) {
+    case 'thread.message.delta':
+      if (event.delta.content) {
+        const content = event.delta.content[0].text.value;
+        setStreamedChunks((prevChunks) => [...prevChunks, content]);
+      }
+      break;
+    case 'thread.message.completed':
+      const finalMessage = event.content[0].text.value;
+      setCompleteResponse(finalMessage);
+      setIsLoading(false);
+      break;
+    default:
+      break;
+  }
+};
+
+const ChatScreen = ({ navigation, route }) => {
+  const apiKey = "fuck no";
+  const threadId = "thread_tKlHb8rst8Zpo7mmwfFJDKHC";
+  const assistantId = "asst_vSXZPlFpwmAHVT0XV94ObY3c";
+
+  const [inputText, setInputText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [streamedChunks, setStreamedChunks] = useState([]);
+  const [completeResponse, setCompleteResponse] = useState(null);
+
+  const handleInputChange = (text) => {
+    setInputText(text);
+  };
+
+  const handleButtonClick = async () => {
+    setIsLoading(true);
+    setStreamedChunks([]);
+    setCompleteResponse(null);
+    await addMessageToThread(threadId, inputText, apiKey);
+    await runThreadWithStreaming(threadId, assistantId, apiKey, (event) => handleStreamedEvent(event, setStreamedChunks, setCompleteResponse, setIsLoading), setIsLoading);
   };
 
   return (
-    <View>
-      <Button title="Upload File" onPress={handleFileUpload} />
+    <View style={{ padding: 20 }}>
+      <TextInput
+        placeholder="Enter your question..."
+        value={inputText}
+        onChangeText={handleInputChange}
+        style={{ padding: 10, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
+      />
+      <Button title="Submit" onPress={handleButtonClick} disabled={isLoading} />
+      {isLoading && <Text>Loading...</Text>}
+      <ScrollView>
+        {streamedChunks.map((chunk, index) => (
+          <Text key={index}>{chunk}</Text>
+        ))}
+        {completeResponse && <Text>{completeResponse}</Text>}
+      </ScrollView>
     </View>
   );
-}
+};
+
+export default ChatScreen;
