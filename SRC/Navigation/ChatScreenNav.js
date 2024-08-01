@@ -6,6 +6,7 @@ import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
 import OnBoardingScreen from "../Screens/OBS/OnBoardingScreen";
 import ChooseChatScreen from "../Screens/ChatScreen/ChooseChatScreen";
 import AppButton from "../Components/AppButton";
+import TestScreen from "../Screens/TestScreen";
 
 
 
@@ -20,6 +21,7 @@ const makeNewChatButton = (navigation) => (
 function ChatScreenNav(props) {
   return (
     <ChatStack.Navigator>
+      <ChatStack.Screen name="TestScreen" component={TestScreen} options={{ headerTitle: "Test" }} />
       
       <ChatStack.Screen
         name="ChatMenuScreen"

@@ -12,7 +12,7 @@ const initializeOpenAI = async () => {
       apiKey = OPENAI_API_KEY;
     }
     console.log("API Key:", apiKey);
-    openai = new OpenAI({ apiKey: apiKey });
+    openai = new OpenAI({ apiKey: apiKey, basePath: 'https://api.openai.com/v1' });
   } catch (error) {
     console.error("Error initializing OpenAI:", error);
     throw error;
@@ -29,6 +29,7 @@ const getOpenAIInstance = async () => {
   }
   return openai;
 };
+
 
 const initializeAssistant = async ({ name, instructions, model }) => {
   try {
@@ -63,10 +64,11 @@ const createThread = async () => {
   }
 };
 
-const callAssistantApi = async (message, threadID, assistantId) => {
+const callAssistantApi = async (message, threadID, assistantId, onChunk) => {
   try {
     const openaiInstance = await getOpenAIInstance();
     const thread = { id: threadID };
+
     console.log("Sending message to thread...");
     await openaiInstance.beta.threads.messages.create(thread.id, {
       role: "user",
@@ -74,32 +76,27 @@ const callAssistantApi = async (message, threadID, assistantId) => {
     });
 
     console.log("Message sent to thread:", message);
-    console.log("in call assistant api", assistantId);
     console.log("Running assistant...");
-    const run = await openaiInstance.beta.threads.runs.createAndPoll(
-      thread.id,
-      {
-        assistant_id: assistantId, // Use your assistant ID
-      }
-    );
 
-    if (run.status === "completed") {
-      console.log("Assistant run completed");
-      const messages = await openaiInstance.beta.threads.messages.list(
-        run.thread_id
-      );
-      console.log("Messages received from thread:", messages.data);
-      const assistantMessage = messages.data[0].content[0].text.value;
+    const stream = openaiInstance.beta.threads.runs.stream(thread.id, {
+      assistant_id: assistantId,
+    });
 
-      if (assistantMessage) {
-        console.log("Assistant message:", assistantMessage);
-        return assistantMessage;
-      } else {
-        throw new Error("No assistant message found in the response");
+    stream.on("data", (data) => {
+      const content = data.choices[0]?.delta?.content || "";
+      if (onChunk) {
+        onChunk(content);
       }
-    } else {
-      throw new Error("Assistant run failed");
-    }
+    });
+
+    stream.on("end", () => {
+      console.log("Streaming ended");
+    });
+
+    stream.on("error", (error) => {
+      console.error("Error during streaming:", error);
+      throw error;
+    });
   } catch (error) {
     console.error("Error calling assistant:", error);
     throw error;
@@ -222,9 +219,15 @@ const addFilesToAssistant = async (assistantId, fileIds) => {
   const openaiInstance = await getOpenAIInstance();
   const vectorStoreId = await createVectorStore(openaiInstance, fileIds);
   await pollVectorStoreStatus(openaiInstance, vectorStoreId);
-  await updateAssistantWithVectorStore(openaiInstance, assistantId, vectorStoreId);
-  console.log(`Assistant ${assistantId} is now updated with Vector Store ${vectorStoreId}`);
-}
+  await updateAssistantWithVectorStore(
+    openaiInstance,
+    assistantId,
+    vectorStoreId
+  );
+  console.log(
+    `Assistant ${assistantId} is now updated with Vector Store ${vectorStoreId}`
+  );
+};
 
 export {
   callAssistantApi,
@@ -232,4 +235,5 @@ export {
   uploadIndividualFiles,
   createThread,
   addFilesToAssistant,
+  getOpenAIInstance,
 };
