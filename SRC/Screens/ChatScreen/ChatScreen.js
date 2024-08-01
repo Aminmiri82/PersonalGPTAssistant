@@ -241,14 +241,16 @@ const ChatScreen = ({ navigation, route }) => {
 
   return (
     <Screen>
-      
+      <ImageBackground
+        source={require("../../assets/background.jpg")}
+        style={styles.background}
+      >
         <View style={styles.container}>
           <FlatList
             data={conversation}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <Chatbubble message={item} />}
             contentContainerStyle={styles.flatListContent}
-            
             ListFooterComponent={
               streamedChunks && !completeResponse ? (
                 <Chatbubble
@@ -263,7 +265,7 @@ const ChatScreen = ({ navigation, route }) => {
           />
           <AppTextInput onSubmit={handleSetMessage} />
         </View>
-      
+      </ImageBackground>
     </Screen>
   );
 };

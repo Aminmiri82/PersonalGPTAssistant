@@ -150,8 +150,10 @@ const styles = StyleSheet.create({
   topPickerContainer: {
     width: "80%",
     padding: 10,
-    borderColor: colors.primary,
+    borderColor: "gray",
     borderWidth: 1,
+    borderRadius: 5,
+    
   },
 
   gp4TipContainer: {
@@ -172,8 +174,7 @@ const styles = StyleSheet.create({
     height: "50%",
     padding: 10,
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "green",
+   
   },
   bottomTipContainer: {
     width: "100%",
