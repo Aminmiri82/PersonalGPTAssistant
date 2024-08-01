@@ -1,14 +1,11 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { HeaderBackButton } from "@react-navigation/elements";
 import ChatScreen from "../Screens/ChatScreen/ChatScreen";
 import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
-import OnBoardingScreen from "../Screens/OBS/OnBoardingScreen";
 import ChooseChatScreen from "../Screens/ChatScreen/ChooseChatScreen";
 import AppButton from "../Components/AppButton";
-import TestScreen from "../Screens/TestScreen";
-
-
 
 const ChatStack = createNativeStackNavigator();
 
@@ -18,11 +15,10 @@ const makeNewChatButton = (navigation) => (
     onPress={() => navigation.navigate("ChooseChatScreen")}
   />
 );
+
 function ChatScreenNav(props) {
   return (
     <ChatStack.Navigator>
-
-      
       <ChatStack.Screen
         name="ChatMenuScreen"
         component={ChatMenuScreen}
@@ -31,7 +27,18 @@ function ChatScreenNav(props) {
         })}
       />
       <ChatStack.Screen name="ChooseChatScreen" component={ChooseChatScreen} />
-      <ChatStack.Screen name="ChatScreen" component={ChatScreen} />
+      <ChatStack.Screen
+        name="ChatScreen"
+        component={ChatScreen}
+        options={({ navigation }) => ({
+          headerLeft: (props) => (
+            <HeaderBackButton
+              {...props}
+              onPress={() => navigation.popToTop()}
+            />
+          ),
+        })}
+      />
     </ChatStack.Navigator>
   );
 }

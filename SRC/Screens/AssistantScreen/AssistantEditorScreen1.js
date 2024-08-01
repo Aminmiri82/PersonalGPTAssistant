@@ -193,8 +193,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "red",
+    
   },
   bottomTitle: {
     fontSize: 20,

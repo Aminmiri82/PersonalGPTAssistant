@@ -170,8 +170,9 @@ const styles = StyleSheet.create({
   topPickerContainer: {
     width: "80%",
     padding: 10,
-    borderColor: colors.primary,
+    borderColor: "gray",
     borderWidth: 1,
+    borderRadius: 5,
   },
   gp4TipContainer: {
     width: "100%",

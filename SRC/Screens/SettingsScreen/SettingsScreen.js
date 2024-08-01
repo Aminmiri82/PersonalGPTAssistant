@@ -6,7 +6,7 @@ import OpenAIPrompt from "../../Components/SettingsComponents/OpenAIPrompt";
 import SettingsItem from "../../Components/SettingsComponents/SettingsItem";
 import Icon from "../../Components/Icon";
 import { OPENAI_API_KEY } from "@env";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 
 import Screen from "../../Components/Screen";
 
@@ -22,7 +22,7 @@ function SettingsScreen({ navigation, route }) {
       try {
         let storedKey = await SecureStore.getItemAsync("apiKey");
         if (storedKey) {
-          setApiKey(storedKey);
+          setApiKey(storedKey.slice(7, 14));
         } else if (OPENAI_API_KEY) {
           setApiKey(OPENAI_API_KEY.slice(-6));
         }
