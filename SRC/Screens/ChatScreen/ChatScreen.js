@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   View,
-  Text,
-  FlatList,
-  ImageBackground,
   StyleSheet,
+  FlatList,
+  Text,
+  ImageBackground,
 } from "react-native";
 import AppTextInput from "../../Components/ChatComponents/AppTextInput";
 import Screen from "../../Components/Screen";
 import Chatbubble from "../../Components/ChatComponents/Chatbubble";
 import {
+  addMessageToThread,
   createThread,
-  getOpenAIInstance,
 } from "../../openai-backend/ApiBackEnd";
 import {
   insertChatMessage,
@@ -20,15 +20,14 @@ import {
   updateChatItemById,
 } from "../../database";
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
-
-import { connectToSSE } from "../../openai-backend/sseHandler";
-import EventSource from "react-native-sse";
+import * as SecureStore from "expo-secure-store";
 
 const ChatScreen = ({ navigation, route }) => {
   const { dbInitialized } = useContext(DatabaseContext);
   const [conversation, setConversation] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [streamingMessage, setStreamingMessage] = useState(null);
+  const [streamedChunks, setStreamedChunks] = useState("");
+  const [completeResponse, setCompleteResponse] = useState(null);
   const assistantId = route.params.assistantId;
   const threadId = route.params.threadId; // this can be null
 
@@ -67,113 +66,157 @@ const ChatScreen = ({ navigation, route }) => {
     initializeThread();
   }, [threadId, dbInitialized]); // Add dbInitialized as a dependency
 
+  const handleStreamedEvent = (event) => {
+    console.log("Streamed event received:", event); // Debugging
+    switch (event.object) {
+      case "thread.message.delta":
+        if (event.delta.content) {
+          const content = event.delta.content[0].text.value;
+          setStreamedChunks((prevChunks) => prevChunks + content);
+          console.log("Updated streamedChunks:", streamedChunks + content); // Debugging
+        }
+        break;
+      case "thread.message.completed":
+        const finalMessage = event.content[0].text.value;
+        setCompleteResponse(finalMessage);
+        setLoading(false);
+        addFinalMessageToConversation(finalMessage);
+        setStreamedChunks(""); // Clear the streamed chunks
+        console.log("Final message received:", finalMessage); // Debugging
+        break;
+      default:
+        break;
+    }
+  };
+
+  const runThreadWithStreaming = async (
+    threadId,
+    assistantId,
+    apiKey,
+    handleStreamedEvent,
+    setIsLoading
+  ) => {
+    try {
+      const runResponse = await fetch(
+        `https://api.openai.com/v1/threads/${threadId}/runs`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+            "OpenAI-Beta": "assistants=v2",
+          },
+          body: JSON.stringify({ assistant_id: assistantId, stream: true }),
+        }
+      );
+
+      if (!runResponse.ok) {
+        throw new Error(`HTTP error! status: ${runResponse.status}`);
+      }
+
+      const responseText = await runResponse.text();
+      console.log("Response text received:", responseText); // Debugging
+
+      const handleStreamedResponse = (value) => {
+        const lines = value.split("\n");
+        for (const line of lines) {
+          if (line.trim().startsWith("data:")) {
+            const data = line.trim().slice(5).trim();
+            if (data === "[DONE]") {
+              setIsLoading(false);
+            } else {
+              try {
+                const event = JSON.parse(data);
+                handleStreamedEvent(event);
+              } catch (error) {
+                console.error("Error parsing streamed response:", error);
+              }
+            }
+          }
+        }
+      };
+
+      const simulateStream = async (text) => {
+        const lines = text.split("\n");
+        for (const line of lines) {
+          if (line) {
+            handleStreamedResponse(line);
+            await new Promise((resolve) => setTimeout(resolve, 100)); // Simulate delay between chunks
+          }
+        }
+      };
+
+      await simulateStream(responseText);
+    } catch (error) {
+      console.error("Error running thread:", error);
+      setIsLoading(false);
+    }
+  };
+
   const callAssistant = async (message, assistantId) => {
+    const apiKey = await SecureStore.getItemAsync("apiKey");
     setLoading(true);
+    setStreamedChunks("");
+    setCompleteResponse(null);
     if (threadRef.current === null) {
       console.log("Thread not initialized yet.");
       setLoading(false);
       return;
     }
-  
     console.log("in chat screen call assistant", assistantId);
-  
     try {
-      const openaiInstance = await getOpenAIInstance();
-  
-      // Log the openaiInstance to verify its structure
-      console.log("OpenAI Instance:", openaiInstance);
-  
-      const basePath = openaiInstance.basePath || openaiInstance._options.basePath;
-      if (!openaiInstance || !basePath) {
-        throw new Error("OpenAI instance or basePath is not defined");
-      }
-  
-      const thread = { id: threadRef.current };
-  
-      console.log("Sending message to thread...");
-      await openaiInstance.beta.threads.messages.create(thread.id, {
-        role: "user",
-        content: message,
-      });
-  
-      console.log("Message sent to thread:", message);
-      console.log("Starting assistant run...");
-  
-      // First, create a run
-      const runResponse = await openaiInstance.beta.threads.runs.create(thread.id, {
-        assistant_id: assistantId,
-      });
-  
-      const runId = runResponse.id; // Ensure you get the run ID from the response
-      console.log("Run ID:", runId);
-  
-      // Now, stream the results of the run
-      const streamUrl = `${basePath}/beta/runs/${runId}/events`;
-      console.log("Stream URL:", streamUrl);
-  
-      const eventSource = new EventSource(streamUrl, {
-        headers: {
-          Authorization: `Bearer ${openaiInstance.apiKey}`,
-          'Content-Type': 'application/json',
-          'OpenAI-Beta': 'assistants=v2',
-        },
-      });
-  
-      eventSource.addEventListener("open", () => {
-        console.log("Open SSE connection.");
-      });
-  
-      eventSource.addEventListener("message", (event) => {
-        const data = JSON.parse(event.data);
-        const content = data.delta?.content[0]?.text?.value || "";
-        setStreamingMessage((prev) => ({
-          ...prev,
-          content: (prev?.content || "") + content,
-          role: "assistant",
-          timestamp: new Date(),
-        }));
-      });
-  
-      eventSource.addEventListener("error", (event) => {
-        if (event.type === 'error') {
-          console.error("Connection error:", event.message);
-        } else if (event.type === 'exception') {
-          console.error("Error:", event.message, event.error);
-        }
-        setLoading(false);
-        eventSource.close();
-      });
-  
-      eventSource.addEventListener("close", () => {
-        console.log("Close SSE connection.");
-        if (streamingMessage) {
-          addMessageToConversationAndDB("assistant", streamingMessage.content);
-        }
-        setStreamingMessage(null);
-        setLoading(false);
-      });
-  
-      return () => {
-        eventSource.removeAllEventListeners();
-        eventSource.close();
-      };
+      console.log("Calling assistant with thread:", threadRef.current);
+      await addMessageToThread(threadRef.current, message);
+      await runThreadWithStreaming(
+        threadRef.current,
+        assistantId,
+        apiKey,
+        handleStreamedEvent,
+        setLoading
+      );
     } catch (error) {
       console.error("Error calling assistant:", error);
-      setLoading(false);
     }
   };
 
   const addMessageToConversationAndDB = (role, content) => {
-    const newMessage = {
-      threadId: threadRef.current,
-      content: content,
-      role: role,
-      timestamp: new Date(),
-    };
-
-    setConversation((prevConversation) => [...prevConversation, newMessage]);
+    const messageId = `msg_${Date.now()}`;
+    setConversation((prevConversation) => [
+      ...prevConversation,
+      {
+        id: messageId,
+        threadId: threadRef.current,
+        content: content,
+        role: role,
+        timestamp: new Date(),
+      },
+    ]);
     insertChatMessage(threadRef.current, content, role).catch(console.error);
     console.log("Message added to conversation and DB");
+    console.log("Updating chatItem in DB, content:", content);
+
+    updateChatItemById(threadRef.current, content.slice(0, 25) + "...").catch(
+      console.error
+    );
+    console.log("ChatItem updated in DB");
+  };
+
+  const addFinalMessageToConversation = (content) => {
+    const messageId = `msg_${Date.now()}`;
+    setConversation((prevConversation) => [
+      ...prevConversation,
+      {
+        id: messageId,
+        threadId: threadRef.current,
+        content: content,
+        role: "assistant",
+        timestamp: new Date(),
+      },
+    ]);
+    insertChatMessage(threadRef.current, content, "assistant").catch(
+      console.error
+    );
+    console.log("Final message added to conversation and DB");
     console.log("Updating chatItem in DB, content:", content);
 
     updateChatItemById(threadRef.current, content.slice(0, 25) + "...").catch(
@@ -210,11 +253,20 @@ const ChatScreen = ({ navigation, route }) => {
           )}
 
           <FlatList
-            data={[...conversation, streamingMessage].filter(Boolean)} // Include streamingMessage if it exists
-            keyExtractor={(item) => item.timestamp.toString()}
+            data={conversation}
+            keyExtractor={(item) => item.id}
             renderItem={({ item }) => <Chatbubble message={item} />}
             contentContainerStyle={styles.flatListContent}
           />
+          {streamedChunks && !completeResponse && (
+            <Chatbubble
+              message={{
+                content: streamedChunks,
+                role: "assistant",
+                timestamp: new Date(),
+              }}
+            />
+          )}
         </View>
 
         <AppTextInput onSubmit={handleSetMessage} />

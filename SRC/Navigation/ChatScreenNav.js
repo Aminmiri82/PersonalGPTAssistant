@@ -21,7 +21,7 @@ const makeNewChatButton = (navigation) => (
 function ChatScreenNav(props) {
   return (
     <ChatStack.Navigator>
-      <ChatStack.Screen name="TestScreen" component={TestScreen} options={{ headerTitle: "Test" }} />
+
       
       <ChatStack.Screen
         name="ChatMenuScreen"
