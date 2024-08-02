@@ -22,9 +22,9 @@ function SettingsScreen({ navigation, route }) {
       try {
         let storedKey = await SecureStore.getItemAsync("apiKey");
         if (storedKey) {
-          setApiKey(storedKey.slice(7, 14));
+          setApiKey(storedKey);
         } else if (OPENAI_API_KEY) {
-          setApiKey(OPENAI_API_KEY.slice(-6));
+          setApiKey(OPENAI_API_KEY);
         }
       } catch (error) {
         console.error("Error retrieving API key", error);
