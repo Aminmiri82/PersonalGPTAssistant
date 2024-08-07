@@ -24,7 +24,7 @@ function LanguagesPrompt({ visible, onClose, onSelectLanguage }) {
               <TouchableOpacity
                 style={styles.menuItem}
                 onPress={() => {
-                  onSelectLanguage("English");
+                  onSelectLanguage("en");
                 }}
               >
                 <AppText style={styles.menuItemAppText}>English</AppText>
@@ -32,7 +32,7 @@ function LanguagesPrompt({ visible, onClose, onSelectLanguage }) {
               <TouchableOpacity
                 style={styles.menuItem}
                 onPress={() => {
-                  onSelectLanguage("Persian");
+                  onSelectLanguage("fa");
                 }}
               >
                 <AppText style={styles.menuItemAppText}>Persian</AppText>
@@ -40,7 +40,7 @@ function LanguagesPrompt({ visible, onClose, onSelectLanguage }) {
               <TouchableOpacity
                 style={styles.menuItem}
                 onPress={() => {
-                  onSelectLanguage("French");
+                  onSelectLanguage("fr");
                 }}
               >
                 <AppText style={styles.menuItemAppText}>French</AppText>

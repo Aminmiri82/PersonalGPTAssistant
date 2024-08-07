@@ -6,7 +6,7 @@ const LocalizationContext = createContext();
 
 export const LocalizationProvider = ({ children }) => {
   const [language, setLanguage] = useState("en");
-  const [translations, setTranslations] = useState(localizations.en);
+  const [translations, setTranslations] = useState(localizations["en"]);
 
   useEffect(() => {
     const fetchLanguage = async () => {
