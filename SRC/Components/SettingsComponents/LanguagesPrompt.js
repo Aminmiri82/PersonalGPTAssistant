@@ -5,9 +5,13 @@ import {
   Modal,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  FlatList,
+  Text,
 } from "react-native";
 
 import AppText from "../AppText";
+import i18next, { languageResources } from "../../services/i18next";
+import languagesList from "../../services/languagesList.json";
 
 function LanguagesPrompt({ visible, onClose, onSelectLanguage }) {
   return (
@@ -20,7 +24,7 @@ function LanguagesPrompt({ visible, onClose, onSelectLanguage }) {
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalBackground}>
           <TouchableWithoutFeedback>
-            <View style={styles.menuContainer}>
+            {/* <View style={styles.menuContainer}>
               <TouchableOpacity
                 style={styles.menuItem}
                 onPress={() => {
@@ -48,6 +52,21 @@ function LanguagesPrompt({ visible, onClose, onSelectLanguage }) {
               <TouchableOpacity style={styles.menuItem} onPress={onClose}>
                 <AppText style={styles.menuItemAppText}>Cancel</AppText>
               </TouchableOpacity>
+            </View> */}
+            <View style={styles.languagesList}>
+              <FlatList
+                data={Object.keys(languageResources)}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.languageButton}
+                    onPress={() => onSelectLanguage(item)}
+                  >
+                    <Text style={styles.lngName}>
+                      {languagesList[item].nativeName}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              />
             </View>
           </TouchableWithoutFeedback>
         </View>
