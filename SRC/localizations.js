@@ -1,94 +1,41 @@
-// const en = {
-//     Chat: "",
-//     Assistants: "",
-//     Setting: "",
-//     edit: "",
-//     newAssistant: "",
-//     choosingPhotoForAssistant: "",
-//     choosingNameForAssistant: "",
-//     enterName: "",
-//     giveAssistantInstruction: "",
-//     enterInstructions: "",
-//     next: "",
-//     chooseModel: "",
-//     selectModel: "",
-//     fileUploadReq: "",
-//     fileUpload: "",
-//     saveAssistant: "",
-//     done: "",
-//     delete: "",
-//     save: "",
-//     enterAPIKey: "",
-//     Languages: "",
-//     selectLang: "",
-//     TOS: "",
-//     PriPol: "",
-//     aboutUs: "",
-//   };
+import * as Localization from "expo-localization";
+import i18n from "i18n-js";
+import * as SecureStore from "expo-secure-store";
+import en from "./locales/en.json";
+import fa from "./locales/fa.json";
 
-const localizations = {
-  en: {
-    Chat: "Chat",
-    Assistants: "Assistants",
-    Setting: "Setting",
-    edit: "edit",
-    newAssistant: "New Assistant",
-    choosingPhotoForAssistant: "You can choose a photo for your assistant",
-    choosingNameForAssistant: "Choose a name for your assistant",
-    enterName: "Enter name",
-    giveAssistantInstruction:
-      "Give your assistant instructions on how it should behave",
-    enterInstructions: "Enter instructions",
-    next: "next",
-    chooseModel: "Choose a model for your assistant",
-    selectModel: "Select a model",
-    fileUploadReq:
-      "If you want to upload files for the knowledge base you need to choose gpt 4 turbo ",
-    fileUpload: "Upload pdf, word and text files to your assistant",
-    saveAssistant: "Save assistant",
-    done: "Done",
-    delete: "Delete",
-    save: "Save",
-    apikey: "OpenAI API Key",
-    enterAPIKey: "Enter API key",
-    Languages: "Languages",
-    selectLang: "Select Languages",
-    TC: "Terms and Conditions",
-    PriPol: "Privacy policy",
-    aboutUs: "About us",
-    noAssistants: "No assistants available. Please add a new assistant",
-  },
-
-  fa: {
-    Chat: "گفتگو",
-    Assistants: "راهنما",
-    Setting: "تنظیمات",
-    edit: "ویرایش",
-    newAssistant: "راهنمای جدید",
-    choosingPhotoForAssistant: "عکس راهنما",
-    choosingNameForAssistant: "نام راهنما",
-    enterName: "نام راهنما را وارد کنید",
-    giveAssistantInstruction: "با نوشتن دستورات، جواب های دقیقتری بگیرید",
-    enterInstructions: "دستورات را وارد کنید",
-    next: "بعدی",
-    chooseModel: "مدل هوش مصنوعی را انتخاب کنید",
-    selectModel: "انتخاب مدل",
-    fileUploadReq:
-      "اگر میخواهید فایل آپلود بکنید، مدل پایه gpt 4 turbo را انتخاب کنید",
-    fileUpload: "فایل pdf یا word و یا txt آپلود کنید",
-    saveAssistant: "ذخیره راهنما",
-    done: "تمام",
-    delete: "حذف",
-    save: "ذخیره",
-    apikey: "کلید API",
-    enterAPIKey: "کلید API را وارد کنید",
-    Languages: "زبان",
-    selectLang: "انتخاب زبان",
-    TC: "شرایط و ضوابط",
-    PriPol: "قوانین و مقررات",
-    aboutUs: "درباره ما",
-    noAssistants: "راهنمایی وجود ندارد. لطفا یک راهنما بسازید",
-  },
+// Set up translations
+i18n.translations = {
+  en,
+  fa,
 };
 
-export default localizations;
+// Set the default language
+i18n.defaultLocale = "en";
+
+// Function to set up localization
+const setupLocalization = async () => {
+  try {
+    const storedLanguage = await SecureStore.getItemAsync("language");
+    const locale = storedLanguage || Localization.locale.split("-")[0] || "en";
+    i18n.locale = locale;
+  } catch (error) {
+    console.error("Failed to set up localization:", error);
+    i18n.locale = "en"; // Fallback to default language
+  }
+};
+
+// Function to change the language
+const changeLanguage = async (lang) => {
+  try {
+    i18n.locale = lang;
+    await SecureStore.setItemAsync("language", lang);
+  } catch (error) {
+    console.error("Failed to change language:", error);
+  }
+};
+
+// Initialize localization
+setupLocalization();
+
+export { i18n, changeLanguage };

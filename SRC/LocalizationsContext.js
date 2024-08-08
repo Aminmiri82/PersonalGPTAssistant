@@ -1,36 +1,43 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
-import localizations from "./localizations";
+import * as Localization from "expo-localization";
+import en from "./locales/en.json";
+import fa from "./locales/fa.json";
+
+const translations = {
+  en,
+  fa,
+};
 
 const LocalizationContext = createContext();
 
 export const LocalizationProvider = ({ children }) => {
   const [language, setLanguage] = useState("en");
-  const [translations, setTranslations] = useState(localizations["en"]);
+  const [currentTranslations, setCurrentTranslations] = useState(
+    translations.en
+  );
 
   useEffect(() => {
-    const fetchLanguage = async () => {
-      let storedLanguage = await SecureStore.getItemAsync("language");
-      if (!storedLanguage) {
-        await SecureStore.setItemAsync("language", "en"); // Default language
-        storedLanguage = "en";
-      }
-      setLanguage(storedLanguage);
-      setTranslations(localizations[storedLanguage]);
+    const initializeLanguage = async () => {
+      const storedLanguage = await SecureStore.getItemAsync("language");
+      const deviceLanguage = Localization.locale.split("-")[0];
+      const initialLanguage = storedLanguage || deviceLanguage || "en";
+      setLanguage(initialLanguage);
+      setCurrentTranslations(translations[initialLanguage]);
     };
 
-    fetchLanguage();
+    initializeLanguage();
   }, []);
 
-  const changeLanguage = (lang) => {
+  const changeLanguage = async (lang) => {
     setLanguage(lang);
-    setTranslations(localizations[lang]);
-    SecureStore.setItemAsync("language", lang);
+    setCurrentTranslations(translations[lang]);
+    await SecureStore.setItemAsync("language", lang);
   };
 
   return (
     <LocalizationContext.Provider
-      value={{ language, translations, changeLanguage }}
+      value={{ language, translations: currentTranslations, changeLanguage }}
     >
       {children}
     </LocalizationContext.Provider>
