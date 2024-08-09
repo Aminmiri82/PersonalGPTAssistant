@@ -14,8 +14,10 @@ import {
 import AppButton from "../../Components/AppButton";
 import { insertAssistant, initDB } from "../../database";
 import Spinner from "react-native-loading-spinner-overlay";
+import { useTranslation } from "react-i18next";
 
 function AssistantMakerScreen2({ navigation, route }) {
+  const { t } = useTranslation();
   const { name, instructions } = route.params;
   const [files, setFiles] = useState([]);
   const [model, setModel] = useState("GPT-4o-mini");
@@ -64,7 +66,7 @@ function AssistantMakerScreen2({ navigation, route }) {
       setIsUploading(false);
     }
     setIsInitializing(true);
-    if (fileIds!=null) {
+    if (fileIds != null) {
       await addFilesToAssistant(assistant.assistantId, fileIds);
     }
 
@@ -110,9 +112,7 @@ function AssistantMakerScreen2({ navigation, route }) {
       />
       <View style={styles.topContainer}>
         <View style={styles.topTipContainer}>
-          <AppText style={styles.topTip}>
-            choose a model for your assistant
-          </AppText>
+          <AppText style={styles.topTip}>{t("chooseModel")}</AppText>
         </View>
         <View style={styles.topPickerContainer}>
           <RNPickerSelect
@@ -121,18 +121,13 @@ function AssistantMakerScreen2({ navigation, route }) {
           />
         </View>
         <View style={styles.gp4TipContainer}>
-          <AppText style={styles.middleTip}>
-            if you want to upload files for the knowledge base you need to
-            choose gpt 4 turbo preview
-          </AppText>
+          <AppText style={styles.middleTip}>{t("fileUploadReq")}</AppText>
         </View>
       </View>
-    
+
       <View style={styles.bottomContainer}>
         <View style={styles.bottomTipContainer}>
-          <AppText style={styles.bottomTip}>
-            upload .pdf .docx and .txt files to your assistant
-          </AppText>
+          <AppText style={styles.bottomTip}>{t("fileUpload")}</AppText>
         </View>
         <AppDocumentPicker
           files={files}
@@ -141,7 +136,7 @@ function AssistantMakerScreen2({ navigation, route }) {
         />
       </View>
       <AppButton
-        title="Save Assistant"
+        title={t("saveAssistant")}
         onPress={handleSave}
         style={styles.nextButton}
         textStyle={styles.nextButtonText}

@@ -8,8 +8,10 @@ import { useFocusEffect } from "@react-navigation/native";
 import Screen from "../../Components/Screen";
 import AppButton from "../../Components/AppButton";
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
+import { useTranslation } from "react-i18next";
 
 function ChatMenuScreen({ navigation }) {
+  const { t } = useTranslation();
   const { dbInitialized } = useContext(DatabaseContext);
   const [chatItems, setChatItems] = useState([]);
   const [editMode, setEditMode] = useState(false);
@@ -76,7 +78,7 @@ function ChatMenuScreen({ navigation }) {
     <Screen>
       <View style={styles.container}>
         {chatItems.length === 0 ? (
-          <Text>No chats available. Please add a new chat.</Text>
+          <Text>{t("noChats")}</Text>
         ) : (
           <FlatList
             data={chatItems}

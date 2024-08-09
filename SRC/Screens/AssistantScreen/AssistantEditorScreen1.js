@@ -12,8 +12,11 @@ import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
 import { useState, useEffect } from "react";
 import { fetchAssistantById, deleteAssistantById } from "../../database";
+
+import { useTranslation } from "react-i18next";
 //info is the stuff that is saved in the database and you edit it here
 function AssistantEditorScreen1({ navigation, info, route }) {
+  const { t } = useTranslation();
   const { id } = route.params;
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
@@ -57,7 +60,7 @@ function AssistantEditorScreen1({ navigation, info, route }) {
         <View style={styles.pictureContainer}>
           <View style={styles.pictureTipContainer}>
             <AppText style={styles.pictureTip}>
-              you can choose a photo for your assistant
+              {t("choosingPhotoForAssistant")}
             </AppText>
           </View>
           <View style={styles.pictureWrapper}>
@@ -78,29 +81,29 @@ function AssistantEditorScreen1({ navigation, info, route }) {
                 console.log("edit");
               }}
             >
-              <AppText style={styles.pictureButtonText}>edit</AppText>
+              <AppText style={styles.pictureButtonText}>{t("edit")}</AppText>
             </TouchableOpacity>
           </View>
         </View>
       </View>
       <View style={styles.middleContainer}>
         <AppText style={styles.midTitle}>
-          choose a name for your assistant
+          {t("choosingNameForAssistant")}
         </AppText>
         <TextInput
           style={styles.midInput}
-          placeholder="Enter name"
+          placeholder={t("enterName")}
           value={name}
           onChangeText={setName}
         />
       </View>
       <View style={styles.bottomContainer}>
         <AppText style={styles.bottomTitle}>
-          give your assistant insutructions on how it should behave
+          {t("giveAssistantInstruction")}
         </AppText>
         <TextInput
           style={styles.bottomInput}
-          placeholder="Enter instructions"
+          placeholder={t("enterInstructions")}
           value={instructions}
           onChangeText={setInstructions}
           multiline
@@ -113,10 +116,10 @@ function AssistantEditorScreen1({ navigation, info, route }) {
           onPress={handleDelete}
           style={styles.deleteAssistantButton}
         >
-          <AppText style={styles.deleteButtonText}>delete</AppText>
+          <AppText style={styles.deleteButtonText}>{t("delete")}</AppText>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleNext} style={styles.nextButton}>
-          <AppText style={styles.nextButtonText}>Next</AppText>
+          <AppText style={styles.nextButtonText}>{t("next")}</AppText>
         </TouchableOpacity>
       </View>
     </Screen>
@@ -193,7 +196,6 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     alignItems: "center",
-    
   },
   bottomTitle: {
     fontSize: 20,
