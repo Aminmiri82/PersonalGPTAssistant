@@ -8,7 +8,7 @@ import AssistantMakerScreen1 from "../Screens/AssistantScreen/AssistantMakerScre
 import AssistantMakerScreen2 from "../Screens/AssistantScreen/AssistantMakerScreen2";
 import AssistantEditorScreen1 from "../Screens/AssistantScreen/AssistantEditorScreen1";
 import AssistantEditorScreen2 from "../Screens/AssistantScreen/AssistantEditorScreen2";
-
+import { useTranslation } from "react-i18next";
 const AssistantsStack = createNativeStackNavigator();
 const makeNewAssistantButton = (navigation) => (
   <AppButton
@@ -18,6 +18,7 @@ const makeNewAssistantButton = (navigation) => (
 );
 
 function AssistantsScreenNav(props) {
+  const { t } = useTranslation();
   return (
     <AssistantsStack.Navigator>
       <AssistantsStack.Screen

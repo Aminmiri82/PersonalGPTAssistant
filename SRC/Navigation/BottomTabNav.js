@@ -7,11 +7,12 @@ import Icon from "../Components/Icon";
 import ChatScreenNav from "./ChatScreenNav";
 import AssistantsScreenNav from "./AssistantsScreenNav";
 
+import { useTranslation } from "react-i18next";
 
 const Tab = createBottomTabNavigator();
 function BottomTabNav() {
+  const { t } = useTranslation();
   return (
-
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
@@ -22,7 +23,7 @@ function BottomTabNav() {
             iconName = focused ? "chat" : "chat-outline";
           } else if (route.name === "Assistants") {
             iconName = focused ? "robot" : "robot-outline";
-          } else if (route.name === "Settings") {
+          } else if (route.name === "Setting") {
             iconName = focused ? "cog" : "cog-outline";
           }
 
@@ -32,19 +33,18 @@ function BottomTabNav() {
         },
       })}
     >
-
       <Tab.Screen
-        name="Chat"
+        name={t("Chat")}
         component={ChatScreenNav}
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="Assistants"
+        name={t("Assistants")}
         component={AssistantsScreenNav}
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="Settings"
+        name={t("Setting")}
         component={SettingsScreenNav}
         options={{ headerShown: false }}
       />

@@ -21,8 +21,11 @@ import {
   deleteAssistantById,
 } from "../../database";
 
+import { useTranslation } from "react-i18next";
+
 //info is the stuff that is saved in the database and you edit it here
 function AssistantEditorScreen2({ navigation, info, route }) {
+  const { t } = useTranslation();
   const { id } = route.params;
   const { name } = route.params;
   const { instructions } = route.params;
@@ -82,9 +85,7 @@ function AssistantEditorScreen2({ navigation, info, route }) {
     <Screen>
       <View style={styles.topContainer}>
         <View style={styles.topTipContainer}>
-          <AppText style={styles.topTip}>
-            choose a model for your assistant
-          </AppText>
+          <AppText style={styles.topTip}>{t("chooseModel")}</AppText>
         </View>
         <View style={styles.topPickerContainer}>
           <RNPickerSelect
@@ -94,18 +95,13 @@ function AssistantEditorScreen2({ navigation, info, route }) {
           />
         </View>
         <View style={styles.gp4TipContainer}>
-          <AppText style={styles.middleTip}>
-            if you want to upload files fro the knowedlge base you need to
-            choose gpt 4 turbo preview
-          </AppText>
+          <AppText style={styles.middleTip}>{t("fileUploadReq")}</AppText>
         </View>
       </View>
 
       <View style={styles.bottomContainer}>
         <View style={styles.bottomTipContainer}>
-          <AppText style={styles.bottomTip}>
-            upload .pdf .docx and .txt files to your assistant
-          </AppText>
+          <AppText style={styles.bottomTip}>{t("fileUpload")}</AppText>
         </View>
         <AppDocumentPicker
           files={files}
@@ -118,10 +114,10 @@ function AssistantEditorScreen2({ navigation, info, route }) {
           onPress={handleDelete}
           style={styles.deleteAssistantButton}
         >
-          <AppText style={styles.deleteButtonText}>delete</AppText>
+          <AppText style={styles.deleteButtonText}>{t("delete")}</AppText>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleSave} style={styles.doneButton}>
-          <AppText style={styles.doneButtonText}>Done</AppText>
+          <AppText style={styles.doneButtonText}>{t("done")}</AppText>
         </TouchableOpacity>
       </View>
     </Screen>
@@ -153,7 +149,6 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderWidth: 1,
     borderRadius: 5,
-    
   },
 
   gp4TipContainer: {
@@ -174,7 +169,6 @@ const styles = StyleSheet.create({
     height: "50%",
     padding: 10,
     alignItems: "center",
-   
   },
   bottomTipContainer: {
     width: "100%",

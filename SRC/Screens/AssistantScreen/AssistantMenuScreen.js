@@ -6,9 +6,11 @@ import Screen from "../../Components/Screen";
 
 import { fetchAssistants, initDB } from "../../database";
 import { useFocusEffect } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 function AssistantMenuScreen({ navigation }) {
   const [assistants, setAssistants] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     initDB().catch((error) => {
@@ -34,7 +36,7 @@ function AssistantMenuScreen({ navigation }) {
         <ScrollView bounces={false}>
           <View style={styles.top}>
             {assistants.length === 0 ? (
-              <Text>No assistants available. Please add a new assistant.</Text>
+              <Text>{t("noAssistants")}</Text>
             ) : (
               assistants.map((assistant) => (
                 <AssistantsMenuItem
