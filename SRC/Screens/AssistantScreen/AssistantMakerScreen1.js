@@ -26,7 +26,7 @@ function AssistantMakerScreen1({ navigation }) {
       console.log("Name or instructions are missing");
       return;
     }
-    navigation.navigate("AssistantMakerScreen2", {
+    navigation.navigate(t("AssistantMakerScreen2"), {
       name,
       instructions,
     });

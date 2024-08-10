@@ -56,7 +56,7 @@ function AssistantEditorScreen2({ navigation, info, route }) {
   const handleSave = () => {
     updateAssistant(id, name, instructions, model, files)
       .then(() => {
-        navigation.navigate("AssistantMenuScreen");
+        navigation.navigate(t("AssistantMenuScreen"));
       })
       .catch((error) => {
         console.log("Error updating assistant: ", error);
@@ -74,7 +74,7 @@ function AssistantEditorScreen2({ navigation, info, route }) {
   const handleDelete = () => {
     deleteAssistantById(id)
       .then(() => {
-        navigation.navigate("AssistantMenuScreen"); // Navigate back to the assistant menu
+        navigation.navigate(t("AssistantMenuScreen")); // Navigate back to the assistant menu
       })
       .catch((error) => {
         console.log("Error deleting assistant: ", error);
