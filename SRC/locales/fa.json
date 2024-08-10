@@ -1,9 +1,10 @@
 {
     "Chat": "گفتگو",
     "Assistants": "راهنما",
-    "Setting": "تنظیمات",
+    "Setting": "تنظیم",
     "edit": "ویرایش",
     "newAssistant": "راهنمای جدید",
+    "newChat" : "چت جدید",
     "choosingPhotoForAssistant": "عکس راهنما",
     "choosingNameForAssistant": "نام راهنما",
     "enterName": "نام راهنما را وارد کنید",
@@ -26,6 +27,18 @@
     "PriPol": "قوانین و مقررات",
     "aboutUs": "درباره ما",
     "noAssistants": "راهنمایی وجود ندارد. لطفا یک راهنما بسازید",
-    "noChats" : "گفتگویی وجود ندارد. لطفا یک گفتگو جدید شروع کنید"
+    "noChats" : "گفتگویی وجود ندارد. لطفا یک گفتگو جدید شروع کنید",
+    "ChatMenuScreen" : "گفتگوها",
+    "ChatScreen" : "صفحه گفتگو",
+    "ChooseChatScreen" : "انتخاب راهنما",
+    "AssistantMenuScreen" : "راهنماها",
+    "AssistantMakerScreen1" : "ساخت راهنما1",
+    "AssistantMakerScreen2" : "ساخت راهنما2",
+    "AssistantEditorScreen1" : "ویرایش راهنما1",
+    "AssistantEditorScreen2" : "ویرایش راهنما2",
+    "SettingsScreen" : "تنظیمات",
+    "AboutUsScreen" : "درباره ما",
+    "TermsAndConditionsScreen" : "شرایط و ضوابط",
+    "PrivacyPolicyScreen" : "قوانین و مقررات"
   }
   

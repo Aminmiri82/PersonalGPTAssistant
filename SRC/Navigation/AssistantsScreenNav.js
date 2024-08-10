@@ -10,38 +10,38 @@ import AssistantEditorScreen1 from "../Screens/AssistantScreen/AssistantEditorSc
 import AssistantEditorScreen2 from "../Screens/AssistantScreen/AssistantEditorScreen2";
 import { useTranslation } from "react-i18next";
 const AssistantsStack = createNativeStackNavigator();
-const makeNewAssistantButton = (navigation) => (
-  <AppButton
-    title="new assistant"
-    onPress={() => navigation.navigate("AssistantMakerScreen1")}
-  />
-);
 
 function AssistantsScreenNav(props) {
   const { t } = useTranslation();
+  const makeNewAssistantButton = (navigation) => (
+    <AppButton
+      title={t("newAssistant")}
+      onPress={() => navigation.navigate(t("AssistantMakerScreen1"))}
+    />
+  );
   return (
     <AssistantsStack.Navigator>
       <AssistantsStack.Screen
-        name="AssistantMenuScreen"
+        name={t("AssistantMenuScreen")}
         component={AssistantMenuScreen}
         options={({ navigation }) => ({
           headerRight: () => makeNewAssistantButton(navigation),
         })}
       />
       <AssistantsStack.Screen
-        name="AssistantMakerScreen1"
+        name={t("AssistantMakerScreen1")}
         component={AssistantMakerScreen1}
       />
       <AssistantsStack.Screen
-        name="AssistantMakerScreen2"
+        name={t("AssistantMakerScreen2")}
         component={AssistantMakerScreen2}
       />
       <AssistantsStack.Screen
-        name="AssistantEditorScreen1"
+        name={t("AssistantEditorScreen1")}
         component={AssistantEditorScreen1}
       />
       <AssistantsStack.Screen
-        name="AssistantEditorScreen2"
+        name={t("AssistantEditorScreen2")}
         component={AssistantEditorScreen2}
       />
       <AssistantsStack.Screen name="BuildScreen" component={BuildScreen} />
