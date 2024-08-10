@@ -51,8 +51,9 @@ function SettingsScreen({ navigation, route }) {
   //   setLanguagePromptVisible(false);
   // };
 
-  const handleSelectLanguage = (lng) => {
-    i18next.changeLanguage(lng);
+  const handleSelectLanguage = async (lng) => {
+    await i18next.changeLanguage(lng);
+    await SecureStore.setItemAsync("selectedLanguage", lng);
     setLanguagePromptVisible(false);
   };
 
@@ -108,17 +109,17 @@ function SettingsScreen({ navigation, route }) {
           <SettingsItem
             title={t("TC")}
             IconComponent={<Icon iconSet="MCI" name="file-document" />}
-            onPress={() => navigation.navigate("TermsAndConditionsScreen")}
+            onPress={() => navigation.navigate(t("TermsAndConditionsScreen"))}
           />
           <SettingsItem
             title={t("PriPol")}
             IconComponent={<Icon iconSet="MCI" name="file-document" />}
-            onPress={() => navigation.navigate("PrivacyPolicyScreen")}
+            onPress={() => navigation.navigate(t("PrivacyPolicyScreen"))}
           />
           <SettingsItem
             title={t("aboutUs")}
             IconComponent={<Icon iconSet="MCI" name="information" />}
-            onPress={() => navigation.navigate("AboutUsScreen")}
+            onPress={() => navigation.navigate(t("AboutUsScreen"))}
           />
         </View>
       </Screen>

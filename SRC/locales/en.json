@@ -4,6 +4,7 @@
     "Setting": "Setting",
     "edit": "edit",
     "newAssistant": "New Assistant",
+    "newChat" : "New Chat",
     "choosingPhotoForAssistant": "You can choose a photo for your assistant",
     "choosingNameForAssistant": "Choose a name for your assistant",
     "enterName": "Enter name",
@@ -26,6 +27,18 @@
     "PriPol": "Privacy policy",
     "aboutUs": "About us",
     "noAssistants": "No assistants available. Please add a new assistant",
-    "noChats" : "No chats available. Please add a new chat."
+    "noChats" : "No chats available. Please add a new chat.",
+    "ChatMenuScreen" : "Chats",
+    "ChatScreen" : "Chat screen",
+    "ChooseChatScreen" : "Choose assistant",
+    "AssistantMenuScreen" : "Assistants",
+    "AssistantMakerScreen1" : "Make Assistant-1",
+    "AssistantMakerScreen2" : "Make Assistant-2",
+    "AssistantEditorScreen1" : "Edit Assistant-1",
+    "AssistantEditorScreen2" : "Edit Assistant-2",
+    "SettingsScreen" : "Settings",
+    "AboutUsScreen" : "About us",
+    "TermsAndConditionsScreen" : "Terms and Conditions",
+    "PrivacyPolicyScreen" : "Privacy policy"
   }
   

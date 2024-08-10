@@ -19,11 +19,11 @@ function BottomTabNav() {
           let iconName;
           let iconSet = "MCI"; // Assuming you have different icon sets to choose from
 
-          if (route.name === "Chat") {
+          if (route.name === t("Chat")) {
             iconName = focused ? "chat" : "chat-outline";
-          } else if (route.name === "Assistants") {
+          } else if (route.name === t("Assistants")) {
             iconName = focused ? "robot" : "robot-outline";
-          } else if (route.name === "Setting") {
+          } else if (route.name === t("Setting")) {
             iconName = focused ? "cog" : "cog-outline";
           }
 

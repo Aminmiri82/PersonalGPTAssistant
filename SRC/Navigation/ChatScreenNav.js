@@ -6,29 +6,33 @@ import ChatScreen from "../Screens/ChatScreen/ChatScreen";
 import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
 import ChooseChatScreen from "../Screens/ChatScreen/ChooseChatScreen";
 import AppButton from "../Components/AppButton";
+import { useTranslation } from "react-i18next";
 
 const ChatStack = createNativeStackNavigator();
 
-const makeNewChatButton = (navigation) => (
-  <AppButton
-    title="new chat"
-    onPress={() => navigation.navigate("ChooseChatScreen")}
-  />
-);
-
 function ChatScreenNav(props) {
+  const { t } = useTranslation();
+  const makeNewChatButton = (navigation) => (
+    <AppButton
+      title={t("newChat")}
+      onPress={() => navigation.navigate(t("ChooseChatScreen"))}
+    />
+  );
   return (
     <ChatStack.Navigator>
       <ChatStack.Screen
-        name="ChatMenuScreen"
+        name={t("ChatMenuScreen")}
         component={ChatMenuScreen}
         options={({ navigation }) => ({
           headerRight: () => makeNewChatButton(navigation),
         })}
       />
-      <ChatStack.Screen name="ChooseChatScreen" component={ChooseChatScreen} />
       <ChatStack.Screen
-        name="ChatScreen"
+        name={t("ChooseChatScreen")}
+        component={ChooseChatScreen}
+      />
+      <ChatStack.Screen
+        name={t("ChatScreen")}
         component={ChatScreen}
         options={({ navigation }) => ({
           headerLeft: (props) => (
