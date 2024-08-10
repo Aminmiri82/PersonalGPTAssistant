@@ -36,7 +36,7 @@ function ChatMenuScreen({ navigation }) {
 
   const handlePress = (chat) => {
     console.log("in chat menu screen", chat.threadId, chat.assistantId);
-    navigation.navigate("ChatScreen", {
+    navigation.navigate(t("ChatScreen"), {
       threadId: chat.threadId,
       assistantId: chat.assistantId,
     });

@@ -6,8 +6,10 @@ import { fetchAssistants, insertChat } from "../../database";
 import { useFocusEffect } from "@react-navigation/native";
 import { createThread } from "../../openai-backend/ApiBackEnd";
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
+import { useTranslation } from "react-i18next";
 
 function ChooseChatScreen({ navigation }) {
+  const { t } = useTranslation();
   const { dbInitialized } = useContext(DatabaseContext);
   const [assistants, setAssistants] = useState([]);
 
@@ -30,7 +32,7 @@ function ChooseChatScreen({ navigation }) {
     console.log("Thread created:", newThread.id);
     await insertChat(newThread.id, assistant_id, null);
     console.log("Inserted chat", newThread.id, assistant_id, null);
-    navigation.navigate("ChatScreen", {
+    navigation.navigate(t("ChatScreen"), {
       assistantId: assistant_id,
       threadId: newThread.id,
     });
