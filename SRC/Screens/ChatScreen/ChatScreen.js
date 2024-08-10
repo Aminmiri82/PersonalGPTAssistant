@@ -145,7 +145,7 @@ const ChatScreen = ({ navigation, route }) => {
         for (const line of lines) {
           if (line) {
             handleStreamedResponse(line);
-            await new Promise((resolve) => setTimeout(resolve, 100)); // Simulate delay between chunks
+            await new Promise((resolve) => setTimeout(resolve, 10)); // Simulate delay between chunks
           }
         }
       };
