@@ -14,8 +14,10 @@ import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
 import { useState, useEffect } from "react";
 import AppButton from "../../Components/AppButton";
+import { useTranslation } from "react-i18next";
 
 function AssistantMakerScreen1({ navigation }) {
+  const { t } = useTranslation();
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
 
@@ -41,7 +43,7 @@ function AssistantMakerScreen1({ navigation }) {
             <View style={styles.pictureContainer}>
               <View style={styles.pictureTipContainer}>
                 <AppText style={styles.pictureTip}>
-                  you can choose a photo for your assistant
+                  {t("choosingPhotoForAssistant")}
                 </AppText>
               </View>
               <View style={styles.pictureWrapper}>
@@ -62,29 +64,31 @@ function AssistantMakerScreen1({ navigation }) {
                     console.log("edit");
                   }}
                 >
-                  <AppText style={styles.pictureButtonText}>edit</AppText>
+                  <AppText style={styles.pictureButtonText}>
+                    {t("edit")}
+                  </AppText>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
           <View style={styles.middleContainer}>
             <AppText style={styles.midTitle}>
-              choose a name for your assistant
+              {t("choosingNameForAssistant")}
             </AppText>
             <TextInput
               style={styles.midInput}
-              placeholder="Enter name"
+              placeholder={t("enterName")}
               value={name}
               onChangeText={setName}
             />
           </View>
           <View style={styles.bottomContainer}>
             <AppText style={styles.bottomTitle}>
-              give your assistant instructions on how it should behave
+              {t("giveAssistantInstruction")}
             </AppText>
             <TextInput
               style={styles.bottomInput}
-              placeholder="Enter instructions"
+              placeholder={t("enterInstructions")}
               value={instructions}
               onChangeText={setInstructions}
               multiline
@@ -93,7 +97,7 @@ function AssistantMakerScreen1({ navigation }) {
             />
           </View>
           <AppButton
-            title="next"
+            title={t("next")}
             onPress={handleNext}
             style={styles.nextButton}
             textStyle={styles.nextButtonText}

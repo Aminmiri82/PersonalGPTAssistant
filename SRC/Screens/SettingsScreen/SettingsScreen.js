@@ -7,10 +7,14 @@ import SettingsItem from "../../Components/SettingsComponents/SettingsItem";
 import Icon from "../../Components/Icon";
 import { OPENAI_API_KEY } from "@env";
 import * as SecureStore from "expo-secure-store";
+import { useTranslation } from "react-i18next";
+import i18next from "../../services/i18next";
 
 import Screen from "../../Components/Screen";
 
 function SettingsScreen({ navigation, route }) {
+  const { t } = useTranslation();
+
   const [isLanguagePromptVisible, setLanguagePromptVisible] = useState(false);
   const [isAPIPromptVisible, setAPIPromptVisible] = useState(false);
 
@@ -42,10 +46,21 @@ function SettingsScreen({ navigation, route }) {
     setAPIPromptVisible(!isAPIPromptVisible);
   };
 
-  const handleSelectLanguage = (language) => {
-    setSelectedLanguage(language);
+  // const handleSelectLanguage = (language) => {
+  //   setSelectedLanguage(language);
+  //   setLanguagePromptVisible(false);
+  // };
+
+  const handleSelectLanguage = async (lng) => {
+    await i18next.changeLanguage(lng);
+    await SecureStore.setItemAsync("selectedLanguage", lng);
     setLanguagePromptVisible(false);
   };
+
+  // const handleSelectLanguage = (language) => {
+  //   changeLanguage(language);
+  //   setLanguagePromptVisible(false);
+  // };
 
   const saveApiKey = async (key) => {
     try {
@@ -70,7 +85,7 @@ function SettingsScreen({ navigation, route }) {
       <Screen>
         <View style={styles.container}>
           <SettingsItem
-            title="OpenAI API Key"
+            title={t("apikey")}
             subTitle={apiKey}
             IconComponent={<Icon iconSet="MCI" name="key" />}
             onPress={toggleAPIPrompt}
@@ -81,8 +96,8 @@ function SettingsScreen({ navigation, route }) {
             onSumbit={handleSetAPIKey}
           />
           <SettingsItem
-            title="Languages"
-            subTitle={selectedLanguage}
+            title={t("Languages")}
+            // subTitle={selectedLanguage}
             IconComponent={<Icon iconSet="MCI" name="translate" />}
             onPress={toggleLanguagePrompt}
           />
@@ -92,19 +107,19 @@ function SettingsScreen({ navigation, route }) {
             onSelectLanguage={handleSelectLanguage}
           />
           <SettingsItem
-            title="Terms and Conditions"
+            title={t("TC")}
             IconComponent={<Icon iconSet="MCI" name="file-document" />}
-            onPress={() => navigation.navigate("TermsAndConditionsScreen")}
+            onPress={() => navigation.navigate(t("TermsAndConditionsScreen"))}
           />
           <SettingsItem
-            title="Privacy Policy"
+            title={t("PriPol")}
             IconComponent={<Icon iconSet="MCI" name="file-document" />}
-            onPress={() => navigation.navigate("PrivacyPolicyScreen")}
+            onPress={() => navigation.navigate(t("PrivacyPolicyScreen"))}
           />
           <SettingsItem
-            title="About Us"
+            title={t("aboutUs")}
             IconComponent={<Icon iconSet="MCI" name="information" />}
-            onPress={() => navigation.navigate("AboutUsScreen")}
+            onPress={() => navigation.navigate(t("AboutUsScreen"))}
           />
         </View>
       </Screen>
