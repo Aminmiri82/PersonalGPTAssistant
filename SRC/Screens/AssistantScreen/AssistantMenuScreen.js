@@ -44,7 +44,7 @@ function AssistantMenuScreen({ navigation }) {
                   image={require("../../assets/assistant.jpg")}
                   title={assistant.name}
                   onPress={() =>
-                    navigation.navigate("AssistantEditorScreen1", {
+                    navigation.navigate(t("AssistantEditorScreen1"), {
                       id: assistant.id,
                     })
                   }
