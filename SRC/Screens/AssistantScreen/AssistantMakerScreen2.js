@@ -77,7 +77,7 @@ function AssistantMakerScreen2({ navigation, route }) {
     }
     insertAssistant(assistant.assistantId, name, instructions, model, files)
       .then(() => {
-        navigation.navigate("AssistantMenuScreen"); // Navigate back to the assistant menu
+        navigation.navigate(t("AssistantMenuScreen")); // Navigate back to the assistant menu
       })
       .catch((error) => {
         console.log("Error saving assistant:", error);
@@ -92,7 +92,7 @@ function AssistantMakerScreen2({ navigation, route }) {
     try {
       const uploadPromises = files.map((file) => uploadIndividualFiles(file));
       const fileIds = await Promise.all(uploadPromises);
-      
+
       console.log("fileIds", fileIds);
       return fileIds;
     } catch (error) {
