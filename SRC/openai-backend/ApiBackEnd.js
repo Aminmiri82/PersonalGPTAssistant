@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "@env";
 import * as SecureStore from "expo-secure-store";
+import * as FileSystem from "expo-file-system";
 
 let openai = null;
 
@@ -90,7 +91,6 @@ const addMessageToThread = async (threadId, message) => {
   }
 };
 
-
 const callAssistantApi = async (message, threadID, assistantId) => {
   try {
     const openaiInstance = await getOpenAIInstance();
@@ -135,14 +135,16 @@ const callAssistantApi = async (message, threadID, assistantId) => {
 };
 
 const UPLOAD_URL = "https://api.openai.com/v1/uploads";
-const COMPLETE_UPLOAD_URL = "https://api.openai.com/v1/uploads/{upload_id}/complete";
+const COMPLETE_UPLOAD_URL =
+  "https://api.openai.com/v1/uploads/{upload_id}/complete";
 
 const uploadIndividualFiles = async (file) => {
   try {
     const apiKey = await SecureStore.getItemAsync("apiKey");
     const { name, size, mimeType, uri } = file;
+
     console.log("Starting upload for file:", { name, size, mimeType, uri });
-    
+
     const upload = await createUpload(name, size, mimeType, apiKey);
     console.log("Upload created:", upload);
 
@@ -150,7 +152,13 @@ const uploadIndividualFiles = async (file) => {
       throw new Error("Failed to create upload");
     }
 
-    const partResponse = await uploadFile(upload.id, uri, mimeType, name, apiKey);
+    const partResponse = await uploadFile(
+      upload.id,
+      uri,
+      mimeType,
+      name,
+      apiKey
+    );
     console.log("Part uploaded:", partResponse);
 
     const partIds = [partResponse.id];
@@ -174,7 +182,13 @@ const uploadIndividualFiles = async (file) => {
   }
 };
 
-const createUpload = async (filename, fileSize, mimeType, apiKey, retries = 3) => {
+const createUpload = async (
+  filename,
+  fileSize,
+  mimeType,
+  apiKey,
+  retries = 3
+) => {
   try {
     const response = await fetch(UPLOAD_URL, {
       method: "POST",
@@ -201,7 +215,7 @@ const createUpload = async (filename, fileSize, mimeType, apiKey, retries = 3) =
     console.error("Error creating upload:", error);
     if (retries > 0) {
       console.log(`Retrying create upload... (${3 - retries + 1}/3)`);
-      await new Promise(resolve => setTimeout(resolve, 1000)); // wait for 1 second before retrying
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // wait for 1 second before retrying
       return createUpload(filename, fileSize, mimeType, apiKey, retries - 1);
     } else {
       throw error;
@@ -218,21 +232,36 @@ const uploadFile = async (uploadId, fileUri, mimeType, filename, apiKey) => {
       name: filename,
     });
 
-    const response = await fetch(`${UPLOAD_URL}/${uploadId}/parts`, {
-      method: "POST",
+    const options = {
+      httpMethod: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "multipart/form-data",
       },
-      body: formData,
-    });
-    const jsonResponse = await response.json();
-    console.log("Upload part response:", jsonResponse);
+      uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+      fieldName: "data", // Make sure to use the correct field name
+    };
+
+    // Use uploadAsync instead of manual fetch
+    const response = await FileSystem.uploadAsync(
+      `${UPLOAD_URL}/${uploadId}/parts`,
+      fileUri,
+      options
+    );
+
+    // Check for errors
+    if (response.status !== 200) {
+      console.error("Upload part response:", response);
+      throw new Error(`Failed to upload part: ${response.body}`);
+    }
+
+    const jsonResponse = JSON.parse(response.body);
 
     if (jsonResponse.error) {
       throw new Error(jsonResponse.error.message);
     }
 
+    console.log("Upload part response:", jsonResponse);
     return jsonResponse;
   } catch (error) {
     console.error("Error uploading file part:", error);
@@ -242,14 +271,17 @@ const uploadFile = async (uploadId, fileUri, mimeType, filename, apiKey) => {
 
 const completeUpload = async (uploadId, partIds, apiKey) => {
   try {
-    const response = await fetch(COMPLETE_UPLOAD_URL.replace("{upload_id}", uploadId), {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ part_ids: partIds }),
-    });
+    const response = await fetch(
+      COMPLETE_UPLOAD_URL.replace("{upload_id}", uploadId),
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ part_ids: partIds }),
+      }
+    );
     const jsonResponse = await response.json();
     console.log("Complete upload response:", jsonResponse);
 
@@ -264,8 +296,6 @@ const completeUpload = async (uploadId, partIds, apiKey) => {
   }
 };
 
-
-
 async function createVectorStore(openaiInstance, fileIds) {
   const vectorStore = await openaiInstance.beta.vectorStores.create({
     name: "my-vector-store",
@@ -273,6 +303,7 @@ async function createVectorStore(openaiInstance, fileIds) {
   });
   return vectorStore.id;
 }
+
 async function pollVectorStoreStatus(openaiInstance, vectorStoreId) {
   let isCompleted = false;
   while (!isCompleted) {
@@ -287,6 +318,7 @@ async function pollVectorStoreStatus(openaiInstance, vectorStoreId) {
     }
   }
 }
+
 async function updateAssistantWithVectorStore(
   openaiInstance,
   assistantId,
@@ -296,6 +328,7 @@ async function updateAssistantWithVectorStore(
     tool_resources: { file_search: { vector_store_ids: [vectorStoreId] } },
   });
 }
+
 const addFilesToAssistant = async (assistantId, fileIds) => {
   const openaiInstance = await getOpenAIInstance();
   const vectorStoreId = await createVectorStore(openaiInstance, fileIds);
@@ -317,5 +350,4 @@ export {
   createThread,
   addFilesToAssistant,
   addMessageToThread,
-  
 };

@@ -90,18 +90,20 @@ function AssistantMakerScreen2({ navigation, route }) {
   const handleUploadFiles = async () => {
     setIsUploading(true);
     try {
-      const uploadPromises = files.map((file) => uploadIndividualFiles(file));
-      const fileIds = await Promise.all(uploadPromises);
+      const uploadPromises = files.map((file) => {
+        console.log("Uploading file:", file);
+        return uploadIndividualFiles(file);
+      });
 
+      const fileIds = await Promise.all(uploadPromises);
       console.log("fileIds", fileIds);
       return fileIds;
     } catch (error) {
-      console.log("Error uploading files:", error);
+      console.error("Error uploading files:", error);
     } finally {
       setIsUploading(false);
     }
   };
-
   return (
     <Screen>
       <Spinner
