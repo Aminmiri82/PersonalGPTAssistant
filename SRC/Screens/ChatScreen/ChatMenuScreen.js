@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
-import { View, Text, FlatList, StyleSheet,Image } from "react-native";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import ChatItem from "../../Components/ChatComponents/ChatItem";
 import AppText from "../../Components/AppText";
 import colors from "../../config/colors";
@@ -86,7 +86,7 @@ function ChatMenuScreen({ navigation }) {
             renderItem={renderItem}
           />
         )}
-
+      
       </View>
     </Screen>
   );
