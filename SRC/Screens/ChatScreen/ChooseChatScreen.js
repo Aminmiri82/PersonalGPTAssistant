@@ -32,7 +32,7 @@ function ChooseChatScreen({ navigation }) {
     console.log("Thread created:", newThread.id);
     await insertChat(newThread.id, assistant_id, null);
     console.log("Inserted chat", newThread.id, assistant_id, null);
-    navigation.navigate(t("ChatScreen"), {
+    navigation.navigate("ChatScreen", {
       assistantId: assistant_id,
       threadId: newThread.id,
     });

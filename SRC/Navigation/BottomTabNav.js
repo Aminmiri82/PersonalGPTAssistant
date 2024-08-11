@@ -19,11 +19,11 @@ function BottomTabNav() {
           let iconName;
           let iconSet = "MCI"; // Assuming you have different icon sets to choose from
 
-          if (route.name === t("Chat")) {
+          if (route.name === "Chat") {
             iconName = focused ? "chat" : "chat-outline";
-          } else if (route.name === t("Assistants")) {
+          } else if (route.name === "Assistants") {
             iconName = focused ? "robot" : "robot-outline";
-          } else if (route.name === t("Setting")) {
+          } else if (route.name === "Settings") {
             iconName = focused ? "cog" : "cog-outline";
           }
 
@@ -34,23 +34,24 @@ function BottomTabNav() {
       })}
     >
       <Tab.Screen
-        name={t("Chat")}
+        name="Chat"
         component={ChatScreenNav}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, title: t("ChatTab") }}
       />
       <Tab.Screen
-        name={t("Assistants")}
+        name="Assistants"
         component={AssistantsScreenNav}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, title: t("AssistantsTab") }}
       />
       <Tab.Screen
-        name={t("Setting")}
+        name="Settings"
         component={SettingsScreenNav}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, title: t("SettingTab") }}
       />
     </Tab.Navigator>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {},

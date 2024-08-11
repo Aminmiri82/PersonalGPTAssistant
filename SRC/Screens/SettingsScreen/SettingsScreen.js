@@ -25,11 +25,13 @@ function SettingsScreen({ navigation, route }) {
     const fetchApiKey = async () => {
       try {
         let storedKey = await SecureStore.getItemAsync("apiKey");
+        let storedLanguage = await SecureStore.getItemAsync("selectedLanguage");
         if (storedKey) {
-          setApiKey(storedKey);
+          setApiKey(storedKey.slice(7, 14));
         } else if (OPENAI_API_KEY) {
-          setApiKey(OPENAI_API_KEY);
+          setApiKey(OPENAI_API_KEY.slice(7, 14));
         }
+        setSelectedLanguage(storedLanguage);
       } catch (error) {
         console.error("Error retrieving API key", error);
       }
@@ -46,21 +48,15 @@ function SettingsScreen({ navigation, route }) {
     setAPIPromptVisible(!isAPIPromptVisible);
   };
 
-  // const handleSelectLanguage = (language) => {
-  //   setSelectedLanguage(language);
-  //   setLanguagePromptVisible(false);
-  // };
+
 
   const handleSelectLanguage = async (lng) => {
     await i18next.changeLanguage(lng);
     await SecureStore.setItemAsync("selectedLanguage", lng);
     setLanguagePromptVisible(false);
+    setSelectedLanguage(lng);
   };
 
-  // const handleSelectLanguage = (language) => {
-  //   changeLanguage(language);
-  //   setLanguagePromptVisible(false);
-  // };
 
   const saveApiKey = async (key) => {
     try {
@@ -75,7 +71,7 @@ function SettingsScreen({ navigation, route }) {
   };
 
   const handleSetAPIKey = (key) => {
-    setApiKey(key);
+    setApiKey(key.slice(7, 14));
     saveApiKey(key);
     console.log(key);
   };
@@ -97,7 +93,7 @@ function SettingsScreen({ navigation, route }) {
           />
           <SettingsItem
             title={t("Languages")}
-            // subTitle={selectedLanguage}
+            subTitle={selectedLanguage}
             IconComponent={<Icon iconSet="MCI" name="translate" />}
             onPress={toggleLanguagePrompt}
           />
@@ -109,12 +105,12 @@ function SettingsScreen({ navigation, route }) {
           <SettingsItem
             title={t("TC")}
             IconComponent={<Icon iconSet="MCI" name="file-document" />}
-            onPress={() => navigation.navigate(t("TermsAndConditionsScreen"))}
+            onPress={() => navigation.navigate("TermsAndConditionsScreen")}
           />
           <SettingsItem
             title={t("PriPol")}
             IconComponent={<Icon iconSet="MCI" name="file-document" />}
-            onPress={() => navigation.navigate(t("PrivacyPolicyScreen"))}
+            onPress={() => navigation.navigate("PrivacyPolicyScreen")}
           />
           <SettingsItem
             title={t("aboutUs")}

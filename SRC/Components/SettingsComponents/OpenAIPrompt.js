@@ -8,9 +8,12 @@ import {
   TextInput,
 } from "react-native";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import i18next from "../../services/i18next";
 
 function OpenAIPrompt({ visible, onClose, onSumbit }) {
   const [inputValue, setInputValue] = useState("");
+  const { t } = useTranslation();
 
   const handleSubmit = () => {
     onSumbit(inputValue);
@@ -34,7 +37,7 @@ function OpenAIPrompt({ visible, onClose, onSumbit }) {
             onChangeText={(text) => setInputValue(text)}
             onSubmitEditing={handleSubmit}
           />
-          <Button title="Save" onPress={handleSubmit} />
+          <Button title={t("Save")} onPress={handleSubmit} />
         </View>
         </TouchableWithoutFeedback>
       </View>

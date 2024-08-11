@@ -12,9 +12,12 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import defaultStyles from "../../config/Styles";
+import { useTranslation } from "react-i18next";
+import i18next from "../../services/i18next";
 
 const AppTextInput = ({ onSubmit }) => {
   const [text, setText] = useState("");
+  const { t } = useTranslation();
 
   const handleSend = () => {
     if (text.trim() === "") {
@@ -32,7 +35,7 @@ const AppTextInput = ({ onSubmit }) => {
             style={styles.input}
             onChangeText={setText}
             value={text}
-            placeholder="Type here"
+            placeholder={t("AppTextInputPlaceholder")}
             multiline
             blurOnSubmit={false}
           />

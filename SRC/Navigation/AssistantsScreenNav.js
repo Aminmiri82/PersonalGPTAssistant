@@ -9,42 +9,54 @@ import AssistantMakerScreen2 from "../Screens/AssistantScreen/AssistantMakerScre
 import AssistantEditorScreen1 from "../Screens/AssistantScreen/AssistantEditorScreen1";
 import AssistantEditorScreen2 from "../Screens/AssistantScreen/AssistantEditorScreen2";
 import { useTranslation } from "react-i18next";
+
 const AssistantsStack = createNativeStackNavigator();
 
-function AssistantsScreenNav(props) {
+function AssistantsScreenNav() {
   const { t } = useTranslation();
+
   const makeNewAssistantButton = (navigation) => (
     <AppButton
       title={t("newAssistant")}
-      onPress={() => navigation.navigate(t("AssistantMakerScreen1"))}
+      onPress={() => navigation.navigate("AssistantMakerScreen1")}
     />
   );
+
   return (
     <AssistantsStack.Navigator>
       <AssistantsStack.Screen
-        name={t("AssistantMenuScreen")}
+        name="AssistantMenuScreen" // Use static names for screens
         component={AssistantMenuScreen}
         options={({ navigation }) => ({
+          title: t("AssistantMenuScreen"), // Translated title for the screen
           headerRight: () => makeNewAssistantButton(navigation),
         })}
       />
       <AssistantsStack.Screen
-        name={t("AssistantMakerScreen1")}
+        name="AssistantMakerScreen1" // Use static names for screens
         component={AssistantMakerScreen1}
+        options={{ title: t("AssistantMakerScreen1") }}
       />
       <AssistantsStack.Screen
-        name={t("AssistantMakerScreen2")}
+        name="AssistantMakerScreen2" // Use static names for screens
         component={AssistantMakerScreen2}
+        options={{ title: t("AssistantMakerScreen2") }}
       />
       <AssistantsStack.Screen
-        name={t("AssistantEditorScreen1")}
+        name="AssistantEditorScreen1" // Use static names for screens
         component={AssistantEditorScreen1}
+        options={{ title: t("AssistantEditorScreen1") }}
       />
       <AssistantsStack.Screen
-        name={t("AssistantEditorScreen2")}
+        name="AssistantEditorScreen2" // Use static names for screens
         component={AssistantEditorScreen2}
+        options={{ title: t("AssistantEditorScreen2") }}
       />
-      <AssistantsStack.Screen name="BuildScreen" component={BuildScreen} />
+      <AssistantsStack.Screen
+        name="BuildScreen" // Use static names for screens
+        component={BuildScreen}
+        options={{ title: t("BuildScreen") }} // Optional: Add translation if needed
+      />
     </AssistantsStack.Navigator>
   );
 }

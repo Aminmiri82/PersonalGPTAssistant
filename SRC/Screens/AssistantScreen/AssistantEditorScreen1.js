@@ -37,7 +37,7 @@ function AssistantEditorScreen1({ navigation, info, route }) {
       console.log("Name or instructions are missing");
       return;
     }
-    navigation.push(t("AssistantEditorScreen2"), {
+    navigation.push("AssistantEditorScreen2", {
       id,
       name,
       instructions,
@@ -47,7 +47,7 @@ function AssistantEditorScreen1({ navigation, info, route }) {
   const handleDelete = () => {
     deleteAssistantById(id)
       .then(() => {
-        navigation.navigate(t("AssistantMenuScreen")); // Navigate back to the assistant menu
+        navigation.navigate("AssistantMenuScreen"); // Navigate back to the assistant menu
       })
       .catch((error) => {
         console.log("Error deleting assistant: ", error);

@@ -77,7 +77,7 @@ function AssistantMakerScreen2({ navigation, route }) {
     }
     insertAssistant(assistant.assistantId, name, instructions, model, files)
       .then(() => {
-        navigation.navigate(t("AssistantMenuScreen")); // Navigate back to the assistant menu
+        navigation.navigate("AssistantMenuScreen"); // Navigate back to the assistant menu
       })
       .catch((error) => {
         console.log("Error saving assistant:", error);
@@ -121,6 +121,7 @@ function AssistantMakerScreen2({ navigation, route }) {
           <RNPickerSelect
             onValueChange={(value) => setModel(value)}
             items={assistantList}
+            
           />
         </View>
         <View style={styles.gp4TipContainer}>
