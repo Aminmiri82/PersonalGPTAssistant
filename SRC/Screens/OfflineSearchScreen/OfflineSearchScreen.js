@@ -18,9 +18,11 @@ export default function SearchScreen({ navigation }) {
   // Initialize Fuse.js with updated options
   const fuse = new Fuse(searchableData, {
     keys: ["text"],
-    threshold: 0.3,
-    distance: 100,
-  });
+    threshold: 0.6, // Lowering the threshold for more lenient matching
+    distance: 50,   // Adjusting the distance for better flexibility
+    minMatchCharLength: 2,
+});
+
 
   const handleSearch = (text) => {
     setQuery(text);
