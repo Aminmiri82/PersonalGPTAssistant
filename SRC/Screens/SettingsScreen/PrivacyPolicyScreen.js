@@ -1,50 +1,31 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import ScrollableAppText from '../../Components/SettingsComponents/ScrollableAppText';
+import React from "react";
+import { View, StyleSheet, Text } from "react-native";
+import Screen from "../../Components/Screen";
+import { useTranslation } from "react-i18next";
 
 function PrivacyPolicyScreen(props) {
+  const { t } = useTranslation();
   return (
-    <ScrollableAppText>
-        {`Privacy Policy for Your App Name At [Your App Name], 
-accessible from [Your Apps URL or App Store Location], one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by [Your App Name] and how we use it.
-
-If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.
-
-This Privacy Policy applies only to our online activities and is valid for visitors to our app with regards to the information that they shared and/or collect in [Your App Name]. This policy is not applicable to any information collected offline or via channels other than this app.
-
-Consent
-
-By using our app, you hereby consent to our Privacy Policy and agree to its terms.
-
-Information We Collect
-
-The personal information that you are asked to provide, and the reasons why you are asked to provide it, will be made clear to you at the point we ask you to provide your personal information.
-
-If you contact us directly, we may receive additional information about you such as your name, email address, phone number, the contents of the message and/or attachments you may send us, and any other information you may choose to provide.
-
-When you register for an Account, we may ask for your contact information, including items such as name, company name, address, email address, and telephone number.
-
-How We Use Your Information
-
-We use the information we collect in various ways, including to:
-
-Provide, operate, and maintain our app
-Improve, personalize, and expand our app
-Understand and analyze how you use our app
-Develop new products, services, features, and functionality
-Communicate with you, either directly or through one of our partners, including for customer service, to provide you with updates and other information relating to the app, and for marketing and promotional purposes
-Send you emails
-Find and prevent fraud
-Log Files
-
-[Your App Name] follows a standard procedure of using log files. 
-These files log visitors when they visit apps. The information collected by log files include internet protocol (IP) addresses`}
-    </ScrollableAppText>
+    <Screen>
+    <View style={styles.container}>
+      <Text style={styles.text}>{t("PrivacyPolicyText")}</Text>
+    </View>
+    </Screen> 
   );
 }
 
 const styles = StyleSheet.create({
-  container: {}
+  container: {
+    flex: 1, // Ensures the container takes up the full screen height
+    padding: 16, // Adds padding around the container to avoid hugging the sides
+    // Optional: a light background color for better readability
+  },
+  text: {
+    fontSize: 16, // Adjusts the font size for readability
+    lineHeight: 24, // Increases the space between lines of text
+     // Aligns text to the left; change to 'justify' if needed
+    color: "#333", // A dark gray color for the text
+  },
 });
 
 export default PrivacyPolicyScreen;

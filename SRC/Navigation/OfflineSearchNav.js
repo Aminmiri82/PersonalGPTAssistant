@@ -19,7 +19,7 @@ function OfflineSearchScreenNav() {
       <OfflineSearchNav.Screen
         name="OfflineSearchScreen" // Use static names for screens
         component={OfflineSearchScreen}
-        options={{ title: t("OfflineSearchScreen") }} // Optional: Add translation if needed
+        options={{ title: t("OfflineSearchScreenName") }} // Optional: Add translation if needed
       />
     </OfflineSearchNav.Navigator>
    

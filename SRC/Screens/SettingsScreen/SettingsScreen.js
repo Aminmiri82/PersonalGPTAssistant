@@ -103,11 +103,6 @@ function SettingsScreen({ navigation, route }) {
             onSelectLanguage={handleSelectLanguage}
           />
           <SettingsItem
-            title={t("TC")}
-            IconComponent={<Icon iconSet="MCI" name="file-document" />}
-            onPress={() => navigation.navigate("TermsAndConditionsScreen")}
-          />
-          <SettingsItem
             title={t("PriPol")}
             IconComponent={<Icon iconSet="MCI" name="file-document" />}
             onPress={() => navigation.navigate("PrivacyPolicyScreen")}
@@ -115,7 +110,7 @@ function SettingsScreen({ navigation, route }) {
           <SettingsItem
             title={t("aboutUs")}
             IconComponent={<Icon iconSet="MCI" name="information" />}
-            onPress={() => navigation.navigate(t("AboutUsScreen"))}
+            onPress={() => navigation.navigate("AboutUsScreen")}
           />
         </View>
       </Screen>

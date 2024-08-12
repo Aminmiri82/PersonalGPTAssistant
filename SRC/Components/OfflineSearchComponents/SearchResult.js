@@ -1,7 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 export default function SearchResult({ item, query, onPress }) {
+  const { t } = useTranslation();
   // Function to highlight the query in the text
   const getHighlightedText = (text, highlight) => {
     if (!highlight.trim()) {
@@ -34,7 +36,7 @@ export default function SearchResult({ item, query, onPress }) {
         {getHighlightedText(item.text, query)}
         
         <View style={styles.detailsContainer}>
-          <Text style={styles.fileName}>{item.fileName} - Page {item.page}</Text>
+          <Text style={styles.fileName}>{item.fileName} - {t("Page")} {item.page}</Text>
         </View>
       </View>
     </TouchableOpacity>

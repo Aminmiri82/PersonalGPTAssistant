@@ -41,9 +41,25 @@
     "AssistantMakerScreen2" : "Make Assistant-2",
     "AssistantEditorScreen1" : "Edit Assistant-1",
     "AssistantEditorScreen2" : "Edit Assistant-2",
+    "OfflineSearchTabName" : "Offline Search",
+    "OfflineSearchScreenName" : "Offline Search",
+    "SearchPlaceholder" : "Search...",
+    "Result" : "result",
+    "Results" : "results",
+    "NoResultsFound" : "No results found",
+    "Page" : "Page",
     "SettingsScreen" : "Settings",
     "AboutUsScreen" : "About us",
+    "AboutUsScreenScreenCredits": "This app was made possible thanks to the sponsorship of Morteza Rajaghomi. The creators behind it are Seyed Amineddin Miri and Ali Radmard.",
+    "AboutUsScreenScreenOpenSource": "You can check out our code—this app is open source, and it's all available on GitHub:",
+    "AboutUsScreenScreenGitHubLink": "GitHub",
+    "AboutUsScreenScreenSupport": "Feel free to reach out to us for any questions or suggestions at:",
+    "AboutUsScreenScreenSupportLink": "support link",
+    "AboutUsScreenScreenFindUs": "Find us on:",
+    "AboutUsScreenScreenFindUsAmin": "Contact Amin",
+    "AboutUsScreenScreenFindUsAli": "Contact Ali",
     "TermsAndConditionsScreen" : "Terms and Conditions",
-    "PrivacyPolicyScreen" : "Privacy policy"
-  }
+    "PrivacyPolicyScreen" : "Privacy policy",
+    "PrivacyPolicyText": "At Dadafarin, your privacy is our top priority. Here’s the deal:\n\nNo Data Collection: \nWe don’t collect or store any of your data. None of your info goes through our servers ever. Your messages go straight to the OpenAI API, and we don't have access to them at any point.\n\nNo Personal Info: \nWe don’t know who you are. The only thing we might see are some basic stats from the app stores, like how many times the app has been downloaded.\n\nThat’s it. No tricks, no hidden stuff. Your privacy is safe with us."
+}
   

@@ -11,10 +11,12 @@ import Fuse from "fuse.js";
 import SearchResult from "../../Components/OfflineSearchComponents/SearchResult";
 import searchableData from "../../assets/searchableData.json";
 import Screen from "../../Components/Screen";
+import { useTranslation } from "react-i18next";
 
 export default function SearchScreen({ navigation }) {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const { t } = useTranslation();
 
   // Initialize Fuse.js with updated options
   const fuse = new Fuse(searchableData, {
@@ -46,7 +48,7 @@ export default function SearchScreen({ navigation }) {
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
-          placeholder="Search..."
+          placeholder={t("SearchPlaceholder")}
           placeholderTextColor="#888"
           value={query}
           onChangeText={handleSearch}
@@ -54,7 +56,7 @@ export default function SearchScreen({ navigation }) {
         {query.length > 0 && (
           <Text style={styles.resultsIndicator}>
             {searchResults.length}{" "}
-            {searchResults.length === 1 ? "result" : "results"}
+            {searchResults.length === 1 ? t("Result") : t("Results")}
           </Text>
         )}
       </View>
@@ -74,7 +76,7 @@ export default function SearchScreen({ navigation }) {
         ListEmptyComponent={
           query.length > 0 && searchResults.length === 0 ? (
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No results found</Text>
+              <Text style={styles.emptyText}>{t("NoResultsFound")}</Text>
             </View>
           ) : null
         }

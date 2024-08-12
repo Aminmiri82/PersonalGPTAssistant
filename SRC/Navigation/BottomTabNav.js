@@ -51,7 +51,7 @@ function BottomTabNav() {
       <Tab.Screen
         name="OfflineSearch"
         component={OfflineSearchNav}
-        options={{ headerShown: false, title: t("OfflineSearchTab") }}
+        options={{ headerShown: false, title: t("OfflineSearchTabName") }}
       />
       <Tab.Screen
         name="Settings"
