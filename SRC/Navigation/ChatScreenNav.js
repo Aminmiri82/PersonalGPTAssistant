@@ -8,6 +8,7 @@ import ChatScreen from "../Screens/ChatScreen/ChatScreen";
 import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
 import ChooseChatScreen from "../Screens/ChatScreen/ChooseChatScreen";
 import OfflineSearchScreen from "../Screens/OfflineSearchScreen/OfflineSearchScreen";
+
 import TestScreen from "../Screens/TestScreen";
 import AppButton from "../Components/AppButton";
 import { useTranslation } from "react-i18next";
@@ -27,6 +28,7 @@ function ChatScreenNav(props) {
   return (
     <ChatStack.Navigator>
       <ChatStack.Screen name="OfflineSearchScreen" component={OfflineSearchScreen} />
+      
       <ChatStack.Screen
         name="ChatMenuScreen" // Use a static name for referencing the screen
         component={ChatMenuScreen}

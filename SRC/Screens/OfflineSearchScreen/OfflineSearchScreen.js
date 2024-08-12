@@ -11,15 +11,15 @@ import Fuse from "fuse.js";
 import SearchResult from "../../Components/OfflineSearchComponents/SearchResult";
 import searchableData from "../../assets/searchableData.json";
 
-export default function SearchScreen() {
+export default function SearchScreen({ navigation }) {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  // Initialize Fuse.js with options
+  // Initialize Fuse.js with updated options
   const fuse = new Fuse(searchableData, {
     keys: ["text"],
-    threshold: 0.0,
-    distance: 0,
+    threshold: 0.3,
+    distance: 100,
   });
 
   const handleSearch = (text) => {
@@ -35,24 +35,42 @@ export default function SearchScreen() {
   };
 
   const handleResultPress = (item) => {
-    // Handle navigation or opening the file based on item
-    console.log("Opening file or navigating to:", item);
+    const { fileName, page } = item;
+    const filePath = require(`../../assets/documents/test.pdf`);
+
+    
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search..."
-        value={query}
-        onChangeText={handleSearch}
-      />
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search..."
+          placeholderTextColor="#888"
+          value={query}
+          onChangeText={handleSearch}
+        />
+        {query.length > 0 && (
+          <Text style={styles.resultsIndicator}>
+            {searchResults.length}{" "}
+            {searchResults.length === 1 ? "result" : "results"}
+          </Text>
+        )}
+      </View>
       <FlatList
         data={searchResults}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <SearchResult item={item} query={query} onPress={handleResultPress} />
+          <SearchResult
+            item={item}
+            query={query}
+            onPress={() => handleResultPress(item)}
+          />
         )}
+        contentContainerStyle={
+          searchResults.length === 0 ? styles.emptyContentContainer : {}
+        }
         ListEmptyComponent={
           query.length > 0 && searchResults.length === 0 ? (
             <View style={styles.emptyContainer}>
@@ -69,20 +87,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: "#fff",
+  },
+  searchContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+    marginTop: 10,
   },
   searchInput: {
+    width: "80%", // Adjust width as needed
     padding: 12,
-    marginBottom: 20,
     borderRadius: 8,
-    backgroundColor: "#f1f1f1",
+    backgroundColor: "#f0f0f0",
     fontSize: 16,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  resultsIndicator: {
+    marginTop: 8,
+    fontSize: 14,
+    color: "#333",
   },
   emptyContainer: {
-    marginTop: 20,
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
   },
   emptyText: {
     fontSize: 16,
-    color: "#999",
+    color: "#888",
+  },
+  emptyContentContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
   },
 });

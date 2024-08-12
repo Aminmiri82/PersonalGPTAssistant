@@ -13,6 +13,7 @@ import colors from "../../config/colors";
 import { useState, useEffect } from "react";
 import { fetchAssistantById, deleteAssistantById } from "../../database";
 
+
 import { useTranslation } from "react-i18next";
 //info is the stuff that is saved in the database and you edit it here
 function AssistantEditorScreen1({ navigation, info, route }) {
