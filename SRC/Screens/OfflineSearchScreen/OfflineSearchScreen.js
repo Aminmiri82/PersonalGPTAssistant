@@ -10,6 +10,7 @@ import {
 import Fuse from "fuse.js";
 import SearchResult from "../../Components/OfflineSearchComponents/SearchResult";
 import searchableData from "../../assets/searchableData.json";
+import Screen from "../../Components/Screen";
 
 export default function SearchScreen({ navigation }) {
   const [query, setQuery] = useState("");
@@ -19,10 +20,9 @@ export default function SearchScreen({ navigation }) {
   const fuse = new Fuse(searchableData, {
     keys: ["text"],
     threshold: 0.5, // Lowering the threshold for more lenient matching
-      // Adjusting the distance for better flexibility
+    // Adjusting the distance for better flexibility
     minMatchCharLength: 2,
-});
-
+  });
 
   const handleSearch = (text) => {
     setQuery(text);
@@ -39,12 +39,10 @@ export default function SearchScreen({ navigation }) {
   const handleResultPress = (item) => {
     const { fileName, page } = item;
     const filePath = require(`../../assets/documents/test.pdf`);
-
-    
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <Screen style={styles.container}>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -81,15 +79,13 @@ export default function SearchScreen({ navigation }) {
           ) : null
         }
       />
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
   },
   searchContainer: {
     alignItems: "center",
