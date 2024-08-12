@@ -26,9 +26,9 @@ function ChatScreenNav(props) {
 
   return (
     <ChatStack.Navigator>
-      <ChatStack.Screen name={t("OfflineSearchScreen")} component={OfflineSearchScreen} />
+      <ChatStack.Screen name="OfflineSearchScreen" component={OfflineSearchScreen} />
       <ChatStack.Screen
-        name={t("ChatMenuScreen")} // Use a static name for referencing the screen
+        name="ChatMenuScreen" // Use a static name for referencing the screen
         component={ChatMenuScreen}
         options={({ navigation }) => ({
           title: t("ChatMenuScreen"), // Translated title for this screen
@@ -36,7 +36,7 @@ function ChatScreenNav(props) {
         })}
       />
       <ChatStack.Screen
-        name={t("ChooseChatScreen")} // Use a static name for referencing the screen
+        name="ChooseChatScreen" // Use a static name for referencing the screen
         component={ChooseChatScreen}
         options={{
           title: t("ChooseChatScreen"), // Translated title for this screen
