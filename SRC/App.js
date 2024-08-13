@@ -8,10 +8,15 @@ import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
 import { DatabaseProvider } from "./DatabaseProvider"; // Adjust the import path
 import i18next from "./services/i18next";
 import * as SecureStore from "expo-secure-store";
+import SplashScreen from "react-native-splash-screen";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  // useEffect(() => {
+  //   SplashScreen.hide();
+  // }, []);
+
   useEffect(() => {
     const fetchLanguage = async () => {
       const storedLanguage = await SecureStore.getItemAsync("selectedLanguage");
