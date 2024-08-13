@@ -3,9 +3,11 @@ import os
 import json
 import concurrent.futures
 from pathlib import Path
+import threading  # Import threading for the lock
 
 max_chunk_size = 1000
 batch_size = 20  # Adjust based on system resources
+global_id = 1  # Initialize a global ID counter
 
 # Function to split text into chunks
 def split_text_into_chunks(text, max_chunk_size):
@@ -30,8 +32,10 @@ def split_text_into_chunks(text, max_chunk_size):
         chunks.append(current_chunk.strip())
 
     return chunks
+
 # Worker function to process a batch of pages
-def process_pages(pdf_path, pages, file_name):
+def process_pages(pdf_path, pages, file_name, id_lock):
+    global global_id
     searchable_data = []
     pdf_document = fitz.open(pdf_path)
     
@@ -42,9 +46,13 @@ def process_pages(pdf_path, pages, file_name):
 
             page_chunks = split_text_into_chunks(page_text, max_chunk_size)
 
-            for index, chunk in enumerate(page_chunks):
+            for chunk in page_chunks:
+                with id_lock:
+                    current_id = global_id
+                    global_id += 1  # Increment global ID
+
                 searchable_data.append({
-                    'id': f'{page_num}-{index}',  # Unique ID combining page and chunk index
+                    'id': str(current_id),  # Use the global incremental ID
                     'text': chunk.lower(),  # Normalize text to lowercase
                     'page': page_num,
                     'fileName': file_name,
@@ -57,7 +65,7 @@ def process_pages(pdf_path, pages, file_name):
     return searchable_data
 
 # Main function to orchestrate processing
-def process_pdf(input_file_path, file_name, all_searchable_data):
+def process_pdf(input_file_path, file_name, all_searchable_data, id_lock):
     try:
         pdf_document = fitz.open(input_file_path)
         total_pages = pdf_document.page_count
@@ -68,7 +76,7 @@ def process_pdf(input_file_path, file_name, all_searchable_data):
         page_batches = [range(i + 1, min(i + batch_size + 1, total_pages + 1)) for i in range(0, total_pages, batch_size)]
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=None) as executor:
-            future_to_batch = {executor.submit(process_pages, input_file_path, batch, file_name): batch for batch in page_batches}
+            future_to_batch = {executor.submit(process_pages, input_file_path, batch, file_name, id_lock): batch for batch in page_batches}
 
             for future in concurrent.futures.as_completed(future_to_batch):
                 try:
@@ -81,15 +89,16 @@ def process_pdf(input_file_path, file_name, all_searchable_data):
         print(f"Error processing the file: {e}")
 
 if __name__ == "__main__":
-    file_paths = ["همکاری.pdf", "آیین-دادرسی-کیفری.pdf","قانون تجارت.pdf","قانون_آیین_دادرسی مدنی.pdf","قانون-تجارت2.pdf","قانون-جرایم-رایانه-ای-1.pdf","قانون-کاهش-مجازات-حبس-تعزیری-2.pdf","قانون-مجازات-92-1.pdf","قانون-مجازات-اسلامی-1375.pdf","قانون-مدنی.pdf","مجموعه-قوانین-جزا.pdf","constitution.pdf"]
+    file_paths = ["همکاری.pdf", "آیین-دادرسی-کیفری.pdf","قانون تجارت.pdf","قانون_آیین_دادرسی مدنی.pdf","قانون-تجارت2.pdf","قانون-جرایم-رایانه-ای-1.pdf","قانون-کاهش-مجازات-حبس-تعزیری-2.pdf","قانون-مجازات-92-1.pdf","قانون-مجازات-اسلامی-1375.pdf","قانون-مدنی.pdf","مجموعه-قوانین-جزا.pdf","constitution.pdf"]
     output_file_path = Path(__file__).parent / "all_searchable_data.json"
 
     all_searchable_data = []
+    id_lock = threading.Lock()  # Corrected: Use threading.Lock for the lock
 
     for file_path in file_paths:
         input_file_path = Path(__file__).parent / file_path
         file_name = Path(file_path).name
-        process_pdf(input_file_path, file_name, all_searchable_data)
+        process_pdf(input_file_path, file_name, all_searchable_data, id_lock)
 
     # Write the aggregated data to a single JSON file
     with open(output_file_path, 'w', encoding='utf-8') as f:

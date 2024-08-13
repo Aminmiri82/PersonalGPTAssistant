@@ -19,14 +19,11 @@ function ChatScreenNav(props) {
   const makeNewChatButton = (navigation) => (
     <Icon
       iconSet={"MCI"}
-      iconColor="blue"
+      iconColor="#3E84F7"
       onPress={() => navigation.navigate("ChooseChatScreen")}
       name={"message-plus"}
     />
-    // <AppButton
-    //   title={t("newChat")} // Translate the title
-    //   onPress={() => navigation.navigate("ChooseChatScreen")}
-    // />
+    
   );
 
   return (
@@ -57,7 +54,7 @@ function ChatScreenNav(props) {
               {...props}
               onPress={() => navigation.popToTop()}
               backImage={() => (
-                <Icon name="chevron-left" size={24} color="black" /> // Custom chevron icon using MaterialCommunityIcons
+                <Icon iconSet={"MCI"} name="chevron-left" size={36} iconColor="#3E84F7" /> // Custom chevron icon using MaterialCommunityIcons
               )}
             />
           ),

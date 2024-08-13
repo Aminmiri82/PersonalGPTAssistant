@@ -24,10 +24,22 @@ function AboutUsScreen(props) {
         </Text>
         <Text></Text>
         <Text>{t("AboutUsScreenScreenSupport")}</Text>
-        <Text>{t("AboutUsScreenScreenSupportLink")}</Text>
+        <Text
+          style={styles.hlink}
+          onPress={() => Linking.openURL("mailto:miri.amin96@gmail.com")}
+        >
+          {t("AboutUsScreenScreenSupportLink")}
+        </Text>
         <Text></Text>
         <Text>{t("AboutUsScreenScreenFindUs")}</Text>
-        <Text>{t("AboutUsScreenScreenFindUsAmin")}</Text>
+        <Text></Text>
+        <Text
+          style={styles.hlink}
+          onPress={() => Linking.openURL("mailto:miri.amin96@gmail.com")}
+        >
+          {t("AboutUsScreenScreenFindUsAmin")}
+        </Text>
+
         <Text
           style={styles.hlink}
           onPress={() => Linking.openURL("mailto:aliradmard5@gmail.com")}

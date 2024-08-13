@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     width: "45%", // Set width to less than half to fit two items per row
     margin: "2.5%", // Set margin to space items out
 
-    // Other styles...
+  
   },
   image: {
     width: 150,

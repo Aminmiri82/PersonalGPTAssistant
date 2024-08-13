@@ -20,7 +20,7 @@ function AssistantsScreenNav() {
     <Icon
       iconSet={"MCI"}
       name={"plus-circle"}
-      iconColor="blue"
+      iconColor="#3E84F7"
       onPress={() => navigation.navigate("AssistantMakerScreen1")}
     />
     // <AppButton
