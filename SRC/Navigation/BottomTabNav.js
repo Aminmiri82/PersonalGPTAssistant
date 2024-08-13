@@ -1,11 +1,13 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Icon from "../Components/Icon";
 
 import SettingsScreenNav from "./SettingsScreenNav";
-import Icon from "../Components/Icon";
 import ChatScreenNav from "./ChatScreenNav";
 import AssistantsScreenNav from "./AssistantsScreenNav";
+import OfflineSearchNav from "./OfflineSearchNav";
+import TestScreen from "../Screens/TestScreen";
 
 import { useTranslation } from "react-i18next";
 
@@ -25,6 +27,8 @@ function BottomTabNav() {
             iconName = focused ? "robot" : "robot-outline";
           } else if (route.name === "Settings") {
             iconName = focused ? "cog" : "cog-outline";
+          }else if (route.name === "OfflineSearch") {
+            iconName = focused ? "file-search" : "file-search-outline";
           }
 
           return (
@@ -33,6 +37,7 @@ function BottomTabNav() {
         },
       })}
     >
+      
       <Tab.Screen
         name="Chat"
         component={ChatScreenNav}
@@ -44,6 +49,11 @@ function BottomTabNav() {
         options={{ headerShown: false, title: t("AssistantsTab") }}
       />
       <Tab.Screen
+        name="OfflineSearch"
+        component={OfflineSearchNav}
+        options={{ headerShown: false, title: t("OfflineSearchTabName") }}
+      />
+      <Tab.Screen
         name="Settings"
         component={SettingsScreenNav}
         options={{ headerShown: false, title: t("SettingTab") }}
@@ -51,7 +61,6 @@ function BottomTabNav() {
     </Tab.Navigator>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {},

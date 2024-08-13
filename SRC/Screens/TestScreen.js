@@ -1,65 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, FlatList, StyleSheet } from 'react-native';
-import Fuse from 'fuse.js';
-import searchableData from '../assets/searchableData.json'; // Adjust the path as necessary
+import React from 'react';
+import {
+  View,
+  KeyboardAvoidingView,
+  TextInput,
+  StyleSheet,
+  Text,
+  Platform,
+  TouchableWithoutFeedback,
+  Button,
+  Keyboard,
+} from 'react-native';
 
-const App = () => {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
-
-  useEffect(() => {
-    // Setup Fuse.js with the imported data
-    const fuse = new Fuse(searchableData, {
-      keys: ['text'],
-      includeScore: true,
-    });
-
-    if (query.length > 0) {
-      const result = fuse.search(query);
-      setResults(result.map(({ item }) => item));
-    } else {
-      setResults([]);
-    }
-  }, [query]);
-
+const KeyboardAvoidingComponent = () => {
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Search..."
-        value={query}
-        onChangeText={setQuery}
-      />
-      <FlatList
-        data={results}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text>{item.text}</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <>
+        <View style={styles.inner}>
+          <Text style={styles.header}>Header</Text>
+          
+          <View style={styles.btnContainer}>
+            <Button title="Submit" onPress={() => null} />
           </View>
-        )}
-      />
-    </View>
+          
+        </View>
+        <TextInput placeholder="Username" style={styles.textInput} />
+        </>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
   },
-  input: {
+  inner: {
+    padding: 24,
+    flex: 1,
+    justifyContent: 'space-around',
+  },
+  header: {
+    fontSize: 36,
+    marginBottom: 48,
+  },
+  textInput: {
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    paddingHorizontal: 8,
-    marginBottom: 16,
-  },
-  item: {
-    padding: 8,
-    borderBottomColor: 'gray',
+    borderColor: '#000000',
     borderBottomWidth: 1,
+    marginBottom: 36,
+  },
+  btnContainer: {
+    backgroundColor: 'white',
+    marginTop: 12,
   },
 });
 
-export default App;
+export default KeyboardAvoidingComponent;

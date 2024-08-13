@@ -13,7 +13,7 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import defaultStyles from "../../config/Styles";
 import { useTranslation } from "react-i18next";
-import i18next from "../../services/i18next";
+
 
 const AppTextInput = ({ onSubmit }) => {
   const [text, setText] = useState("");
@@ -29,6 +29,7 @@ const AppTextInput = ({ onSubmit }) => {
 
   return (
     <View style={styles.AppTextInput}>
+      
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.textInputContainer}>
           <TextInput

@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // Import M
 import ChatScreen from "../Screens/ChatScreen/ChatScreen";
 import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
 import ChooseChatScreen from "../Screens/ChatScreen/ChooseChatScreen";
-import OfflineSearchScreen from "../Screens/OfflineSearchScreen/OfflineSearchScreen";
+
 
 import TestScreen from "../Screens/TestScreen";
 import AppButton from "../Components/AppButton";
@@ -21,13 +21,12 @@ function ChatScreenNav(props) {
   const makeNewChatButton = (navigation) => (
     <AppButton
       title={t("newChat")} // Translate the title
-      onPress={() => navigation.navigate(t("ChooseChatScreen"))}
+      onPress={() => navigation.navigate("ChooseChatScreen")}
     />
   );
 
   return (
-    <ChatStack.Navigator>
-      <ChatStack.Screen name="OfflineSearchScreen" component={OfflineSearchScreen} />
+    <ChatStack.Navigator>  
       
       <ChatStack.Screen
         name="ChatMenuScreen" // Use a static name for referencing the screen

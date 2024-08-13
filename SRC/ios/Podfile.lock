@@ -1,27 +1,6 @@
 PODS:
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
-  - dr-pogodin-react-native-fs (2.27.1):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - EASClient (0.12.0):
     - ExpoModulesCore
   - EXConstants (16.0.2):
@@ -135,10 +114,6 @@ PODS:
   - hermes-engine (0.74.5):
     - hermes-engine/Pre-built (= 0.74.5)
   - hermes-engine/Pre-built (0.74.5)
-  - Instant (13.8.0)
-  - PSPDFKit (13.8.0):
-    - PSPDFKit/Core (= 13.8.0)
-  - PSPDFKit/Core (13.8.0)
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1068,31 +1043,6 @@ PODS:
   - React-Mapbuffer (0.74.5):
     - glog
     - React-debug
-  - react-native-pdf (6.7.5):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
-  - react-native-pspdfkit (2.12.0):
-    - Instant (= 13.8.0)
-    - PSPDFKit (= 13.8.0)
-    - React
   - react-native-safe-area-context (4.10.5):
     - DoubleConversion
     - glog
@@ -1515,7 +1465,6 @@ PODS:
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
-  - "dr-pogodin-react-native-fs (from `../node_modules/@dr.pogodin/react-native-fs`)"
   - EASClient (from `../node_modules/expo-eas-client/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXJSONUtils (from `../node_modules/expo-json-utils/ios`)
@@ -1565,8 +1514,6 @@ DEPENDENCIES:
   - React-jsitracing (from `../node_modules/react-native/ReactCommon/hermes/executor/`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
-  - react-native-pdf (from `../node_modules/react-native-pdf`)
-  - react-native-pspdfkit (from `../node_modules/react-native-pspdfkit`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -1601,8 +1548,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - Instant
-    - PSPDFKit
     - ReachabilitySwift
     - SocketRocket
     - sqlite3
@@ -1612,8 +1557,6 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
-  dr-pogodin-react-native-fs:
-    :path: "../node_modules/@dr.pogodin/react-native-fs"
   EASClient:
     :path: "../node_modules/expo-eas-client/ios"
   EXConstants:
@@ -1709,10 +1652,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
-  react-native-pdf:
-    :path: "../node_modules/react-native-pdf"
-  react-native-pspdfkit:
-    :path: "../node_modules/react-native-pspdfkit"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-sqlite-storage:
@@ -1779,7 +1718,6 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
-  dr-pogodin-react-native-fs: 38c2789dd841955bfe1cc7b6ecef80277086c879
   EASClient: 1509a9a6b48b932ec61667644634daf2562983b8
   EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
   EXJSONUtils: 30c17fd9cc364d722c0946a550dfbf1be92ef6a4
@@ -1803,8 +1741,6 @@ SPEC CHECKSUMS:
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
   hermes-engine: 8c1577f3fdb849cbe7729c2e7b5abc4b845e88f8
-  Instant: 1d8d670e94984f671412999c0a5b41e597654148
-  PSPDFKit: 1722fafcd31a209431e1cc3f1bfe070571f2bec8
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: 3afceddffa65aee666dafd6f0116f1d975db1584
   RCTRequired: ec1239bc9d8bf63e10fb92bd8b26171a9258e0c1
@@ -1830,8 +1766,6 @@ SPEC CHECKSUMS:
   React-jsitracing: 3b6060bbf5317663667e1dd93560c7943ab86ccc
   React-logger: 257858bd55f3a4e1bc0cf07ddc8fb9faba6f8c7c
   React-Mapbuffer: 6c1cacdbf40b531f549eba249e531a7d0bfd8e7f
-  react-native-pdf: 5aa4735f8874ff679b67801576554524cd40e63c
-  react-native-pspdfkit: 7f2c17171102862759c862d8300359f3b738dd24
   react-native-safe-area-context: afa5d614d6b1b73b743c9261985876606560d128
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   React-nativeconfig: ba9a2e54e2f0882cf7882698825052793ed4c851
@@ -1866,6 +1800,6 @@ SPEC CHECKSUMS:
   sqlite3: 02d1f07eaaa01f80a1c16b4b31dfcbb3345ee01a
   Yoga: 950bbfd7e6f04790fdb51149ed51df41f329fcc8
 
-PODFILE CHECKSUM: 5b9ba01c0612282f1d9be6bc4dc1522083794fcd
+PODFILE CHECKSUM: d17c58c3e4dcee52f39a90a2d6100fa7749d7271
 
 COCOAPODS: 1.15.2

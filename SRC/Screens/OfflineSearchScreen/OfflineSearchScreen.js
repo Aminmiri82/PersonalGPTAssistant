@@ -1,95 +1,102 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   FlatList,
-  SafeAreaView,
   TextInput,
   StyleSheet,
   View,
   Text,
 } from "react-native";
-import Fuse from "fuse.js";
+import _ from "lodash";  
 import SearchResult from "../../Components/OfflineSearchComponents/SearchResult";
 import searchableData from "../../assets/searchableData.json";
+import Screen from "../../Components/Screen";
+import { useTranslation } from "react-i18next";
 
 export default function SearchScreen({ navigation }) {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const { t } = useTranslation();
 
-  // Initialize Fuse.js with updated options
-  const fuse = new Fuse(searchableData, {
-    keys: ["text"],
-    threshold: 0.6, // Lowering the threshold for more lenient matching
-    distance: 50,   // Adjusting the distance for better flexibility
-    minMatchCharLength: 2,
-});
-
-
+  // Function to process search
   const handleSearch = (text) => {
-    setQuery(text);
-
     if (text.trim() === "") {
       setSearchResults([]);
       return;
     }
 
-    const results = fuse.search(text).map((result) => result.item);
+    // Use Lodash filter to find matches
+    const results = _.filter(searchableData, (item) =>
+      item.text.toLowerCase().includes(text.toLowerCase())
+    );
     setSearchResults(results);
   };
 
-  const handleResultPress = (item) => {
-    const { fileName, page } = item;
-    const filePath = require(`../../assets/documents/test.pdf`);
+  // Create debounced version of handleSearch
+  const debouncedHandleSearch = useCallback(
+    _.debounce((text) => handleSearch(text), 300),
+    [] // Dependency array for useCallback
+  );
 
+  // Handle search input change
+  const handleChangeText = (text) => {
+    setQuery(text); // Update query immediately
+    debouncedHandleSearch(text); // Call debounced search function
+  };
+
+  const handleResultPress = (item) => {
+    console.log(item);
     
   };
 
+  const renderItem = ({ item }) => (
+    <SearchResult
+      item={item}
+      query={query}
+      onPress={() => handleResultPress(item)}
+    />
+  );
+
   return (
-    <SafeAreaView style={styles.container}>
+    <Screen style={styles.container}>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
-          placeholder="Search..."
+          placeholder={t("SearchPlaceholder")}
           placeholderTextColor="#888"
           value={query}
-          onChangeText={handleSearch}
+          onChangeText={handleChangeText} // Use handleChangeText for text input
         />
         {query.length > 0 && (
           <Text style={styles.resultsIndicator}>
             {searchResults.length}{" "}
-            {searchResults.length === 1 ? "result" : "results"}
+            {searchResults.length === 1 ? t("Result") : t("Results")}
           </Text>
         )}
       </View>
       <FlatList
         data={searchResults}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <SearchResult
-            item={item}
-            query={query}
-            onPress={() => handleResultPress(item)}
-          />
-        )}
+        renderItem={renderItem}
         contentContainerStyle={
           searchResults.length === 0 ? styles.emptyContentContainer : {}
         }
         ListEmptyComponent={
           query.length > 0 && searchResults.length === 0 ? (
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No results found</Text>
+              <Text style={styles.emptyText}>{t("NoResultsFound")}</Text>
             </View>
           ) : null
         }
+        initialNumToRender={20}
+        removeClippedSubviews={true}
       />
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
   },
   searchContainer: {
     alignItems: "center",
@@ -109,6 +116,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+   
   },
   resultsIndicator: {
     marginTop: 8,
