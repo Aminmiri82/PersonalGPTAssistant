@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {memo} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-export default function SearchResult({ item, query, onPress }) {
+const SearchResult= memo(({ item, query, onPress }) => {
   const { t } = useTranslation();
   // Function to highlight the query in the text
   const getHighlightedText = (text, highlight) => {
@@ -41,7 +41,7 @@ export default function SearchResult({ item, query, onPress }) {
       </View>
     </TouchableOpacity>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -84,3 +84,6 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
 });
+
+
+export default SearchResult;
