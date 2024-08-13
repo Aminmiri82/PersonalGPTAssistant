@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform, TextInput } from "react-native";
 import colors from "../../config/colors";
 
 const Chatbubble = ({ message }) => {
@@ -12,7 +12,19 @@ const Chatbubble = ({ message }) => {
         isUser ? styles.userBubble : styles.assistantBubble,
       ]}
     >
-      <Text style={styles.text}>{message.content}</Text>
+      {Platform.OS === "ios" ? (
+        <TextInput
+          style={styles.text}
+          multiline={true}
+          selectable={true}
+          editable={false}
+          value={message.content}
+        />
+      ) : (
+        <Text style={styles.text} selectable={true}>
+          {message.content}
+        </Text>
+      )}
     </View>
   );
 };

@@ -27,6 +27,7 @@ import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import p
 import * as SecureStore from "expo-secure-store";
 import { useHeaderHeight } from "@react-navigation/elements";
 
+
 const ChatScreen = ({ navigation, route }) => {
   const { dbInitialized } = useContext(DatabaseContext);
   const [conversation, setConversation] = useState([]);
@@ -37,7 +38,7 @@ const ChatScreen = ({ navigation, route }) => {
   const threadId = route.params.threadId; // this can be null
 
   const threadRef = useRef(null);
-  const flatListRef = useRef(null);  // Reference for FlatList
+  const flatListRef = useRef(null); // Reference for FlatList
 
   useEffect(() => {
     const initializeThread = async () => {
@@ -256,44 +257,48 @@ const ChatScreen = ({ navigation, route }) => {
     return <Text>Loading...</Text>;
   }
   const headerHeight = useHeaderHeight();
+  
+  
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={headerHeight + 0} // Adjust 80 according to your tab bar height
-      style={styles.container}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ImageBackground
-          source={require("../../assets/background.jpg")}
-          style={styles.background}
-        >
-          <View style={styles.container}>
-            <FlatList
-              ref={flatListRef}  // Attach the ref here
-              data={conversation}
-              keyExtractor={(item, index) =>
-                `${item.threadId}-${item.role}-${index}`
-              }
-              renderItem={({ item }) => <Chatbubble message={item} />}
-              contentContainerStyle={styles.flatListContent}
-              ListFooterComponent={
-                streamedChunks && !completeResponse ? (
-                  <Chatbubble
-                    message={{
-                      content: streamedChunks,
-                      role: "assistant",
-                      timestamp: new Date(),
-                    }}
-                  />
-                ) : null
-              }
-            />
-            <AppTextInput onSubmit={handleSetMessage} />
-          </View>
-        </ImageBackground>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+    <Screen>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? headerHeight : headerHeight*2 } // put the botttom tab nav height here
+        style={styles.container}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ImageBackground
+            source={require("../../assets/background.jpg")}
+            style={styles.background}
+          >
+            <View style={styles.container}>
+              <FlatList
+                ref={flatListRef} // Attach the ref here
+                data={conversation}
+                keyExtractor={(item, index) =>
+                  `${item.threadId}-${item.role}-${index}`
+                }
+                renderItem={({ item }) => <Chatbubble message={item} />}
+                contentContainerStyle={styles.flatListContent}
+                ListFooterComponent={
+                  streamedChunks && !completeResponse ? (
+                    <Chatbubble
+                      message={{
+                        content: streamedChunks,
+                        role: "assistant",
+                        timestamp: new Date(),
+                      }}
+                    />
+                  ) : null
+                }
+              />
+              <AppTextInput onSubmit={handleSetMessage} />
+            </View>
+          </ImageBackground>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </Screen>
   );
 };
 
