@@ -9,6 +9,7 @@ import AssistantMakerScreen2 from "../Screens/AssistantScreen/AssistantMakerScre
 import AssistantEditorScreen1 from "../Screens/AssistantScreen/AssistantEditorScreen1";
 import AssistantEditorScreen2 from "../Screens/AssistantScreen/AssistantEditorScreen2";
 import { useTranslation } from "react-i18next";
+import Icon from "../Components/Icon";
 
 const AssistantsStack = createNativeStackNavigator();
 
@@ -16,10 +17,16 @@ function AssistantsScreenNav() {
   const { t } = useTranslation();
 
   const makeNewAssistantButton = (navigation) => (
-    <AppButton
-      title={t("newAssistant")}
+    <Icon
+      iconSet={"MCI"}
+      name={"plus-circle"}
+      iconColor="blue"
       onPress={() => navigation.navigate("AssistantMakerScreen1")}
     />
+    // <AppButton
+    //   title={t("newAssistant")}
+    //   onPress={() => navigation.navigate("AssistantMakerScreen1")}
+    // />
   );
 
   return (

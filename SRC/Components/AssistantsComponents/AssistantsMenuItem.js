@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     padding: 10,
     borderBottomWidth: 1,
+    borderRadius: 20,
     borderBottomColor: colors.light,
     width: "45%", // Set width to less than half to fit two items per row
     margin: "2.5%", // Set margin to space items out
@@ -51,6 +52,8 @@ const styles = StyleSheet.create({
   modelText: {
     fontSize: 20,
     fontWeight: "bold",
+    alignSelf: "center",
+    textAlign: "center",
   },
 });
 

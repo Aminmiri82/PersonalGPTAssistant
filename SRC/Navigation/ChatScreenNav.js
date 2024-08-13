@@ -2,12 +2,10 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HeaderBackButton } from "@react-navigation/elements";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // Import MaterialCommunityIcons
-
+import Icon from "../Components/Icon";
 import ChatScreen from "../Screens/ChatScreen/ChatScreen";
 import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
 import ChooseChatScreen from "../Screens/ChatScreen/ChooseChatScreen";
-
 
 import TestScreen from "../Screens/TestScreen";
 import AppButton from "../Components/AppButton";
@@ -17,17 +15,22 @@ const ChatStack = createNativeStackNavigator();
 
 function ChatScreenNav(props) {
   const { t } = useTranslation();
-  
+
   const makeNewChatButton = (navigation) => (
-    <AppButton
-      title={t("newChat")} // Translate the title
+    <Icon
+      iconSet={"MCI"}
+      iconColor="blue"
       onPress={() => navigation.navigate("ChooseChatScreen")}
+      name={"message-plus"}
     />
+    // <AppButton
+    //   title={t("newChat")} // Translate the title
+    //   onPress={() => navigation.navigate("ChooseChatScreen")}
+    // />
   );
 
   return (
-    <ChatStack.Navigator>  
-      
+    <ChatStack.Navigator>
       <ChatStack.Screen
         name="ChatMenuScreen" // Use a static name for referencing the screen
         component={ChatMenuScreen}
