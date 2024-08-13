@@ -6,7 +6,7 @@ import {
   View,
   Text,
 } from "react-native";
-import _ from "lodash";  // Import Lodash
+import _ from "lodash";  
 import SearchResult from "../../Components/OfflineSearchComponents/SearchResult";
 import searchableData from "../../assets/searchableData.json";
 import Screen from "../../Components/Screen";
@@ -44,8 +44,8 @@ export default function SearchScreen({ navigation }) {
   };
 
   const handleResultPress = (item) => {
-    const { fileName, page } = item;
-    const filePath = require(`../../assets/documents/test.pdf`);
+    console.log(item);
+    
   };
 
   const renderItem = ({ item }) => (
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+   
   },
   resultsIndicator: {
     marginTop: 8,
