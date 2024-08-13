@@ -11,19 +11,23 @@ function Icon({
   style,
   onPress,
 }) {
-  return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={[styles.container, style]}>
-        {iconSet === "AntDesign" && (
-          <AntDesign name={name} color={iconColor} size={size} />
-        )}
+  const IconContent = (
+    <View style={[styles.container, style]}>
+      {iconSet === "AntDesign" && (
+        <AntDesign name={name} color={iconColor} size={size} />
+      )}
 
-        {iconSet === "MCI" && (
-          <MaterialCommunityIcons name={name} color={iconColor} size={size} />
-        )}
-      </View>
-    </TouchableOpacity>
+      {iconSet === "MCI" && (
+        <MaterialCommunityIcons name={name} color={iconColor} size={size} />
+      )}
+    </View>
   );
+
+  if (onPress) {
+    return <TouchableOpacity onPress={onPress}>{IconContent}</TouchableOpacity>;
+  }
+
+  return IconContent;
 }
 
 const styles = StyleSheet.create({

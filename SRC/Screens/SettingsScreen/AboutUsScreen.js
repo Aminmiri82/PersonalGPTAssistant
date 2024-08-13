@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet,Text } from "react-native";
+import { View, StyleSheet, Text, Linking } from "react-native";
 import ScrollableAppText from "../../Components/SettingsComponents/ScrollableAppText";
 import EmailLink from "../../Components/SettingsComponents/EmailLink";
 import Materialcomunityicons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -10,21 +10,32 @@ function AboutUsScreen(props) {
   const { t } = useTranslation();
   return (
     <Screen>
-    <View style={styles.container}>
-      <Text>{t("AboutUsScreenScreenCredits")}</Text>
-      <Text></Text>
-      <Text>{t("AboutUsScreenScreenOpenSource")}</Text>
-      <Text>{t("AboutUsScreenScreenGitHubLink")}</Text>
-      <Text></Text>
-      <Text>{t("AboutUsScreenScreenSupport")}</Text>
-      <Text>{t("AboutUsScreenScreenSupportLink")}</Text>
-      <Text></Text>
-      <Text>{t("AboutUsScreenScreenFindUs")}</Text>
-      <Text>{t("AboutUsScreenScreenFindUsAmin")}</Text>
-      <Text>{t("AboutUsScreenScreenFindUsAli")}</Text>
-
-    </View>
-    </Screen> 
+      <View style={styles.container}>
+        <Text>{t("AboutUsScreenScreenCredits")}</Text>
+        <Text></Text>
+        <Text>{t("AboutUsScreenScreenOpenSource")}</Text>
+        <Text
+          style={styles.hlink}
+          onPress={() =>
+            Linking.openURL("https://github.com/Aminmiri82/lawChatbot")
+          }
+        >
+          {t("AboutUsScreenScreenGitHubLink")}
+        </Text>
+        <Text></Text>
+        <Text>{t("AboutUsScreenScreenSupport")}</Text>
+        <Text>{t("AboutUsScreenScreenSupportLink")}</Text>
+        <Text></Text>
+        <Text>{t("AboutUsScreenScreenFindUs")}</Text>
+        <Text>{t("AboutUsScreenScreenFindUsAmin")}</Text>
+        <Text
+          style={styles.hlink}
+          onPress={() => Linking.openURL("mailto:aliradmard5@gmail.com")}
+        >
+          {t("AboutUsScreenScreenFindUsAli")}
+        </Text>
+      </View>
+    </Screen>
   );
 }
 
@@ -37,8 +48,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16, // Adjusts the font size for readability
     lineHeight: 24, // Increases the space between lines of text
-     // Aligns text to the left; change to 'justify' if needed
+    // Aligns text to the left; change to 'justify' if needed
     color: "#333", // A dark gray color for the text
+  },
+  hlink: {
+    color: "blue",
   },
 });
 
