@@ -1016,71 +1016,7 @@ PODS:
     - glog
     - React-debug
   - react-native-safe-area-context (4.10.5):
-    - DoubleConversion
-    - glog
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
     - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - react-native-safe-area-context/common (= 4.10.5)
-    - react-native-safe-area-context/fabric (= 4.10.5)
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
-  - react-native-safe-area-context/common (4.10.5):
-    - DoubleConversion
-    - glog
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
-  - react-native-safe-area-context/fabric (4.10.5):
-    - DoubleConversion
-    - glog
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - react-native-safe-area-context/common
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - react-native-sqlite-storage (6.0.1):
     - React-Core
   - React-nativeconfig (0.74.5)
@@ -1298,26 +1234,7 @@ PODS:
   - ReactNativeLocalization (2.3.2):
     - React-Core
   - RNCPicker (2.7.5):
-    - DoubleConversion
-    - glog
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
     - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - RNGestureHandler (2.16.2):
     - DoubleConversion
     - glog
@@ -1340,29 +1257,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - RNScreens (3.31.1):
-    - DoubleConversion
-    - glog
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-RCTImage
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - RNScreens/common (= 3.31.1)
-    - Yoga
-  - RNScreens/common (3.31.1):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.01.01.00)
@@ -1461,7 +1355,6 @@ DEPENDENCIES:
   - React-graphics (from `../node_modules/react-native/ReactCommon/react/renderer/graphics`)
   - React-ImageManager (from `../node_modules/react-native/ReactCommon/react/renderer/imagemanager/platform/ios`)
   - React-jsc (from `../node_modules/react-native/ReactCommon/jsc`)
-  - React-jsc/Fabric (from `../node_modules/react-native/ReactCommon/jsc`)
   - React-jserrorhandler (from `../node_modules/react-native/ReactCommon/jserrorhandler`)
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
@@ -1679,12 +1572,12 @@ SPEC CHECKSUMS:
   ExpoHead: 342c7a6692f00bd9f23169183098a5c78eebe644
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
   ExpoLocalization: f04eeec2e35bed01ab61c72ee1768ec04d093d01
-  ExpoModulesCore: d49c1145e139baa57ca647150ad79cf48d1d8a8d
+  ExpoModulesCore: 01d8bb9c0163ea756ccf0919b53e2d45f68f4e3b
   ExpoSecureStore: 060cebcb956b80ddae09821610ac1aa9e1ac74cd
   ExpoSQLite: 80476d564ec75b26ffe801f3953d876377b3c9fe
-  EXSplashScreen: b059805783db1f7ee6870f161ebc4bd60b2e22b6
+  EXSplashScreen: 1214f27b64e691160687922f8cb862c6477be9e1
   EXStructuredHeaders: cb8d1f698e144f4c5547b4c4963e1552f5d2b457
-  EXUpdates: cabde66a39af02cb5232155c80774f5c2a2caf59
+  EXUpdates: 9ddae1a77e6ece3ddbdc39e9b74f017aec341f02
   EXUpdatesInterface: 996527fd7d1a5d271eb523258d603f8f92038f24
   FBLazyVector: ac12dc084d1c8ec4cc4d7b3cf1b0ebda6dab85af
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
@@ -1714,16 +1607,16 @@ SPEC CHECKSUMS:
   React-jsitracing: 3b6060bbf5317663667e1dd93560c7943ab86ccc
   React-logger: 257858bd55f3a4e1bc0cf07ddc8fb9faba6f8c7c
   React-Mapbuffer: 6c1cacdbf40b531f549eba249e531a7d0bfd8e7f
-  react-native-safe-area-context: cd3c216f89a5491a3a4d97bb25609cdff644cf11
+  react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   React-nativeconfig: ba9a2e54e2f0882cf7882698825052793ed4c851
   React-NativeModulesApple: 374d2a7da3657bd284ffa024449ae01c804ca8da
   React-perflogger: ed4e0c65781521e0424f2e5e40b40cc7879d737e
   React-RCTActionSheet: 49d53ff03bb5688ca4606c55859053a0cd129ea5
   React-RCTAnimation: 07b4923885c52c397c4ec103924bf6e53b42c73e
-  React-RCTAppDelegate: 0d91efa9eb2b1bc10d5da9a09b17eee80d352920
+  React-RCTAppDelegate: 851a957235af2fe88bee41240a9cd6e3970729a4
   React-RCTBlob: 8b8fc9e44ce3caba82ac19a840e7fb4714010477
-  React-RCTFabric: b357d6d0b95ef76fe7fef54399c04a0ad57f0573
+  React-RCTFabric: fea9748972c0216d3cb06f9aa9c4e51ad3a3ddc4
   React-RCTImage: b965c85bec820e2a9c154b1fb00a2ecdd59a9c92
   React-RCTLinking: 75f04a5f27c26c4e73a39c50df470820d219df79
   React-RCTNetwork: c1a9143f4d5778efc92da40d83969d03912ccc24
@@ -1739,14 +1632,14 @@ SPEC CHECKSUMS:
   React-utils: b4b4a8bdd58632a9ec314071fbd4a642d984718e
   ReactCommon: bfd464c8f774a0acb93cf2a45afa80b763431f1b
   ReactNativeLocalization: fb171138cdc80d5d0d4f20243d2fc82c2b3cc48f
-  RNCPicker: e78a54daefd4ee86e8cc8e0c8d980b2a11a2e869
-  RNGestureHandler: 751ae37db058a83c9a69998d5ba2a28509aeb7f2
-  RNScreens: 584ff210b36efe7847712aae8a67e4194eedb082
-  RNVectorIcons: 8e26716bc981878aeea57de97ffcb185920011f8
+  RNCPicker: 3e2c37a8328f368ce14da050cdc8231deb5fc9f9
+  RNGestureHandler: 9508b860b3709d658dda7a701363a318e329d04b
+  RNScreens: 4e9248a76e35421013de772f5fefa73d7b039d05
+  RNVectorIcons: c6689df230427641f2313e35365855eb4cd1a0dd
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   sqlite3: 02d1f07eaaa01f80a1c16b4b31dfcbb3345ee01a
   Yoga: 950bbfd7e6f04790fdb51149ed51df41f329fcc8
 
-PODFILE CHECKSUM: d17c58c3e4dcee52f39a90a2d6100fa7749d7271
+PODFILE CHECKSUM: 7254e50e3b88cc486ee7969cfc3e8a2759b4b0dc
 
 COCOAPODS: 1.15.2
