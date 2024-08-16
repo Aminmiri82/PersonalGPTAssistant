@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import { OPENAI_API_KEY } from "@env";
 import * as SecureStore from "expo-secure-store";
 import * as FileSystem from "expo-file-system";
+import Upload from "react-native-background-upload";
 
 let openai = null;
 
@@ -142,9 +143,9 @@ const uploadIndividualFiles = async (file) => {
   try {
     const apiKey = await SecureStore.getItemAsync("apiKey");
     const { name, size, mimeType, uri } = file;
-
     console.log("Starting upload for file:", { name, size, mimeType, uri });
 
+    // Step 1: Create Upload
     const upload = await createUpload(name, size, mimeType, apiKey);
     console.log("Upload created:", upload);
 
@@ -152,22 +153,23 @@ const uploadIndividualFiles = async (file) => {
       throw new Error("Failed to create upload");
     }
 
-    const partResponse = await uploadFile(
+    // Step 2: Upload File using react-native-background-upload
+    const partResponse = await startBackgroundUpload(
       upload.id,
       uri,
       mimeType,
       name,
       apiKey
     );
-    console.log("Part uploaded:", partResponse);
+    const partId = JSON.parse(partResponse).id; // Extract the part ID from the response
+    console.log("Part uploaded:", partId);
 
-    const partIds = [partResponse.id];
-
-    if (!partResponse.id) {
+    if (!partId) {
       throw new Error("Failed to upload part");
     }
 
-    const completion = await completeUpload(upload.id, partIds, apiKey);
+    // Step 3: Complete Upload
+    const completion = await completeUpload(upload.id, [partId], apiKey);
     console.log("Upload complete:", completion);
 
     if (!completion.file || !completion.file.id) {
@@ -223,50 +225,46 @@ const createUpload = async (
   }
 };
 
-const uploadFile = async (uploadId, fileUri, mimeType, filename, apiKey) => {
-  try {
-    const formData = new FormData();
-    formData.append("data", {
-      uri: fileUri,
-      type: mimeType,
-      name: filename,
-    });
-
+const startBackgroundUpload = async (
+  uploadId,
+  fileUri,
+  mimeType,
+  filename,
+  apiKey
+) => {
+  return new Promise((resolve, reject) => {
     const options = {
-      httpMethod: "POST",
+      url: `${UPLOAD_URL}/${uploadId}/parts`,
+      path: fileUri,
+      method: "POST",
+      type: "multipart",
+      field: "data", // The form field name for the file
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "multipart/form-data",
       },
-      uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-      fieldName: "data", // Make sure to use the correct field name
     };
 
-    // Use uploadAsync instead of manual fetch
-    const response = await FileSystem.uploadAsync(
-      `${UPLOAD_URL}/${uploadId}/parts`,
-      fileUri,
-      options
-    );
-
-    // Check for errors
-    if (response.status !== 200) {
-      console.error("Upload part response:", response);
-      throw new Error(`Failed to upload part: ${response.body}`);
-    }
-
-    const jsonResponse = JSON.parse(response.body);
-
-    if (jsonResponse.error) {
-      throw new Error(jsonResponse.error.message);
-    }
-
-    console.log("Upload part response:", jsonResponse);
-    return jsonResponse;
-  } catch (error) {
-    console.error("Error uploading file part:", error);
-    throw error;
-  }
+    Upload.startUpload(options)
+      .then((uploadId) => {
+        console.log("Upload started with ID:", uploadId);
+        Upload.addListener("progress", uploadId, (data) => {
+          console.log(`Progress: ${data.progress}%`);
+        });
+        Upload.addListener("error", uploadId, (data) => {
+          console.error("Upload error:", data.error);
+          reject(new Error(data.error));
+        });
+        Upload.addListener("completed", uploadId, (data) => {
+          console.log("Upload completed:", data);
+          resolve(data.responseBody); // Returning response body for part ID
+        });
+      })
+      .catch((err) => {
+        console.error("Upload start error:", err);
+        reject(err);
+      });
+  });
 };
 
 const completeUpload = async (uploadId, partIds, apiKey) => {

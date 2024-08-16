@@ -57,6 +57,7 @@ function AssistantMakerScreen2({ navigation, route }) {
     if (files.length > 0) {
       setIsUploading(true);
       fileIds = await handleUploadFiles();
+      console.log("uploading files", fileIds);
       console.log(
         "uploading files",
         fileIds,
@@ -93,7 +94,7 @@ function AssistantMakerScreen2({ navigation, route }) {
       const uploadPromises = files.map((file) => {
         console.log("Uploading file:", file);
         return uploadIndividualFiles(file);
-      });
+      });//this is getting fucked when using background upload
 
       const fileIds = await Promise.all(uploadPromises);
       console.log("fileIds", fileIds);
