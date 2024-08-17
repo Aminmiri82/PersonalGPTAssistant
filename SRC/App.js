@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, AppRegistry, Text } from "react-native";
 import { name as appName } from "./app.json";
 import { NavigationContainer } from "@react-navigation/native";
@@ -8,11 +8,22 @@ import OnBoardingScreen from "./Screens/OBS/OnBoardingScreen";
 import { DatabaseProvider } from "./DatabaseProvider"; // Adjust the import path
 import i18next from "./services/i18next";
 import * as SecureStore from "expo-secure-store";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [onboarded, setOnboarded] = useState();
+
+  useEffect(() => {
+    getStorage();
+  }, []);
+
+  const getStorage = async () => {
+    const onboarded = await AsyncStorage.getItem("ONBOARDED");
+    setOnboarded(JSON.parse(onboarded));
+  };
+
   // useEffect(() => {
   //   SplashScreen.hide();
   // }, []);
@@ -30,18 +41,7 @@ export default function App() {
   return (
     <DatabaseProvider>
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={BottomTabNav}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="OnBoarding"
-            component={OnBoardingScreen}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
+        <AppContainer onboarded={onboarded} />
       </NavigationContainer>
     </DatabaseProvider>
   );
