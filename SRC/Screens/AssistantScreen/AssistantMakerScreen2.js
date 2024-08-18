@@ -23,6 +23,7 @@ function AssistantMakerScreen2({ navigation, route }) {
   const [model, setModel] = useState("GPT-4o-mini");
   const [isUploading, setIsUploading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
+  const [progressMap, setProgressMap] = useState({});
 
   const assistantList = [
     { label: "GPT-4o-mini", value: "gpt-4o-mini" },
@@ -39,27 +40,27 @@ function AssistantMakerScreen2({ navigation, route }) {
   }, []);
 
   const handleAddFile = async (file) => {
-    setFiles((prevFiles) => [...prevFiles, file]);
+    // Use a unique identifier such as file.uri or a timestamp
+    const uniqueId = file.uri || Date.now().toString();
+    setFiles((prevFiles) => [...prevFiles, { ...file, id: uniqueId }]);
 
     try {
-      
-      const uploadResponse = await uploadIndividualFiles(file, onProgress);
-
-      
+      const uploadResponse = await uploadIndividualFiles(file, (progress) =>
+        onProgress(uniqueId, progress)
+      );
       console.log("Complete upload response:", uploadResponse);
 
-      if (uploadResponse ) {
-        const fileId = uploadResponse;
+      if (uploadResponse) {
+        const fileId = uploadResponse; // Assuming uploadResponse is the file ID
         setFileIds((prevFileIds) => [...prevFileIds, fileId]);
         console.log("Upload Complete, File ID:", fileId);
       } else {
-        // Detailed error logging
         console.error("Upload response is missing file ID:", uploadResponse);
         throw new Error("Upload response does not contain a valid file ID");
       }
     } catch (error) {
       console.error("Error uploading file:", error);
-    } 
+    }
   };
 
   const handleRemoveFile = (index) => {
@@ -67,8 +68,12 @@ function AssistantMakerScreen2({ navigation, route }) {
     setFileIds((prevFileIds) => prevFileIds.filter((_, i) => i !== index));
   };
 
-  const onProgress = (progress) => {
-    console.log(`Progress from callback: ${progress}%`);
+  const onProgress = (fileId, progress) => {
+    setProgressMap((prevMap) => ({
+      ...prevMap,
+      [fileId]: progress,
+    }));
+    console.log(`File ID ${fileId}: Progress ${progress}%`);
   };
 
   const handleSave = async () => {
@@ -86,7 +91,7 @@ function AssistantMakerScreen2({ navigation, route }) {
         model,
       });
 
-      if (fileIds && fileIds.length > 0) {
+      if (fileIds.length > 0) {
         console.log("Adding files to assistant and creating vector store");
         await addFilesToAssistant(assistant.assistantId, fileIds);
       }
@@ -143,6 +148,7 @@ function AssistantMakerScreen2({ navigation, route }) {
           files={files}
           onAddFile={handleAddFile}
           onRemoveFile={handleRemoveFile}
+          progressMap={progressMap} // Pass progressMap
         />
       </View>
       <AppButton

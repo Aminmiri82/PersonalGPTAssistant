@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   StyleSheet,
   FlatList,
   Image,
   TouchableOpacity,
+  Platform,
 } from "react-native";
+import { ProgressView } from "@react-native-community/progress-view";
 import AppText from "../AppText";
 import colors from "../../config/colors";
 import * as DocumentPicker from "expo-document-picker";
 
-function AppDocumentPicker({ files, onAddFile, onRemoveFile }) {
+function AppDocumentPicker({ files, onAddFile, onRemoveFile, progressMap }) {
   const pickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync();
@@ -41,6 +43,21 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile }) {
     }
   };
 
+  const renderProgressBar = (fileId) => {
+    const progress = progressMap[fileId] || 0; // Default to 0 if undefined
+    return (
+      <View style={styles.progressBarContainer}>
+        <ProgressView
+          progressTintColor="orange"
+          trackTintColor="blue"
+          progress={progress / 100}
+          style={styles.progressBar}
+        />
+        <AppText style={styles.progressText}>{progress}%</AppText>
+      </View>
+    );
+  };
+
   return (
     <>
       <View style={styles.generalFileContainer}>
@@ -58,6 +75,8 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile }) {
               >
                 {item.name}
               </AppText>
+
+              {renderProgressBar(item.id)}
 
               <TouchableOpacity
                 style={styles.deleteButton}
@@ -145,6 +164,20 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     fontSize: 24,
+  },
+  progressBarContainer: {
+    marginTop: 5,
+    width: "100%",
+    alignItems: "center",
+  },
+  progressBar: {
+    width: "100%",
+    height: 4,
+  },
+  progressText: {
+    marginTop: 2,
+    fontSize: 12,
+    color: colors.grey,
   },
 });
 
