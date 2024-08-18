@@ -9,10 +9,13 @@ import { OPENAI_API_KEY } from "@env";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import i18next from "../../services/i18next";
+import { copilot, CopilotStep, walkthroughable } from "react-native-copilot";
 
 import Screen from "../../Components/Screen";
 
-function SettingsScreen({ navigation, route }) {
+const WalkthroughableSettingsItem = walkthroughable(SettingsItem);
+
+function SettingsScreen({ navigation, route, start }) {
   const { t } = useTranslation();
 
   const [isLanguagePromptVisible, setLanguagePromptVisible] = useState(false);
@@ -48,7 +51,10 @@ function SettingsScreen({ navigation, route }) {
     setAPIPromptVisible(!isAPIPromptVisible);
   };
 
-
+  useEffect(() => {
+    // Automatically start the walkthrough when the screen is loaded
+    start();
+  }, [start]);
 
   const handleSelectLanguage = async (lng) => {
     await i18next.changeLanguage(lng);
@@ -56,7 +62,6 @@ function SettingsScreen({ navigation, route }) {
     setLanguagePromptVisible(false);
     setSelectedLanguage(lng);
   };
-
 
   const saveApiKey = async (key) => {
     try {
@@ -80,12 +85,24 @@ function SettingsScreen({ navigation, route }) {
     <>
       <Screen>
         <View style={styles.container}>
-          <SettingsItem
+          <CopilotStep
+            text="Set your API key here."
+            order={1}
+            name="apiKeyStep"
+          >
+            <WalkthroughableSettingsItem
+              title={t("apikey")}
+              subTitle={apiKey}
+              IconComponent={<Icon iconSet="MCI" name="key" />}
+              onPress={toggleAPIPrompt}
+            />
+          </CopilotStep>
+          {/* <SettingsItem
             title={t("apikey")}
             subTitle={apiKey}
             IconComponent={<Icon iconSet="MCI" name="key" />}
             onPress={toggleAPIPrompt}
-          />
+          /> */}
           <OpenAIPrompt
             visible={isAPIPromptVisible}
             onClose={toggleAPIPrompt}
@@ -125,4 +142,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SettingsScreen;
+export default copilot()(SettingsScreen);

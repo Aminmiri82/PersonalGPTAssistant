@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator();
 export const AppContainer = ({ onboarded }) => {
   return (
     <>
-      <Stack.Navigator initialRouteName={onboarded ? "Home" : "OnBoarding"}>
+      <Stack.Navigator initialRouteName={onboarded ? "Home" : "Home"}>
         <Stack.Screen
           name="OnBoarding"
           component={OnBoardingScreen}

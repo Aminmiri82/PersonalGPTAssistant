@@ -9,6 +9,7 @@ import { DatabaseProvider } from "./DatabaseProvider"; // Adjust the import path
 import i18next from "./services/i18next";
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AppContainer } from "./Navigation/AppContainer";
 
 const Stack = createNativeStackNavigator();
 
