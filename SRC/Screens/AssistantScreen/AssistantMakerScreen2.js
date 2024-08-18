@@ -68,6 +68,7 @@ function AssistantMakerScreen2({ navigation, route }) {
     }
     setIsInitializing(true);
     if (fileIds != null) {
+      console.log("adding files to assistant and creating vector store");
       await addFilesToAssistant(assistant.assistantId, fileIds);
     }
 
@@ -94,7 +95,7 @@ function AssistantMakerScreen2({ navigation, route }) {
       const uploadPromises = files.map((file) => {
         console.log("Uploading file:", file);
         return uploadIndividualFiles(file);
-      });//this is getting fucked when using background upload
+      }); //this is getting fucked when using background upload
 
       const fileIds = await Promise.all(uploadPromises);
       console.log("fileIds", fileIds);
@@ -122,7 +123,6 @@ function AssistantMakerScreen2({ navigation, route }) {
           <RNPickerSelect
             onValueChange={(value) => setModel(value)}
             items={assistantList}
-            
           />
         </View>
         <View style={styles.gp4TipContainer}>

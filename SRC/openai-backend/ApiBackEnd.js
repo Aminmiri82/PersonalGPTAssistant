@@ -329,7 +329,9 @@ async function updateAssistantWithVectorStore(
 
 const addFilesToAssistant = async (assistantId, fileIds) => {
   const openaiInstance = await getOpenAIInstance();
+  console.log("creating vector store");
   const vectorStoreId = await createVectorStore(openaiInstance, fileIds);
+  console.log("vector store created", vectorStoreId);
   await pollVectorStoreStatus(openaiInstance, vectorStoreId);
   await updateAssistantWithVectorStore(
     openaiInstance,
