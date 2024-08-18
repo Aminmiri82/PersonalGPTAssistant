@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, TouchableOpacity, Text, Button } from "react-native";
+import { View, StyleSheet } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
-
 import RNPickerSelect from "react-native-picker-select";
 import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocumentPicker";
 import {
@@ -20,6 +19,7 @@ function AssistantMakerScreen2({ navigation, route }) {
   const { t } = useTranslation();
   const { name, instructions } = route.params;
   const [files, setFiles] = useState([]);
+  const [fileIds, setFileIds] = useState([]);
   const [model, setModel] = useState("GPT-4o-mini");
   const [isUploading, setIsUploading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
@@ -38,12 +38,37 @@ function AssistantMakerScreen2({ navigation, route }) {
     });
   }, []);
 
-  const handleAddFile = (file) => {
+  const handleAddFile = async (file) => {
     setFiles((prevFiles) => [...prevFiles, file]);
+
+    try {
+      
+      const uploadResponse = await uploadIndividualFiles(file, onProgress);
+
+      
+      console.log("Complete upload response:", uploadResponse);
+
+      if (uploadResponse ) {
+        const fileId = uploadResponse;
+        setFileIds((prevFileIds) => [...prevFileIds, fileId]);
+        console.log("Upload Complete, File ID:", fileId);
+      } else {
+        // Detailed error logging
+        console.error("Upload response is missing file ID:", uploadResponse);
+        throw new Error("Upload response does not contain a valid file ID");
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    } 
   };
 
   const handleRemoveFile = (index) => {
-    setFiles(files.filter((_, i) => i !== index));
+    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setFileIds((prevFileIds) => prevFileIds.filter((_, i) => i !== index));
+  };
+
+  const onProgress = (progress) => {
+    console.log(`Progress from callback: ${progress}%`);
   };
 
   const handleSave = async () => {
@@ -51,61 +76,41 @@ function AssistantMakerScreen2({ navigation, route }) {
       console.log("Name or instructions are missing");
       return;
     }
-    let fileIds = null;
 
-    const assistant = await initializeAssistant({ name, instructions, model });
-    if (files.length > 0) {
-      setIsUploading(true);
-      fileIds = await handleUploadFiles();
-      console.log("uploading files", fileIds);
-      console.log(
-        "uploading files",
-        fileIds,
-        "to assistant",
-        assistant.assistantId
-      );
-      setIsUploading(false);
-    }
     setIsInitializing(true);
-    if (fileIds != null) {
-      console.log("adding files to assistant and creating vector store");
-      await addFilesToAssistant(assistant.assistantId, fileIds);
-    }
 
-    if (assistant.error) {
-      console.log("Error initializing assistant:", assistant.error);
-      setIsInitializing(false);
-      return;
-    }
-    insertAssistant(assistant.assistantId, name, instructions, model, files)
-      .then(() => {
-        navigation.navigate("AssistantMenuScreen"); // Navigate back to the assistant menu
-      })
-      .catch((error) => {
-        console.log("Error saving assistant:", error);
-      })
-      .finally(() => {
-        setIsInitializing(false);
-      });
-  };
-
-  const handleUploadFiles = async () => {
-    setIsUploading(true);
     try {
-      const uploadPromises = files.map((file) => {
-        console.log("Uploading file:", file);
-        return uploadIndividualFiles(file);
-      }); //this is getting fucked when using background upload
+      const assistant = await initializeAssistant({
+        name,
+        instructions,
+        model,
+      });
 
-      const fileIds = await Promise.all(uploadPromises);
-      console.log("fileIds", fileIds);
-      return fileIds;
+      if (fileIds && fileIds.length > 0) {
+        console.log("Adding files to assistant and creating vector store");
+        await addFilesToAssistant(assistant.assistantId, fileIds);
+      }
+
+      if (assistant.error) {
+        console.log("Error initializing assistant:", assistant.error);
+        return;
+      }
+
+      await insertAssistant(
+        assistant.assistantId,
+        name,
+        instructions,
+        model,
+        files
+      );
+      navigation.navigate("AssistantMenuScreen");
     } catch (error) {
-      console.error("Error uploading files:", error);
+      console.log("Error saving assistant:", error);
     } finally {
-      setIsUploading(false);
+      setIsInitializing(false);
     }
   };
+
   return (
     <Screen>
       <Spinner
@@ -201,61 +206,6 @@ const styles = StyleSheet.create({
   bottomTip: {
     color: colors.dark,
     fontSize: 18,
-    textAlign: "center",
-  },
-  doneButtonContainer: {
-    marginTop: 10,
-    backgroundColor: colors.primary,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignSelf: "center",
-  },
-  doneButtonText: {
-    color: colors.white,
-    fontSize: 16,
-  },
-  container: {
-    padding: 20,
-    alignItems: "center",
-  },
-  instructions: {
-    fontSize: 16,
-    marginBottom: 10,
-    textAlign: "center",
-  },
-  ButtonContainer: {
-    margin: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-  },
-  deleteAssistantButton: {
-    backgroundColor: colors.deleteRed,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    elevation: 2, // For a slight shadow effect
-    marginRight: 10, // Add margin to the right for spacing
-  },
-  deleteButtonText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  doneButton: {
-    backgroundColor: colors.niceBlue,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    elevation: 2,
-    marginLeft: 10,
-  },
-  doneButtonText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: "bold",
     textAlign: "center",
   },
   nextButton: {

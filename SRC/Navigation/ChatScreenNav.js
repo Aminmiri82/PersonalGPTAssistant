@@ -28,7 +28,7 @@ function ChatScreenNav(props) {
 
   return (
     <ChatStack.Navigator>
-      <ChatStack.Screen name="TestScreen" component={TestScreen} />
+      
       <ChatStack.Screen
         name="ChatMenuScreen" // Use a static name for referencing the screen
         component={ChatMenuScreen}

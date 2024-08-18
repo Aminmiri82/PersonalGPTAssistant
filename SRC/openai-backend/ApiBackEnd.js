@@ -139,7 +139,7 @@ const UPLOAD_URL = "https://api.openai.com/v1/uploads";
 const COMPLETE_UPLOAD_URL =
   "https://api.openai.com/v1/uploads/{upload_id}/complete";
 
-const uploadIndividualFiles = async (file) => {
+const uploadIndividualFiles = async (file, onProgress) => {
   try {
     const apiKey = await SecureStore.getItemAsync("apiKey");
     const { name, size, mimeType, uri } = file;
@@ -159,7 +159,8 @@ const uploadIndividualFiles = async (file) => {
       uri,
       mimeType,
       name,
-      apiKey
+      apiKey,
+      onProgress
     );
     const partId = JSON.parse(partResponse).id; // Extract the part ID from the response
     console.log("Part uploaded:", partId);
@@ -230,7 +231,8 @@ const startBackgroundUpload = async (
   fileUri,
   mimeType,
   filename,
-  apiKey
+  apiKey,
+  onProgress
 ) => {
   return new Promise((resolve, reject) => {
     const options = {
@@ -249,7 +251,8 @@ const startBackgroundUpload = async (
       .then((uploadId) => {
         console.log("Upload started with ID:", uploadId);
         Upload.addListener("progress", uploadId, (data) => {
-          console.log(`Progress: ${data.progress}%`);
+          
+          onProgress(data.progress);
         });
         Upload.addListener("error", uploadId, (data) => {
           console.error("Upload error:", data.error);
