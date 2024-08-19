@@ -6,6 +6,7 @@ import Icon from "../Components/Icon";
 import ChatScreen from "../Screens/ChatScreen/ChatScreen";
 import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
 import ChooseChatScreen from "../Screens/ChatScreen/ChooseChatScreen";
+import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
 
 import TestScreen from "../Screens/TestScreen";
 import AppButton from "../Components/AppButton";

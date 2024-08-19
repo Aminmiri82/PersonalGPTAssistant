@@ -9,12 +9,30 @@ import Screen from "../../Components/Screen";
 import AppButton from "../../Components/AppButton";
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
 import { useTranslation } from "react-i18next";
+import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
 
 function ChatMenuScreen({ navigation }) {
   const { t } = useTranslation();
   const { dbInitialized } = useContext(DatabaseContext);
   const [chatItems, setChatItems] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const { start, copilotEvents } = useCopilot();
+
+  useEffect(() => {
+    const handleStepChange = (step) => {
+      console.log("Current Step:", step); // Debugging line
+    };
+
+    const stepChangeSubscription = copilotEvents.on(
+      "stepChange",
+      handleStepChange
+    );
+
+    // Cleanup on component unmount
+    return () => {
+      stepChangeSubscription.remove();
+    };
+  }, [copilotEvents, navigation]);
 
   useFocusEffect(
     useCallback(() => {
@@ -86,7 +104,6 @@ function ChatMenuScreen({ navigation }) {
             renderItem={renderItem}
           />
         )}
-      
       </View>
     </Screen>
   );
