@@ -46,6 +46,7 @@
     "react-dom": "18.2.0",
     "react-i18next": "^15.0.1",
     "react-native": "0.74.5",
+    "react-native-app-tour": "^1.0.5",
     "react-native-copilot": "^3.3.2",
     "react-native-dotenv": "^3.4.11",
     "react-native-file-stream": "^1.0.4",

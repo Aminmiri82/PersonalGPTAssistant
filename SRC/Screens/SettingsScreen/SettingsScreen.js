@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { View, StyleSheet, Alert } from "react-native";
+import { AppTour, AppTourSequence, AppTourView } from "react-native-app-tour";
 import AppText from "../../Components/AppText";
 import LanguagesPrompt from "../../Components/SettingsComponents/LanguagesPrompt";
 import OpenAIPrompt from "../../Components/SettingsComponents/OpenAIPrompt";
@@ -9,13 +10,9 @@ import { OPENAI_API_KEY } from "@env";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import i18next from "../../services/i18next";
-import { copilot, CopilotStep, walkthroughable } from "react-native-copilot";
-
 import Screen from "../../Components/Screen";
 
-const WalkthroughableSettingsItem = walkthroughable(SettingsItem);
-
-function SettingsScreen({ navigation, route, start }) {
+function SettingsScreen({ navigation, route }) {
   const { t } = useTranslation();
 
   const [isLanguagePromptVisible, setLanguagePromptVisible] = useState(false);
@@ -23,6 +20,10 @@ function SettingsScreen({ navigation, route, start }) {
 
   const [selectedLanguage, setSelectedLanguage] = useState("Select Language");
   const [apiKey, setApiKey] = useState("Enter API Key");
+
+  // Refs to hold the components to be highlighted
+  const apiKeyRef = useRef();
+  const languageRef = useRef();
 
   useEffect(() => {
     const fetchApiKey = async () => {
@@ -51,11 +52,6 @@ function SettingsScreen({ navigation, route, start }) {
     setAPIPromptVisible(!isAPIPromptVisible);
   };
 
-  useEffect(() => {
-    // Automatically start the walkthrough when the screen is loaded
-    start();
-  }, [start]);
-
   const handleSelectLanguage = async (lng) => {
     await i18next.changeLanguage(lng);
     await SecureStore.setItemAsync("selectedLanguage", lng);
@@ -67,8 +63,6 @@ function SettingsScreen({ navigation, route, start }) {
     try {
       await SecureStore.setItemAsync("apiKey", key);
       console.log("API key saved successfully");
-      console.log(key);
-      console.log(await SecureStore.getItemAsync("apiKey"));
     } catch (error) {
       console.error("Error saving API key", error);
       Alert.alert("Error", "Failed to save API key");
@@ -78,60 +72,82 @@ function SettingsScreen({ navigation, route, start }) {
   const handleSetAPIKey = (key) => {
     setApiKey(key.slice(7, 14));
     saveApiKey(key);
-    console.log(key);
   };
 
+  // Start the tour
+  const startTour = () => {
+    const appTourTargets = [];
+
+    if (apiKeyRef.current) {
+      appTourTargets.push(
+        AppTourView.for(apiKeyRef.current, {
+          hintText: "Set your API key here",
+        })
+      );
+    }
+
+    if (languageRef.current) {
+      appTourTargets.push(
+        AppTourView.for(languageRef.current, {
+          hintText: "Choose your language here",
+        })
+      );
+    }
+
+    const sequence = new AppTourSequence();
+
+    appTourTargets.forEach((target) => {
+      sequence.add(target);
+    });
+
+    AppTour.ShowSequence(sequence);
+  };
+
+  useEffect(() => {
+    startTour();
+  }, []);
+
   return (
-    <>
-      <Screen>
-        <View style={styles.container}>
-          <CopilotStep
-            text="Set your API key here."
-            order={1}
-            name="apiKeyStep"
-          >
-            <WalkthroughableSettingsItem
-              title={t("apikey")}
-              subTitle={apiKey}
-              IconComponent={<Icon iconSet="MCI" name="key" />}
-              onPress={toggleAPIPrompt}
-            />
-          </CopilotStep>
-          {/* <SettingsItem
+    <Screen>
+      <View style={styles.container}>
+        <AppTourView ref={apiKeyRef} style={{ padding: 10 }}>
+          <SettingsItem
             title={t("apikey")}
             subTitle={apiKey}
             IconComponent={<Icon iconSet="MCI" name="key" />}
             onPress={toggleAPIPrompt}
-          /> */}
-          <OpenAIPrompt
-            visible={isAPIPromptVisible}
-            onClose={toggleAPIPrompt}
-            onSumbit={handleSetAPIKey}
           />
+        </AppTourView>
+        <OpenAIPrompt
+          visible={isAPIPromptVisible}
+          onClose={toggleAPIPrompt}
+          onSumbit={handleSetAPIKey}
+        />
+        <AppTourView ref={languageRef} style={{ padding: 10 }}>
           <SettingsItem
             title={t("Languages")}
             subTitle={selectedLanguage}
             IconComponent={<Icon iconSet="MCI" name="translate" />}
             onPress={toggleLanguagePrompt}
           />
-          <LanguagesPrompt
-            visible={isLanguagePromptVisible}
-            onClose={toggleLanguagePrompt}
-            onSelectLanguage={handleSelectLanguage}
-          />
-          <SettingsItem
-            title={t("PriPol")}
-            IconComponent={<Icon iconSet="MCI" name="file-document" />}
-            onPress={() => navigation.navigate("PrivacyPolicyScreen")}
-          />
-          <SettingsItem
-            title={t("aboutUs")}
-            IconComponent={<Icon iconSet="MCI" name="information" />}
-            onPress={() => navigation.navigate("AboutUsScreen")}
-          />
-        </View>
-      </Screen>
-    </>
+        </AppTourView>
+        <LanguagesPrompt
+          visible={isLanguagePromptVisible}
+          onClose={toggleLanguagePrompt}
+          onSelectLanguage={handleSelectLanguage}
+        />
+        <SettingsItem
+          title={t("PriPol")}
+          IconComponent={<Icon iconSet="MCI" name="file-document" />}
+          onPress={() => navigation.navigate("PrivacyPolicyScreen")}
+        />
+        <SettingsItem
+          title={t("aboutUs")}
+          IconComponent={<Icon iconSet="MCI" name="information" />}
+          onPress={() => navigation.navigate("AboutUsScreen")}
+        />
+      </View>
+    </Screen>
   );
 }
 
@@ -142,4 +158,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default copilot()(SettingsScreen);
+export default SettingsScreen;

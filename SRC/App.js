@@ -10,6 +10,8 @@ import i18next from "./services/i18next";
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppContainer } from "./Navigation/AppContainer";
+import { CopilotProvider } from "react-native-copilot";
+import SettingsScreen from "./Screens/SettingsScreen/SettingsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -42,7 +44,10 @@ export default function App() {
   return (
     <DatabaseProvider>
       <NavigationContainer>
-        <AppContainer onboarded={onboarded} />
+        <Stack.Navigator>
+          <Stack.Screen name="Settings" component={SettingsScreen} />
+        </Stack.Navigator>
+        {/* <AppContainer onboarded={onboarded} /> */}
       </NavigationContainer>
     </DatabaseProvider>
   );

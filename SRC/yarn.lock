@@ -7468,6 +7468,11 @@ react-localization@^1.0.17:
   dependencies:
     localized-strings "^0.2.0"
 
+react-native-app-tour@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.npmjs.org/react-native-app-tour/-/react-native-app-tour-1.0.5.tgz"
+  integrity sha512-faG2BleVPE3QHJ1/P8/mKQTpDljP1RydyRQ9IhCIHv6Bkf4VqQlQN9vMCxcYsWZF1N0Tc4FlXYzbUrRrGUd2IQ==
+
 react-native-copilot@^3.3.2:
   version "3.3.2"
   resolved "https://registry.npmjs.org/react-native-copilot/-/react-native-copilot-3.3.2.tgz"
