@@ -10,6 +10,7 @@ import OfflineSearchNav from "./OfflineSearchNav";
 import TestScreen from "../Screens/TestScreen";
 
 import { useTranslation } from "react-i18next";
+import { CopilotProvider } from "react-native-copilot";
 
 const Tab = createBottomTabNavigator();
 function BottomTabNav() {
@@ -27,7 +28,7 @@ function BottomTabNav() {
             iconName = focused ? "robot" : "robot-outline";
           } else if (route.name === "Settings") {
             iconName = focused ? "cog" : "cog-outline";
-          }else if (route.name === "OfflineSearch") {
+          } else if (route.name === "OfflineSearch") {
             iconName = focused ? "file-search" : "file-search-outline";
           }
 
@@ -37,7 +38,7 @@ function BottomTabNav() {
         },
       })}
     >
-      
+      <Tab.Screen name="Test" component={TestScreen} options={{ headerShown: false, title: t("TestTab") }} />
       <Tab.Screen
         name="Chat"
         component={ChatScreenNav}
@@ -53,11 +54,8 @@ function BottomTabNav() {
         component={OfflineSearchNav}
         options={{ headerShown: false, title: t("OfflineSearchTabName") }}
       />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreenNav}
-        options={{ headerShown: false, title: t("SettingTab") }}
-      />
+      <Tab.Screen name="Settings" component={SettingsScreenNav} options={{ headerShown: false, title: t("SettingTab") }} />
+     
     </Tab.Navigator>
   );
 }

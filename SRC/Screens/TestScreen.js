@@ -1,61 +1,55 @@
-import React from 'react';
-import {
-  View,
-  KeyboardAvoidingView,
-  TextInput,
-  StyleSheet,
-  Text,
-  Platform,
-  TouchableWithoutFeedback,
-  Button,
-  Keyboard,
-} from 'react-native';
+import React, { useEffect } from "react";
+import { View, Text, Button } from "react-native";
+import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
+import Screen from "../Components/Screen";
 
-const KeyboardAvoidingComponent = () => {
+const WalkthroughableText = walkthroughable(Text);
+
+function TestScreen({ navigation }) {
+  const { start, copilotEvents } = useCopilot();
+
+  useEffect(() => {
+    const handleStepChange = (step) => {
+      console.log("Current Step:", step); // Debugging line
+
+      if (step.order === 4) {
+        navigation.navigate("Settings");
+      }
+    };
+
+    const stepChangeSubscription = copilotEvents.on(
+      "stepChange",
+      handleStepChange
+    );
+
+    // Cleanup on component unmount
+    return () => {
+      stepChangeSubscription.remove();
+    };
+  }, [copilotEvents, navigation]);
+
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <>
-        <View style={styles.inner}>
-          <Text style={styles.header}>Header</Text>
-          
-          <View style={styles.btnContainer}>
-            <Button title="Submit" onPress={() => null} />
-          </View>
-          
-        </View>
-        <TextInput placeholder="Username" style={styles.textInput} />
-        </>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+    <Screen>
+      <View>
+        <CopilotStep text="This is step 1" order={1} name="step1">
+          <WalkthroughableText>Step 1</WalkthroughableText>
+        </CopilotStep>
+
+        <CopilotStep text="This is step 2" order={2} name="step2">
+          <WalkthroughableText>Step 2</WalkthroughableText>
+        </CopilotStep>
+
+        <CopilotStep text="This is step 3" order={3} name="step3">
+          <WalkthroughableText>Step 3</WalkthroughableText>
+        </CopilotStep>
+        <CopilotStep text="This is settings screen" order={4} name="step4">
+          <View></View>
+        </CopilotStep>
+
+        <Button title="Start Walkthrough" onPress={() => start()} />
+      </View>
+    </Screen>
   );
-};
+}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  inner: {
-    padding: 24,
-    flex: 1,
-    justifyContent: 'space-around',
-  },
-  header: {
-    fontSize: 36,
-    marginBottom: 48,
-  },
-  textInput: {
-    height: 40,
-    borderColor: '#000000',
-    borderBottomWidth: 1,
-    marginBottom: 36,
-  },
-  btnContainer: {
-    backgroundColor: 'white',
-    marginTop: 12,
-  },
-});
-
-export default KeyboardAvoidingComponent;
+export default TestScreen;

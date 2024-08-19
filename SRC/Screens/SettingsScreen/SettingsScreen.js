@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Alert } from "react-native";
+import React, { useState, useEffect} from "react";
+import { View, StyleSheet, Alert, Button } from "react-native";
+import {
+  CopilotProvider,
+  useCopilot,
+  CopilotStep,
+  walkthroughable,
+} from "react-native-copilot";
 import AppText from "../../Components/AppText";
 import LanguagesPrompt from "../../Components/SettingsComponents/LanguagesPrompt";
 import OpenAIPrompt from "../../Components/SettingsComponents/OpenAIPrompt";
@@ -9,15 +15,17 @@ import { OPENAI_API_KEY } from "@env";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import i18next from "../../services/i18next";
-
 import Screen from "../../Components/Screen";
+
+// Make SettingsItem walkthroughable
+const WalkthroughableSettingsItem = walkthroughable(SettingsItem); // you'll need to make stuff walkthroughable, check out SettingsItem.js i had to add a forwardRef thingy to it. idk why vscode was just yelling at me
+
 
 function SettingsScreen({ navigation, route }) {
   const { t } = useTranslation();
-
+  const { start } = useCopilot(); // Get the start function from useCopilot
   const [isLanguagePromptVisible, setLanguagePromptVisible] = useState(false);
   const [isAPIPromptVisible, setAPIPromptVisible] = useState(false);
-
   const [selectedLanguage, setSelectedLanguage] = useState("Select Language");
   const [apiKey, setApiKey] = useState("Enter API Key");
 
@@ -26,6 +34,7 @@ function SettingsScreen({ navigation, route }) {
       try {
         let storedKey = await SecureStore.getItemAsync("apiKey");
         let storedLanguage = await SecureStore.getItemAsync("selectedLanguage");
+
         if (storedKey) {
           setApiKey(storedKey.slice(7, 14));
         } else if (OPENAI_API_KEY) {
@@ -48,15 +57,12 @@ function SettingsScreen({ navigation, route }) {
     setAPIPromptVisible(!isAPIPromptVisible);
   };
 
-
-
   const handleSelectLanguage = async (lng) => {
     await i18next.changeLanguage(lng);
     await SecureStore.setItemAsync("selectedLanguage", lng);
     setLanguagePromptVisible(false);
     setSelectedLanguage(lng);
   };
-
 
   const saveApiKey = async (key) => {
     try {
@@ -77,44 +83,53 @@ function SettingsScreen({ navigation, route }) {
   };
 
   return (
-    <>
+    
       <Screen>
         <View style={styles.container}>
-          <SettingsItem
-            title={t("apikey")}
-            subTitle={apiKey}
-            IconComponent={<Icon iconSet="MCI" name="key" />}
-            onPress={toggleAPIPrompt}
-          />
+          <CopilotStep text="Set your API Key here" order={5} name="apiKey">
+            <WalkthroughableSettingsItem
+              title={t("apikey")}
+              subTitle={apiKey}
+              IconComponent={<Icon iconSet="MCI" name="key" />}
+              onPress={toggleAPIPrompt}
+            />
+          </CopilotStep>
+
           <OpenAIPrompt
             visible={isAPIPromptVisible}
             onClose={toggleAPIPrompt}
             onSumbit={handleSetAPIKey}
           />
-          <SettingsItem
-            title={t("Languages")}
-            subTitle={selectedLanguage}
-            IconComponent={<Icon iconSet="MCI" name="translate" />}
-            onPress={toggleLanguagePrompt}
-          />
+
+          <CopilotStep text="Choose your language" order={6} name="language">
+            <WalkthroughableSettingsItem
+              title={t("Languages")}
+              subTitle={selectedLanguage}
+              IconComponent={<Icon iconSet="MCI" name="translate" />}
+              onPress={toggleLanguagePrompt}
+            />
+          </CopilotStep>
+
           <LanguagesPrompt
             visible={isLanguagePromptVisible}
             onClose={toggleLanguagePrompt}
             onSelectLanguage={handleSelectLanguage}
           />
-          <SettingsItem
+
+          <WalkthroughableSettingsItem
             title={t("PriPol")}
             IconComponent={<Icon iconSet="MCI" name="file-document" />}
             onPress={() => navigation.navigate("PrivacyPolicyScreen")}
           />
-          <SettingsItem
+          <WalkthroughableSettingsItem
             title={t("aboutUs")}
             IconComponent={<Icon iconSet="MCI" name="information" />}
             onPress={() => navigation.navigate("AboutUsScreen")}
           />
+          <Button title="Start tutorial" onPress={() => start()} />
         </View>
       </Screen>
-    </>
+    
   );
 }
 
