@@ -51,7 +51,7 @@ function AssistantMakerScreen2({ navigation, route }) {
       console.log("Complete upload response:", uploadResponse);
 
       if (uploadResponse) {
-        const fileId = uploadResponse; // Assuming uploadResponse is the file ID
+        const fileId = uploadResponse; 
         setFileIds((prevFileIds) => [...prevFileIds, fileId]);
         console.log("Upload Complete, File ID:", fileId);
       } else {
@@ -114,7 +114,7 @@ function AssistantMakerScreen2({ navigation, route }) {
     } finally {
       setIsInitializing(false);
     }
-  };
+  };// to do: delete the isUploading thing
 
   return (
     <Screen>
@@ -220,11 +220,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     elevation: 2,
-    marginLeft: 10,
-    position: "relative",
-    width: "30%",
-    left: "40%",
-    bottom: "10%",
+    marginLeft: "auto",  
+    marginRight: 20,    
+    width: "30%",       
   },
   nextButtonText: {
     color: colors.white,

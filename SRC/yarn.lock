@@ -7124,11 +7124,6 @@ react-native-svg@>=12.0.0:
     css-tree "^1.1.3"
     warn-once "0.1.1"
 
-react-native-upload-manager@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.npmjs.org/react-native-upload-manager/-/react-native-upload-manager-1.0.8.tgz"
-  integrity sha512-22IdN96LhfQTZ1yxUICO6jdv5KyWR170143PXBijqtQEOerpiO94iMTEwfWxAcyJRxoTh/E+XJL+YZF0rNj6dQ==
-
 react-native-use-file-upload@^0.2.0:
   version "0.2.0"
   resolved "https://registry.npmjs.org/react-native-use-file-upload/-/react-native-use-file-upload-0.2.0.tgz"
