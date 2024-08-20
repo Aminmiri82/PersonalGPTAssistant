@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { View, Button, Text,  } from "react-native";
 import Screen from "../Components/Screen";
-import { fetchAssistantstest } from "../database";
+import { fetchAssistantstest,fetchChatItems } from "../database";
 
 
 const TestScreen = () => {
   const [result, setResult] = useState("");
   const test = async () => {
-    const res = await fetchAssistantstest();
+    const res1 = await fetchAssistantstest();
+    const res2 = await fetchChatItems();
+    const res = res1.concat(res2);
     setResult(JSON.stringify(res));
   };
   

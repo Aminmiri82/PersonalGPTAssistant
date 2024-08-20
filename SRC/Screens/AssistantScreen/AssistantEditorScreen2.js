@@ -9,8 +9,9 @@ import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocument
 import {
   initDB,
   fetchAssistantById,
-  updateAssistant,
+  insertAssistant,
   deleteAssistantById,
+  updateChatItemByAssistantId,
 } from "../../database";
 import {
   uploadIndividualFiles,
@@ -19,8 +20,7 @@ import {
 } from "../../openai-backend/ApiBackEnd";
 import { useTranslation } from "react-i18next";
 
-//info is the stuff that is saved in the database and you edit it here
-function AssistantEditorScreen2({ navigation, info, route }) {
+function AssistantEditorScreen2({ navigation, route }) {
   const { t } = useTranslation();
   const { id } = route.params;
   const { name } = route.params;
@@ -78,14 +78,17 @@ function AssistantEditorScreen2({ navigation, info, route }) {
         console.log("Error initializing assistant:", assistant.error);
         return;
       }
-
-      await updateAssistant(
+      console.log("Assistant successfully initialized");
+      console.log("calling updateAssistant");
+      await deleteAssistantById(id); //deletes old assistant
+      await insertAssistant(
         assistant.assistantId,
         name,
         instructions,
         model,
         files
-      );
+      ); //inserts into assistant table
+      await updateChatItemByAssistantId(id, assistant.assistantId); //updates assistantId in chatItems table
       navigation.navigate("AssistantMenuScreen");
     } catch (error) {
       console.log("Error saving assistant:", error);

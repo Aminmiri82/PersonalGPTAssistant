@@ -133,6 +133,25 @@ export const updateChatItemById = async (threadId, lastMessage) => {
     }
   });
 };
+
+export const updateChatItemByAssistantId = async (oldAssistantId, newAssistantId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!db) {
+        throw new Error("Database is not initialized");
+      }
+      await db.runAsync(
+        "UPDATE ChatItems SET assistantId = ? WHERE assistantId = ?",
+        [newAssistantId, oldAssistantId]
+      );
+      console.log("ChatItem really successfully");
+      resolve();
+    } catch (error) {
+      console.log("Error updating ChatItem: ", error);
+      reject(error);
+    }
+  });
+};
 export const insertAssistant = async (id, name, instructions, model, files) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -182,25 +201,6 @@ export const fetchAssistantById = async (id) => {
       resolve(result);
     } catch (error) {
       console.log("Error fetching assistant: ", error);
-      reject(error);
-    }
-  });
-};
-
-export const updateAssistant = async (id, name, instructions, model, files) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (!db) {
-        throw new Error("Database is not initialized");
-      }
-      await db.runAsync(
-        "UPDATE Assistants SET name = ?, instructions = ?, model = ?, files = ? WHERE id = ?",
-        [name, instructions, model, JSON.stringify(files), id]
-      );
-      console.log("Assistant updated successfully");
-      resolve();
-    } catch (error) {
-      console.log("Error updating assistant: ", error);
       reject(error);
     }
   });
@@ -262,21 +262,3 @@ export const fetchChatHistory = async (threadId) => {
   });
 };
 
-// export const fetchChatItems = async (assistantId) => {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       if (!db) {
-//         throw new Error("Database is not initialized");
-//       }
-//       const allRows = await db.getAllAsync(
-//         "SELECT Chats.id AS chatId, Assistants.name AS assistantName, Assistants.model AS modelName, Chats.message, Chats.timestamp FROM Chats JOIN Assistants ON Chats.assistantId = Assistants.id WHERE assistantId = ? ORDER BY Chats.timestamp DESC",
-//         [assistantId]
-//       );
-//       console.log("Fetched ChatItems successfully");
-//       resolve(allRows);
-//     } catch (error) {
-//       console.log("Error fetching ChatItems: ", error);
-//       reject(error);
-//     }
-//   });
-// };
