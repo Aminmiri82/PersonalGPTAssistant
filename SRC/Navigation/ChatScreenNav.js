@@ -14,8 +14,9 @@ import { useTranslation } from "react-i18next";
 
 const ChatStack = createNativeStackNavigator();
 
-function ChatScreenNav(props) {
+function ChatScreenNav(props, route) {
   const { t } = useTranslation();
+  const startWalkthrough = route.params?.startWalkthrough;
 
   const makeNewChatButton = (navigation) => (
     <Icon
@@ -31,6 +32,7 @@ function ChatScreenNav(props) {
       <ChatStack.Screen
         name="ChatMenuScreen" // Use a static name for referencing the screen
         component={ChatMenuScreen}
+        initialParams={{ startWalkthrough }}
         options={({ navigation }) => ({
           title: t("ChatMenuScreen"), // Translated title for this screen
           headerRight: () => makeNewChatButton(navigation),

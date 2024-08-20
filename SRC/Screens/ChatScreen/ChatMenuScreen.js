@@ -11,31 +11,38 @@ import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import p
 import { useTranslation } from "react-i18next";
 import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
 
-const WalkthrouableText = walkthroughable(Text);
+const WalkthrouableText = walkthroughable(AppText);
 const WalkthroughableView = walkthroughable(View);
 
-function ChatMenuScreen({ navigation }) {
+function ChatMenuScreen({ navigation, route }) {
   const { t } = useTranslation();
   const { dbInitialized } = useContext(DatabaseContext);
   const [chatItems, setChatItems] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const { start, copilotEvents } = useCopilot();
+  const { startWalkthrough } = route.params || {};
+
+  // useEffect(() => {
+  //   const handleStepChange = (step) => {
+  //     console.log("Current Step:", step); // Debugging line
+  //   };
+
+  //   const stepChangeSubscription = copilotEvents.on(
+  //     "stepChange",
+  //     handleStepChange
+  //   );
+
+  //   // Cleanup on component unmount
+  //   return () => {
+  //     stepChangeSubscription.remove();
+  //   };
+  // }, [copilotEvents, navigation]);
 
   useEffect(() => {
-    const handleStepChange = (step) => {
-      console.log("Current Step:", step); // Debugging line
-    };
-
-    const stepChangeSubscription = copilotEvents.on(
-      "stepChange",
-      handleStepChange
-    );
-
-    // Cleanup on component unmount
-    return () => {
-      stepChangeSubscription.remove();
-    };
-  }, [copilotEvents, navigation]);
+    if (startWalkthrough) {
+      start();
+    }
+  }, [startWalkthrough]);
 
   useFocusEffect(
     useCallback(() => {
@@ -102,9 +109,15 @@ function ChatMenuScreen({ navigation }) {
         order={1}
         name="chatMenuScreen"
       > */}
-      <WalkthroughableView style={styles.container}>
+      <View style={styles.container}>
         {chatItems.length === 0 ? (
-          <Text>{t("noChats")}</Text>
+          <CopilotStep
+            text="Chat with your legal assistant"
+            order={1}
+            name="chatMenuScreen"
+          >
+            <WalkthrouableText>{t("noChats")}</WalkthrouableText>
+          </CopilotStep>
         ) : (
           <FlatList
             data={chatItems}
@@ -112,7 +125,7 @@ function ChatMenuScreen({ navigation }) {
             renderItem={renderItem}
           />
         )}
-      </WalkthroughableView>
+      </View>
       {/* </CopilotStep> */}
     </Screen>
   );

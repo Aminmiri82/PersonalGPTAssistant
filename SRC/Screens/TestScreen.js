@@ -10,29 +10,8 @@ function TestScreen({ navigation }) {
   const { t } = useTranslation();
   const { start, copilotEvents } = useCopilot();
 
-  // useEffect(() => {
-  //   const handleStepChange = (step) => {
-  //     console.log("Current Step:", step); // Debugging line
-
-  //     if (step.order === 4) {
-  //       navigation.navigate("Settings");
-  //     }
-  //   };
-
-  //   const stepChangeSubscription = copilotEvents.on(
-  //     "stepChange",
-  //     handleStepChange
-  //   );
-
-  //   // Cleanup on component unmount
-  //   return () => {
-  //     stepChangeSubscription.remove();
-  //   };
-  // }, [copilotEvents, navigation]);
-
   const handleStartWalkthrough = () => {
-    start();
-    navigation.navigate("BottomTabNav");
+    navigation.navigate("BottomTabNav", { startWalkthrough: true });
   };
 
   return (
