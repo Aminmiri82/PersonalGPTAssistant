@@ -1,26 +1,22 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  Text,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
-import Styles from "../../config/Styles";
+import Spinner from "react-native-loading-spinner-overlay";
 import RNPickerSelect from "react-native-picker-select";
-import * as DocumentPicker from "expo-document-picker";
 import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocumentPicker";
 import {
+  initDB,
   fetchAssistantById,
   updateAssistant,
   deleteAssistantById,
 } from "../../database";
-
+import {
+  uploadIndividualFiles,
+  initializeAssistant,
+  addFilesToAssistant,
+} from "../../openai-backend/ApiBackEnd";
 import { useTranslation } from "react-i18next";
 
 //info is the stuff that is saved in the database and you edit it here
@@ -29,10 +25,12 @@ function AssistantEditorScreen2({ navigation, info, route }) {
   const { id } = route.params;
   const { name } = route.params;
   const { instructions } = route.params;
-  // console.log(id);
-  // console.log(name);
-  const [model, setModel] = useState("pick a model");
   const [files, setFiles] = useState([]);
+  const [fileIds, setFileIds] = useState([]);
+  const [model, setModel] = useState("GPT-4o-mini");
+  const [isUploading, setIsUploading] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(false);
+  const [progressMap, setProgressMap] = useState({});
   const assistantList = [
     { label: "GPT-4o-mini", value: "gpt-4o-mini" },
     { label: "GPT-4o", value: "gpt-4o" },
@@ -42,6 +40,9 @@ function AssistantEditorScreen2({ navigation, info, route }) {
   ];
 
   useEffect(() => {
+    initDB().catch((error) => {
+      console.log("Error initializing database: ", error);
+    });
     fetchAssistantById(id)
       .then((assistant) => {
         setModel(assistant.model);
@@ -53,22 +54,81 @@ function AssistantEditorScreen2({ navigation, info, route }) {
       });
   }, [id]);
 
-  const handleSave = () => {
-    updateAssistant(id, name, instructions, model, files)
-      .then(() => {
-        navigation.navigate("AssistantMenuScreen");
-      })
-      .catch((error) => {
-        console.log("Error updating assistant: ", error);
+  const handleSave = async () => {
+    if (!name || !instructions) {
+      console.log("Name or instructions are missing");
+      return;
+    }
+
+    setIsInitializing(true);
+
+    try {
+      const assistant = await initializeAssistant({
+        name,
+        instructions,
+        model,
       });
+
+      if (fileIds.length > 0) {
+        console.log("Adding files to assistant and creating vector store");
+        await addFilesToAssistant(assistant.assistantId, fileIds);
+      }
+
+      if (assistant.error) {
+        console.log("Error initializing assistant:", assistant.error);
+        return;
+      }
+
+      await updateAssistant(
+        assistant.assistantId,
+        name,
+        instructions,
+        model,
+        files
+      );
+      navigation.navigate("AssistantMenuScreen");
+    } catch (error) {
+      console.log("Error saving assistant:", error);
+    } finally {
+      setIsInitializing(false);
+    }
   };
 
-  const handleAddFile = (file) => {
-    setFiles((prevFiles) => [...prevFiles, file]);
+  const handleAddFile = async (file) => {
+    // Use a unique identifier such as file.uri or a timestamp
+    const uniqueId = file.uri || Date.now().toString();
+    setFiles((prevFiles) => [...prevFiles, { ...file, id: uniqueId }]);
+
+    try {
+      const uploadResponse = await uploadIndividualFiles(file, (progress) =>
+        onProgress(uniqueId, progress)
+      );
+      console.log("Complete upload response:", uploadResponse);
+
+      if (uploadResponse) {
+        const fileId = uploadResponse;
+        setFileIds((prevFileIds) => [...prevFileIds, fileId]);
+        console.log("Upload Complete, File ID:", fileId);
+      } else {
+        console.error("Upload response is missing file ID:", uploadResponse);
+        throw new Error("Upload response does not contain a valid file ID");
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
   };
 
   const handleRemoveFile = (index) => {
-    setFiles(files.filter((_, i) => i !== index));
+    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setFileIds((prevFileIds) => prevFileIds.filter((_, i) => i !== index));
+  };
+
+  const onProgress = (fileId, progress) => {
+    setProgressMap((prevMap) => ({
+      ...prevMap,
+      [fileId]: progress,
+    }));
+    console.log(`File ID ${fileId}: Progress ${progress}%`);
   };
 
   const handleDelete = () => {
@@ -83,6 +143,13 @@ function AssistantEditorScreen2({ navigation, info, route }) {
 
   return (
     <Screen>
+      <Spinner
+        visible={isUploading || isInitializing}
+        textContent={
+          isUploading ? "Uploading files..." : "Initializing assistant..."
+        }
+        textStyle={styles.spinnerTextStyle}
+      />
       <View style={styles.topContainer}>
         <View style={styles.topTipContainer}>
           <AppText style={styles.topTip}>{t("chooseModel")}</AppText>
@@ -92,7 +159,6 @@ function AssistantEditorScreen2({ navigation, info, route }) {
             onValueChange={(value) => setModel(value)}
             items={assistantList}
             value={model}
-            
           />
         </View>
         <View style={styles.gp4TipContainer}>
@@ -108,6 +174,7 @@ function AssistantEditorScreen2({ navigation, info, route }) {
           files={files}
           onAddFile={handleAddFile}
           onRemoveFile={handleRemoveFile}
+          progressMap={progressMap}
         />
       </View>
       <View style={styles.ButtonContainer}>
@@ -129,8 +196,6 @@ const styles = StyleSheet.create({
   topContainer: {
     alignItems: "center",
     padding: 10,
-    // borderColor: "blue",
-    // borderWidth: 1,
   },
   topTipContainer: {
     width: "100%",

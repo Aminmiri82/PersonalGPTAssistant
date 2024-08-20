@@ -148,7 +148,7 @@ function AssistantMakerScreen2({ navigation, route }) {
           files={files}
           onAddFile={handleAddFile}
           onRemoveFile={handleRemoveFile}
-          progressMap={progressMap} // Pass progressMap
+          progressMap={progressMap} 
         />
       </View>
       <AppButton

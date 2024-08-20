@@ -37,7 +37,11 @@ function BottomTabNav() {
         },
       })}
     >
-      
+      <Tab.Screen
+        name="Test"
+        component={TestScreen}
+        options={{ headerShown: false, title: t("TestTab") }}
+      />
       <Tab.Screen
         name="Chat"
         component={ChatScreenNav}

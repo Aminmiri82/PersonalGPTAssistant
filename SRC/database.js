@@ -42,7 +42,24 @@ export const initDB = async () => {
     }
   });
 };
-
+export const fetchAssistantstest = async () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!db) {
+        throw new Error("Database is not initialized");
+      }
+      const allRows = await db.getAllAsync(`
+        SELECT Assistants.id AS assistantId, Assistants.name AS assistantName, Assistants.instructions AS instructions
+        FROM Assistants
+      `);
+      console.log("Fetched Assistants successfully");
+      resolve(allRows);
+    } catch (error) {
+      console.log("Error fetching Assistants: ", error);
+      reject(error);
+    }
+  });
+};
 export const insertChat = async (threadId, assistantId, lastMessage) => {
   return new Promise(async (resolve, reject) => {
     try {
