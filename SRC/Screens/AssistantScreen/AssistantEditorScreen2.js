@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
@@ -19,6 +19,7 @@ import {
   addFilesToAssistant,
 } from "../../openai-backend/ApiBackEnd";
 import { useTranslation } from "react-i18next";
+import { set } from "lodash";
 
 function AssistantEditorScreen2({ navigation, route }) {
   const { t } = useTranslation();
@@ -26,9 +27,10 @@ function AssistantEditorScreen2({ navigation, route }) {
   const { name } = route.params;
   const { instructions } = route.params;
   const [files, setFiles] = useState([]);
+  const [parsedFiles, setParsedFiles] = useState([]);
   const [fileIds, setFileIds] = useState([]);
   const [model, setModel] = useState("GPT-4o-mini");
-  const [isUploading, setIsUploading] = useState(false);
+
   const [isInitializing, setIsInitializing] = useState(false);
   const [progressMap, setProgressMap] = useState({});
   const assistantList = [
@@ -38,21 +40,55 @@ function AssistantEditorScreen2({ navigation, route }) {
     { label: "GPT-4", value: "gpt-4" },
     { label: "GPT-3.5", value: "gpt-3.5-turbo" },
   ];
+  const isUploadingRef = useRef(false);
 
   useEffect(() => {
-    initDB().catch((error) => {
-      console.log("Error initializing database: ", error);
-    });
-    fetchAssistantById(id)
-      .then((assistant) => {
+    const initialize = async () => {
+      try {
+        await initDB();
+        const assistant = await fetchAssistantById(id);
+
         setModel(assistant.model);
-        console.log(assistant.model);
-        setFiles(JSON.parse(assistant.files));
-      })
-      .catch((error) => {
-        console.log("Error fetching Assistant: ", error);
-      });
+        console.log("assistant.model", assistant.model);
+        console.log("Raw assistant.files:", assistant.files);
+
+        try {
+          // Directly parse the JSON string assuming it's always in the correct format
+          const filesArray = JSON.parse(assistant.files);
+
+          console.log("Parsed files array:", filesArray);
+          setParsedFiles(filesArray);
+        } catch (error) {
+          console.error("Error parsing assistant.files:", error.message);
+        }
+      } catch (error) {
+        console.log(
+          "Error initializing database or fetching Assistant: ",
+          error
+        );
+      }
+    };
+
+    initialize();
   }, [id]);
+
+  useEffect(() => {
+    console.log("files given to usestate", files);
+
+    isUploadingRef.current = true;
+    console.log("uploading old files");
+
+    // Function to handle file uploads
+    const uploadFiles = async () => {
+      try {
+        await uploadOldFiles(parsedFiles);
+      } finally {
+        isUploadingRef.current = false;
+      }
+    };
+    console.log ("parsed files in second useeffect", parsedFiles);
+    uploadFiles();
+  }, [parsedFiles]);
 
   const handleSave = async () => {
     if (!name || !instructions) {
@@ -96,7 +132,20 @@ function AssistantEditorScreen2({ navigation, route }) {
       setIsInitializing(false);
     }
   };
-
+  const uploadOldFiles = async ( parsedFiles) => {
+    console.log("uploading old files");
+    
+    
+    for (const file of parsedFiles) {
+      console.log(
+        "for loop happening uploading file",
+        file,
+        "here is the files array",
+        files
+      );
+      await handleAddFile(file);
+    }
+  };
   const handleAddFile = async (file) => {
     // Use a unique identifier such as file.uri or a timestamp
     const uniqueId = file.uri || Date.now().toString();
@@ -147,10 +196,8 @@ function AssistantEditorScreen2({ navigation, route }) {
   return (
     <Screen>
       <Spinner
-        visible={isUploading || isInitializing}
-        textContent={
-          isUploading ? "Uploading files..." : "Initializing assistant..."
-        }
+        visible={isInitializing}
+        textContent={"Initializing assistant..."}
         textStyle={styles.spinnerTextStyle}
       />
       <View style={styles.topContainer}>
