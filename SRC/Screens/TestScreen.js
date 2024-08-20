@@ -32,7 +32,7 @@ function TestScreen({ navigation }) {
 
   const handleStartWalkthrough = () => {
     start();
-    navigation.navigate(t("ChatMenuScreen"));
+    navigation.navigate("BottomTabNav");
   };
 
   return (

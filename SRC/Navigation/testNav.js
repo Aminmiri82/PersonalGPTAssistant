@@ -8,13 +8,13 @@ import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
 import TestScreen from "../Screens/TestScreen";
 import AppButton from "../Components/AppButton";
 import { useTranslation } from "react-i18next";
-import ChatMenuScreenNav from "./ChatMenuScreenNav";
+import ChatScreenNav from "./ChatScreenNav";
 import BottomTabNav from "./BottomTabNav";
 import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
 
 const TestStack = createNativeStackNavigator();
 
-function testNav(props) {
+function TestNav(props) {
   const { t } = useTranslation();
 
   return (
@@ -27,10 +27,10 @@ function testNav(props) {
         }}
       />
       <TestStack.Screen
-        name="ChatMenuScreen" // Use a static name for referencing the screen
-        component={ChatMenuScreen}
+        name="BottomTabNav" // Use a static name for referencing the screen
+        component={BottomTabNav}
         options={{
-          title: t("ChatMenuScreen"), // Translated title for this screen
+          title: t("BottomTabNav"), // Translated title for this screen
         }}
       />
     </TestStack.Navigator>
@@ -41,4 +41,4 @@ const styles = StyleSheet.create({
   container: {},
 });
 
-export default testNav;
+export default TestNav;
