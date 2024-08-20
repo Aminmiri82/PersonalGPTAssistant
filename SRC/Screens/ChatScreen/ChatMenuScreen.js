@@ -11,6 +11,9 @@ import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import p
 import { useTranslation } from "react-i18next";
 import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
 
+const WalkthrouableText = walkthroughable(Text);
+const WalkthroughableView = walkthroughable(View);
+
 function ChatMenuScreen({ navigation }) {
   const { t } = useTranslation();
   const { dbInitialized } = useContext(DatabaseContext);
@@ -94,7 +97,12 @@ function ChatMenuScreen({ navigation }) {
 
   return (
     <Screen>
-      <View style={styles.container}>
+      {/* <CopilotStep
+        text="Chat with your legal assistant"
+        order={1}
+        name="chatMenuScreen"
+      > */}
+      <WalkthroughableView style={styles.container}>
         {chatItems.length === 0 ? (
           <Text>{t("noChats")}</Text>
         ) : (
@@ -104,7 +112,8 @@ function ChatMenuScreen({ navigation }) {
             renderItem={renderItem}
           />
         )}
-      </View>
+      </WalkthroughableView>
+      {/* </CopilotStep> */}
     </Screen>
   );
 }

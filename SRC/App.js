@@ -9,6 +9,7 @@ import { DatabaseProvider } from "./DatabaseProvider"; // Adjust the import path
 import i18next from "./services/i18next";
 import * as SecureStore from "expo-secure-store";
 import { CopilotProvider } from "react-native-copilot";
+import TestScreen from "./Screens/TestScreen";
 
 const Stack = createNativeStackNavigator();
 // Imporatnt : you can only have one walkthroug in the whole app, so if you want to go to another screen, you need to do what i did in TestScreen.js
@@ -34,15 +35,20 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen
+              name="Test"
+              component={TestScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="Home"
               component={BottomTabNav}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
               name="OnBoarding"
               component={OnBoardingScreen}
               options={{ headerShown: false }}
-            />
+            /> */}
           </Stack.Navigator>
         </NavigationContainer>
       </DatabaseProvider>

@@ -38,7 +38,11 @@ function BottomTabNav() {
         },
       })}
     >
-      <Tab.Screen name="Test" component={TestScreen} options={{ headerShown: false, title: t("TestTab") }} />
+      {/* <Tab.Screen
+        name="Test"
+        component={TestScreen}
+        options={{ headerShown: false, title: t("TestTab") }}
+      /> */}
       <Tab.Screen
         name="Chat"
         component={ChatScreenNav}
@@ -54,8 +58,11 @@ function BottomTabNav() {
         component={OfflineSearchNav}
         options={{ headerShown: false, title: t("OfflineSearchTabName") }}
       />
-      <Tab.Screen name="Settings" component={SettingsScreenNav} options={{ headerShown: false, title: t("SettingTab") }} />
-     
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreenNav}
+        options={{ headerShown: false, title: t("SettingTab") }}
+      />
     </Tab.Navigator>
   );
 }
