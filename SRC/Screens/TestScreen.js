@@ -1,25 +1,14 @@
-import React, { useState } from "react";
-import { View, Button, Text,  } from "react-native";
-import Screen from "../Components/Screen";
-import { fetchAssistantstest,fetchChatItems } from "../database";
+import React from 'react';
+import { View } from 'react-native';
+import AppImagePicker from '../Components/AssistantsComponents/AppImagePicker';// Adjust the path as necessary
 
-
-const TestScreen = () => {
-  const [result, setResult] = useState("");
-  const test = async () => {
-    const res1 = await fetchAssistantstest();
-    const res2 = await fetchChatItems();
-    const res = res1.concat(res2);
-    setResult(JSON.stringify(res));
-  };
-  
-  
+export default function App() {
   return (
-    <Screen>
-      <Button title="Test" onPress={test} />
-      <Text>{result}</Text>
-    </Screen>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <AppImagePicker 
+        tipText="Choosing photo for the assistant" 
+        editText="Edit"
+      />
+    </View>
   );
-};
-
-export default TestScreen;
+}

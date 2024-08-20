@@ -5,7 +5,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  Button,
+  
 } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
@@ -15,8 +15,8 @@ import { fetchAssistantById, deleteAssistantById } from "../../database";
 
 
 import { useTranslation } from "react-i18next";
-//info is the stuff that is saved in the database and you edit it here
-function AssistantEditorScreen1({ navigation, info, route }) {
+
+function AssistantEditorScreen1({ navigation, route }) {
   const { t } = useTranslation();
   const { id } = route.params;
   const [name, setName] = useState("");

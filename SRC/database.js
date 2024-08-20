@@ -24,7 +24,8 @@ export const initDB = async () => {
           name TEXT, 
           instructions TEXT, 
           model TEXT, 
-          files TEXT
+          files TEXT,
+          profile TEXT
         );
         CREATE TABLE IF NOT EXISTS Chats (
           id TEXT PRIMARY KEY,
