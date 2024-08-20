@@ -86,7 +86,7 @@ function AssistantEditorScreen2({ navigation, route }) {
         isUploadingRef.current = false;
       }
     };
-    console.log ("parsed files in second useeffect", parsedFiles);
+    console.log("parsed files in second useeffect", parsedFiles);
     uploadFiles();
   }, [parsedFiles]);
 
@@ -132,18 +132,20 @@ function AssistantEditorScreen2({ navigation, route }) {
       setIsInitializing(false);
     }
   };
-  const uploadOldFiles = async ( parsedFiles) => {
+  const uploadOldFiles = async (parsedFiles) => {
     console.log("uploading old files");
-    
-    
-    for (const file of parsedFiles) {
-      console.log(
-        "for loop happening uploading file",
-        file,
-        "here is the files array",
-        files
-      );
-      await handleAddFile(file);
+
+    try {
+      const uploadPromises = parsedFiles.map((file) => {
+        console.log("Uploading file:", file, "Files array:", files);
+        return handleAddFile(file); 
+      });
+
+      await Promise.all(uploadPromises);
+
+      console.log("All files have been uploaded.");
+    } catch (error) {
+      console.error("Error uploading files:", error);
     }
   };
   const handleAddFile = async (file) => {

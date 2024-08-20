@@ -175,8 +175,6 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     alignItems: "center",
-    // borderWidth: 1,
-    // borderColor: colors.primary,
   },
   midTitle: {
     fontSize: 20,
