@@ -19,13 +19,11 @@ import {
   addFilesToAssistant,
 } from "../../openai-backend/ApiBackEnd";
 import { useTranslation } from "react-i18next";
-import { set } from "lodash";
+
 
 function AssistantEditorScreen2({ navigation, route }) {
   const { t } = useTranslation();
-  const { id } = route.params;
-  const { name } = route.params;
-  const { instructions } = route.params;
+  const { id,name,instructions,imageUri } = route.params;
   const [files, setFiles] = useState([]);
   const [parsedFiles, setParsedFiles] = useState([]);
   const [fileIds, setFileIds] = useState([]);
@@ -122,7 +120,8 @@ function AssistantEditorScreen2({ navigation, route }) {
         name,
         instructions,
         model,
-        files
+        files,
+        imageUri
       ); //inserts into assistant table
       await updateChatItemByAssistantId(id, assistant.assistantId); //updates assistantId in chatItems table
       navigation.navigate("AssistantMenuScreen");

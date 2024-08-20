@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 
 function AssistantMakerScreen2({ navigation, route }) {
   const { t } = useTranslation();
-  const { name, instructions } = route.params;
+  const { name, instructions, imageUri } = route.params;
   const [files, setFiles] = useState([]);
   const [fileIds, setFileIds] = useState([]);
   const [model, setModel] = useState("GPT-4o-mini");
@@ -106,7 +106,8 @@ function AssistantMakerScreen2({ navigation, route }) {
         name,
         instructions,
         model,
-        files
+        files,
+        imageUri
       );
       navigation.navigate("AssistantMenuScreen");
     } catch (error) {
@@ -151,6 +152,7 @@ function AssistantMakerScreen2({ navigation, route }) {
           progressMap={progressMap} 
         />
       </View>
+      <Text>{imageUri}</Text>
       <AppButton
         title={t("saveAssistant")}
         onPress={handleSave}

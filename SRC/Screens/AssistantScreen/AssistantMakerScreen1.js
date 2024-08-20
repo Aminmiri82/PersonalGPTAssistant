@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import {
   View,
   StyleSheet,
-  Image,
-  TouchableOpacity,
   TextInput,
-  Button,
   KeyboardAvoidingView,
 } from "react-native";
 import AppText from "../../Components/AppText";
@@ -19,7 +16,12 @@ function AssistantMakerScreen1({ navigation }) {
   const { t } = useTranslation();
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
+  const [imageUri, setImageUri] = useState(require("../../assets/assistant.jpg"));
 
+  const handleImagePicked = (uri) => {
+    setImageUri(uri);
+    console.log("Image URI:", uri);
+  };
   const handleNext = () => {
     if (!name || !instructions) {
       console.log("Name or instructions are missing");
@@ -28,6 +30,7 @@ function AssistantMakerScreen1({ navigation }) {
     navigation.navigate("AssistantMakerScreen2", {
       name,
       instructions,
+      imageUri
     });
   };
 
@@ -41,6 +44,8 @@ function AssistantMakerScreen1({ navigation }) {
           <AppImagePicker
             tipText="Choosing photo for the assistant"
             editText="Edit"
+            onImagePicked={handleImagePicked}
+            
           />
           <View style={styles.middleContainer}>
             <AppText style={styles.midTitle}>

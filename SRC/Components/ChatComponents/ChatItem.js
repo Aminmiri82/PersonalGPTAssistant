@@ -18,11 +18,10 @@ import {
 function ChatItem({
   title,
   subTitle,
-  image,
+  imageUri,
   IconComponent,
   onPress,
   modelname,
-  showDelete,
   onDelete,
 }) {
   const renderRightActions = () => (
@@ -38,7 +37,14 @@ function ChatItem({
           <View style={styles.container}>
             <View style={styles.visualcontainer}>
               {IconComponent}
-              {image && <Image style={styles.image} source={image} />}
+              {imageUri ? (
+                <Image style={styles.image} source={{ uri: imageUri }} />
+              ) : (
+                <Image
+                  style={styles.image}
+                  source={require("../../assets/logo.jpg")}
+                />
+              )}
               {modelname && (
                 <AppText style={styles.modelstyle}> {modelname} </AppText>
               )}

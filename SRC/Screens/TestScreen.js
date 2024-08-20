@@ -1,14 +1,18 @@
-import React from 'react';
-import { View } from 'react-native';
-import AppImagePicker from '../Components/AssistantsComponents/AppImagePicker';// Adjust the path as necessary
+import React, { useState } from 'react';
+import { View, Text,Button } from 'react-native';
+import { fetchAssistantstest } from '../database';
 
 export default function App() {
+  const [res, setRes] = useState('');
+test = async () => {
+  const result = await fetchAssistantstest();
+  setRes(JSON.stringify(result));
+}
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <AppImagePicker 
-        tipText="Choosing photo for the assistant" 
-        editText="Edit"
-      />
+      
+      <Button title="Test" onPress={test} />
+      <Text>{res}</Text>
     </View>
   );
 }

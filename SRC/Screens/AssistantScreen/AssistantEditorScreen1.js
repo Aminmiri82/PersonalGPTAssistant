@@ -1,19 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
   Image,
   TouchableOpacity,
   TextInput,
-  
 } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
-import { useState, useEffect } from "react";
+import AppImagePicker from "../../Components/AssistantsComponents/AppImagePicker";
 import { fetchAssistantById, deleteAssistantById } from "../../database";
-
-
 import { useTranslation } from "react-i18next";
 
 function AssistantEditorScreen1({ navigation, route }) {
@@ -21,12 +18,14 @@ function AssistantEditorScreen1({ navigation, route }) {
   const { id } = route.params;
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
+  const [imageUri, setImageUri] = useState("");
 
   useEffect(() => {
-    fetchAssistantById(id)
+    fetchAssistantById(id) // could've pickeck these up from route params
       .then((assistant) => {
         setName(assistant.name);
         setInstructions(assistant.instructions);
+        setImageUri(assistant.profile);
       })
       .catch((error) => {
         console.log("Error fetching assistant: ", error);
@@ -42,6 +41,7 @@ function AssistantEditorScreen1({ navigation, route }) {
       id,
       name,
       instructions,
+      imageUri,
     });
   };
 
@@ -54,39 +54,19 @@ function AssistantEditorScreen1({ navigation, route }) {
         console.log("Error deleting assistant: ", error);
       });
   };
+  const handleImagePicked = (newUri) => {
+    setImageUri(newUri);
+    console.log("Image URI:", newUri);
+  };
 
   return (
     <Screen>
-      <View style={styles.topContainer}>
-        <View style={styles.pictureContainer}>
-          <View style={styles.pictureTipContainer}>
-            <AppText style={styles.pictureTip}>
-              {t("choosingPhotoForAssistant")}
-            </AppText>
-          </View>
-          <View style={styles.pictureWrapper}>
-            <TouchableOpacity
-              style={styles.picture}
-              onPress={() => {
-                console.log("edit");
-              }}
-            >
-              <Image
-                style={styles.picture}
-                source={require("../../assets/assistant.jpg")}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.pictureButton}
-              onPress={() => {
-                console.log("edit");
-              }}
-            >
-              <AppText style={styles.pictureButtonText}>{t("edit")}</AppText>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
+      <AppImagePicker
+        tipText="Choosing photo for the assistant"
+        editText="Edit"
+        onImagePicked={handleImagePicked}
+        prepickedUri={imageUri}
+      />
       <View style={styles.middleContainer}>
         <AppText style={styles.midTitle}>
           {t("choosingNameForAssistant")}
@@ -132,43 +112,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     padding: 10,
-    // borderColor: "blue",
-    // borderWidth: 1,
-  },
-  pictureContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "80%",
-  },
-  pictureTipContainer: {
-    width: "40%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 10,
-    padding: 10,
-  },
-  pictureTip: {
-    color: colors.dark,
-    fontSize: 16,
-    textAlign: "center",
-  },
-  pictureWrapper: {
-    alignItems: "center",
-  },
-  picture: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  pictureButton: {
-    marginTop: 5,
-    padding: 5,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  pictureButtonText: {
-    fontSize: 12,
-    color: colors.blue,
   },
   middleContainer: {
     marginTop: 20,

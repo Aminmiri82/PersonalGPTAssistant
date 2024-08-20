@@ -31,6 +31,7 @@ function ChatMenuScreen({ navigation }) {
 
       console.log("loading chat items");
       loadChatItems();
+      console.log(chatItems);
     }, [dbInitialized])
   );
 
@@ -58,10 +59,10 @@ function ChatMenuScreen({ navigation }) {
     <ChatItem
       title={item.assistantName || "Legal Guide"}
       subTitle={item.lastMessage}
-      image={
+      imageUri={
         item.assistantId === "asst_40ROFN9nKe2V6Eka6bYXSZ2y"
-          ? require("../../assets/logo.jpg")
-          : require("../../assets/assistant.jpg")
+          ? null
+          : item.profile
       }
       modelname={item.assistantModel}
       onPress={() => handlePress(item)}
@@ -86,7 +87,6 @@ function ChatMenuScreen({ navigation }) {
             renderItem={renderItem}
           />
         )}
-      
       </View>
     </Screen>
   );

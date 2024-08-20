@@ -37,7 +37,7 @@ function BottomTabNav() {
         },
       })}
     >
-      <Tab.Screen name="test" component={TestScreen} />
+      
       <Tab.Screen
         name="Chat"
         component={ChatScreenNav}

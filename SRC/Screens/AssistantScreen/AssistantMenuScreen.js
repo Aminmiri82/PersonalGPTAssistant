@@ -26,6 +26,7 @@ function AssistantMenuScreen({ navigation }) {
       fetchAssistants()
         .then((data) => {
           setAssistants(data);
+          console.log(data);
         })
         .catch((error) => {
           console.log("Error fetching assistants: ", error);
@@ -57,14 +58,13 @@ function AssistantMenuScreen({ navigation }) {
             renderItem={({ item }) => (
               <AssistantsMenuItem
                 key={item.id}
-                image={require("../../assets/assistant.jpg")}
+                imageUri={item.profile}
                 title={item.name}
                 onPress={() =>
                   navigation.navigate("AssistantEditorScreen1", {
                     id: item.id,
                   })
                 }
-                ShowEditButton={true}
               />
             )}
             keyExtractor={(item) => item.id.toString()}
