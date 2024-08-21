@@ -8,9 +8,9 @@ export default function AppImagePicker({
   tipText,
   editText,
   onImagePicked,
-  prepickedUri,
+  prepickedUri = null,
 }) {
-  const [imageUri, setImageUri] = useState(prepickedUri || null);
+  const [imageUri, setImageUri] = useState(null);
 
   // Request permission to access the media library
   const requestPermission = async () => {
@@ -53,13 +53,7 @@ export default function AppImagePicker({
           <TouchableOpacity style={styles.picture} onPress={pickImage}>
             <Image
               style={styles.picture}
-              source={
-                imageUri
-                  ? { uri: imageUri }
-                  : prepickedUri
-                  ? { uri: prepickedUri }
-                  : require("../../assets/assistant.jpg") // this is so stupid i'm only doing it because i dont know what the local asset uri's look when the app is bundled
-              }
+              source={imageUri ? { uri: imageUri } : prepickedUri}
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.pictureButton} onPress={pickImage}>

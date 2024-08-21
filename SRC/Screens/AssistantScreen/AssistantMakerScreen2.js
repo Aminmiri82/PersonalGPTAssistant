@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Alert, Text } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
@@ -24,10 +24,11 @@ function AssistantMakerScreen2({ navigation, route }) {
   const [isUploading, setIsUploading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
   const [progressMap, setProgressMap] = useState({});
+  const [uploadCount, setUploadCount] = useState(0);
 
   const assistantList = [
     { label: "GPT-4o-mini", value: "gpt-4o-mini" },
-    { label: "GPT-4o", value: "gpt-4o" },
+    { label: "GPT-4o", value: "gpt-4" },
     { label: "GPT-4 Turbo", value: "gpt-4-turbo" },
     { label: "GPT-4", value: "gpt-4" },
     { label: "GPT-3.5", value: "gpt-3.5-turbo" },
@@ -40,42 +41,61 @@ function AssistantMakerScreen2({ navigation, route }) {
   }, []);
 
   const handleAddFile = async (file) => {
-    setIsUploading((prev) => {
-      const newValue = true;
-      console.log('Updated value:', newValue); // This will reflect the new value
-      return newValue;
-    });
-
-
-    // Use a unique identifier such as file.uri or a timestamp
     const uniqueId = file.uri || Date.now().toString();
     setFiles((prevFiles) => [...prevFiles, { ...file, id: uniqueId }]);
-  
-    try {
-      const uploadResponse = await uploadIndividualFiles(file, (progress) =>
-        onProgress(uniqueId, progress)
-      );
-      console.log("Complete upload response:", uploadResponse);
+    setUploadCount((prev) => prev + 1);
+    setIsUploading(true);
 
-      if (uploadResponse) {
-        const fileId = uploadResponse;
-        setFileIds((prevFileIds) => [...prevFileIds, fileId]);
-        console.log("Upload Complete, File ID:", fileId);
-        setIsUploading(false);
-        console.log(isUploading);
-      } else {
-        console.error("Upload response is missing file ID:", uploadResponse);
-        throw new Error("Upload response does not contain a valid file ID");
-      }
+    try {
+      const fileId = await uploadIndividualFiles(
+        file,
+        (progress) => onProgress(uniqueId, progress),
+        reportError
+      );
+      
+      // Update fileIds state with the returned fileId
+      setFileIds((prevFileIds) => [...prevFileIds, fileId]);
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.error("Error in handleAddFile:", error);
+    } finally {
+      setUploadCount((prev) => prev - 1);
     }
   };
 
-  const handleRemoveFile = (index) => {
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
-    setFileIds((prevFileIds) => prevFileIds.filter((_, i) => i !== index));
+  const reportError = (fileId, errorMessage) => {
+    Alert.alert(
+      "Upload Failed",
+      `File upload failed: ${errorMessage}`,
+      [
+        {
+          text: "Retry",
+          onPress: () => {
+            const failedFile = files.find((file) => file.id === fileId);
+            if (failedFile) {
+              handleAddFile(failedFile); // Retry the failed upload
+            }
+          },
+        },
+        {
+          text: "Delete",
+          onPress: () => handleRemoveFile(fileId),
+          style: "destructive",
+        },
+      ],
+      { cancelable: false }
+    );
   };
+
+  const handleRemoveFile = (fileId) => {
+    setFiles((prevFiles) => prevFiles.filter((file) => file.id !== fileId));
+    setFileIds((prevFileIds) => prevFileIds.filter((id) => id !== fileId));
+  };
+
+  useEffect(() => {
+    if (uploadCount === 0) {
+      setIsUploading(false);
+    }
+  }, [uploadCount]);
 
   const onProgress = (fileId, progress) => {
     setProgressMap((prevMap) => ({
@@ -86,6 +106,14 @@ function AssistantMakerScreen2({ navigation, route }) {
   };
 
   const handleSave = async () => {
+    if (isUploading) {
+      Alert.alert(
+        "Upload in Progress",
+        "Please wait until all files have finished uploading before saving the assistant."
+      );
+      return;
+    }
+
     if (!name || !instructions) {
       console.log("Name or instructions are missing");
       return;
@@ -165,6 +193,7 @@ function AssistantMakerScreen2({ navigation, route }) {
         style={styles.nextButton}
         textStyle={styles.nextButtonText}
       />
+      <Text>{fileIds}</Text>
     </Screen>
   );
 }

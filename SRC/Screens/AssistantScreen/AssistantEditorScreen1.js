@@ -65,7 +65,7 @@ function AssistantEditorScreen1({ navigation, route }) {
         tipText="Choosing photo for the assistant"
         editText="Edit"
         onImagePicked={handleImagePicked}
-        prepickedUri={imageUri}
+        prepickedUri={{uri: imageUri}}
       />
       <View style={styles.middleContainer}>
         <AppText style={styles.midTitle}>

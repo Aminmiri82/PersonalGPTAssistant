@@ -26,12 +26,24 @@ function AssistantMenuScreen({ navigation }) {
       fetchAssistants()
         .then((data) => {
           setAssistants(data);
-          console.log(data);
         })
         .catch((error) => {
           console.log("Error fetching assistants: ", error);
         });
     }, [])
+  );
+
+  const renderItem = ({ item }) => (
+    <AssistantsMenuItem
+      key={item.id}
+      imageUri={item.profile} //local asset uri not working
+      title={item.name}
+      onPress={() =>
+        navigation.navigate("AssistantEditorScreen1", {
+          id: item.id,
+        })
+      }
+    />
   );
 
   return (
@@ -54,18 +66,7 @@ function AssistantMenuScreen({ navigation }) {
           data={assistants}
           contentContainerStyle={styles.listContainer}
           numColumns={2}
-          renderItem={({ item }) => (
-            <AssistantsMenuItem
-              key={item.id}
-              imageUri={item.profile}
-              title={item.name}
-              onPress={() =>
-                navigation.navigate("AssistantEditorScreen1", {
-                  id: item.id,
-                })
-              }
-            />
-          )}
+          renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
         />
       )}

@@ -138,51 +138,69 @@ const callAssistantApi = async (message, threadID, assistantId) => {
 const UPLOAD_URL = "https://api.openai.com/v1/uploads";
 const COMPLETE_UPLOAD_URL =
   "https://api.openai.com/v1/uploads/{upload_id}/complete";
+const MAX_RETRIES = 3;
 
-const uploadIndividualFiles = async (file, onProgress) => {
-  try {
-    const apiKey = await SecureStore.getItemAsync("apiKey");
-    const { name, size, mimeType, uri } = file;
-    console.log("Starting upload for file:", { name, size, mimeType, uri });
+const uploadIndividualFiles = async (file, onProgress, reportError) => {
+  let retriesLeft = MAX_RETRIES;
 
-    // Step 1: Create Upload
-    const upload = await createUpload(name, size, mimeType, apiKey);
-    console.log("Upload created:", upload);
+  const attemptUpload = async () => {
+    try {
+      const apiKey = await SecureStore.getItemAsync("apiKey");
+      const { name, size, mimeType, uri } = file;
+      console.log("Starting upload for file:", { name, size, mimeType, uri });
 
-    if (!upload.id) {
-      throw new Error("Failed to create upload");
+      // Step 1: Create Upload
+      const upload = await createUpload(name, size, mimeType, apiKey);
+      console.log("Upload created:", upload);
+
+      if (!upload.id) {
+        throw new Error("Failed to create upload");
+      }
+
+      // Step 2: Upload File using react-native-background-upload
+      const partResponse = await startBackgroundUpload(
+        upload.id,
+        uri,
+        mimeType,
+        name,
+        apiKey,
+        onProgress
+      );
+      const partId = JSON.parse(partResponse).id;
+      console.log("Part uploaded:", partId);
+
+      if (!partId) {
+        throw new Error("Failed to upload part");
+      }
+
+      // Step 3: Complete Upload
+      const completion = await completeUpload(upload.id, [partId], apiKey);
+      console.log("Upload complete:", completion);
+
+      if (!completion.file || !completion.file.id) {
+        throw new Error("Failed to complete upload");
+      }
+
+      console.log("Upload Complete, File ID:", completion.file.id);
+      return completion.file.id;
+    } catch (error) {
+      console.error("Error uploading files:", error);
+
+      if (retriesLeft > 0) {
+        retriesLeft--;
+        console.log(
+          `Retrying upload... (${MAX_RETRIES - retriesLeft}/${MAX_RETRIES})`
+        );
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second before retrying
+        return attemptUpload();
+      } else {
+        reportError(file.id, error.message);
+        throw error;
+      }
     }
+  };
 
-    // Step 2: Upload File using react-native-background-upload
-    const partResponse = await startBackgroundUpload(
-      upload.id,
-      uri,
-      mimeType,
-      name,
-      apiKey,
-      onProgress
-    );
-    const partId = JSON.parse(partResponse).id; // Extract the part ID from the response
-    console.log("Part uploaded:", partId);
-
-    if (!partId) {
-      throw new Error("Failed to upload part");
-    }
-
-    // Step 3: Complete Upload
-    const completion = await completeUpload(upload.id, [partId], apiKey);
-    console.log("Upload complete:", completion);
-
-    if (!completion.file || !completion.file.id) {
-      throw new Error("Failed to complete upload");
-    }
-
-    console.log("Upload Complete, File ID:", completion.file.id);
-    return completion.file.id;
-  } catch (error) {
-    console.error("Error uploading files:", error);
-    throw error;
-  }
+  return attemptUpload();
 };
 
 const createUpload = async (
@@ -251,7 +269,6 @@ const startBackgroundUpload = async (
       .then((uploadId) => {
         console.log("Upload started with ID:", uploadId);
         Upload.addListener("progress", uploadId, (data) => {
-          
           onProgress(data.progress);
         });
         Upload.addListener("error", uploadId, (data) => {

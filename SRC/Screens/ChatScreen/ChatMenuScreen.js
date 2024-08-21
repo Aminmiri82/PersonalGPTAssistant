@@ -6,7 +6,7 @@ import colors from "../../config/colors";
 import { fetchChatItems, deleteChatItemById } from "../../database";
 import { useFocusEffect } from "@react-navigation/native";
 import AppButton from "../../Components/AppButton";
-import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
+import { DatabaseContext } from "../../DatabaseProvider"; 
 import { useTranslation } from "react-i18next";
 
 function ChatMenuScreen({ navigation }) {

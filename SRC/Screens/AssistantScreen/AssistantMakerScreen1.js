@@ -45,6 +45,7 @@ function AssistantMakerScreen1({ navigation }) {
             tipText="Choosing photo for the assistant"
             editText="Edit"
             onImagePicked={handleImagePicked}
+            prepickedUri={require("../../assets/assistant.jpg")}
             
           />
           <View style={styles.middleContainer}>
