@@ -1022,6 +1022,8 @@ PODS:
     - React-debug
   - react-native-background-upload (6.6.0):
     - React
+  - react-native-document-picker (9.3.0):
+    - React-Core
   - react-native-progress-view (1.4.2):
     - React-Core
   - react-native-safe-area-context (4.10.5):
@@ -1374,6 +1376,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-background-upload (from `../node_modules/react-native-background-upload`)
+  - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - "react-native-progress-view (from `../node_modules/@react-native-community/progress-view`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
@@ -1515,6 +1518,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-background-upload:
     :path: "../node_modules/react-native-background-upload"
+  react-native-document-picker:
+    :path: "../node_modules/react-native-document-picker"
   react-native-progress-view:
     :path: "../node_modules/@react-native-community/progress-view"
   react-native-safe-area-context:
@@ -1631,6 +1636,7 @@ SPEC CHECKSUMS:
   React-logger: 257858bd55f3a4e1bc0cf07ddc8fb9faba6f8c7c
   React-Mapbuffer: 6c1cacdbf40b531f549eba249e531a7d0bfd8e7f
   react-native-background-upload: 7c608537f87106c93530a3a19a853afd55466823
+  react-native-document-picker: 5b97e24a7f1a1e4a50a72c540a043f32d29a70a2
   react-native-progress-view: fda23a769e325dd94f08439f6cfca5867fca32c0
   react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
