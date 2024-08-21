@@ -18,6 +18,7 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile, progressMap }) {
       if (!result.canceled) {
         
         const pickedFile = result.assets[0];
+        console.log("OVER HERE Picked file:", pickedFile.uri);
         onAddFile(pickedFile);
       }
     } catch (err) {
