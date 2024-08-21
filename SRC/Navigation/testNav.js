@@ -31,6 +31,7 @@ function TestNav(props) {
         component={BottomTabNav}
         options={{
           title: t("BottomTabNav"), // Translated title for this screen
+          headerShown: false,
         }}
       />
     </TestStack.Navigator>
