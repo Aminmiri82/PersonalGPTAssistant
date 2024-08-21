@@ -16,7 +16,7 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile, progressMap }) {
     try {
       const result = await DocumentPicker.getDocumentAsync();
       if (!result.canceled) {
-        console.log("Picked file:", result);
+        
         const pickedFile = result.assets[0];
         onAddFile(pickedFile);
       }

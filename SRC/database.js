@@ -13,8 +13,6 @@ export const initDB = async () => {
       db = await SQLite.openDatabaseAsync("chatApp.db");
       await db.execAsync(`
         PRAGMA journal_mode = WAL;
-      
-        
         CREATE TABLE IF NOT EXISTS ChatItems (
           Id INTEGER PRIMARY KEY AUTOINCREMENT, 
           threadId TEXT,

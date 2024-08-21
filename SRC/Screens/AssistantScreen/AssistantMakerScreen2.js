@@ -40,10 +40,17 @@ function AssistantMakerScreen2({ navigation, route }) {
   }, []);
 
   const handleAddFile = async (file) => {
+    setIsUploading((prev) => {
+      const newValue = true;
+      console.log('Updated value:', newValue); // This will reflect the new value
+      return newValue;
+    });
+
+
     // Use a unique identifier such as file.uri or a timestamp
     const uniqueId = file.uri || Date.now().toString();
     setFiles((prevFiles) => [...prevFiles, { ...file, id: uniqueId }]);
-
+  
     try {
       const uploadResponse = await uploadIndividualFiles(file, (progress) =>
         onProgress(uniqueId, progress)
@@ -51,9 +58,11 @@ function AssistantMakerScreen2({ navigation, route }) {
       console.log("Complete upload response:", uploadResponse);
 
       if (uploadResponse) {
-        const fileId = uploadResponse; 
+        const fileId = uploadResponse;
         setFileIds((prevFileIds) => [...prevFileIds, fileId]);
         console.log("Upload Complete, File ID:", fileId);
+        setIsUploading(false);
+        console.log(isUploading);
       } else {
         console.error("Upload response is missing file ID:", uploadResponse);
         throw new Error("Upload response does not contain a valid file ID");
@@ -73,7 +82,7 @@ function AssistantMakerScreen2({ navigation, route }) {
       ...prevMap,
       [fileId]: progress,
     }));
-    console.log(`File ID ${fileId}: Progress ${progress}%`);
+    console.log(`Progress ${progress}%`);
   };
 
   const handleSave = async () => {
@@ -115,15 +124,13 @@ function AssistantMakerScreen2({ navigation, route }) {
     } finally {
       setIsInitializing(false);
     }
-  };// to do: delete the isUploading thing
+  };
 
   return (
     <Screen>
       <Spinner
-        visible={isUploading || isInitializing}
-        textContent={
-          isUploading ? "Uploading files..." : "Initializing assistant..."
-        }
+        visible={isInitializing}
+        textContent="Initializing assistant..."
         textStyle={styles.spinnerTextStyle}
       />
       <View style={styles.topContainer}>
@@ -149,10 +156,9 @@ function AssistantMakerScreen2({ navigation, route }) {
           files={files}
           onAddFile={handleAddFile}
           onRemoveFile={handleRemoveFile}
-          progressMap={progressMap} 
+          progressMap={progressMap}
         />
       </View>
-      <Text>{imageUri}</Text>
       <AppButton
         title={t("saveAssistant")}
         onPress={handleSave}
@@ -222,9 +228,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     elevation: 2,
-    marginLeft: "auto",  
-    marginRight: 20,    
-    width: "30%",       
+    marginLeft: "auto",
+    marginRight: 20,
+    width: "30%",
   },
   nextButtonText: {
     color: colors.white,

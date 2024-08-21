@@ -5,7 +5,6 @@ import AppText from "../../Components/AppText";
 import colors from "../../config/colors";
 import { fetchChatItems, deleteChatItemById } from "../../database";
 import { useFocusEffect } from "@react-navigation/native";
-import Screen from "../../Components/Screen";
 import AppButton from "../../Components/AppButton";
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
 import { useTranslation } from "react-i18next";
@@ -55,6 +54,8 @@ function ChatMenuScreen({ navigation }) {
       });
   };
 
+  
+
   const renderItem = ({ item }) => (
     <ChatItem
       title={item.assistantName || "Legal Guide"}
@@ -76,19 +77,18 @@ function ChatMenuScreen({ navigation }) {
   }
 
   return (
-    <Screen>
-      <View style={styles.container}>
-        {chatItems.length === 0 ? (
-          <Text>{t("noChats")}</Text>
-        ) : (
-          <FlatList
-            data={chatItems}
-            keyExtractor={(item) => item.Id.toString()}
-            renderItem={renderItem}
-          />
-        )}
-      </View>
-    </Screen>
+    <View style={styles.container}>
+      {chatItems.length === 0 ? (
+        <Text>{t("noChats")}</Text>
+      ) : (
+        <FlatList
+          data={chatItems}
+          keyExtractor={(item) => item.Id.toString()}
+          renderItem={renderItem}
+          
+        />
+      )}
+    </View>
   );
 }
 

@@ -35,43 +35,41 @@ function AssistantMenuScreen({ navigation }) {
   );
 
   return (
-    <Screen>
-      <View style={styles.container}>
-        {assistants.length === 0 ? (
-          <View style={styles.noAss}>
-            <AppText style={styles.text}>
-              Build a new personal Chat GPT Assistant
-            </AppText>
-            <Button
-              title="Get Started"
-              onPress={() => navigation.navigate("AssistantMakerScreen1")}
-              style={styles.button}
-              textStyle={styles.buttonText}
-              color="#3E84F7"
-            />
-          </View>
-        ) : (
-          <FlatList
-            data={assistants}
-            contentContainerStyle={styles.listContainer}
-            numColumns={2}
-            renderItem={({ item }) => (
-              <AssistantsMenuItem
-                key={item.id}
-                imageUri={item.profile}
-                title={item.name}
-                onPress={() =>
-                  navigation.navigate("AssistantEditorScreen1", {
-                    id: item.id,
-                  })
-                }
-              />
-            )}
-            keyExtractor={(item) => item.id.toString()}
+    <View style={styles.container}>
+      {assistants.length === 0 ? (
+        <View style={styles.noAss}>
+          <AppText style={styles.text}>
+            Build a new personal Chat GPT Assistant
+          </AppText>
+          <Button
+            title="Get Started"
+            onPress={() => navigation.navigate("AssistantMakerScreen1")}
+            style={styles.button}
+            textStyle={styles.buttonText}
+            color="#3E84F7"
           />
-        )}
-      </View>
-    </Screen>
+        </View>
+      ) : (
+        <FlatList
+          data={assistants}
+          contentContainerStyle={styles.listContainer}
+          numColumns={2}
+          renderItem={({ item }) => (
+            <AssistantsMenuItem
+              key={item.id}
+              imageUri={item.profile}
+              title={item.name}
+              onPress={() =>
+                navigation.navigate("AssistantEditorScreen1", {
+                  id: item.id,
+                })
+              }
+            />
+          )}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      )}
+    </View>
   );
 }
 
