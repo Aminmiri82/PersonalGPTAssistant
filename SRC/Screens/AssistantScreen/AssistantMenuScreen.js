@@ -51,10 +51,10 @@ function AssistantMenuScreen({ navigation }) {
       {assistants.length === 0 ? (
         <View style={styles.noAss}>
           <AppText style={styles.text}>
-            Build a new personal Chat GPT Assistant
+            {t("emptyassistant")}
           </AppText>
           <Button
-            title="Get Started"
+            title={t("statrtBuldingAssistant")}
             onPress={() => navigation.navigate("AssistantMakerScreen1")}
             style={styles.button}
             textStyle={styles.buttonText}

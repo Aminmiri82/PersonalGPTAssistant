@@ -42,8 +42,8 @@ function AssistantMakerScreen1({ navigation }) {
       >
         <View style={styles.container}>
           <AppImagePicker
-            tipText="Choosing photo for the assistant"
-            editText="Edit"
+            tipText={t("choosingPhotoForAssistant")}
+            editText={t("edit")}
             onImagePicked={handleImagePicked}
             prepickedUri={require("../../assets/assistant.jpg")}
             

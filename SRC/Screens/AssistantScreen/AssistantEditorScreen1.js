@@ -62,8 +62,8 @@ function AssistantEditorScreen1({ navigation, route }) {
   return (
     <Screen>
       <AppImagePicker
-        tipText="Choosing photo for the assistant"
-        editText="Edit"
+        tipText={t("choosingPhotoForAssistant")}
+        editText={t("edit")}
         onImagePicked={handleImagePicked}
         prepickedUri={{uri: imageUri}}
       />

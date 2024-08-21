@@ -33,8 +33,8 @@ def split_text_into_chunks(text, max_chunk_size):
 
     return chunks
 
-# Worker function to process a batch of pages
-def process_pages(pdf_path, pages, file_name, id_lock):
+# Worker function to process a batch of pages from a PDF
+def process_pdf_pages(pdf_path, pages, file_name, id_lock):
     global global_id
     searchable_data = []
     pdf_document = fitz.open(pdf_path)
@@ -64,32 +64,61 @@ def process_pages(pdf_path, pages, file_name, id_lock):
     pdf_document.close()
     return searchable_data
 
-# Main function to orchestrate processing
-def process_pdf(input_file_path, file_name, all_searchable_data, id_lock):
+# Function to process text files
+def process_text_file(file_path, file_name, all_searchable_data, id_lock):
+    global global_id
     try:
-        pdf_document = fitz.open(input_file_path)
-        total_pages = pdf_document.page_count
-        pdf_document.close()
+        with open(file_path, 'r', encoding='utf-8') as f:
+            text = f.read()
 
-        print(f"Processing {total_pages} pages from file: {file_name}")
+        text_chunks = split_text_into_chunks(text, max_chunk_size)
 
-        page_batches = [range(i + 1, min(i + batch_size + 1, total_pages + 1)) for i in range(0, total_pages, batch_size)]
+        for chunk in text_chunks:
+            with id_lock:
+                current_id = global_id
+                global_id += 1  # Increment global ID
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=None) as executor:
-            future_to_batch = {executor.submit(process_pages, input_file_path, batch, file_name, id_lock): batch for batch in page_batches}
-
-            for future in concurrent.futures.as_completed(future_to_batch):
-                try:
-                    data = future.result()
-                    all_searchable_data.extend(data)
-                except Exception as e:
-                    print(f"Error processing batch: {e}")
+            all_searchable_data.append({
+                'id': str(current_id),  # Use the global incremental ID
+                'text': chunk.lower(),  # Normalize text to lowercase
+                'page': None,  # No page number for text files
+                'fileName': file_name,
+            })
 
     except Exception as e:
-        print(f"Error processing the file: {e}")
+        print(f"Error processing text file {file_name}: {e}")
+
+# Main function to orchestrate processing
+def process_file(input_file_path, file_name, all_searchable_data, id_lock):
+    if input_file_path.suffix.lower() == '.pdf':
+        try:
+            pdf_document = fitz.open(input_file_path)
+            total_pages = pdf_document.page_count
+            pdf_document.close()
+
+            print(f"Processing {total_pages} pages from file: {file_name}")
+
+            page_batches = [range(i + 1, min(i + batch_size + 1, total_pages + 1)) for i in range(0, total_pages, batch_size)]
+
+            with concurrent.futures.ThreadPoolExecutor(max_workers=None) as executor:
+                future_to_batch = {executor.submit(process_pdf_pages, input_file_path, batch, file_name, id_lock): batch for batch in page_batches}
+
+                for future in concurrent.futures.as_completed(future_to_batch):
+                    try:
+                        data = future.result()
+                        all_searchable_data.extend(data)
+                    except Exception as e:
+                        print(f"Error processing batch: {e}")
+
+        except Exception as e:
+            print(f"Error processing the file: {e}")
+    elif input_file_path.suffix.lower() == '.txt':
+        process_text_file(input_file_path, file_name, all_searchable_data, id_lock)
+    else:
+        print(f"Unsupported file format: {input_file_path.suffix}")
 
 if __name__ == "__main__":
-    file_paths = ["همکاری.pdf", "آیین-دادرسی-کیفری.pdf","قانون تجارت.pdf","قانون_آیین_دادرسی مدنی.pdf","قانون-تجارت2.pdf","قانون-جرایم-رایانه-ای-1.pdf","قانون-کاهش-مجازات-حبس-تعزیری-2.pdf","قانون-مجازات-92-1.pdf","قانون-مجازات-اسلامی-1375.pdf","قانون-مدنی.pdf","مجموعه-قوانین-جزا.pdf","constitution.pdf"]
+    file_paths = ["Assasi.txt","hamkari.txt","dadrasi_madani.txt","dadrasi_keyfari.txt","jarayem_rayaneie.txt","Madani.txt","mojazat.txt","tejarat.txt"]
     output_file_path = Path(__file__).parent / "all_searchable_data.json"
 
     all_searchable_data = []
@@ -98,7 +127,7 @@ if __name__ == "__main__":
     for file_path in file_paths:
         input_file_path = Path(__file__).parent / file_path
         file_name = Path(file_path).name
-        process_pdf(input_file_path, file_name, all_searchable_data, id_lock)
+        process_file(input_file_path, file_name, all_searchable_data, id_lock)
 
     # Write the aggregated data to a single JSON file
     with open(output_file_path, 'w', encoding='utf-8') as f:

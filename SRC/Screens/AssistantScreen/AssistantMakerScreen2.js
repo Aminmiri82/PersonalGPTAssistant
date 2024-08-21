@@ -108,8 +108,9 @@ function AssistantMakerScreen2({ navigation, route }) {
   const handleSave = async () => {
     if (isUploading) {
       Alert.alert(
-        "Upload in Progress",
-        "Please wait until all files have finished uploading before saving the assistant."
+        t("uploadInProgress"),
+        t("pleaseWait")
+        
       );
       return;
     }
