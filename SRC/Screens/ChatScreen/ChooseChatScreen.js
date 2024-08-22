@@ -59,7 +59,7 @@ function ChooseChatScreen({ navigation }) {
       <View style={styles.container}>
         <AssistantsMenuItem
           
-          title="persian law guide"
+          title={t("PersianLegalGuide")}
           onPress={() => {
             createAndInstertNewThread("asst_40ROFN9nKe2V6Eka6bYXSZ2y", require("../../assets/logo.jpg"));
           }}

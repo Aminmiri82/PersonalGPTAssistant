@@ -41,7 +41,9 @@ function AssistantMakerScreen2({ navigation, route }) {
   }, []);
 
   const handleAddFile = async (file) => {
+    console.log("File URI:", file);
     const uniqueId = file.uri || Date.now().toString();
+    console.log("Unique ID:", uniqueId);
     setFiles((prevFiles) => [...prevFiles, { ...file, id: uniqueId }]);
     setUploadCount((prev) => prev + 1);
     setIsUploading(true);
@@ -52,7 +54,7 @@ function AssistantMakerScreen2({ navigation, route }) {
         (progress) => onProgress(uniqueId, progress),
         reportError
       );
-      
+
       // Update fileIds state with the returned fileId
       setFileIds((prevFileIds) => [...prevFileIds, fileId]);
     } catch (error) {
@@ -86,9 +88,9 @@ function AssistantMakerScreen2({ navigation, route }) {
     );
   };
 
-  const handleRemoveFile = (fileId) => {
-    setFiles((prevFiles) => prevFiles.filter((file) => file.id !== fileId));
-    setFileIds((prevFileIds) => prevFileIds.filter((id) => id !== fileId));
+  const handleRemoveFile = (index) => {
+    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setFileIds((prevFileIds) => prevFileIds.filter((_, i) => i !== index));
   };
 
   useEffect(() => {
@@ -107,11 +109,7 @@ function AssistantMakerScreen2({ navigation, route }) {
 
   const handleSave = async () => {
     if (isUploading) {
-      Alert.alert(
-        t("uploadInProgress"),
-        t("pleaseWait")
-        
-      );
+      Alert.alert(t("uploadInProgress"), t("pleaseWait"));
       return;
     }
 

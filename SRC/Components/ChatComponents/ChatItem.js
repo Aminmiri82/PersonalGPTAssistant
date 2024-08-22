@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: colors.white,
     borderBottomColor: colors.dark,
-    borderBottomWidth: 0.5,
+    borderWidth: 0.2,
   },
   detailContainer: {
     marginLeft: 10,

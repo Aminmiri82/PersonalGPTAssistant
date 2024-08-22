@@ -33,13 +33,15 @@ const ChatScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const [streamedChunks, setStreamedChunks] = useState("");
   const [completeResponse, setCompleteResponse] = useState(null);
-  const assistantId = route.params.assistantId;
-  const threadId = route.params.threadId; // this can be null
+  const { threadId, assistantId, assistantName } = route.params; //threadId can be null
 
   const threadRef = useRef(null);
   const flatListRef = useRef(null); // Reference for FlatList
 
   useEffect(() => {
+    navigation.setOptions({
+      title: assistantName,
+    });
     const initializeThread = async () => {
       if (!dbInitialized) return; // Wait for the database to be initialized
 
@@ -70,7 +72,7 @@ const ChatScreen = ({ navigation, route }) => {
     };
 
     initializeThread();
-  }, [threadId, dbInitialized]); // Add dbInitialized as a dependency
+  }, [threadId, dbInitialized, navigation, assistantName]);
 
   const handleStreamedEvent = (event) => {
     console.log("Streamed event received:", event); // Debugging

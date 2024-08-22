@@ -21,7 +21,8 @@ function ChatMenuScreen({ navigation }) {
         if (dbInitialized) {
           try {
             const data = await fetchChatItems();
-            setChatItems(data.reverse());
+            console.log("chat items", data);
+            setChatItems(data);
           } catch (error) {
             console.log("Error fetching ChatItems: ", error);
           }
@@ -39,6 +40,7 @@ function ChatMenuScreen({ navigation }) {
     navigation.navigate("ChatScreen", {
       threadId: chat.threadId,
       assistantId: chat.assistantId,
+      assistantName: chat.assistantName || t("PersianLegalGuide"),
     });
   };
 
@@ -58,7 +60,7 @@ function ChatMenuScreen({ navigation }) {
 
   const renderItem = ({ item }) => (
     <ChatItem
-      title={item.assistantName || "Legal Guide"}
+      title={item.assistantName || t("PersianLegalGuide")}
       subTitle={item.lastMessage}
       imageUri={
         item.assistantId === "asst_40ROFN9nKe2V6Eka6bYXSZ2y"

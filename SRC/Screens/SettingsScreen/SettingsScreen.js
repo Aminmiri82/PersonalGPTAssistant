@@ -71,9 +71,13 @@ function SettingsScreen({ navigation, route }) {
   };
 
   const handleSetAPIKey = (key) => {
-    setApiKey(key.slice(7, 14));
-    saveApiKey(key);
-    console.log(key);
+    if (key.length === 56) {
+      setApiKey(key.slice(7, 14));
+      saveApiKey(key);
+      console.log(key);
+    } else {
+      Alert.alert(t("error"), t("invalidAPIKey"));
+    }
   };
 
   return (

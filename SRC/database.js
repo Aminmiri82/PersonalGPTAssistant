@@ -13,12 +13,15 @@ export const initDB = async () => {
       db = await SQLite.openDatabaseAsync("chatApp.db");
       await db.execAsync(`
         PRAGMA journal_mode = WAL;
+
         CREATE TABLE IF NOT EXISTS ChatItems (
           Id INTEGER PRIMARY KEY AUTOINCREMENT, 
           threadId TEXT,
           assistantId TEXT,
           lastMessage TEXT,
+          lastMessageTimestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
           profile TEXT
+
         );
         CREATE TABLE IF NOT EXISTS Assistants (
           id TEXT PRIMARY KEY, 
@@ -44,24 +47,7 @@ export const initDB = async () => {
     }
   });
 };
-export const fetchAssistantstest = async () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (!db) {
-        throw new Error("Database is not initialized");
-      }
-      const allRows = await db.getAllAsync(`
-        SELECT Assistants.id AS assistantId, Assistants.name AS assistantName, Assistants.instructions AS instructions, Assistants.profile AS profile
-        FROM Assistants
-      `);
-      console.log("Fetched Assistants successfully");
-      resolve(allRows);
-    } catch (error) {
-      console.log("Error fetching Assistants: ", error);
-      reject(error);
-    }
-  });
-};
+
 export const insertChat = async (threadId, assistantId, lastMessage,profile) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -89,9 +75,10 @@ export const fetchChatItems = async () => {
         throw new Error("Database is not initialized");
       }
       const allRows = await db.getAllAsync(`
-        SELECT ChatItems.*, Assistants.name AS assistantName, Assistants.model AS assistantModel , Assistants.profile AS profile
+        SELECT ChatItems.*, Assistants.name AS assistantName, Assistants.model AS assistantModel , Assistants.profile AS profile 
         FROM ChatItems
         LEFT JOIN Assistants ON ChatItems.assistantId = Assistants.id
+        ORDER BY ChatItems.lastMessageTimestamp DESC
       `);
       console.log("Fetched ChatItems successfully");
       resolve(allRows);
@@ -125,7 +112,7 @@ export const updateChatItemById = async (threadId, lastMessage) => {
         throw new Error("Database is not initialized");
       }
       await db.runAsync(
-        "UPDATE ChatItems SET lastMessage = ? WHERE threadId = ?",
+        "UPDATE ChatItems SET lastMessage = ?, lastMessageTimestamp = CURRENT_TIMESTAMP WHERE threadId = ?",
         [lastMessage, threadId]
       );
       console.log("ChatItem really successfully");

@@ -20,10 +20,9 @@ import {
 } from "../../openai-backend/ApiBackEnd";
 import { useTranslation } from "react-i18next";
 
-
 function AssistantEditorScreen2({ navigation, route }) {
   const { t } = useTranslation();
-  const { id,name,instructions,imageUri } = route.params;
+  const { id, name, instructions, imageUri } = route.params;
   const [files, setFiles] = useState([]);
   const [parsedFiles, setParsedFiles] = useState([]);
   const [fileIds, setFileIds] = useState([]);
@@ -137,7 +136,7 @@ function AssistantEditorScreen2({ navigation, route }) {
     try {
       const uploadPromises = parsedFiles.map((file) => {
         console.log("Uploading file:", file, "Files array:", files);
-        return handleAddFile(file); 
+        return handleAddFile(file);
       });
 
       await Promise.all(uploadPromises);
@@ -170,7 +169,12 @@ function AssistantEditorScreen2({ navigation, route }) {
       console.error("Error uploading file:", error);
     }
   };
-
+  //oh god oh fuck please fix this
+  // LOG  Removing file at index: 0
+  //LOG  Files: [{"id": "file:///Users/aminmiri/Library/Developer/CoreSimulator/Devices/9BCE7473-F759-42B1-BF12-17FEC2C55D9B/data/Containers/Data/Application/27B93F0C-CF67-4920-AC53-5FC9693895C1/tmp/com.amin04.SRC-Inbox/10MB-TESTFILE.ORG.pdf", "mimeType": "application/pdf", "name": "10MB-TESTFILE.ORG.pdf", "size": 10705702, "uri": "file:///Users/aminmiri/Library/Developer/CoreSimulator/Devices/9BCE7473-F759-42B1-BF12-17FEC2C55D9B/data/Containers/Data/Application/27B93F0C-CF67-4920-AC53-5FC9693895C1/tmp/com.amin04.SRC-Inbox/10MB-TESTFILE.ORG.pdf"}]
+  //LOG  File IDs: ["file-NCsWm2Wc7XsgpM9oTFXc0WoX"]
+  // it doesnt work when the files are finished uploading in diffrent order
+  //oh god oh fuck
   const handleRemoveFile = (index) => {
     setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     setFileIds((prevFileIds) => prevFileIds.filter((_, i) => i !== index));
