@@ -57,7 +57,7 @@
     "react-native-screens": "^3.31.1",
     "react-native-sqlite-storage": "^6.0.1",
     "react-native-sse": "^1.2.1",
-    "react-native-svg": "^15.5.0",
+    "react-native-svg": "^15.2.0",
     "react-native-svg-transformer": "^1.5.0",
     "react-native-use-file-upload": "^0.2.0",
     "react-native-vector-icons": "^10.1.0",

@@ -13,7 +13,7 @@ function TestScreen({ navigation }) {
       console.log("Current Step:", step); // Debugging line
 
       if (step.order === 4) {
-        navigation.navigate("Settings");
+        navigation.navigate("Home", { screen: "Settings" });
       }
     };
 

@@ -1,19 +1,16 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Icon from "../Components/Icon";
+import Icon from "../../Components/Icon";
 
-import SettingsScreenNav from "./SettingsScreenNav";
-import ChatScreenNav from "./ChatScreenNav";
-import AssistantsScreenNav from "./AssistantsScreenNav";
-import OfflineSearchNav from "./OfflineSearchNav";
+import WTSettingsScreenNav from "./WTSettingsScreenNav";
 
 
 import { useTranslation } from "react-i18next";
 import { CopilotProvider } from "react-native-copilot";
 
 const Tab = createBottomTabNavigator();
-function BottomTabNav() {
+function WTBottomTabNav() {
   const { t } = useTranslation();
   return (
     <Tab.Navigator
@@ -39,22 +36,8 @@ function BottomTabNav() {
       })}
     >
       
-      <Tab.Screen
-        name="Chat"
-        component={ChatScreenNav}
-        options={{ headerShown: false, title: t("ChatTab") }}
-      />
-      <Tab.Screen
-        name="Assistants"
-        component={AssistantsScreenNav}
-        options={{ headerShown: false, title: t("AssistantsTab") }}
-      />
-      <Tab.Screen
-        name="OfflineSearch"
-        component={OfflineSearchNav}
-        options={{ headerShown: false, title: t("OfflineSearchTabName") }}
-      />
-      <Tab.Screen name="Settings" component={SettingsScreenNav} options={{ headerShown: false, title: t("SettingTab") }} />
+      <Tab.Screen name="Settings" component={WTSettingsScreenNav} options={{ headerShown: false, title: t("SettingTabWT") }} />
+      
      
     </Tab.Navigator>
   );
@@ -64,4 +47,4 @@ const styles = StyleSheet.create({
   container: {},
 });
 
-export default BottomTabNav;
+export default WTBottomTabNav;
