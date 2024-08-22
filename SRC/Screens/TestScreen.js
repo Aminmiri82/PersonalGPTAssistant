@@ -11,7 +11,7 @@ function TestScreen({ navigation }) {
   const { start, copilotEvents } = useCopilot();
 
   const handleStartWalkthrough = () => {
-    navigation.navigate("BottomTabNav", { startWalkthrough: true });
+    navigation.navigate("ChatMenuScreen", { startWalkthrough: true });
   };
 
   return (

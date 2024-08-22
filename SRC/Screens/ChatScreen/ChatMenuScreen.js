@@ -11,7 +11,7 @@ import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import p
 import { useTranslation } from "react-i18next";
 import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
 
-const WalkthrouableText = walkthroughable(AppText);
+const WalkthrouableText = walkthroughable(Text);
 const WalkthroughableView = walkthroughable(View);
 
 function ChatMenuScreen({ navigation, route }) {
@@ -20,26 +20,29 @@ function ChatMenuScreen({ navigation, route }) {
   const [chatItems, setChatItems] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const { start, copilotEvents } = useCopilot();
-  const { startWalkthrough } = route.params || {};
-
-  // useEffect(() => {
-  //   const handleStepChange = (step) => {
-  //     console.log("Current Step:", step); // Debugging line
-  //   };
-
-  //   const stepChangeSubscription = copilotEvents.on(
-  //     "stepChange",
-  //     handleStepChange
-  //   );
-
-  //   // Cleanup on component unmount
-  //   return () => {
-  //     stepChangeSubscription.remove();
-  //   };
-  // }, [copilotEvents, navigation]);
+  const { startWalkthrough } = route.params;
 
   useEffect(() => {
+    const handleStepChange = (step) => {
+      console.log("Current Step:", step); // Debugging line
+    };
+
+    const stepChangeSubscription = copilotEvents.on(
+      "stepChange",
+      handleStepChange
+    );
+
+    // Cleanup on component unmount
+    return () => {
+      stepChangeSubscription.remove();
+    };
+  }, [copilotEvents, navigation]);
+
+  useEffect(() => {
+    console.log("huh");
+    console.log(startWalkthrough);
     if (startWalkthrough) {
+      console.log("started");
       start();
     }
   }, [startWalkthrough]);
@@ -104,29 +107,29 @@ function ChatMenuScreen({ navigation, route }) {
 
   return (
     <Screen>
-      {/* <CopilotStep
+      <CopilotStep
         text="Chat with your legal assistant"
         order={1}
         name="chatMenuScreen"
-      > */}
-      <View style={styles.container}>
-        {chatItems.length === 0 ? (
-          <CopilotStep
-            text="Chat with your legal assistant"
-            order={1}
-            name="chatMenuScreen"
-          >
-            <WalkthrouableText>{t("noChats")}</WalkthrouableText>
-          </CopilotStep>
-        ) : (
-          <FlatList
-            data={chatItems}
-            keyExtractor={(item) => item.Id.toString()}
-            renderItem={renderItem}
-          />
-        )}
-      </View>
-      {/* </CopilotStep> */}
+      >
+        <WalkthroughableView style={styles.container}>
+          {chatItems.length === 0 ? (
+            <CopilotStep
+              text="Chat with your legal assistant"
+              order={2}
+              name="chatMenuScreen"
+            >
+              <WalkthrouableText>{t("noChats")}</WalkthrouableText>
+            </CopilotStep>
+          ) : (
+            <FlatList
+              data={chatItems}
+              keyExtractor={(item) => item.Id.toString()}
+              renderItem={renderItem}
+            />
+          )}
+        </WalkthroughableView>
+      </CopilotStep>
     </Screen>
   );
 }

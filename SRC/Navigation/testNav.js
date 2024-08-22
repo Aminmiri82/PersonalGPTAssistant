@@ -14,8 +14,9 @@ import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
 
 const TestStack = createNativeStackNavigator();
 
-function TestNav(props) {
+function TestNav(props, route) {
   const { t } = useTranslation();
+  const startWalkthrough = route.params?.startWalkthrough;
 
   return (
     <TestStack.Navigator>
@@ -27,12 +28,12 @@ function TestNav(props) {
         }}
       />
       <TestStack.Screen
-        name="BottomTabNav" // Use a static name for referencing the screen
-        component={BottomTabNav}
+        name="ChatMenuScreen" // Use a static name for referencing the screen
+        component={ChatMenuScreen}
         options={{
-          title: t("BottomTabNav"), // Translated title for this screen
-          headerShown: false,
+          title: t("ChatMenuScreen"), // Translated title for this screen
         }}
+        initialParams={{ startWalkthrough }}
       />
     </TestStack.Navigator>
   );
