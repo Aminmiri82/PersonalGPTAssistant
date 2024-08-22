@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SettingsScreen from "../../Screens/SettingsScreen/SettingsScreen";
-import AboutUsScreen from "../../Screens/SettingsScreen/AboutUsScreen";
-import TermsAndConditionsScreen from "../../Screens/SettingsScreen/TermsAndConditionsScreen";
-import PrivacyPolicyScreen from "../../Screens/SettingsScreen/PrivacyPolicyScreen";
+import SettingsScreen from "../../Screens/WTScreens/WTSettingsScreen/WTSettingsScreen";
+import AboutUsScreen from "../../Screens/WTScreens/WTSettingsScreen/WTAboutUsScreen";
+import TermsAndConditionsScreen from "../../Screens/WTScreens/WTSettingsScreen/WTTermsAndConditionsScreen";
+import PrivacyPolicyScreen from "../../Screens/WTScreens/WTSettingsScreen/WTPrivacyPolicyScreen";
 import { useTranslation } from "react-i18next";
 
 const SettingsStack = createNativeStackNavigator();

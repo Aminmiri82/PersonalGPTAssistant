@@ -1,15 +1,15 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import OfflineSearchScreen from "../Screens/OfflineSearchScreen/OfflineSearchScreen";
+import WTSearchScreen from "../../Screens/WTScreens/WTOfflineSearchScreen/WTOfflineSearchScreen";
 
-import AppButton from "../Components/AppButton";
+import AppButton from "../../Components/AppButton";
 
 import { useTranslation } from "react-i18next";
 
 const OfflineSearchNav = createNativeStackNavigator();
 
-function OfflineSearchScreenNav() {
+function WTOfflineSearchScreenNav() {
   const { t } = useTranslation();
 
 
@@ -17,8 +17,8 @@ function OfflineSearchScreenNav() {
   return (
     <OfflineSearchNav.Navigator>
       <OfflineSearchNav.Screen
-        name="OfflineSearchScreen" // Use static names for screens
-        component={OfflineSearchScreen}
+        name="WTOfflineSearchScreen" // Use static names for screens
+        component={WTSearchScreen}
         options={{ title: t("OfflineSearchScreenName") }} // Optional: Add translation if needed
       />
     </OfflineSearchNav.Navigator>
@@ -30,4 +30,4 @@ const styles = StyleSheet.create({
   container: {},
 });
 
-export default OfflineSearchScreenNav;
+export default WTOfflineSearchScreenNav;

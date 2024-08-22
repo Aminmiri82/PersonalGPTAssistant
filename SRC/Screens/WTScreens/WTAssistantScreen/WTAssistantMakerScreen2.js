@@ -1,38 +1,29 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  Text,
-  ScrollView,
-} from "react-native";
-import AppText from "../../Components/AppText";
-import Screen from "../../Components/Screen";
-import colors from "../../config/colors";
-import Styles from "../../config/Styles";
-import RNPickerSelect from "react-native-picker-select";
-import * as DocumentPicker from "expo-document-picker";
-import AppDocumentPicker from "../../Components/AssistantsComponents/AppDocumentPicker";
-import {
-  fetchAssistantById,
-  updateAssistant,
-  deleteAssistantById,
-} from "../../database";
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, TouchableOpacity, Text, Button } from "react-native";
+import AppText from "../../../Components/AppText";
+import Screen from "../../../Components/Screen";
+import colors from "../../../config/colors";
 
+import RNPickerSelect from "react-native-picker-select";
+import AppDocumentPicker from "../../../Components/AssistantsComponents/AppDocumentPicker";
+import {
+  uploadIndividualFiles,
+  initializeAssistant,
+  addFilesToAssistant,
+} from "../../../openai-backend/ApiBackEnd";
+import AppButton from "../../../Components/AppButton";
+import { insertAssistant, initDB } from "../../../database";
+import Spinner from "react-native-loading-spinner-overlay";
 import { useTranslation } from "react-i18next";
 
-//info is the stuff that is saved in the database and you edit it here
-function AssistantEditorScreen2({ navigation, info, route }) {
+function AssistantMakerScreen2({ navigation, route }) {
   const { t } = useTranslation();
-  const { id } = route.params;
-  const { name } = route.params;
-  const { instructions } = route.params;
-  // console.log(id);
-  // console.log(name);
-  const [model, setModel] = useState("pick a model");
+  const { name, instructions } = route.params;
   const [files, setFiles] = useState([]);
+  const [model, setModel] = useState("GPT-4o-mini");
+  const [isUploading, setIsUploading] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(false);
+
   const assistantList = [
     { label: "GPT-4o-mini", value: "gpt-4o-mini" },
     { label: "GPT-4o", value: "gpt-4o" },
@@ -42,26 +33,10 @@ function AssistantEditorScreen2({ navigation, info, route }) {
   ];
 
   useEffect(() => {
-    fetchAssistantById(id)
-      .then((assistant) => {
-        setModel(assistant.model);
-        console.log(assistant.model);
-        setFiles(JSON.parse(assistant.files));
-      })
-      .catch((error) => {
-        console.log("Error fetching Assistant: ", error);
-      });
-  }, [id]);
-
-  const handleSave = () => {
-    updateAssistant(id, name, instructions, model, files)
-      .then(() => {
-        navigation.navigate("AssistantMenuScreen");
-      })
-      .catch((error) => {
-        console.log("Error updating assistant: ", error);
-      });
-  };
+    initDB().catch((error) => {
+      console.log("Error initializing database: ", error);
+    });
+  }, []);
 
   const handleAddFile = (file) => {
     setFiles((prevFiles) => [...prevFiles, file]);
@@ -71,18 +46,73 @@ function AssistantEditorScreen2({ navigation, info, route }) {
     setFiles(files.filter((_, i) => i !== index));
   };
 
-  const handleDelete = () => {
-    deleteAssistantById(id)
+  const handleSave = async () => {
+    if (!name || !instructions) {
+      console.log("Name or instructions are missing");
+      return;
+    }
+    let fileIds = null;
+
+    const assistant = await initializeAssistant({ name, instructions, model });
+    if (files.length > 0) {
+      setIsUploading(true);
+      fileIds = await handleUploadFiles();
+      console.log(
+        "uploading files",
+        fileIds,
+        "to assistant",
+        assistant.assistantId
+      );
+      setIsUploading(false);
+    }
+    setIsInitializing(true);
+    if (fileIds != null) {
+      await addFilesToAssistant(assistant.assistantId, fileIds);
+    }
+
+    if (assistant.error) {
+      console.log("Error initializing assistant:", assistant.error);
+      setIsInitializing(false);
+      return;
+    }
+    insertAssistant(assistant.assistantId, name, instructions, model, files)
       .then(() => {
-        navigation.navigate("AssistantMenuScreen"); // Navigate back to the assistant menu
+        navigation.navigate("WTAssistantMenuScreen"); // Navigate back to the assistant menu
       })
       .catch((error) => {
-        console.log("Error deleting assistant: ", error);
+        console.log("Error saving assistant:", error);
+      })
+      .finally(() => {
+        setIsInitializing(false);
       });
   };
 
+  const handleUploadFiles = async () => {
+    setIsUploading(true);
+    try {
+      const uploadPromises = files.map((file) => {
+        console.log("Uploading file:", file);
+        return uploadIndividualFiles(file);
+      });
+
+      const fileIds = await Promise.all(uploadPromises);
+      console.log("fileIds", fileIds);
+      return fileIds;
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
   return (
     <Screen>
+      <Spinner
+        visible={isUploading || isInitializing}
+        textContent={
+          isUploading ? "Uploading files..." : "Initializing assistant..."
+        }
+        textStyle={styles.spinnerTextStyle}
+      />
       <View style={styles.topContainer}>
         <View style={styles.topTipContainer}>
           <AppText style={styles.topTip}>{t("chooseModel")}</AppText>
@@ -91,7 +121,6 @@ function AssistantEditorScreen2({ navigation, info, route }) {
           <RNPickerSelect
             onValueChange={(value) => setModel(value)}
             items={assistantList}
-            value={model}
             
           />
         </View>
@@ -110,17 +139,12 @@ function AssistantEditorScreen2({ navigation, info, route }) {
           onRemoveFile={handleRemoveFile}
         />
       </View>
-      <View style={styles.ButtonContainer}>
-        <TouchableOpacity
-          onPress={handleDelete}
-          style={styles.deleteAssistantButton}
-        >
-          <AppText style={styles.deleteButtonText}>{t("delete")}</AppText>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleSave} style={styles.doneButton}>
-          <AppText style={styles.doneButtonText}>{t("done")}</AppText>
-        </TouchableOpacity>
-      </View>
+      <AppButton
+        title={t("saveAssistant")}
+        onPress={handleSave}
+        style={styles.nextButton}
+        textStyle={styles.nextButtonText}
+      />
     </Screen>
   );
 }
@@ -129,8 +153,6 @@ const styles = StyleSheet.create({
   topContainer: {
     alignItems: "center",
     padding: 10,
-    // borderColor: "blue",
-    // borderWidth: 1,
   },
   topTipContainer: {
     width: "100%",
@@ -151,7 +173,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
   },
-
   gp4TipContainer: {
     width: "100%",
     justifyContent: "center",
@@ -236,6 +257,27 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  nextButton: {
+    backgroundColor: colors.niceBlue,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    elevation: 2,
+    marginLeft: 10,
+    position: "relative",
+    width: "30%",
+    left: "40%",
+    bottom: "10%",
+  },
+  nextButtonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  spinnerTextStyle: {
+    color: "#FFF",
+  },
 });
 
-export default AssistantEditorScreen2;
+export default AssistantMakerScreen2;
