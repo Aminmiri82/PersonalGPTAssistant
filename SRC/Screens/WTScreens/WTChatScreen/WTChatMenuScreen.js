@@ -1,7 +1,12 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import ChatItem from "../../../Components/ChatComponents/ChatItem";
-
+import {
+  CopilotProvider,
+  useCopilot,
+  CopilotStep,
+  walkthroughable,
+} from "react-native-copilot";
 import colors from "../../../config/colors";
 import { fetchChatItems, deleteChatItemById } from "../../../database";
 import { useFocusEffect } from "@react-navigation/native";
@@ -14,6 +19,7 @@ function WTChatMenuScreen({ navigation }) {
   const { dbInitialized } = useContext(DatabaseContext);
   const [chatItems, setChatItems] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const { start,copilotEvents } = useCopilot();
 
   useFocusEffect(
     useCallback(() => {
@@ -85,6 +91,13 @@ function WTChatMenuScreen({ navigation }) {
             renderItem={renderItem}
           />
         )}
+        <CopilotStep text="This is step 5" order={5} name="step5">
+          <View></View>
+        </CopilotStep>
+        <CopilotStep text="This is step 6" order={6} name="step6">
+          <View></View>
+        </CopilotStep>
+        
       
       </View>
     </Screen>

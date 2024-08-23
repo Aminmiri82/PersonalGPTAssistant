@@ -11,17 +11,19 @@ function WTMainScreen({ navigation }) {
   useEffect(() => {
     const handleStepChange = (step) => {
       console.log("Current Step:", step); // Debugging line
-
       if (step.order === 4) {
-        navigation.navigate("WTBottomTabNav", { screen: "WTSettings" });
+        navigation.navigate("WTBottomTabNav", { screen: "WTChat" });
+      }
+      // fuck me this is so dumb
+      if (step.order === 6) {
+        navigation.navigate("WTSettings");
       }
     };
-
     const stepChangeSubscription = copilotEvents.on(
       "stepChange",
       handleStepChange
     );
-
+  
     // Cleanup on component unmount
     return () => {
       stepChangeSubscription.remove();
@@ -42,7 +44,7 @@ function WTMainScreen({ navigation }) {
         <CopilotStep text="This is step 3" order={3} name="step3">
           <WalkthroughableText>Step 3</WalkthroughableText>
         </CopilotStep>
-        <CopilotStep text="This is settings screen" order={4} name="step4">
+        <CopilotStep text="This is chats screen" order={4} name="step4">
           <View></View>
         </CopilotStep>
 

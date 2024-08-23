@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Alert, Button } from "react-native";
 import {
   CopilotProvider,
@@ -19,7 +19,6 @@ import Screen from "../../Components/Screen";
 
 // Make SettingsItem walkthroughable
 const WalkthroughableSettingsItem = walkthroughable(SettingsItem); // you'll need to make stuff walkthroughable, check out SettingsItem.js i had to add a forwardRef thingy to it. idk why vscode was just yelling at me
-
 
 function SettingsScreen({ navigation, route }) {
   const { t } = useTranslation();
@@ -83,53 +82,51 @@ function SettingsScreen({ navigation, route }) {
   };
 
   return (
-    
-      <Screen>
-        <View style={styles.container}>
-          <CopilotStep text="Set your API Key here" order={5} name="apiKey">
-            <WalkthroughableSettingsItem
-              title={t("apikey")}
-              subTitle={apiKey}
-              IconComponent={<Icon iconSet="MCI" name="key" />}
-              onPress={toggleAPIPrompt}
-            />
-          </CopilotStep>
-
-          <OpenAIPrompt
-            visible={isAPIPromptVisible}
-            onClose={toggleAPIPrompt}
-            onSumbit={handleSetAPIKey}
-          />
-
-          <CopilotStep text="Choose your language" order={6} name="language">
-            <WalkthroughableSettingsItem
-              title={t("Languages")}
-              subTitle={selectedLanguage}
-              IconComponent={<Icon iconSet="MCI" name="translate" />}
-              onPress={toggleLanguagePrompt}
-            />
-          </CopilotStep>
-
-          <LanguagesPrompt
-            visible={isLanguagePromptVisible}
-            onClose={toggleLanguagePrompt}
-            onSelectLanguage={handleSelectLanguage}
-          />
-
+    <Screen>
+      <View style={styles.container}>
+        <CopilotStep text="Set your API Key here" order={5} name="apiKey">
           <WalkthroughableSettingsItem
-            title={t("PriPol")}
-            IconComponent={<Icon iconSet="MCI" name="file-document" />}
-            onPress={() => navigation.navigate("PrivacyPolicyScreen")}
+            title={t("apikey")}
+            subTitle={apiKey}
+            IconComponent={<Icon iconSet="MCI" name="key" />}
+            onPress={toggleAPIPrompt}
           />
+        </CopilotStep>
+
+        <OpenAIPrompt
+          visible={isAPIPromptVisible}
+          onClose={toggleAPIPrompt}
+          onSumbit={handleSetAPIKey}
+        />
+
+        <CopilotStep text="Choose your language" order={6} name="language">
           <WalkthroughableSettingsItem
-            title={t("aboutUs")}
-            IconComponent={<Icon iconSet="MCI" name="information" />}
-            onPress={() => navigation.navigate("AboutUsScreen")}
+            title={t("Languages")}
+            subTitle={selectedLanguage}
+            IconComponent={<Icon iconSet="MCI" name="translate" />}
+            onPress={toggleLanguagePrompt}
           />
-          <Button title="Start tutorial" onPress={() => start()} />
-        </View>
-      </Screen>
-    
+        </CopilotStep>
+
+        <LanguagesPrompt
+          visible={isLanguagePromptVisible}
+          onClose={toggleLanguagePrompt}
+          onSelectLanguage={handleSelectLanguage}
+        />
+
+        <WalkthroughableSettingsItem
+          title={t("PriPol")}
+          IconComponent={<Icon iconSet="MCI" name="file-document" />}
+          onPress={() => navigation.navigate("PrivacyPolicyScreen")}
+        />
+        <WalkthroughableSettingsItem
+          title={t("aboutUs")}
+          IconComponent={<Icon iconSet="MCI" name="information" />}
+          onPress={() => navigation.navigate("AboutUsScreen")}
+        />
+        <Button title="Start tutorial" onPress={() => start()} />
+      </View>
+    </Screen>
   );
 }
 

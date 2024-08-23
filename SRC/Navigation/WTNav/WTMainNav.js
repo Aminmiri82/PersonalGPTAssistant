@@ -5,25 +5,26 @@ import WTBottomTabNav from "./WTBottomTabNav";
 import WTMainScreen from "../../Screens/WTScreens/WTMainScreen";
 
 
-
 const WTMNav = createNativeStackNavigator();
-
 function WTMainNav() {
-  
-
   return (
-    <WTMNav.Navigator>
+    
+    
+      <WTMNav.Navigator>
+        {/* main screen is for all the explainations you might wanna give before you start the walk through */}
         <WTMNav.Screen
-        name="WTMainScreen"
-        component={WTMainScreen}
-        options={{ headerShown: false }}
-      />
-      <WTMNav.Screen
-        name="WTBottomTabNav"
-        component={WTBottomTabNav}
-        options={{ headerShown: false }}
-      />
-    </WTMNav.Navigator>
+          name="WTMainScreen"
+          component={WTMainScreen}
+          options={{ headerShown: false }}
+        />
+        {/* after you're done with the explaination, you can go to the actual app stuff */}
+        <WTMNav.Screen
+          name="WTBottomTabNav"
+          component={WTBottomTabNav}
+          options={{ headerShown: false }}
+        />
+      </WTMNav.Navigator>
+    
   );
 }
 

@@ -34,8 +34,13 @@ export default function App() {
       <CopilotProvider>
         <NavigationContainer>
           <Stack.Navigator>
-            <Stack.Screen name="WTMainNav" component={WTMainNav} options={{ headerShown: false }} />
-            
+            {/* this is where you put all the walkthroughs stuff */}
+            <Stack.Screen
+              name="WTMainNav"
+              component={WTMainNav}
+              options={{ headerShown: false }}
+            />
+
             <Stack.Screen
               name="Home"
               component={BottomTabNav}

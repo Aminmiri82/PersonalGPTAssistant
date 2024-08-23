@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Alert, Button, Text } from "react-native";
+import { View, StyleSheet, Alert, Button,Text } from "react-native";
 import {
   CopilotProvider,
   useCopilot,
@@ -22,7 +22,7 @@ const WalkthroughableSettingsItem = walkthroughable(SettingsItem); // you'll nee
 
 function SettingsScreen({ navigation, route }) {
   const { t } = useTranslation();
-  const { start } = useCopilot(); // Get the start function from useCopilot
+  const { copilotEvents } = useCopilot(); // Get the start function from useCopilot
   const [isLanguagePromptVisible, setLanguagePromptVisible] = useState(false);
   const [isAPIPromptVisible, setAPIPromptVisible] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("Select Language");
@@ -44,9 +44,24 @@ function SettingsScreen({ navigation, route }) {
         console.error("Error retrieving API key", error);
       }
     };
+    const handleStepChange = (step) => {
+      console.log("Current Step:", step); // Debugging line
+      // put WTchat here because it's the first screen you gottt go to
+      if (step.order === 9) {
+        navigation.navigate("Home"); // WTsettings is the name of the screen you wanna go to
+      }
+    };
+
+    const stepChangeSubscription = copilotEvents.on(
+      "stepChange",
+      handleStepChange
+    );
 
     fetchApiKey();
-  }, []);
+    return () => {
+      stepChangeSubscription.remove();
+    };
+  }, [copilotEvents, navigation]);
 
   const toggleLanguagePrompt = () => {
     setLanguagePromptVisible(!isLanguagePromptVisible);
@@ -84,7 +99,7 @@ function SettingsScreen({ navigation, route }) {
   return (
     <Screen>
       <View style={styles.container}>
-        <CopilotStep text="Set your API Key here" order={5} name="apiKey">
+        <CopilotStep text="Set your API Key here" order={7} name="apiKey">
           <WalkthroughableSettingsItem
             title={t("apikey")}
             subTitle={apiKey}
@@ -99,7 +114,7 @@ function SettingsScreen({ navigation, route }) {
           onSumbit={handleSetAPIKey}
         />
 
-        <CopilotStep text="Choose your language" order={6} name="language">
+        <CopilotStep text="Choose your language" order={8} name="language">
           <WalkthroughableSettingsItem
             title={t("Languages")}
             subTitle={selectedLanguage}
@@ -113,7 +128,7 @@ function SettingsScreen({ navigation, route }) {
           onClose={toggleLanguagePrompt}
           onSelectLanguage={handleSelectLanguage}
         />
-      {/* if you wanna put two components in the same step you gotta create a new walkthroughable component that has both components inside it. very stupid i know*/}
+
         <WalkthroughableSettingsItem
           title={t("PriPol")}
           IconComponent={<Icon iconSet="MCI" name="file-document" />}
@@ -124,10 +139,13 @@ function SettingsScreen({ navigation, route }) {
           IconComponent={<Icon iconSet="MCI" name="information" />}
           onPress={() => navigation.navigate("AboutUsScreen")}
         />
-
-        <Button title="Start tutorial" onPress={() => start()} />
+        <CopilotStep text="This is it" order={9} name="step7">
+          <View></View>
+        </CopilotStep>
+        
         <Text>hiiii</Text>
       </View>
+      
     </Screen>
   );
 }

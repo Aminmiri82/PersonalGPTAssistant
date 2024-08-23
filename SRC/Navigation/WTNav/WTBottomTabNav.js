@@ -37,6 +37,7 @@ function WTBottomTabNav() {
         },
       })}
     >
+      {/* i changed all the names and added WT to the beginning of them, so they're not mistaken for the normal ones */}
       <Tab.Screen name="WTChat" component={WTChatScreenNav} options={{ headerShown: false, title: t("ChatTab") }} />
       <Tab.Screen name="WTAssistants" component={WTAssistantsScreenNav} options={{ headerShown: false, title: t("AssistantTab") }} />
       <Tab.Screen name="WTOfflineSearch" component={WTOfflineSearchScreenNav} options={{ headerShown: false, title: t("OfflineSearchTab") }} />
