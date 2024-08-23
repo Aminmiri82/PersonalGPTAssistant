@@ -33,7 +33,7 @@ function OpenAIPrompt({ visible, onClose, onSumbit }) {
         <View style={styles.menuContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Enter API Key"
+            placeholder={t("enterAPIKey")}
             onChangeText={(text) => setInputValue(text)}
             onSubmitEditing={handleSubmit}
           />

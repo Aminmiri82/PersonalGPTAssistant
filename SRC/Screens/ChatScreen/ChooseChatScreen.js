@@ -27,7 +27,7 @@ function ChooseChatScreen({ navigation }) {
     }, [dbInitialized])
   );
 
-  const createAndInstertNewThread = async (assistant_id) => {
+  const createAndInstertNewThread = async (assistant_id,assistantName) => {
     const newThread = await createThread();
     console.log("Thread created:", newThread.id);
     await insertChat(newThread.id, assistant_id, null);
@@ -35,6 +35,7 @@ function ChooseChatScreen({ navigation }) {
     navigation.navigate("ChatScreen", {
       assistantId: assistant_id,
       threadId: newThread.id,
+      assistantName: assistantName
     });
   };
 
@@ -45,10 +46,10 @@ function ChooseChatScreen({ navigation }) {
   const renderItem = ({ item }) => (
     <AssistantsMenuItem
       key={item.id}
-      image={require("../../assets/assistant.jpg")}
+      imageUri={item.profile}
       title={item.name}
       onPress={() => {
-        createAndInstertNewThread(item.id);
+        createAndInstertNewThread(item.id, item.name);
       }}
       ShowEditButton={false}
     />
@@ -58,10 +59,10 @@ function ChooseChatScreen({ navigation }) {
     <Screen>
       <View style={styles.container}>
         <AssistantsMenuItem
-          image={require("../../assets/logo.jpg")}
-          title="persian law guide"
+          
+          title={t("PersianLegalGuide")}
           onPress={() => {
-            createAndInstertNewThread("asst_40ROFN9nKe2V6Eka6bYXSZ2y");
+            createAndInstertNewThread("asst_40ROFN9nKe2V6Eka6bYXSZ2y", t("PersianLegalGuide"));
           }}
           ShowEditButton={false}
         />

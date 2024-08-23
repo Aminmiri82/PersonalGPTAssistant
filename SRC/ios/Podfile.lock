@@ -5,6 +5,9 @@ PODS:
     - ExpoModulesCore
   - EXConstants (16.0.2):
     - ExpoModulesCore
+  - EXImageLoader (4.7.0):
+    - ExpoModulesCore
+    - React-Core
   - EXJSONUtils (0.13.1)
   - EXManifests (0.14.3):
     - ExpoModulesCore
@@ -19,6 +22,8 @@ PODS:
   - ExpoFont (12.0.9):
     - ExpoModulesCore
   - ExpoHead (3.5.21):
+    - ExpoModulesCore
+  - ExpoImagePicker (15.0.7):
     - ExpoModulesCore
   - ExpoKeepAwake (13.0.2):
     - ExpoModulesCore
@@ -1017,6 +1022,8 @@ PODS:
     - React-debug
   - react-native-background-upload (6.6.0):
     - React
+  - react-native-document-picker (9.3.0):
+    - React-Core
   - react-native-progress-view (1.4.2):
     - React-Core
   - react-native-safe-area-context (4.10.5):
@@ -1320,6 +1327,7 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EASClient (from `../node_modules/expo-eas-client/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
+  - EXImageLoader (from `../node_modules/expo-image-loader/ios`)
   - EXJSONUtils (from `../node_modules/expo-json-utils/ios`)
   - EXManifests (from `../node_modules/expo-manifests/ios`)
   - Expo (from `../node_modules/expo`)
@@ -1328,6 +1336,7 @@ DEPENDENCIES:
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
   - ExpoFont (from `../node_modules/expo-font/ios`)
   - ExpoHead (from `../node_modules/expo-router/ios`)
+  - ExpoImagePicker (from `../node_modules/expo-image-picker/ios`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoLocalization (from `../node_modules/expo-localization/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
@@ -1367,6 +1376,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-background-upload (from `../node_modules/react-native-background-upload`)
+  - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - "react-native-progress-view (from `../node_modules/@react-native-community/progress-view`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
@@ -1414,6 +1424,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-eas-client/ios"
   EXConstants:
     :path: "../node_modules/expo-constants/ios"
+  EXImageLoader:
+    :path: "../node_modules/expo-image-loader/ios"
   EXJSONUtils:
     :path: "../node_modules/expo-json-utils/ios"
   EXManifests:
@@ -1430,6 +1442,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-font/ios"
   ExpoHead:
     :path: "../node_modules/expo-router/ios"
+  ExpoImagePicker:
+    :path: "../node_modules/expo-image-picker/ios"
   ExpoKeepAwake:
     :path: "../node_modules/expo-keep-awake/ios"
   ExpoLocalization:
@@ -1504,6 +1518,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-background-upload:
     :path: "../node_modules/react-native-background-upload"
+  react-native-document-picker:
+    :path: "../node_modules/react-native-document-picker"
   react-native-progress-view:
     :path: "../node_modules/@react-native-community/progress-view"
   react-native-safe-area-context:
@@ -1572,6 +1588,7 @@ SPEC CHECKSUMS:
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   EASClient: 1509a9a6b48b932ec61667644634daf2562983b8
   EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
+  EXImageLoader: ab589d67d6c5f2c33572afea9917304418566334
   EXJSONUtils: 30c17fd9cc364d722c0946a550dfbf1be92ef6a4
   EXManifests: c1fab4c3237675e7b0299ea8df0bcb14baca4f42
   Expo: f3e39cddde295c79d206e972a59693cbb329ef46
@@ -1580,6 +1597,7 @@ SPEC CHECKSUMS:
   ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
   ExpoFont: e7f2275c10ca8573c991e007329ad6bf98086485
   ExpoHead: 342c7a6692f00bd9f23169183098a5c78eebe644
+  ExpoImagePicker: 12a420923383ae38dccb069847218f27a3b87816
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
   ExpoLocalization: f04eeec2e35bed01ab61c72ee1768ec04d093d01
   ExpoModulesCore: 01d8bb9c0163ea756ccf0919b53e2d45f68f4e3b
@@ -1618,6 +1636,7 @@ SPEC CHECKSUMS:
   React-logger: 257858bd55f3a4e1bc0cf07ddc8fb9faba6f8c7c
   React-Mapbuffer: 6c1cacdbf40b531f549eba249e531a7d0bfd8e7f
   react-native-background-upload: 7c608537f87106c93530a3a19a853afd55466823
+  react-native-document-picker: 5b97e24a7f1a1e4a50a72c540a043f32d29a70a2
   react-native-progress-view: fda23a769e325dd94f08439f6cfca5867fca32c0
   react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261

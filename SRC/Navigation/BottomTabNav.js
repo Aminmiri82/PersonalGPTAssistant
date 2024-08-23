@@ -27,7 +27,7 @@ function BottomTabNav() {
             iconName = focused ? "robot" : "robot-outline";
           } else if (route.name === "Settings") {
             iconName = focused ? "cog" : "cog-outline";
-          }else if (route.name === "OfflineSearch") {
+          } else if (route.name === "OfflineSearch") {
             iconName = focused ? "file-search" : "file-search-outline";
           }
 
@@ -37,7 +37,6 @@ function BottomTabNav() {
         },
       })}
     >
-      
       <Tab.Screen
         name="Chat"
         component={ChatScreenNav}

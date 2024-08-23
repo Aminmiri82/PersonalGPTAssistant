@@ -1,101 +1,96 @@
 import React, { useState } from "react";
-import { View, Button, Text, ActivityIndicator, Alert } from "react-native";
-import * as DocumentPicker from "expo-document-picker";
-import Upload from "react-native-background-upload";
+import { View, Text, Button, StyleSheet, ScrollView } from "react-native";
+import DocumentPicker from "react-native-document-picker";
+import { uploadIndividualFiles } from "../openai-backend/ApiBackEnd";
 
-const UploadScreen = () => {
-  const [fileUri, setFileUri] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-
-  const pickFile = async () => {
+const DocumentPickerScreen = () => {
+  const [fileInfo, setFileInfo] = useState(null);
+  const uploadDocument = async (file) => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({});
-      if (!result.canceled && result.assets.length > 0) {
-        const file = result.assets[0];
-        setFileUri(file.uri);
-      } else {
-        Alert.alert("No file selected", "Please select a file.");
-      }
+      const { name, size, type, uri } = file;
+
+      // Start the upload process
+      const fileId = await uploadIndividualFiles(
+        { name, size, mimeType: type, uri },
+        (progress) => console.log(`Upload progress: ${progress}%`),
+        (fileId, errorMessage) =>
+          console.log(`Error uploading file ${fileId}: ${errorMessage}`)
+      );
+
+      console.log("File uploaded successfully, ID:", fileId);
     } catch (error) {
-      console.error("Error picking file:", error);
+      console.error("Upload failed:", error);
     }
   };
-
-  const uploadFile = async () => {
-    if (!fileUri) {
-      Alert.alert("No file selected", "Please select a file first.");
-      return;
-    }
-
-    setUploading(true);
-
-    const options = {
-      url: "https://httpbin.org/post", // Test URL for uploading files
-      path: fileUri,
-      method: "POST",
-      type: "multipart",
-      field: "file", // Form field name for the file
-      notification: {
-        enabled: true, // Only Android
-      },
-      useUtf8Charset: true, // Only Android
-    };
-
+  const pickDocument = async () => {
     try {
-      const uploadId = await Upload.startUpload(options);
-      console.log("Upload started with ID:", uploadId);
-
-      Upload.addListener("progress", uploadId, (data) => {
-        setUploadProgress(data.progress);
-        console.log(`Progress: ${data.progress}%`);
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
       });
-
-      Upload.addListener("error", uploadId, (data) => {
-        console.error(`Error: ${data.error}`);
-        Alert.alert("Upload failed", "An error occurred while uploading.");
-        setUploading(false);
-      });
-
-      Upload.addListener("cancelled", uploadId, () => {
-        console.log("Upload cancelled");
-        Alert.alert("Upload cancelled", "The upload was cancelled.");
-        setUploading(false);
-      });
-
-      Upload.addListener("completed", uploadId, (data) => {
-        console.log("Upload completed:", data);
-        Alert.alert("Upload successful", "Your file has been uploaded.");
-        setUploading(false);
-        setFileUri(null); // Reset file URI after successful upload
-      });
-    } catch (error) {
-      console.error("Error starting upload:", error);
-      Alert.alert(
-        "Upload failed",
-        "An error occurred while starting the upload."
-      );
-      setUploading(false);
+      console.log("Document selected:", res);
+      setFileInfo(res);
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log("User cancelled the picker");
+      } else {
+        console.log("Unknown error:", err);
+        throw err;
+      }
     }
+  };
+  const doTheThing = () => {
+    uploadDocument({
+      name: "10MB-TESTFILE.ORG.pdf",
+      size: 10705702,
+      type: "application/pdf",
+      uri: "file:///Users/aminmiri/Library/Developer/CoreSimulator/Devices/9BCE7473-F759-42B1-BF12-17FEC2C55D9B/data/Containers/Data/Application/27B93F0C-CF67-4920-AC53-5FC9693895C1/tmp/com.amin04.SRC-Inbox/10MB-TESTFILE.ORG.pdf",
+    });
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Button title="Pick a file" onPress={pickFile} />
-      {fileUri && (
-        <>
-          <Text>Selected file: {fileUri}</Text>
-          <Button title="Upload file" onPress={uploadFile} />
-        </>
-      )}
-      {uploading && (
-        <View style={{ marginTop: 20 }}>
-          <Text>Uploading: {Math.round(uploadProgress)}%</Text>
-          <ActivityIndicator size="large" />
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Document Picker Example</Text>
+      <Button title="Pick a Document" onPress={pickDocument} />
+      {fileInfo && (
+        <View style={styles.fileInfo}>
+          <Text style={styles.label}>File Name:</Text>
+          <Text>{fileInfo[0].name}</Text>
+          <Text style={styles.label}>File URI:</Text>
+          <Text>{fileInfo[0].uri}</Text>
+          <Text style={styles.label}>File Type:</Text>
+          <Text>{fileInfo[0].type}</Text>
+          <Text style={styles.label}>File Size:</Text>
+          <Text>{fileInfo[0].size} bytes</Text>
         </View>
       )}
-    </View>
+      <Button title="Upload File" onPress={doTheThing} />
+    </ScrollView>
   );
 };
 
-export default UploadScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  fileInfo: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "#f0f0f0",
+    borderRadius: 8,
+    width: "100%",
+  },
+  label: {
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+});
+
+export default DocumentPickerScreen;

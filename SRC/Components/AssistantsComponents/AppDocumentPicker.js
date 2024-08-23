@@ -9,26 +9,35 @@ import {
 import { ProgressView } from "@react-native-community/progress-view";
 import AppText from "../AppText";
 import colors from "../../config/colors";
-import * as DocumentPicker from "expo-document-picker";
+import DocumentPicker from "react-native-document-picker";
 
 function AppDocumentPicker({ files, onAddFile, onRemoveFile, progressMap }) {
   const pickDocument = async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync();
-      if (!result.canceled) {
-        console.log("Picked file:", result);
-        const pickedFile = result.assets[0];
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.pdf], // You can change this to allow other file types
+      });
+
+      if (res) {
+        const pickedFile = {
+          mimeType: res[0].type,
+          name: res[0].name,
+          size: res[0].size,
+          uri: res[0].uri,
+        };
+        console.log("Picked file:", pickedFile);
         onAddFile(pickedFile);
       }
     } catch (err) {
-      console.error("Error picking document: ", err);
+      if (DocumentPicker.isCancel(err)) {
+        console.log("User cancelled the picker");
+      } else {
+        console.error("Error picking document: ", err);
+      }
     }
   };
 
   const renderThumbnail = (file) => {
-    console.log("File MIME Type:", file.mimeType);
-    console.log("File URI:", file.uri);
-
     if (file.mimeType.startsWith("image/")) {
       return <Image source={{ uri: file.uri }} style={styles.thumbnail} />;
     } else {
@@ -42,7 +51,7 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile, progressMap }) {
   };
 
   const renderProgressBar = (fileId) => {
-    const progress = progressMap[fileId] || 0; // Default to 0 if undefined
+    const progress = progressMap[fileId] || 0;
     return (
       <View style={styles.progressBarContainer}>
         <ProgressView
@@ -62,7 +71,7 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile, progressMap }) {
         <FlatList
           data={files}
           keyExtractor={(item, index) => index.toString()}
-          numColumns={3} // Adjust the number of columns as needed
+          numColumns={3}
           renderItem={({ item, index }) => (
             <View style={styles.fileContainer}>
               {renderThumbnail(item)}
