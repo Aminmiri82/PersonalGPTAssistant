@@ -1,28 +1,29 @@
-
 import React, { useEffect } from "react";
 import { View, Text, Button } from "react-native";
 import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
-import Screen from "../Components/Screen";
+import Screen from "../../Components/Screen";
 
 const WalkthroughableText = walkthroughable(Text);
 
-function TestScreen({ navigation }) {
+function WTMainScreen({ navigation }) {
   const { start, copilotEvents } = useCopilot();
 
   useEffect(() => {
     const handleStepChange = (step) => {
       console.log("Current Step:", step); // Debugging line
-
       if (step.order === 4) {
-        navigation.navigate("Home", { screen: "Settings" });
+        navigation.navigate("WTBottomTabNav", { screen: "WTChat" });
+      }
+      // fuck me this is so dumb
+      if (step.order === 6) {
+        navigation.navigate("WTSettings");
       }
     };
-
     const stepChangeSubscription = copilotEvents.on(
       "stepChange",
       handleStepChange
     );
-
+  
     // Cleanup on component unmount
     return () => {
       stepChangeSubscription.remove();
@@ -43,7 +44,7 @@ function TestScreen({ navigation }) {
         <CopilotStep text="This is step 3" order={3} name="step3">
           <WalkthroughableText>Step 3</WalkthroughableText>
         </CopilotStep>
-        <CopilotStep text="This is settings screen" order={4} name="step4">
+        <CopilotStep text="This is chats screen" order={4} name="step4">
           <View></View>
         </CopilotStep>
 
@@ -53,4 +54,4 @@ function TestScreen({ navigation }) {
   );
 }
 
-export default TestScreen;
+export default WTMainScreen;

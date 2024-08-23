@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AssistantMenuScreen from "../Screens/AssistantScreen/AssistantMenuScreen";
-import BuildScreen from "../Screens/AssistantScreen/EmptyAssistantsMenuScreen";
+
 import colors from "../config/colors";
 import AssistantMakerScreen1 from "../Screens/AssistantScreen/AssistantMakerScreen1";
 import AssistantMakerScreen2 from "../Screens/AssistantScreen/AssistantMakerScreen2";
@@ -54,11 +54,6 @@ function AssistantsScreenNav() {
         name="AssistantEditorScreen2" // Use static names for screens
         component={AssistantEditorScreen2}
         options={{ title: t("AssistantEditorScreen2") }}
-      />
-      <AssistantsStack.Screen
-        name="BuildScreen" // Use static names for screens
-        component={BuildScreen}
-        options={{ title: t("BuildScreen") }} // Optional: Add translation if needed
       />
     </AssistantsStack.Navigator>
   );

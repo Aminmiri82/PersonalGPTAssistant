@@ -1,41 +1,46 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { View, StyleSheet, TouchableHighlight } from "react-native";
 import AppText from "../AppText";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-
 import colors from "../../config/colors";
 import Icon from "../Icon";
 
-function SettingsItem({ title, subTitle, IconComponent, onPress }) {
-  return (
-    <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
-      <View style={styles.container}>
-        <View style={styles.iconContainer}>{IconComponent}</View>
+const SettingsItem = forwardRef(
+  ({ title, subTitle, IconComponent, onPress }, ref) => {
+    return (
+      <TouchableHighlight
+        ref={ref}
+        underlayColor={colors.light}
+        onPress={onPress}
+      >
+        <View style={styles.container}>
+          <View style={styles.iconContainer}>{IconComponent}</View>
 
-        <View style={styles.detailsContainer}>
-          <AppText style={styles.title}>{title}</AppText>
-        </View>
-        {subTitle && (
-          <View style={styles.subTitleContainer}>
-            <AppText style={styles.subTitle}>{subTitle}</AppText>
+          <View style={styles.detailsContainer}>
+            <AppText style={styles.title}>{title}</AppText>
           </View>
-        )}
+          {subTitle && (
+            <View style={styles.subTitleContainer}>
+              <AppText style={styles.subTitle}>{subTitle}</AppText>
+            </View>
+          )}
 
-        <View style={styles.arrow}>
-          <Icon
-            iconSet="MCI"
-            name="chevron-right"
-            size={25}
-            color={colors.medium}
-            style={styles.arrow}
-          />
+          <View style={styles.arrow}>
+            <Icon
+              iconSet="MCI"
+              name="chevron-right"
+              size={25}
+              color={colors.medium}
+              style={styles.arrow}
+            />
+          </View>
         </View>
-      </View>
-    </TouchableHighlight>
-  );
-}
+      </TouchableHighlight>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {

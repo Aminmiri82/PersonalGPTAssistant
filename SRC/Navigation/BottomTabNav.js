@@ -7,9 +7,10 @@ import SettingsScreenNav from "./SettingsScreenNav";
 import ChatScreenNav from "./ChatScreenNav";
 import AssistantsScreenNav from "./AssistantsScreenNav";
 import OfflineSearchNav from "./OfflineSearchNav";
-import TestScreen from "../Screens/TestScreen";
+
 
 import { useTranslation } from "react-i18next";
+import { CopilotProvider } from "react-native-copilot";
 
 const Tab = createBottomTabNavigator();
 function BottomTabNav() {
@@ -52,11 +53,8 @@ function BottomTabNav() {
         component={OfflineSearchNav}
         options={{ headerShown: false, title: t("OfflineSearchTabName") }}
       />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreenNav}
-        options={{ headerShown: false, title: t("SettingTab") }}
-      />
+      <Tab.Screen name="Settings" component={SettingsScreenNav} options={{ headerShown: false, title: t("SettingTab") }} />
+     
     </Tab.Navigator>
   );
 }

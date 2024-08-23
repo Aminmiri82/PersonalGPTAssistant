@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { View, Text, Button } from "react-native";
 import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";

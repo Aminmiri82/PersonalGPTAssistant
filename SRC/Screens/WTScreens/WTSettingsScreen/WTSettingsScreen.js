@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Alert, Button } from "react-native";
+import { View, StyleSheet, Alert, Button,Text } from "react-native";
 import {
   CopilotProvider,
   useCopilot,
   CopilotStep,
   walkthroughable,
 } from "react-native-copilot";
-import AppText from "../../Components/AppText";
-import LanguagesPrompt from "../../Components/SettingsComponents/LanguagesPrompt";
-import OpenAIPrompt from "../../Components/SettingsComponents/OpenAIPrompt";
-import SettingsItem from "../../Components/SettingsComponents/SettingsItem";
-import Icon from "../../Components/Icon";
+import AppText from "../../../Components/AppText";
+import LanguagesPrompt from "../../../Components/SettingsComponents/LanguagesPrompt";
+import OpenAIPrompt from "../../../Components/SettingsComponents/OpenAIPrompt";
+import SettingsItem from "../../../Components/SettingsComponents/SettingsItem";
+import Icon from "../../../Components/Icon";
 import { OPENAI_API_KEY } from "@env";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
-import i18next from "../../services/i18next";
-import Screen from "../../Components/Screen";
+import i18next from "../../../services/i18next";
+import Screen from "../../../Components/Screen";
 
 // Make SettingsItem walkthroughable
 const WalkthroughableSettingsItem = walkthroughable(SettingsItem); // you'll need to make stuff walkthroughable, check out SettingsItem.js i had to add a forwardRef thingy to it. idk why vscode was just yelling at me
 
 function SettingsScreen({ navigation, route }) {
   const { t } = useTranslation();
-  const { start } = useCopilot(); // Get the start function from useCopilot
+  const { copilotEvents } = useCopilot(); // Get the start function from useCopilot
   const [isLanguagePromptVisible, setLanguagePromptVisible] = useState(false);
   const [isAPIPromptVisible, setAPIPromptVisible] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("Select Language");
@@ -44,9 +44,24 @@ function SettingsScreen({ navigation, route }) {
         console.error("Error retrieving API key", error);
       }
     };
+    const handleStepChange = (step) => {
+      console.log("Current Step:", step); // Debugging line
+      // put WTchat here because it's the first screen you gottt go to
+      if (step.order === 9) {
+        navigation.navigate("Home"); // WTsettings is the name of the screen you wanna go to
+      }
+    };
+
+    const stepChangeSubscription = copilotEvents.on(
+      "stepChange",
+      handleStepChange
+    );
 
     fetchApiKey();
-  }, []);
+    return () => {
+      stepChangeSubscription.remove();
+    };
+  }, [copilotEvents, navigation]);
 
   const toggleLanguagePrompt = () => {
     setLanguagePromptVisible(!isLanguagePromptVisible);
@@ -76,19 +91,15 @@ function SettingsScreen({ navigation, route }) {
   };
 
   const handleSetAPIKey = (key) => {
-    if (key.length === 56) {
-      setApiKey(key.slice(7, 14));
-      saveApiKey(key);
-      console.log(key);
-    } else {
-      Alert.alert(t("error"), t("invalidAPIKey"));
-    }
+    setApiKey(key.slice(7, 14));
+    saveApiKey(key);
+    console.log(key);
   };
 
   return (
     <Screen>
       <View style={styles.container}>
-        <CopilotStep text="Set your API Key here" order={5} name="apiKey">
+        <CopilotStep text="Set your API Key here" order={7} name="apiKey">
           <WalkthroughableSettingsItem
             title={t("apikey")}
             subTitle={apiKey}
@@ -103,7 +114,7 @@ function SettingsScreen({ navigation, route }) {
           onSumbit={handleSetAPIKey}
         />
 
-        <CopilotStep text="Choose your language" order={6} name="language">
+        <CopilotStep text="Choose your language" order={8} name="language">
           <WalkthroughableSettingsItem
             title={t("Languages")}
             subTitle={selectedLanguage}
@@ -128,8 +139,13 @@ function SettingsScreen({ navigation, route }) {
           IconComponent={<Icon iconSet="MCI" name="information" />}
           onPress={() => navigation.navigate("AboutUsScreen")}
         />
-        <Button title="Start tutorial" onPress={() => start()} />
+        <CopilotStep text="This is it" order={9} name="step7">
+          <View></View>
+        </CopilotStep>
+        
+        <Text>hiiii</Text>
       </View>
+      
     </Screen>
   );
 }
