@@ -5,18 +5,23 @@ import Screen from "../Components/Screen";
 
 const WalkthroughableText = walkthroughable(Text);
 
-function TestScreen({ navigation }) {
+function WTMainScreen({ navigation }) {
   const { start, copilotEvents } = useCopilot();
 
   useEffect(() => {
     const handleStepChange = (step) => {
       console.log("Current Step:", step); // Debugging line
-
       if (step.order === 4) {
-        navigation.navigate("Home", { screen: "Settings" });
+        navigation.navigate("Home", { screen: "ChatMenuScreen" });
+      }
+      // fuck me this is so dumb
+      if (step.order === 6) {
+        navigation.navigate("Settings");
+      }
+      if (step.order === 9) {
+        navigation.navigate("ChatMenuScreen");
       }
     };
-
     const stepChangeSubscription = copilotEvents.on(
       "stepChange",
       handleStepChange
@@ -42,7 +47,7 @@ function TestScreen({ navigation }) {
         <CopilotStep text="This is step 3" order={3} name="step3">
           <WalkthroughableText>Step 3</WalkthroughableText>
         </CopilotStep>
-        <CopilotStep text="This is settings screen" order={4} name="step4">
+        <CopilotStep text="This is chats screen" order={4} name="step4">
           <View></View>
         </CopilotStep>
 
@@ -52,4 +57,4 @@ function TestScreen({ navigation }) {
   );
 }
 
-export default TestScreen;
+export default WTMainScreen;

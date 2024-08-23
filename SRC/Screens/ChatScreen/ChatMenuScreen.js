@@ -6,14 +6,21 @@ import colors from "../../config/colors";
 import { fetchChatItems, deleteChatItemById } from "../../database";
 import { useFocusEffect } from "@react-navigation/native";
 import AppButton from "../../Components/AppButton";
-import { DatabaseContext } from "../../DatabaseProvider"; 
+import { DatabaseContext } from "../../DatabaseProvider";
 import { useTranslation } from "react-i18next";
+import {
+  CopilotProvider,
+  useCopilot,
+  CopilotStep,
+  walkthroughable,
+} from "react-native-copilot";
 
 function ChatMenuScreen({ navigation }) {
   const { t } = useTranslation();
   const { dbInitialized } = useContext(DatabaseContext);
   const [chatItems, setChatItems] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const { start, copilotEvents } = useCopilot();
 
   useFocusEffect(
     useCallback(() => {
@@ -56,8 +63,6 @@ function ChatMenuScreen({ navigation }) {
       });
   };
 
-  
-
   const renderItem = ({ item }) => (
     <ChatItem
       title={item.assistantName || t("PersianLegalGuide")}
@@ -87,9 +92,14 @@ function ChatMenuScreen({ navigation }) {
           data={chatItems}
           keyExtractor={(item) => item.Id.toString()}
           renderItem={renderItem}
-          
         />
       )}
+      <CopilotStep text="This is step 5" order={5} name="step5">
+        <View></View>
+      </CopilotStep>
+      <CopilotStep text="This is step 6" order={6} name="step6">
+        <View></View>
+      </CopilotStep>
     </View>
   );
 }
