@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import { OPENAI_API_KEY } from "@env";
 import * as SecureStore from "expo-secure-store";
 import * as FileSystem from "expo-file-system";
+import Upload from "react-native-background-upload";
 
 let openai = null;
 
@@ -137,49 +138,69 @@ const callAssistantApi = async (message, threadID, assistantId) => {
 const UPLOAD_URL = "https://api.openai.com/v1/uploads";
 const COMPLETE_UPLOAD_URL =
   "https://api.openai.com/v1/uploads/{upload_id}/complete";
+const MAX_RETRIES = 3;
 
-const uploadIndividualFiles = async (file) => {
-  try {
-    const apiKey = await SecureStore.getItemAsync("apiKey");
-    const { name, size, mimeType, uri } = file;
+const uploadIndividualFiles = async (file, onProgress, reportError) => {
+  let retriesLeft = MAX_RETRIES;
 
-    console.log("Starting upload for file:", { name, size, mimeType, uri });
+  const attemptUpload = async () => {
+    try {
+      const apiKey = await SecureStore.getItemAsync("apiKey");
+      const { name, size, mimeType, uri } = file;
+      console.log("Starting upload for file:", { name, size, mimeType, uri });
 
-    const upload = await createUpload(name, size, mimeType, apiKey);
-    console.log("Upload created:", upload);
+      // Step 1: Create Upload
+      const upload = await createUpload(name, size, mimeType, apiKey);
+      console.log("Upload created:", upload);
 
-    if (!upload.id) {
-      throw new Error("Failed to create upload");
+      if (!upload.id) {
+        throw new Error("Failed to create upload");
+      }
+
+      // Step 2: Upload File using react-native-background-upload
+      const partResponse = await startBackgroundUpload(
+        upload.id,
+        uri,
+        mimeType,
+        name,
+        apiKey,
+        onProgress
+      );
+      const partId = JSON.parse(partResponse).id;
+      console.log("Part uploaded:", partId);
+
+      if (!partId) {
+        throw new Error("Failed to upload part");
+      }
+
+      // Step 3: Complete Upload
+      const completion = await completeUpload(upload.id, [partId], apiKey);
+      console.log("Upload complete:", completion);
+
+      if (!completion.file || !completion.file.id) {
+        throw new Error("Failed to complete upload");
+      }
+
+      console.log("Upload Complete, File ID:", completion.file.id);
+      return completion.file.id;
+    } catch (error) {
+      console.error("Error uploading files:", error);
+
+      if (retriesLeft > 0) {
+        retriesLeft--;
+        console.log(
+          `Retrying upload... (${MAX_RETRIES - retriesLeft}/${MAX_RETRIES})`
+        );
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second before retrying
+        return attemptUpload();
+      } else {
+        reportError(file.id, error.message);
+        throw error;
+      }
     }
+  };
 
-    const partResponse = await uploadFile(
-      upload.id,
-      uri,
-      mimeType,
-      name,
-      apiKey
-    );
-    console.log("Part uploaded:", partResponse);
-
-    const partIds = [partResponse.id];
-
-    if (!partResponse.id) {
-      throw new Error("Failed to upload part");
-    }
-
-    const completion = await completeUpload(upload.id, partIds, apiKey);
-    console.log("Upload complete:", completion);
-
-    if (!completion.file || !completion.file.id) {
-      throw new Error("Failed to complete upload");
-    }
-
-    console.log("Upload Complete, File ID:", completion.file.id);
-    return completion.file.id;
-  } catch (error) {
-    console.error("Error uploading files:", error);
-    throw error;
-  }
+  return attemptUpload();
 };
 
 const createUpload = async (
@@ -223,50 +244,47 @@ const createUpload = async (
   }
 };
 
-const uploadFile = async (uploadId, fileUri, mimeType, filename, apiKey) => {
-  try {
-    const formData = new FormData();
-    formData.append("data", {
-      uri: fileUri,
-      type: mimeType,
-      name: filename,
-    });
-
+const startBackgroundUpload = async (
+  uploadId,
+  fileUri,
+  mimeType,
+  filename,
+  apiKey,
+  onProgress
+) => {
+  return new Promise((resolve, reject) => {
     const options = {
-      httpMethod: "POST",
+      url: `${UPLOAD_URL}/${uploadId}/parts`,
+      path: fileUri,
+      method: "POST",
+      type: "multipart",
+      field: "data", // The form field name for the file
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "multipart/form-data",
       },
-      uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-      fieldName: "data", // Make sure to use the correct field name
     };
 
-    // Use uploadAsync instead of manual fetch
-    const response = await FileSystem.uploadAsync(
-      `${UPLOAD_URL}/${uploadId}/parts`,
-      fileUri,
-      options
-    );
-
-    // Check for errors
-    if (response.status !== 200) {
-      console.error("Upload part response:", response);
-      throw new Error(`Failed to upload part: ${response.body}`);
-    }
-
-    const jsonResponse = JSON.parse(response.body);
-
-    if (jsonResponse.error) {
-      throw new Error(jsonResponse.error.message);
-    }
-
-    console.log("Upload part response:", jsonResponse);
-    return jsonResponse;
-  } catch (error) {
-    console.error("Error uploading file part:", error);
-    throw error;
-  }
+    Upload.startUpload(options)
+      .then((uploadId) => {
+        console.log("Upload started with ID:", uploadId);
+        Upload.addListener("progress", uploadId, (data) => {
+          onProgress(data.progress);
+        });
+        Upload.addListener("error", uploadId, (data) => {
+          console.error("Upload error:", data.error);
+          reject(new Error(data.error));
+        });
+        Upload.addListener("completed", uploadId, (data) => {
+          console.log("Upload completed:", data);
+          resolve(data.responseBody); // Returning response body for part ID
+        });
+      })
+      .catch((err) => {
+        console.error("Upload start error:", err);
+        reject(err);
+      });
+  });
 };
 
 const completeUpload = async (uploadId, partIds, apiKey) => {
@@ -331,7 +349,9 @@ async function updateAssistantWithVectorStore(
 
 const addFilesToAssistant = async (assistantId, fileIds) => {
   const openaiInstance = await getOpenAIInstance();
+  console.log("creating vector store");
   const vectorStoreId = await createVectorStore(openaiInstance, fileIds);
+  console.log("vector store created", vectorStoreId);
   await pollVectorStoreStatus(openaiInstance, vectorStoreId);
   await updateAssistantWithVectorStore(
     openaiInstance,

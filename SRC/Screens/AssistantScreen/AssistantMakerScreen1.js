@@ -1,26 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
-  Image,
-  TouchableOpacity,
   TextInput,
-  Button,
   KeyboardAvoidingView,
-  ScrollView,
 } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
-import { useState, useEffect } from "react";
 import AppButton from "../../Components/AppButton";
+import AppImagePicker from "../../Components/AssistantsComponents/AppImagePicker";
 import { useTranslation } from "react-i18next";
 
 function AssistantMakerScreen1({ navigation }) {
   const { t } = useTranslation();
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
+  const [imageUri, setImageUri] = useState(require("../../assets/assistant.jpg"));
 
+  const handleImagePicked = (uri) => {
+    setImageUri(uri);
+    console.log("Image URI:", uri);
+  };
   const handleNext = () => {
     if (!name || !instructions) {
       console.log("Name or instructions are missing");
@@ -29,6 +30,7 @@ function AssistantMakerScreen1({ navigation }) {
     navigation.navigate("AssistantMakerScreen2", {
       name,
       instructions,
+      imageUri
     });
   };
 
@@ -38,39 +40,14 @@ function AssistantMakerScreen1({ navigation }) {
         behavior="padding"
         keyboardVerticalOffset={50} // Adjust the offset as needed
       >
-        <ScrollView contentContainerStyle={styles.container}>
-          <View style={styles.topContainer}>
-            <View style={styles.pictureContainer}>
-              <View style={styles.pictureTipContainer}>
-                <AppText style={styles.pictureTip}>
-                  {t("choosingPhotoForAssistant")}
-                </AppText>
-              </View>
-              <View style={styles.pictureWrapper}>
-                <TouchableOpacity
-                  style={styles.picture}
-                  onPress={() => {
-                    console.log("edit");
-                  }}
-                >
-                  <Image
-                    style={styles.picture}
-                    source={require("../../assets/assistant.jpg")}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.pictureButton}
-                  onPress={() => {
-                    console.log("edit");
-                  }}
-                >
-                  <AppText style={styles.pictureButtonText}>
-                    {t("edit")}
-                  </AppText>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
+        <View style={styles.container}>
+          <AppImagePicker
+            tipText={t("choosingPhotoForAssistant")}
+            editText={t("edit")}
+            onImagePicked={handleImagePicked}
+            prepickedUri={require("../../assets/assistant.jpg")}
+            
+          />
           <View style={styles.middleContainer}>
             <AppText style={styles.midTitle}>
               {t("choosingNameForAssistant")}
@@ -102,7 +79,7 @@ function AssistantMakerScreen1({ navigation }) {
             style={styles.nextButton}
             textStyle={styles.nextButtonText}
           />
-        </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     </Screen>
   );
@@ -112,46 +89,6 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     justifyContent: "center",
-  },
-  topContainer: {
-    alignItems: "center",
-    marginTop: 20,
-    padding: 10,
-  },
-  pictureContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "80%",
-  },
-  pictureTipContainer: {
-    width: "40%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 10,
-    padding: 10,
-  },
-  pictureTip: {
-    color: colors.dark,
-    fontSize: 16,
-    textAlign: "center",
-  },
-  pictureWrapper: {
-    alignItems: "center",
-  },
-  picture: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  pictureButton: {
-    marginTop: 5,
-    padding: 5,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  pictureButtonText: {
-    fontSize: 12,
-    color: colors.blue,
   },
   middleContainer: {
     marginTop: 20,

@@ -2185,6 +2185,11 @@
     prompts "^2.4.2"
     semver "^7.5.2"
 
+"@react-native-community/progress-view@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.npmjs.org/@react-native-community/progress-view/-/progress-view-1.4.2.tgz"
+  integrity sha512-eFn8hssvFjr0w78mdlN0rt2KY5ptR5DAj2sjn7CWlmEkdFuOKAYt6HnHP1cKdXFrmeH31MVbqib43+iA6wEbWQ==
+
 "@react-native-picker/picker@^2.4.0", "@react-native-picker/picker@^2.7.5":
   version "2.7.5"
   resolved "https://registry.npmjs.org/@react-native-picker/picker/-/picker-2.7.5.tgz"
@@ -3173,11 +3178,6 @@ balanced-match@^1.0.0:
   resolved "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-base64-arraybuffer@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/base64-arraybuffer/-/base64-arraybuffer-1.0.2.tgz"
-  integrity sha512-I3yl4r9QB5ZRY3XuJVEPfc2XhZO6YweFPI+UovAzn+8/hb3oJ6lnysaFcjVpkCPfVWFUDvoZ8kmVDP7WyRtYtQ==
-
 base64-js@^1.2.3, base64-js@^1.3.1, base64-js@^1.5.1:
   version "1.5.1"
   resolved "https://registry.npmjs.org/base64-js/-/base64-js-1.5.1.tgz"
@@ -3486,7 +3486,6 @@ chalk@4:
   dependencies:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
-
 chardet@^0.7.0:
   version "0.7.0"
   resolved "https://registry.npmjs.org/chardet/-/chardet-0.7.0.tgz"
@@ -4476,6 +4475,18 @@ expo-font@~12.0.9:
   dependencies:
     fontfaceobserver "^2.1.0"
 
+expo-image-loader@~4.7.0:
+  version "4.7.0"
+  resolved "https://registry.npmjs.org/expo-image-loader/-/expo-image-loader-4.7.0.tgz"
+  integrity sha512-cx+MxxsAMGl9AiWnQUzrkJMJH4eNOGlu7XkLGnAXSJrRoIiciGaKqzeaD326IyCTV+Z1fXvIliSgNW+DscvD8g==
+
+expo-image-picker@~15.0.7:
+  version "15.0.7"
+  resolved "https://registry.npmjs.org/expo-image-picker/-/expo-image-picker-15.0.7.tgz"
+  integrity sha512-u8qiPZNfDb+ap6PJ8pq2iTO7JKX+ikAUQ0K0c7gXGliKLxoXgDdDmXxz9/6QdICTshJBJlBvI0MwY5NWu7A/uw==
+  dependencies:
+    expo-image-loader "~4.7.0"
+
 expo-json-utils@~0.13.0:
   version "0.13.1"
   resolved "https://registry.npmjs.org/expo-json-utils/-/expo-json-utils-0.13.1.tgz"
@@ -4529,7 +4540,8 @@ expo-modules-core@1.12.22:
   dependencies:
     invariant "^2.2.4"
 
-expo-router@~3.5.21:
+
+expo-router@~3.5.23:
   version "3.5.23"
   resolved "https://registry.npmjs.org/expo-router/-/expo-router-3.5.23.tgz"
   integrity sha512-Re2kYcxov67hWrcjuu0+3ovsLxYn79PuX6hgtYN20MgigY5ttX79KOIBEVGTO3F3y9dxSrGHyy5Z14BcO+usGQ==
@@ -4578,7 +4590,9 @@ expo-updates-interface@~0.16.2:
   resolved "https://registry.npmjs.org/expo-updates-interface/-/expo-updates-interface-0.16.2.tgz"
   integrity sha512-929XBU70q5ELxkKADj1xL0UIm3HvhYhNAOZv5DSk7rrKvLo7QDdPyl+JVnwZm9LrkNbH4wuE2rLoKu1KMgZ+9A==
 
-expo-updates@^0.25.22:
+
+expo-updates@^0.25.23:
+
   version "0.25.23"
   resolved "https://registry.npmjs.org/expo-updates/-/expo-updates-0.25.23.tgz"
   integrity sha512-MNEexYa2vnK3gSDCfUwKl2xz75Pm43hohscqvgs+Q/gYPLW6E8mDfElfkJGf92T5VCNJB+YbBLrgWBIex44vqg==
@@ -4599,7 +4613,8 @@ expo-updates@^0.25.22:
     ignore "^5.3.1"
     resolve-from "^5.0.0"
 
-expo@*, expo@~51.0.26:
+
+expo@*, expo@~51.0.30:
   version "51.0.30"
   resolved "https://registry.npmjs.org/expo/-/expo-51.0.30.tgz"
   integrity sha512-eo4T2TGnKyDkLryY6lYuGVV1FZyWa1FG7Ns0aqfZ7N/PFQYDfbowVwkcEWbRppSzqSfjGXYqvVV4WZNFbpgZZw==
@@ -7521,7 +7536,6 @@ react-localization@^1.0.17:
   integrity sha512-f4E6T8xRis19K8qMOnnhjGV2quy1YH2lrSsnAiytvgt7uOSp6WgDhrZH6XZEaEFqupTOCFSf8uagIoIAkjl4JA==
   dependencies:
     localized-strings "^0.2.0"
-
 react-native-copilot@^3.3.2:
   version "3.3.2"
   resolved "https://registry.npmjs.org/react-native-copilot/-/react-native-copilot-3.3.2.tgz"
@@ -7531,19 +7545,23 @@ react-native-copilot@^3.3.2:
     "@changesets/cli" "^2.27.1"
     mitt "^3.0.1"
 
+react-native-background-upload@^6.6.0:
+  version "6.6.0"
+  resolved "https://registry.npmjs.org/react-native-background-upload/-/react-native-background-upload-6.6.0.tgz"
+  integrity sha512-adfOJmeO3GmPmc53cdHYWp5eTGKagk/AhkraSoQ89BHRwBWrtRQ29NN9sm2CLezBYrSQWg0W47C8TaowtYZ1LQ==
+
+react-native-document-picker@^9.3.0:
+  version "9.3.0"
+  resolved "https://registry.npmjs.org/react-native-document-picker/-/react-native-document-picker-9.3.0.tgz"
+  integrity sha512-X/j0xKn8cObckpHTNwE/hW9WzBiP6oKx820FYu1Nat43QnnHmmT6uozFgAUDcJfxmZGcEdLlbv0lNhnyRXJyyA==
+  dependencies:
+    invariant "^2.2.4"
 react-native-dotenv@^3.4.11:
   version "3.4.11"
   resolved "https://registry.npmjs.org/react-native-dotenv/-/react-native-dotenv-3.4.11.tgz"
   integrity sha512-6vnIE+WHABSeHCaYP6l3O1BOEhWxKH6nHAdV7n/wKn/sciZ64zPPp2NUdEUf1m7g4uuzlLbjgr+6uDt89q2DOg==
   dependencies:
     dotenv "^16.4.5"
-
-react-native-file-stream@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/react-native-file-stream/-/react-native-file-stream-1.0.4.tgz"
-  integrity sha512-Xx5eVt+2VBZsen5UnaUE8uUTcKmBtkv49t9CowF0mgfLSJqm7uoaN2oAd48xhqr4mcRSz7/zQgAKggECvQP8UA==
-  dependencies:
-    base64-arraybuffer "^1.0.2"
 
 "react-native-gesture-handler@>= 1.0.0", react-native-gesture-handler@~2.16.2:
   version "2.16.2"
@@ -7658,7 +7676,8 @@ react-native-web@^0.19.12:
     postcss-value-parser "^4.2.0"
     styleq "^0.1.3"
 
-react-native@*, react-native@>=0.14.0, react-native@>=0.59.0, react-native@>=0.60.0, react-native@>0.64, react-native@0.74.5:
+
+react-native@*, react-native@>=0.14.0, react-native@>=0.47.0, react-native@>=0.59.0, react-native@>=0.59.5, react-native@>0.64, react-native@0.74.5:
   version "0.74.5"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.74.5.tgz"
   integrity sha512-Bgg2WvxaGODukJMTZFTZBNMKVaROHLwSb8VAGEdrlvKwfb1hHg/3aXTUICYk7dwgAnb+INbGMwnF8yeAgIUmqw==
@@ -7714,7 +7733,9 @@ react-shallow-renderer@^16.15.0:
     object-assign "^4.1.1"
     react-is "^16.12.0 || ^17.0.0 || ^18.0.0"
 
-react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.6.0 || ^17.0.0 || ^18.0.0", "react@^16.8 || ^17.0 || ^18.0", react@^18.0.0, "react@^18.0.0 || ^17.0.0 || ^16.0.0 || ^15.6.0", react@^18.2.0, "react@>= 16.8.0", react@>=16.8, react@>=16.8.0, react@>=17.0.0, react@>15.6.0, react@18.2.0:
+
+react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.6.0 || ^17.0.0 || ^18.0.0", "react@^16.8 || ^17.0 || ^18.0", react@^18.0.0, "react@^18.0.0 || ^17.0.0 || ^16.0.0 || ^15.6.0", react@^18.2.0, "react@>= 16.8.0", react@>=16.8, react@>=17.0.0, react@>15.6.0, react@>16.8.3, react@18.2.0:
+
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==

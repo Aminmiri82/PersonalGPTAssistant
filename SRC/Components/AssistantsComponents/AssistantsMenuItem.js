@@ -4,12 +4,12 @@ import AppText from "../AppText";
 
 import colors from "../../config/colors";
 
-function AssistantsMenuItem({ image, title, onPress, ShowEditButton = true }) {
+function AssistantsMenuItem({ imageUri, title, onPress, ShowEditButton = true }) {
   return (
     <View style={styles.TopContainer}>
       <View style={styles.ImageContainer}>
         <TouchableOpacity onPress={onPress}>
-          {image && <Image style={styles.image} source={image} />}
+          {imageUri ? <Image style={styles.image} source={{ uri: imageUri }} /> : <Image style={styles.image} source={require("../../assets/logo.jpg")} />}
         </TouchableOpacity>
       </View>
       <View style={styles.modelTextContainer}>

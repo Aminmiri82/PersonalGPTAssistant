@@ -5,9 +5,8 @@ import AppText from "../../Components/AppText";
 import colors from "../../config/colors";
 import { fetchChatItems, deleteChatItemById } from "../../database";
 import { useFocusEffect } from "@react-navigation/native";
-import Screen from "../../Components/Screen";
 import AppButton from "../../Components/AppButton";
-import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
+import { DatabaseContext } from "../../DatabaseProvider"; 
 import { useTranslation } from "react-i18next";
 
 function ChatMenuScreen({ navigation }) {
@@ -22,7 +21,8 @@ function ChatMenuScreen({ navigation }) {
         if (dbInitialized) {
           try {
             const data = await fetchChatItems();
-            setChatItems(data.reverse());
+            console.log("chat items", data);
+            setChatItems(data);
           } catch (error) {
             console.log("Error fetching ChatItems: ", error);
           }
@@ -31,6 +31,7 @@ function ChatMenuScreen({ navigation }) {
 
       console.log("loading chat items");
       loadChatItems();
+      console.log(chatItems);
     }, [dbInitialized])
   );
 
@@ -39,6 +40,7 @@ function ChatMenuScreen({ navigation }) {
     navigation.navigate("ChatScreen", {
       threadId: chat.threadId,
       assistantId: chat.assistantId,
+      assistantName: chat.assistantName || t("PersianLegalGuide"),
     });
   };
 
@@ -54,14 +56,16 @@ function ChatMenuScreen({ navigation }) {
       });
   };
 
+  
+
   const renderItem = ({ item }) => (
     <ChatItem
-      title={item.assistantName || "Legal Guide"}
+      title={item.assistantName || t("PersianLegalGuide")}
       subTitle={item.lastMessage}
-      image={
+      imageUri={
         item.assistantId === "asst_40ROFN9nKe2V6Eka6bYXSZ2y"
-          ? require("../../assets/logo.jpg")
-          : require("../../assets/assistant.jpg")
+          ? null
+          : item.profile
       }
       modelname={item.assistantModel}
       onPress={() => handlePress(item)}
@@ -75,20 +79,18 @@ function ChatMenuScreen({ navigation }) {
   }
 
   return (
-    <Screen>
-      <View style={styles.container}>
-        {chatItems.length === 0 ? (
-          <Text>{t("noChats")}</Text>
-        ) : (
-          <FlatList
-            data={chatItems}
-            keyExtractor={(item) => item.Id.toString()}
-            renderItem={renderItem}
-          />
-        )}
-      
-      </View>
-    </Screen>
+    <View style={styles.container}>
+      {chatItems.length === 0 ? (
+        <Text>{t("noChats")}</Text>
+      ) : (
+        <FlatList
+          data={chatItems}
+          keyExtractor={(item) => item.Id.toString()}
+          renderItem={renderItem}
+          
+        />
+      )}
+    </View>
   );
 }
 

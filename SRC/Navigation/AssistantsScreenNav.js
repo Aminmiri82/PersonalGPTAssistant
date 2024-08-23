@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AssistantMenuScreen from "../Screens/AssistantScreen/AssistantMenuScreen";
 
-
+import colors from "../config/colors";
 import AssistantMakerScreen1 from "../Screens/AssistantScreen/AssistantMakerScreen1";
 import AssistantMakerScreen2 from "../Screens/AssistantScreen/AssistantMakerScreen2";
 import AssistantEditorScreen1 from "../Screens/AssistantScreen/AssistantEditorScreen1";
@@ -20,13 +20,9 @@ function AssistantsScreenNav() {
     <Icon
       iconSet={"MCI"}
       name={"plus-circle"}
-      iconColor="#3E84F7"
+      iconColor={colors.niceBlue}
       onPress={() => navigation.navigate("AssistantMakerScreen1")}
     />
-    // <AppButton
-    //   title={t("newAssistant")}
-    //   onPress={() => navigation.navigate("AssistantMakerScreen1")}
-    // />
   );
 
   return (

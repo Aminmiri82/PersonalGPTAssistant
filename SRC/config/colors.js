@@ -3,7 +3,7 @@ export default {
   secondary: "#4ecdc4",
   black: "#000",
   white: "#fff",
-  niceBlue: "#007BFF",
+  niceBlue: "#007aff",
   deleteRed: "#DC3545",
   medium: "#6e6969",
   light: "#f8f4f4",
