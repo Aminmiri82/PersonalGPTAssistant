@@ -10,9 +10,25 @@ function TestScreen({ navigation }) {
   const { t } = useTranslation();
   const { start, copilotEvents } = useCopilot();
 
-  const handleStartWalkthrough = () => {
-    navigation.navigate("ChatMenuScreen", { startWalkthrough: true });
-  };
+  useEffect(() => {
+    const handleStepChange = (step) => {
+      console.log("Current Step:", step); // Debugging line
+
+      if (step.order === 4) {
+        navigation.navigate("Home", { screen: "Settings" });
+      }
+    };
+
+    const stepChangeSubscription = copilotEvents.on(
+      "stepChange",
+      handleStepChange
+    );
+
+    // Cleanup on component unmount
+    return () => {
+      stepChangeSubscription.remove();
+    };
+  }, [copilotEvents, navigation]);
 
   return (
     <Screen>

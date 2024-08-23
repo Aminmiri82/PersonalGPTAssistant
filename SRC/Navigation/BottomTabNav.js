@@ -7,7 +7,6 @@ import SettingsScreenNav from "./SettingsScreenNav";
 import ChatScreenNav from "./ChatScreenNav";
 import AssistantsScreenNav from "./AssistantsScreenNav";
 import OfflineSearchNav from "./OfflineSearchNav";
-import TestScreen from "../Screens/TestScreen";
 
 import { useTranslation } from "react-i18next";
 import { CopilotProvider } from "react-native-copilot";
@@ -40,11 +39,6 @@ function BottomTabNav(route) {
         },
       })}
     >
-      {/* <Tab.Screen
-        name="Test"
-        component={TestScreen}
-        options={{ headerShown: false, title: t("TestTab") }}
-      /> */}
       <Tab.Screen
         name="Chat"
         component={ChatScreenNav}

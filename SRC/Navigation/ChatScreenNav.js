@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HeaderBackButton } from "@react-navigation/elements";
 import Icon from "../Components/Icon";
+import colors from "../config/colors";
 import ChatScreen from "../Screens/ChatScreen/ChatScreen";
 import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
 import ChooseChatScreen from "../Screens/ChatScreen/ChooseChatScreen";
@@ -21,7 +22,7 @@ function ChatScreenNav(props, route) {
   const makeNewChatButton = (navigation) => (
     <Icon
       iconSet={"MCI"}
-      iconColor="#3E84F7"
+      iconColor={colors.niceBlue}
       onPress={() => navigation.navigate("ChooseChatScreen")}
       name={"message-plus"}
     />
@@ -29,6 +30,7 @@ function ChatScreenNav(props, route) {
 
   return (
     <ChatStack.Navigator>
+      
       <ChatStack.Screen
         name="ChatMenuScreen" // Use a static name for referencing the screen
         component={ChatMenuScreen}
