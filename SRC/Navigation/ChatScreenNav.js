@@ -7,6 +7,7 @@ import colors from "../config/colors";
 import ChatScreen from "../Screens/ChatScreen/ChatScreen";
 import ChatMenuScreen from "../Screens/ChatScreen/ChatMenuScreen";
 import ChooseChatScreen from "../Screens/ChatScreen/ChooseChatScreen";
+import EmptyCS from "../Screens/ChatScreen/EmptyCS";
 import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
 
 import TestScreen from "../Screens/TestScreen";
@@ -30,7 +31,6 @@ function ChatScreenNav(props, route) {
 
   return (
     <ChatStack.Navigator>
-      
       <ChatStack.Screen
         name="ChatMenuScreen" // Use a static name for referencing the screen
         component={ChatMenuScreen}
@@ -68,6 +68,13 @@ function ChatScreenNav(props, route) {
             />
           ),
         })}
+      />
+      <ChatStack.Screen
+        name="EmptyCS" // Use a static name for referencing the screen
+        component={EmptyCS}
+        options={{
+          title: t("ChatScreen"), // Translated title for this screen
+        }}
       />
     </ChatStack.Navigator>
   );

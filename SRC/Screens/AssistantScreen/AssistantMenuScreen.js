@@ -8,11 +8,15 @@ import AppText from "../../Components/AppText";
 import { fetchAssistants, initDB } from "../../database";
 import { useFocusEffect } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
+import { useCopilot, walkthroughable, CopilotStep } from "react-native-copilot";
 
 const { height } = Dimensions.get("window");
+const WalkthroughableAMI = walkthroughable(AssistantsMenuItem);
+const WalkthroughableView = walkthroughable(View);
 
 function AssistantMenuScreen({ navigation }) {
   const [assistants, setAssistants] = useState([]);
+  const { start, copilotEvents } = useCopilot();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -50,9 +54,7 @@ function AssistantMenuScreen({ navigation }) {
     <View style={styles.container}>
       {assistants.length === 0 ? (
         <View style={styles.noAss}>
-          <AppText style={styles.text}>
-            {t("emptyassistant")}
-          </AppText>
+          <AppText style={styles.text}>{t("emptyassistant")}</AppText>
           <Button
             title={t("statrtBuldingAssistant")}
             onPress={() => navigation.navigate("AssistantMakerScreen1")}

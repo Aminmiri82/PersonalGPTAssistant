@@ -32,7 +32,7 @@ export default function App() {
   }, []);
   return (
     <DatabaseProvider>
-      <CopilotProvider>
+      <CopilotProvider tooltipStyle={{ top: 50 }}>
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen

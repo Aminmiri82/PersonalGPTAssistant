@@ -88,7 +88,7 @@ function SettingsScreen({ navigation, route }) {
   return (
     <Screen>
       <View style={styles.container}>
-        <CopilotStep text="Set your API Key here" order={7} name="apiKey">
+        <CopilotStep text="Set your API Key here" order={20} name="apiKey">
           <WalkthroughableSettingsItem
             title={t("apikey")}
             subTitle={apiKey}
@@ -103,7 +103,7 @@ function SettingsScreen({ navigation, route }) {
           onSumbit={handleSetAPIKey}
         />
 
-        <CopilotStep text="Choose your language" order={8} name="language">
+        <CopilotStep text="Choose your language" order={21} name="language">
           <WalkthroughableSettingsItem
             title={t("Languages")}
             subTitle={selectedLanguage}
@@ -129,7 +129,7 @@ function SettingsScreen({ navigation, route }) {
           onPress={() => navigation.navigate("AboutUsScreen")}
         />
         <Button title="Start tutorial" onPress={() => start()} />
-        <CopilotStep text="This is it" order={9} name="step7">
+        <CopilotStep text="This is it" order={22} name="step7">
           <View></View>
         </CopilotStep>
       </View>

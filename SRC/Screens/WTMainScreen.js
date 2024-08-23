@@ -15,11 +15,14 @@ function WTMainScreen({ navigation }) {
         navigation.navigate("Home", { screen: "ChatMenuScreen" });
       }
       // fuck me this is so dumb
-      if (step.order === 6) {
-        navigation.navigate("Settings");
+      if (step.order === 3) {
+        navigation.navigate("ChooseChatScreen");
       }
-      if (step.order === 9) {
-        navigation.navigate("ChatMenuScreen");
+      if (step.order === 6) {
+        navigation.navigate("EmptyCS", { isWalkthrough: true });
+      }
+      if (step.order === 8) {
+        navigation.navigate("AssistantMenuScreen");
       }
     };
     const stepChangeSubscription = copilotEvents.on(
@@ -39,8 +42,6 @@ function WTMainScreen({ navigation }) {
         <CopilotStep text="This is step 1" order={1} name="step1">
           <WalkthroughableText></WalkthroughableText>
         </CopilotStep>
-
-        
 
         <Button title="Start Walkthrough" onPress={() => start()} />
       </View>
