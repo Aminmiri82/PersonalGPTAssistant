@@ -18,6 +18,9 @@ function WTMainScreen({ navigation }) {
       if (step.order === 6) {
         navigation.navigate("WTSettings");
       }
+      if (step.order === 9) {
+        navigation.navigate("Home"); 
+      }
     };
     const stepChangeSubscription = copilotEvents.on(
       "stepChange",

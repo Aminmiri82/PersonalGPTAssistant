@@ -44,24 +44,8 @@ function SettingsScreen({ navigation, route }) {
         console.error("Error retrieving API key", error);
       }
     };
-    const handleStepChange = (step) => {
-      console.log("Current Step:", step); // Debugging line
-      // put WTchat here because it's the first screen you gottt go to
-      if (step.order === 9) {
-        navigation.navigate("Home"); // WTsettings is the name of the screen you wanna go to
-      }
-    };
-
-    const stepChangeSubscription = copilotEvents.on(
-      "stepChange",
-      handleStepChange
-    );
-
-    fetchApiKey();
-    return () => {
-      stepChangeSubscription.remove();
-    };
-  }, [copilotEvents, navigation]);
+    
+  },[]);
 
   const toggleLanguagePrompt = () => {
     setLanguagePromptVisible(!isLanguagePromptVisible);
