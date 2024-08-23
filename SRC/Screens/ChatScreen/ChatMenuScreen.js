@@ -14,8 +14,9 @@ import {
   CopilotStep,
   walkthroughable,
 } from "react-native-copilot";
+const WalkthroughableText = walkthroughable(Text);
 
-function ChatMenuScreen({ navigation }) {
+function ChatMenuScreen({ navigation, route }) {
   const { t } = useTranslation();
   const { dbInitialized } = useContext(DatabaseContext);
   const [chatItems, setChatItems] = useState([]);
@@ -94,6 +95,18 @@ function ChatMenuScreen({ navigation }) {
           renderItem={renderItem}
         />
       )}
+
+
+      <CopilotStep text="This is step 2" order={2} name="step2">
+        <WalkthroughableText>Step 2</WalkthroughableText>
+      </CopilotStep>
+
+      <CopilotStep text="This is step 3" order={3} name="step3">
+        <WalkthroughableText>Step 3</WalkthroughableText>
+      </CopilotStep>
+      <CopilotStep text="This is chats screen" order={4} name="step4">
+        <View></View>
+      </CopilotStep>
       <CopilotStep text="This is step 5" order={5} name="step5">
         <View></View>
       </CopilotStep>
