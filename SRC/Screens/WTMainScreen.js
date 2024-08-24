@@ -22,9 +22,12 @@ function WTMainScreen({ navigation }) {
         navigation.navigate("EmptyCS", { isWalkthrough: true });
       }
       if (step.order === 8) {
-        navigation.reset({ index: 0, routes: [{ name: "Home" }] }); // Go back to Home
-        navigation.navigate("Home", { screen: "Assistants" }); // Navigate to Assistant
+        navigation.navigate("Home", { screen: "Assistants" }); 
       }
+      if (step.order === 10) {
+        navigation.navigate("AssistantMakerScreen1");
+      }
+
     };
     const stepChangeSubscription = copilotEvents.on(
       "stepChange",

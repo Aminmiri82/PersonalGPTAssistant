@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TextInput,
   KeyboardAvoidingView,
+  Text,
 } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
@@ -11,12 +12,18 @@ import colors from "../../config/colors";
 import AppButton from "../../Components/AppButton";
 import AppImagePicker from "../../Components/AssistantsComponents/AppImagePicker";
 import { useTranslation } from "react-i18next";
+import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
+import { Circle } from "react-native-svg";
 
+const WalkthroughableView = walkthroughable(View);
+const WalkthroughableText = walkthroughable(Text);
 function AssistantMakerScreen1({ navigation }) {
   const { t } = useTranslation();
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
-  const [imageUri, setImageUri] = useState(require("../../assets/assistant.jpg"));
+  const [imageUri, setImageUri] = useState(
+    require("../../assets/assistant.jpg")
+  );
 
   const handleImagePicked = (uri) => {
     setImageUri(uri);
@@ -30,7 +37,7 @@ function AssistantMakerScreen1({ navigation }) {
     navigation.navigate("AssistantMakerScreen2", {
       name,
       instructions,
-      imageUri
+      imageUri,
     });
   };
 
@@ -46,7 +53,6 @@ function AssistantMakerScreen1({ navigation }) {
             editText={t("edit")}
             onImagePicked={handleImagePicked}
             prepickedUri={require("../../assets/assistant.jpg")}
-            
           />
           <View style={styles.middleContainer}>
             <AppText style={styles.midTitle}>
@@ -79,6 +85,11 @@ function AssistantMakerScreen1({ navigation }) {
             style={styles.nextButton}
             textStyle={styles.nextButtonText}
           />
+          <CopilotStep text="This is step 11" order={11} name="step12">
+            <WalkthroughableText>hiii</WalkthroughableText>
+          </CopilotStep>
+          
+          
         </View>
       </KeyboardAvoidingView>
     </Screen>

@@ -11,6 +11,7 @@ import * as SecureStore from "expo-secure-store";
 import { CopilotProvider } from "react-native-copilot";
 
 import WTMainScreen from "./Screens/WTMainScreen";
+import AssistantMenuScreen from "./Screens/AssistantScreen/AssistantMenuScreen";
 
 const Stack = createNativeStackNavigator();
 // Imporatnt : you can only have one walkthroug in the whole app, so if you want to go to another screen, you need to do what i did in TestScreen.js
@@ -35,6 +36,7 @@ export default function App() {
       <CopilotProvider tooltipStyle={{ top: 50 }}>
         <NavigationContainer>
           <Stack.Navigator>
+
             <Stack.Screen
               name="WTMainScreen"
               component={WTMainScreen}

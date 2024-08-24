@@ -122,7 +122,7 @@ function ChatMenuScreen({ navigation, route }) {
         </WalkthroughableView>
       </CopilotStep>
       <CopilotStep text="Just press next" order={3} name="step3">
-        <WalkthroughableView></WalkthroughableView>
+       <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
     </>
   );
@@ -130,7 +130,7 @@ function ChatMenuScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    
   },
   container2: {
     flex: 1,
