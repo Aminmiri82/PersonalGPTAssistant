@@ -58,7 +58,7 @@
     "EmailToReceiveAnswer" : "ایمیل برای دریافت جواب",
     "EmailToReceiveAnswerPlaceholder" : "ایمیل را وارد کنید",
     "Send" : "ارسال",
-    "emptyfields": "لطفاً نام و ایمیل را وارد کنید",
+    "emptyfields": "لطفا تمام فیلدها را پر کنید",
     "EmailSent" : "سوال شما با موفقیت ارسال شد",
     "EmailFailed" : "ارسال سوال ناموفق بود",
     "SettingsScreen" : "تنظیمات",

@@ -58,7 +58,7 @@
     "EmailToReceiveAnswer" : "Email pour recevoir la réponse :",
     "EmailToReceiveAnswerPlaceholder" : "Entrez votre email",
     "Send" : "Envoyer",
-    "emptyfields": "Veuillez entrer votre nom et votre email",
+    "emptyfields": "Veuillez remplir tous les champs",
     "EmailSent" : "Votre question a été envoyée!",
     "EmailFailed" : "Échec de l'envoi de l'email",
     "SettingsScreen" : "Réglages",

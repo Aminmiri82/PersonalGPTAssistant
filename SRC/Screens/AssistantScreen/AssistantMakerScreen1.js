@@ -4,6 +4,10 @@ import {
   StyleSheet,
   TextInput,
   KeyboardAvoidingView,
+  Alert,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
@@ -11,75 +15,81 @@ import colors from "../../config/colors";
 import AppButton from "../../Components/AppButton";
 import AppImagePicker from "../../Components/AssistantsComponents/AppImagePicker";
 import { useTranslation } from "react-i18next";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 function AssistantMakerScreen1({ navigation }) {
   const { t } = useTranslation();
+  const headerHeight = useHeaderHeight();
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
-  const [imageUri, setImageUri] = useState(require("../../assets/assistant.jpg"));
+  const [imageUri, setImageUri] = useState("");
 
   const handleImagePicked = (uri) => {
     setImageUri(uri);
     console.log("Image URI:", uri);
   };
   const handleNext = () => {
-    if (!name || !instructions) {
-      console.log("Name or instructions are missing");
+    if (!name || !instructions || !imageUri) {
+      Alert.alert(t("error"), t("emptyfields"));
       return;
     }
     navigation.navigate("AssistantMakerScreen2", {
       name,
       instructions,
-      imageUri
+      imageUri,
     });
   };
 
   return (
     <Screen>
       <KeyboardAvoidingView
-        behavior="padding"
-        keyboardVerticalOffset={50} // Adjust the offset as needed
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={
+          Platform.OS === "ios" ? headerHeight : headerHeight * 2
+        }
+        style={styles.container}
       >
-        <View style={styles.container}>
-          <AppImagePicker
-            tipText={t("choosingPhotoForAssistant")}
-            editText={t("edit")}
-            onImagePicked={handleImagePicked}
-            prepickedUri={require("../../assets/assistant.jpg")}
-            
-          />
-          <View style={styles.middleContainer}>
-            <AppText style={styles.midTitle}>
-              {t("choosingNameForAssistant")}
-            </AppText>
-            <TextInput
-              style={styles.midInput}
-              placeholder={t("enterName")}
-              value={name}
-              onChangeText={setName}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View>
+            <AppImagePicker
+              tipText={t("choosingPhotoForAssistant")}
+              editText={t("edit")}
+              onImagePicked={handleImagePicked}
+              prepickedUri={require("../../assets/assistant.jpg")}
+            />
+            <View style={styles.middleContainer}>
+              <AppText style={styles.midTitle}>
+                {t("choosingNameForAssistant")}
+              </AppText>
+              <TextInput
+                style={styles.midInput}
+                placeholder={t("enterName")}
+                value={name}
+                onChangeText={setName}
+              />
+            </View>
+            <View style={styles.bottomContainer}>
+              <AppText style={styles.bottomTitle}>
+                {t("giveAssistantInstruction")}
+              </AppText>
+              <TextInput
+                style={styles.bottomInput}
+                placeholder={t("enterInstructions")}
+                value={instructions}
+                onChangeText={setInstructions}
+                multiline
+                numberOfLines={5}
+                scrollEnabled
+              />
+            </View>
+            <AppButton
+              title={t("next")}
+              onPress={handleNext}
+              style={styles.nextButton}
+              textStyle={styles.nextButtonText}
             />
           </View>
-          <View style={styles.bottomContainer}>
-            <AppText style={styles.bottomTitle}>
-              {t("giveAssistantInstruction")}
-            </AppText>
-            <TextInput
-              style={styles.bottomInput}
-              placeholder={t("enterInstructions")}
-              value={instructions}
-              onChangeText={setInstructions}
-              multiline
-              numberOfLines={5}
-              scrollEnabled
-            />
-          </View>
-          <AppButton
-            title={t("next")}
-            onPress={handleNext}
-            style={styles.nextButton}
-            textStyle={styles.nextButtonText}
-          />
-        </View>
+        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </Screen>
   );
@@ -88,7 +98,7 @@ function AssistantMakerScreen1({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "center",
+    
   },
   middleContainer: {
     marginTop: 20,

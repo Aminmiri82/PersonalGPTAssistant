@@ -29,6 +29,7 @@ import { useHeaderHeight } from "@react-navigation/elements";
 
 const ChatScreen = ({ navigation, route }) => {
   const { dbInitialized } = useContext(DatabaseContext);
+  const headerHeight = useHeaderHeight();
   const [conversation, setConversation] = useState([]);
   const [loading, setLoading] = useState(false);
   const [streamedChunks, setStreamedChunks] = useState("");
@@ -257,7 +258,7 @@ const ChatScreen = ({ navigation, route }) => {
   if (!dbInitialized) {
     return <Text>Loading...</Text>;
   }
-  const headerHeight = useHeaderHeight();
+  
 
   return (
     <Screen>
@@ -265,7 +266,7 @@ const ChatScreen = ({ navigation, route }) => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={
           Platform.OS === "ios" ? headerHeight : headerHeight * 2
-        } // put the botttom tab nav height here
+        } 
         style={styles.container}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

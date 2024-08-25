@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
-  Image,
+  Alert,
   TouchableOpacity,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
@@ -12,10 +16,12 @@ import colors from "../../config/colors";
 import AppImagePicker from "../../Components/AssistantsComponents/AppImagePicker";
 import { fetchAssistantById, deleteAssistantById } from "../../database";
 import { useTranslation } from "react-i18next";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 function AssistantEditorScreen1({ navigation, route }) {
   const { t } = useTranslation();
   const { id } = route.params;
+  const headerHeight = useHeaderHeight();
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
   const [imageUri, setImageUri] = useState("");
@@ -26,6 +32,7 @@ function AssistantEditorScreen1({ navigation, route }) {
         setName(assistant.name);
         setInstructions(assistant.instructions);
         setImageUri(assistant.profile);
+        console.log("Assistant fetched: ", assistant.profile);
       })
       .catch((error) => {
         console.log("Error fetching assistant: ", error);
@@ -33,8 +40,8 @@ function AssistantEditorScreen1({ navigation, route }) {
   }, [id]);
 
   const handleNext = () => {
-    if (!name || !instructions) {
-      console.log("Name or instructions are missing");
+    if (!name || !instructions || !imageUri) {
+      Alert.alert(t("error"), t("emptyfields"));
       return;
     }
     navigation.push("AssistantEditorScreen2", {
@@ -61,53 +68,68 @@ function AssistantEditorScreen1({ navigation, route }) {
 
   return (
     <Screen>
-      <AppImagePicker
-        tipText={t("choosingPhotoForAssistant")}
-        editText={t("edit")}
-        onImagePicked={handleImagePicked}
-        prepickedUri={{uri: imageUri}}
-      />
-      <View style={styles.middleContainer}>
-        <AppText style={styles.midTitle}>
-          {t("choosingNameForAssistant")}
-        </AppText>
-        <TextInput
-          style={styles.midInput}
-          placeholder={t("enterName")}
-          value={name}
-          onChangeText={setName}
-        />
-      </View>
-      <View style={styles.bottomContainer}>
-        <AppText style={styles.bottomTitle}>
-          {t("giveAssistantInstruction")}
-        </AppText>
-        <TextInput
-          style={styles.bottomInput}
-          placeholder={t("enterInstructions")}
-          value={instructions}
-          onChangeText={setInstructions}
-          multiline
-          numberOfLines={5}
-          scrollEnabled
-        />
-      </View>
-      <View style={styles.ButtonContainer}>
-        <TouchableOpacity
-          onPress={handleDelete}
-          style={styles.deleteAssistantButton}
-        >
-          <AppText style={styles.deleteButtonText}>{t("delete")}</AppText>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleNext} style={styles.nextButton}>
-          <AppText style={styles.nextButtonText}>{t("next")}</AppText>
-        </TouchableOpacity>
-      </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={
+          Platform.OS === "ios" ? headerHeight : headerHeight * 2
+        }
+        style={styles.container}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View>
+            <AppImagePicker
+              tipText={t("choosingPhotoForAssistant")}
+              editText={t("edit")}
+              onImagePicked={handleImagePicked}
+              prepickedUri={{ uri: imageUri }}
+            />
+            <View style={styles.middleContainer}>
+              <AppText style={styles.midTitle}>
+                {t("choosingNameForAssistant")}
+              </AppText>
+              <TextInput
+                style={styles.midInput}
+                placeholder={t("enterName")}
+                value={name}
+                onChangeText={setName}
+              />
+            </View>
+            <View style={styles.bottomContainer}>
+              <AppText style={styles.bottomTitle}>
+                {t("giveAssistantInstruction")}
+              </AppText>
+              <TextInput
+                style={styles.bottomInput}
+                placeholder={t("enterInstructions")}
+                value={instructions}
+                onChangeText={setInstructions}
+                multiline
+                numberOfLines={5}
+                scrollEnabled
+              />
+            </View>
+            <View style={styles.ButtonContainer}>
+              <TouchableOpacity
+                onPress={handleDelete}
+                style={styles.deleteAssistantButton}
+              >
+                <AppText style={styles.deleteButtonText}>{t("delete")}</AppText>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleNext} style={styles.nextButton}>
+                <AppText style={styles.nextButtonText}>{t("next")}</AppText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+  },
   topContainer: {
     alignItems: "center",
     marginTop: 20,
