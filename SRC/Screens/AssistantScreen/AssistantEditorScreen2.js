@@ -309,10 +309,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignSelf: "center",
   },
-  doneButtonText: {
-    color: colors.white,
-    fontSize: 16,
-  },
   container: {
     padding: 20,
     alignItems: "center",
