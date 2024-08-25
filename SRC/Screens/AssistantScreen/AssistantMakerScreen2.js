@@ -14,10 +14,13 @@ import AppButton from "../../Components/AppButton";
 import { insertAssistant, initDB } from "../../database";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useTranslation } from "react-i18next";
+import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
+
+const WalkthroughableView = walkthroughable(View);
 
 function AssistantMakerScreen2({ navigation, route }) {
   const { t } = useTranslation();
-  const { name, instructions, imageUri } = route.params;
+  // const { name, instructions, imageUri } = route.params;
   const [files, setFiles] = useState([]);
   const [fileIds, setFileIds] = useState([]);
   const [model, setModel] = useState("GPT-4o-mini");
@@ -93,19 +96,19 @@ function AssistantMakerScreen2({ navigation, route }) {
     setFileIds((prevFileIds) => prevFileIds.filter((_, i) => i !== index));
   };
 
-  useEffect(() => {
-    if (uploadCount === 0) {
-      setIsUploading(false);
-    }
-  }, [uploadCount]);
+  // useEffect(() => {
+  //   if (uploadCount === 0) {
+  //     setIsUploading(false);
+  //   }
+  // }, [uploadCount]);
 
-  const onProgress = (fileId, progress) => {
-    setProgressMap((prevMap) => ({
-      ...prevMap,
-      [fileId]: progress,
-    }));
-    console.log(`Progress ${progress}%`);
-  };
+  // const onProgress = (fileId, progress) => {
+  //   setProgressMap((prevMap) => ({
+  //     ...prevMap,
+  //     [fileId]: progress,
+  //   }));
+  //   console.log(`Progress ${progress}%`);
+  // };
 
   const handleSave = async () => {
     if (isUploading) {
@@ -160,39 +163,53 @@ function AssistantMakerScreen2({ navigation, route }) {
         textContent="Initializing assistant..."
         textStyle={styles.spinnerTextStyle}
       />
-      <View style={styles.topContainer}>
-        <View style={styles.topTipContainer}>
-          <AppText style={styles.topTip}>{t("chooseModel")}</AppText>
-        </View>
-        <View style={styles.topPickerContainer}>
-          <RNPickerSelect
-            onValueChange={(value) => setModel(value)}
-            items={assistantList}
+      <CopilotStep
+        text="You can choose the model you want to use for your assistant."
+        order={15}
+        name="step15"
+      >
+        <WalkthroughableView style={styles.topContainer}>
+          <View style={styles.topTipContainer}>
+            <AppText style={styles.topTip}>{t("chooseModel")}</AppText>
+          </View>
+          <View style={styles.topPickerContainer}>
+            <RNPickerSelect
+              onValueChange={(value) => setModel(value)}
+              items={assistantList}
+            />
+          </View>
+          <View style={styles.gp4TipContainer}>
+            <AppText style={styles.middleTip}>{t("fileUploadReq")}</AppText>
+          </View>
+        </WalkthroughableView>
+      </CopilotStep>
+      <CopilotStep
+        text="You can upload files to your assistant."
+        order={16}
+        name="step16"
+      >
+        <WalkthroughableView style={styles.bottomContainer}>
+          <View style={styles.bottomTipContainer}>
+            <AppText style={styles.bottomTip}>{t("fileUpload")}</AppText>
+          </View>
+          <AppDocumentPicker
+          // files={files}
+          // onAddFile={handleAddFile}
+          // onRemoveFile={handleRemoveFile}
+          // progressMap={progressMap}
           />
-        </View>
-        <View style={styles.gp4TipContainer}>
-          <AppText style={styles.middleTip}>{t("fileUploadReq")}</AppText>
-        </View>
-      </View>
-
-      <View style={styles.bottomContainer}>
-        <View style={styles.bottomTipContainer}>
-          <AppText style={styles.bottomTip}>{t("fileUpload")}</AppText>
-        </View>
-        <AppDocumentPicker
-          files={files}
-          onAddFile={handleAddFile}
-          onRemoveFile={handleRemoveFile}
-          progressMap={progressMap}
-        />
-      </View>
+        </WalkthroughableView>
+      </CopilotStep>
       <AppButton
         title={t("saveAssistant")}
-        onPress={handleSave}
+        // onPress={handleSave}
         style={styles.nextButton}
         textStyle={styles.nextButtonText}
       />
       <Text>{fileIds}</Text>
+      <CopilotStep text="This is the offline tab" order={17} name="step17">
+        <WalkthroughableView></WalkthroughableView>
+      </CopilotStep>
     </Screen>
   );
 }

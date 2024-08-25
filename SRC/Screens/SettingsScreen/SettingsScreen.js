@@ -88,7 +88,7 @@ function SettingsScreen({ navigation, route }) {
   return (
     <Screen>
       <View style={styles.container}>
-        <CopilotStep text="Set your API Key here" order={20} name="apiKey">
+        <CopilotStep text="Set your API Key here" order={20} name="step20">
           <WalkthroughableSettingsItem
             title={t("apikey")}
             subTitle={apiKey}
@@ -103,7 +103,7 @@ function SettingsScreen({ navigation, route }) {
           onSumbit={handleSetAPIKey}
         />
 
-        <CopilotStep text="Choose your language" order={21} name="language">
+        <CopilotStep text="Choose your language" order={21} name="step21">
           <WalkthroughableSettingsItem
             title={t("Languages")}
             subTitle={selectedLanguage}
@@ -117,20 +117,19 @@ function SettingsScreen({ navigation, route }) {
           onClose={toggleLanguagePrompt}
           onSelectLanguage={handleSelectLanguage}
         />
-
-        <WalkthroughableSettingsItem
-          title={t("PriPol")}
-          IconComponent={<Icon iconSet="MCI" name="file-document" />}
-          onPress={() => navigation.navigate("PrivacyPolicyScreen")}
-        />
-        <WalkthroughableSettingsItem
-          title={t("aboutUs")}
-          IconComponent={<Icon iconSet="MCI" name="information" />}
-          onPress={() => navigation.navigate("AboutUsScreen")}
-        />
-        <Button title="Start tutorial" onPress={() => start()} />
-        <CopilotStep text="This is it" order={22} name="step7">
-          <View></View>
+        <CopilotStep text="This is the privacy policy" order={22} name="step22">
+          <WalkthroughableSettingsItem
+            title={t("PriPol")}
+            IconComponent={<Icon iconSet="MCI" name="file-document" />}
+            onPress={() => navigation.navigate("PrivacyPolicyScreen")}
+          />
+        </CopilotStep>
+        <CopilotStep text="This is the about us page" order={23} name="step23">
+          <WalkthroughableSettingsItem
+            title={t("aboutUs")}
+            IconComponent={<Icon iconSet="MCI" name="information" />}
+            onPress={() => navigation.navigate("AboutUsScreen")}
+          />
         </CopilotStep>
       </View>
     </Screen>

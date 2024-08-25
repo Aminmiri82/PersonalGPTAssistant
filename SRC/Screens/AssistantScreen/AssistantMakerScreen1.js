@@ -48,48 +48,70 @@ function AssistantMakerScreen1({ navigation }) {
         keyboardVerticalOffset={50} // Adjust the offset as needed
       >
         <View style={styles.container}>
-          <AppImagePicker
-            tipText={t("choosingPhotoForAssistant")}
-            editText={t("edit")}
-            onImagePicked={handleImagePicked}
-            prepickedUri={require("../../assets/assistant.jpg")}
-          />
-          <View style={styles.middleContainer}>
-            <AppText style={styles.midTitle}>
-              {t("choosingNameForAssistant")}
-            </AppText>
-            <TextInput
-              style={styles.midInput}
-              placeholder={t("enterName")}
-              value={name}
-              onChangeText={setName}
-            />
-          </View>
-          <View style={styles.bottomContainer}>
-            <AppText style={styles.bottomTitle}>
-              {t("giveAssistantInstruction")}
-            </AppText>
-            <TextInput
-              style={styles.bottomInput}
-              placeholder={t("enterInstructions")}
-              value={instructions}
-              onChangeText={setInstructions}
-              multiline
-              numberOfLines={5}
-              scrollEnabled
-            />
-          </View>
+          <CopilotStep
+            text="You can add an image to your assistant"
+            order={11}
+            name="step11"
+          >
+            <WalkthroughableView>
+              <AppImagePicker
+                tipText={t("choosingPhotoForAssistant")}
+                editText={t("edit")}
+                onImagePicked={handleImagePicked}
+                prepickedUri={require("../../assets/assistant.jpg")}
+              />
+            </WalkthroughableView>
+          </CopilotStep>
+          <CopilotStep
+            text="You can give your assistant a name"
+            order={12}
+            name="step12"
+          >
+            <WalkthroughableView style={styles.middleContainer}>
+              <AppText style={styles.midTitle}>
+                {t("choosingNameForAssistant")}
+              </AppText>
+              <TextInput
+                style={styles.midInput}
+                placeholder={t("enterName")}
+                value={name}
+                onChangeText={setName}
+              />
+            </WalkthroughableView>
+          </CopilotStep>
+          <CopilotStep
+            text="Give your assistant instructions"
+            order={13}
+            name="step13"
+          >
+            <WalkthroughableView style={styles.bottomContainer}>
+              <AppText style={styles.bottomTitle}>
+                {t("giveAssistantInstruction")}
+              </AppText>
+              <TextInput
+                style={styles.bottomInput}
+                placeholder={t("enterInstructions")}
+                value={instructions}
+                onChangeText={setInstructions}
+                multiline
+                numberOfLines={5}
+                scrollEnabled
+              />
+            </WalkthroughableView>
+          </CopilotStep>
           <AppButton
             title={t("next")}
             onPress={handleNext}
             style={styles.nextButton}
             textStyle={styles.nextButtonText}
           />
-          <CopilotStep text="This is step 11" order={11} name="step12">
-            <WalkthroughableText>hiii</WalkthroughableText>
+          <CopilotStep
+            text="After you're done, you can go to the next fields"
+            order={14}
+            name="step14"
+          >
+            <WalkthroughableView></WalkthroughableView>
           </CopilotStep>
-          
-          
         </View>
       </KeyboardAvoidingView>
     </Screen>

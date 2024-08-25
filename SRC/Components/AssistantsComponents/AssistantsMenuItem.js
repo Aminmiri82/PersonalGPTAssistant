@@ -1,28 +1,44 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import AppText from "../AppText";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 import colors from "../../config/colors";
 
-function AssistantsMenuItem({ imageUri, title, onPress, ShowEditButton = true }) {
-  return (
-    <View style={styles.TopContainer}>
-      <View style={styles.ImageContainer}>
-        <TouchableOpacity onPress={onPress}>
-          {imageUri ? <Image style={styles.image} source={{ uri: imageUri }} /> : <Image style={styles.image} source={require("../../assets/logo.jpg")} />}
-        </TouchableOpacity>
-      </View>
-      <View style={styles.modelTextContainer}>
-        <AppText style={styles.modelText}>{title}</AppText>
-      </View>
-      {ShowEditButton && (
-        <TouchableOpacity onPress={onPress}>
-          <AppText style={styles.edit}>edit</AppText>
-        </TouchableOpacity>
-      )}
-    </View>
-  );
-}
+const AssistantsMenuItem = forwardRef(
+  ({ imageUri, title, onPress, ShowEditButton = true }, ref) => {
+    return (
+      <TouchableHighlight
+        ref={ref}
+        underlayColor={colors.light}
+        onPress={onPress}
+      >
+        <View style={styles.TopContainer}>
+          <View style={styles.ImageContainer}>
+            <TouchableOpacity onPress={onPress}>
+              {imageUri ? (
+                <Image style={styles.image} source={{ uri: imageUri }} />
+              ) : (
+                <Image
+                  style={styles.image}
+                  source={require("../../assets/logo.jpg")}
+                />
+              )}
+            </TouchableOpacity>
+          </View>
+          <View style={styles.modelTextContainer}>
+            <AppText style={styles.modelText}>{title}</AppText>
+          </View>
+          {ShowEditButton && (
+            <TouchableOpacity onPress={onPress}>
+              <AppText style={styles.edit}>edit</AppText>
+            </TouchableOpacity>
+          )}
+        </View>
+      </TouchableHighlight>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   TopContainer: {
@@ -34,8 +50,6 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.light,
     width: "45%", // Set width to less than half to fit two items per row
     margin: "2.5%", // Set margin to space items out
-
-  
   },
   image: {
     width: 150,

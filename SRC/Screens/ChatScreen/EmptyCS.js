@@ -46,22 +46,22 @@ const EmptyCS = ({ navigation, route }) => {
   const headerHeight = useHeaderHeight();
   return (
     <Screen>
-      <CopilotStep
-        text="After you've pressed on an assitant, you will be redirected to the conversation and can message the chatbot"
-        order={7}
-        name="step7"
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={
+          Platform.OS === "ios" ? headerHeight : headerHeight * 2
+        } // put the botttom tab nav height here
+        style={styles.container}
       >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={
-            Platform.OS === "ios" ? headerHeight : headerHeight * 2
-          } // put the botttom tab nav height here
-          style={styles.container}
-        >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <ImageBackground
-              source={require("../../assets/background.jpg")}
-              style={styles.background}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ImageBackground
+            source={require("../../assets/background.jpg")}
+            style={styles.background}
+          >
+            <CopilotStep
+              text="After you've pressed on an assitant, you will be redirected to the conversation and can message the chatbot"
+              order={7}
+              name="step7"
             >
               <WalkthroughableView style={styles.container}>
                 {/* <FlatList
@@ -86,10 +86,11 @@ const EmptyCS = ({ navigation, route }) => {
               /> */}
                 <AppTextInput style={styles.input} />
               </WalkthroughableView>
-            </ImageBackground>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </CopilotStep>
+            </CopilotStep>
+          </ImageBackground>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+
       <CopilotStep
         text="This is the Assitant tab. You can manage your assistants here"
         order={8}

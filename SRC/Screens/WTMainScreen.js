@@ -22,12 +22,20 @@ function WTMainScreen({ navigation }) {
         navigation.navigate("EmptyCS", { isWalkthrough: true });
       }
       if (step.order === 8) {
-        navigation.navigate("Home", { screen: "Assistants" }); 
+        navigation.navigate("Home", { screen: "Assistants" });
       }
       if (step.order === 10) {
         navigation.navigate("AssistantMakerScreen1");
       }
-
+      if (step.order === 14) {
+        navigation.navigate("AssistantMakerScreen2");
+      }
+      if (step.order === 17) {
+        navigation.navigate("Home", { screen: "OfflineSearch" });
+      }
+      if (step.order === 19) {
+        navigation.navigate("Home", { screen: "Settings" });
+      }
     };
     const stepChangeSubscription = copilotEvents.on(
       "stepChange",
