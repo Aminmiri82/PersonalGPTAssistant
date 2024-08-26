@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { StyleSheet, AppRegistry, Text,Platform } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, AppRegistry, Text, Platform } from "react-native";
 import { name as appName } from "./app.json";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -22,6 +22,8 @@ export default function App() {
   //   SplashScreen.hide();
   // }, []);
 
+  const [initialRoute, setInitialRoute] = useState(null);
+
   useEffect(() => {
     const fetchLanguage = async () => {
       const storedLanguage = await SecureStore.getItemAsync("selectedLanguage");
@@ -30,14 +32,33 @@ export default function App() {
       }
     };
 
+    const checkWalkthroughStatus = async () => {
+      const walkthroughCompleted = await SecureStore.getItemAsync(
+        "walkthroughCompleted"
+      );
+      if (walkthroughCompleted) {
+        setInitialRoute("Home");
+      } else {
+        setInitialRoute("WTMainScreen");
+      }
+    };
+
+    checkWalkthroughStatus();
     fetchLanguage();
   }, []);
+
+  if (initialRoute === null) {
+    // Return null or a loading screen while waiting for the initial route to be determined
+    return null;
+  }
+
   return (
     <DatabaseProvider>
-      <CopilotProvider tooltipStyle={Platform.OS === "android" ? {top: 50} : null}>
+      <CopilotProvider
+        tooltipStyle={Platform.OS === "android" ? { top: 50 } : null}
+      >
         <NavigationContainer>
-          <Stack.Navigator>
-
+          <Stack.Navigator initialRouteName={initialRoute}>
             <Stack.Screen
               name="WTMainScreen"
               component={WTMainScreen}
