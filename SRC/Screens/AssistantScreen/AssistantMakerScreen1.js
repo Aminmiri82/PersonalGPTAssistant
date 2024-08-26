@@ -8,6 +8,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Text,
 } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";

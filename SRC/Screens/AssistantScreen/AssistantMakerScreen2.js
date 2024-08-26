@@ -20,7 +20,7 @@ const WalkthroughableView = walkthroughable(View);
 
 function AssistantMakerScreen2({ navigation, route }) {
   const { t } = useTranslation();
-  // const { name, instructions, imageUri } = route.params;
+  const { name, instructions, imageUri } = route.params;
   const [files, setFiles] = useState([]);
   const [fileIds, setFileIds] = useState([]);
   const [model, setModel] = useState("GPT-4o-mini");
@@ -96,19 +96,19 @@ function AssistantMakerScreen2({ navigation, route }) {
     setFileIds((prevFileIds) => prevFileIds.filter((_, i) => i !== index));
   };
 
-  // useEffect(() => {
-  //   if (uploadCount === 0) {
-  //     setIsUploading(false);
-  //   }
-  // }, [uploadCount]);
+  useEffect(() => {
+    if (uploadCount === 0) {
+      setIsUploading(false);
+    }
+  }, [uploadCount]);
 
-  // const onProgress = (fileId, progress) => {
-  //   setProgressMap((prevMap) => ({
-  //     ...prevMap,
-  //     [fileId]: progress,
-  //   }));
-  //   console.log(`Progress ${progress}%`);
-  // };
+  const onProgress = (fileId, progress) => {
+    setProgressMap((prevMap) => ({
+      ...prevMap,
+      [fileId]: progress,
+    }));
+    console.log(`Progress ${progress}%`);
+  };
 
   const handleSave = async () => {
     if (isUploading) {
@@ -193,16 +193,16 @@ function AssistantMakerScreen2({ navigation, route }) {
             <AppText style={styles.bottomTip}>{t("fileUpload")}</AppText>
           </View>
           <AppDocumentPicker
-          // files={files}
-          // onAddFile={handleAddFile}
-          // onRemoveFile={handleRemoveFile}
-          // progressMap={progressMap}
+            files={files}
+            onAddFile={handleAddFile}
+            onRemoveFile={handleRemoveFile}
+            progressMap={progressMap}
           />
         </WalkthroughableView>
       </CopilotStep>
       <AppButton
         title={t("saveAssistant")}
-        // onPress={handleSave}
+        onPress={handleSave}
         style={styles.nextButton}
         textStyle={styles.nextButtonText}
       />

@@ -33,9 +33,7 @@ export default function App() {
     };
 
     const checkWalkthroughStatus = async () => {
-      const walkthroughCompleted = await SecureStore.getItemAsync(
-        "walkthroughCompleted"
-      );
+      const walkthroughCompleted = false;
       if (walkthroughCompleted) {
         setInitialRoute("Home");
       } else {
