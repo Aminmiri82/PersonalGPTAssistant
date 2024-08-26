@@ -30,10 +30,10 @@ function WTMainScreen({ navigation }) {
       if (step.order === 14) {
         navigation.navigate("AssistantMakerScreen2");
       }
+      // if (step.order === 17) {
+      //   navigation.navigate("Home", { screen: "OfflineSearch" });
+      // }
       if (step.order === 17) {
-        navigation.navigate("Home", { screen: "OfflineSearch" });
-      }
-      if (step.order === 19) {
         navigation.navigate("Home", { screen: "Settings" });
       }
     };

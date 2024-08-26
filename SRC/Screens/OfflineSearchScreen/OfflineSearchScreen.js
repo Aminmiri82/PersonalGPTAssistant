@@ -54,27 +54,27 @@ export default function SearchScreen({ navigation }) {
 
   return (
     <Screen style={styles.container}>
-      <CopilotStep
+      {/* <CopilotStep
         text="This is the offline search screen"
         order={18}
         name="step18"
-      >
-        <WalkthroughableView style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder={t("SearchPlaceholder")}
-            placeholderTextColor="#888"
-            value={query}
-            onChangeText={handleChangeText} // Use handleChangeText for text input
-          />
-          {query.length > 0 && (
-            <Text style={styles.resultsIndicator}>
-              {searchResults.length}{" "}
-              {searchResults.length === 1 ? t("Result") : t("Results")}
-            </Text>
-          )}
-        </WalkthroughableView>
-      </CopilotStep>
+      > */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder={t("SearchPlaceholder")}
+          placeholderTextColor="#888"
+          value={query}
+          onChangeText={handleChangeText} // Use handleChangeText for text input
+        />
+        {query.length > 0 && (
+          <Text style={styles.resultsIndicator}>
+            {searchResults.length}{" "}
+            {searchResults.length === 1 ? t("Result") : t("Results")}
+          </Text>
+        )}
+      </View>
+      {/* </CopilotStep> */}
       <FlatList
         data={searchResults}
         keyExtractor={(item) => item.id.toString()}
@@ -92,13 +92,13 @@ export default function SearchScreen({ navigation }) {
         initialNumToRender={20}
         removeClippedSubviews={true}
       />
-      <CopilotStep
+      {/* <CopilotStep
         text="Here you can change the settings"
         order={19}
         name="step19"
-      >
-        <WalkthroughableView></WalkthroughableView>
-      </CopilotStep>
+      > */}
+      {/* <WalkthroughableView></WalkthroughableView> */}
+      {/* </CopilotStep> */}
     </Screen>
   );
 }

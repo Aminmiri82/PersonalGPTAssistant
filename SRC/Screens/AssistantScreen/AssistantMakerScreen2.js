@@ -207,7 +207,7 @@ function AssistantMakerScreen2({ navigation, route }) {
         textStyle={styles.nextButtonText}
       />
       <Text>{fileIds}</Text>
-      <CopilotStep text="This is the offline tab" order={17} name="step17">
+      <CopilotStep text="This is the settings tab" order={17} name="step17">
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
     </Screen>
