@@ -1,41 +1,34 @@
 import React, { forwardRef } from "react";
 import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import AppText from "../AppText";
-import { TouchableHighlight } from "react-native-gesture-handler";
 
 import colors from "../../config/colors";
 
 const AssistantsMenuItem = forwardRef(
   ({ imageUri, title, onPress, ShowEditButton = true }, ref) => {
     return (
-      <TouchableHighlight
-        ref={ref}
-        underlayColor={colors.light}
-        onPress={onPress}
-      >
-        <View style={styles.TopContainer}>
-          <View style={styles.ImageContainer}>
-            <TouchableOpacity onPress={onPress}>
-              {imageUri ? (
-                <Image style={styles.image} source={{ uri: imageUri }} />
-              ) : (
-                <Image
-                  style={styles.image}
-                  source={require("../../assets/logo.jpg")}
-                />
-              )}
-            </TouchableOpacity>
-          </View>
-          <View style={styles.modelTextContainer}>
-            <AppText style={styles.modelText}>{title}</AppText>
-          </View>
-          {ShowEditButton && (
-            <TouchableOpacity onPress={onPress}>
-              <AppText style={styles.edit}>edit</AppText>
-            </TouchableOpacity>
-          )}
+      <View style={styles.TopContainer}>
+        <View style={styles.ImageContainer}>
+          <TouchableOpacity  onPress={onPress} ref={ref}>
+            {imageUri ? (
+              <Image style={styles.image} source={{ uri: imageUri }} />
+            ) : (
+              <Image
+                style={styles.image}
+                source={require("../../assets/logo.jpg")}
+              />
+            )}
+          </TouchableOpacity>
         </View>
-      </TouchableHighlight>
+        <View style={styles.modelTextContainer}>
+          <AppText style={styles.modelText}>{title}</AppText>
+        </View>
+        {ShowEditButton && (
+          <TouchableOpacity onPress={onPress}>
+            <AppText style={styles.edit}>edit</AppText>
+          </TouchableOpacity>
+        )}
+      </View>
     );
   }
 );

@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import { StyleSheet, AppRegistry, Text } from "react-native";
+import { StyleSheet, AppRegistry, Text,Platform } from "react-native";
 import { name as appName } from "./app.json";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import BottomTabNav from "./Navigation/BottomTabNav";
 
 import { DatabaseProvider } from "./DatabaseProvider"; // Adjust the import path
@@ -33,7 +34,7 @@ export default function App() {
   }, []);
   return (
     <DatabaseProvider>
-      <CopilotProvider tooltipStyle={{ top: 50 }}>
+      <CopilotProvider tooltipStyle={Platform.OS === "android" ? {top: 50} : null}>
         <NavigationContainer>
           <Stack.Navigator>
 
