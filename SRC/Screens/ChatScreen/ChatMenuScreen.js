@@ -13,6 +13,7 @@ import {
   useCopilot,
   CopilotStep,
   walkthroughable,
+  copilotEvents,
 } from "react-native-copilot";
 const WalkthroughableText = walkthroughable(Text);
 const WalkthroughableView = walkthroughable(View);
@@ -23,6 +24,22 @@ function ChatMenuScreen({ navigation, route }) {
   const [chatItems, setChatItems] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const { start, copilotEvents } = useCopilot();
+
+  // useEffect(() => {
+  //   const handleStepChange = (step) => {
+  //     if (step.name === "step2") {
+  //       copilotEvents.on("stop", () => {
+  //         navigation.navigate("NextScreen"); // Navigate to the next screen
+  //       });
+  //     }
+  //   };
+
+  //   copilotEvents.on("stepChange", handleStepChange);
+
+  //   return () => {
+  //     copilotEvents.off("stepChange", handleStepChange);
+  //   };
+  // }, [copilotEvents, navigation]);
 
   useFocusEffect(
     useCallback(() => {
@@ -86,41 +103,36 @@ function ChatMenuScreen({ navigation, route }) {
   }
 
   return (
-    <CopilotStep text="This is chats screen" order={2} name="step4">
-      <WalkthroughableView style={styles.container}>
-        {chatItems.length === 0 ? (
-          <Text>{t("noChats")}</Text>
-        ) : (
-          <FlatList
-            data={chatItems}
-            keyExtractor={(item) => item.Id.toString()}
-            renderItem={renderItem}
-          />
-        )}
-
-        {/* <CopilotStep text="This is step 2" order={2} name="step2">
-          <WalkthroughableText>Step 2</WalkthroughableText>
-        </CopilotStep>
-
-        <CopilotStep text="This is step 3" order={3} name="step3">
-          <WalkthroughableText>Step 3</WalkthroughableText>
-        </CopilotStep>
-        <CopilotStep text="This is chats screen" order={4} name="step4">
-          <View></View>
-        </CopilotStep>
-        <CopilotStep text="This is step 5" order={5} name="step5">
-          <View></View>
-        </CopilotStep>
-        <CopilotStep text="This is step 6" order={6} name="step6">
-          <View></View>
-        </CopilotStep> */}
-      </WalkthroughableView>
-    </CopilotStep>
+    <>
+      <CopilotStep
+        text="This is chats screen. you can add new conversations here. By pressing the plus button you can add a new chat."
+        order={2}
+        name="step2"
+      >
+        <WalkthroughableView style={styles.container}>
+          {chatItems.length === 0 ? (
+            <Text>{t("noChats")}</Text>
+          ) : (
+            <FlatList
+              data={chatItems}
+              keyExtractor={(item) => item.Id.toString()}
+              renderItem={renderItem}
+            />
+          )}
+        </WalkthroughableView>
+      </CopilotStep>
+      <CopilotStep text="Just press next" order={3} name="step3">
+        <WalkthroughableView></WalkthroughableView>
+      </CopilotStep>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  container2: {
     flex: 1,
   },
   bottomContainer: {

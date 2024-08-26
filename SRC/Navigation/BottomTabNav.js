@@ -8,13 +8,14 @@ import ChatScreenNav from "./ChatScreenNav";
 import AssistantsScreenNav from "./AssistantsScreenNav";
 import OfflineSearchNav from "./OfflineSearchNav";
 
-
 import { useTranslation } from "react-i18next";
 import { CopilotProvider } from "react-native-copilot";
 
 const Tab = createBottomTabNavigator();
-function BottomTabNav() {
+function BottomTabNav(route) {
   const { t } = useTranslation();
+  const startWalkthrough = route.params?.startWalkthrough;
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -41,6 +42,7 @@ function BottomTabNav() {
       <Tab.Screen
         name="Chat"
         component={ChatScreenNav}
+        initialParams={{ startWalkthrough }}
         options={{ headerShown: false, title: t("ChatTab") }}
       />
       <Tab.Screen
@@ -53,8 +55,11 @@ function BottomTabNav() {
         component={OfflineSearchNav}
         options={{ headerShown: false, title: t("OfflineSearchTabName") }}
       />
-      <Tab.Screen name="Settings" component={SettingsScreenNav} options={{ headerShown: false, title: t("SettingTab") }} />
-     
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreenNav}
+        options={{ headerShown: false, title: t("SettingTab") }}
+      />
     </Tab.Navigator>
   );
 }

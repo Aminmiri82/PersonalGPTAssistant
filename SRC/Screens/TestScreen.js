@@ -1,12 +1,13 @@
-
 import React, { useEffect } from "react";
 import { View, Text, Button } from "react-native";
 import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
 import Screen from "../Components/Screen";
+import { useTranslation } from "react-i18next";
 
 const WalkthroughableText = walkthroughable(Text);
 
 function TestScreen({ navigation }) {
+  const { t } = useTranslation();
   const { start, copilotEvents } = useCopilot();
 
   useEffect(() => {
@@ -32,7 +33,7 @@ function TestScreen({ navigation }) {
   return (
     <Screen>
       <View>
-        <CopilotStep text="This is step 1" order={1} name="step1">
+        {/* <CopilotStep text="This is step 1" order={1} name="step1">
           <WalkthroughableText>Step 1</WalkthroughableText>
         </CopilotStep>
 
@@ -45,9 +46,9 @@ function TestScreen({ navigation }) {
         </CopilotStep>
         <CopilotStep text="This is settings screen" order={4} name="step4">
           <View></View>
-        </CopilotStep>
-
-        <Button title="Start Walkthrough" onPress={() => start()} />
+        </CopilotStep> */}
+        <Text>To start the walkthrough, press the button below</Text>
+        <Button title="Start Walkthrough" onPress={handleStartWalkthrough} />
       </View>
     </Screen>
   );
