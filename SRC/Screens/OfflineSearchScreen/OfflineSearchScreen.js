@@ -1,13 +1,16 @@
 import React, { useState, useCallback } from "react";
-import { FlatList, TextInput, StyleSheet, View, Text } from "react-native";
-import _ from "lodash";
+import {
+  FlatList,
+  TextInput,
+  StyleSheet,
+  View,
+  Text,
+} from "react-native";
+import _ from "lodash";  
 import SearchResult from "../../Components/OfflineSearchComponents/SearchResult";
 import searchableData from "../../assets/searchableData.json";
 import Screen from "../../Components/Screen";
 import { useTranslation } from "react-i18next";
-import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
-
-const WalkthroughableView = walkthroughable(View);
 
 export default function SearchScreen({ navigation }) {
   const [query, setQuery] = useState("");
@@ -42,6 +45,7 @@ export default function SearchScreen({ navigation }) {
 
   const handleResultPress = (item) => {
     console.log(item);
+    
   };
 
   const renderItem = ({ item }) => (
@@ -54,11 +58,6 @@ export default function SearchScreen({ navigation }) {
 
   return (
     <Screen style={styles.container}>
-      {/* <CopilotStep
-        text="This is the offline search screen"
-        order={18}
-        name="step18"
-      > */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -74,7 +73,6 @@ export default function SearchScreen({ navigation }) {
           </Text>
         )}
       </View>
-      {/* </CopilotStep> */}
       <FlatList
         data={searchResults}
         keyExtractor={(item) => item.id.toString()}
@@ -92,13 +90,6 @@ export default function SearchScreen({ navigation }) {
         initialNumToRender={20}
         removeClippedSubviews={true}
       />
-      {/* <CopilotStep
-        text="Here you can change the settings"
-        order={19}
-        name="step19"
-      > */}
-      {/* <WalkthroughableView></WalkthroughableView> */}
-      {/* </CopilotStep> */}
     </Screen>
   );
 }
@@ -125,6 +116,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+   
   },
   resultsIndicator: {
     marginTop: 8,

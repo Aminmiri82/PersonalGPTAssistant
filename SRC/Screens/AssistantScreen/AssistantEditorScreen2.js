@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
@@ -24,12 +24,15 @@ function AssistantEditorScreen2({ navigation, route }) {
   const { t } = useTranslation();
   const { id, name, instructions, imageUri } = route.params;
   const [files, setFiles] = useState([]);
-  const [parsedFiles, setParsedFiles] = useState([]);
   const [fileIds, setFileIds] = useState([]);
-  const [model, setModel] = useState("GPT-4o-mini");
-
+  const [parsedFiles, setParsedFiles] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
   const [progressMap, setProgressMap] = useState({});
+  const [uploadCount, setUploadCount] = useState(0);
+  const [model, setModel] = useState("GPT-4o-mini");
+
+  
   const assistantList = [
     { label: "GPT-4o-mini", value: "gpt-4o-mini" },
     { label: "GPT-4o", value: "gpt-4o" },
@@ -86,6 +89,11 @@ function AssistantEditorScreen2({ navigation, route }) {
     console.log("parsed files in second useeffect", parsedFiles);
     uploadFiles();
   }, [parsedFiles]);
+  useEffect(() => {
+    if (uploadCount === 0) {
+      setIsUploading(false);
+    }
+  }, [uploadCount]);
 
   const handleSave = async () => {
     if (!name || !instructions) {
@@ -147,28 +155,53 @@ function AssistantEditorScreen2({ navigation, route }) {
     }
   };
   const handleAddFile = async (file) => {
-    // Use a unique identifier such as file.uri or a timestamp
+    console.log("File URI:", file);
     const uniqueId = file.uri || Date.now().toString();
+    console.log("Unique ID:", uniqueId);
     setFiles((prevFiles) => [...prevFiles, { ...file, id: uniqueId }]);
+    setUploadCount((prev) => prev + 1);
+    setIsUploading(true);
 
     try {
-      const uploadResponse = await uploadIndividualFiles(file, (progress) =>
-        onProgress(uniqueId, progress)
+      const fileId = await uploadIndividualFiles(
+        file,
+        (progress) => onProgress(uniqueId, progress),
+        reportError
       );
-      console.log("Complete upload response:", uploadResponse);
 
-      if (uploadResponse) {
-        const fileId = uploadResponse;
-        setFileIds((prevFileIds) => [...prevFileIds, fileId]);
-        console.log("Upload Complete, File ID:", fileId);
-      } else {
-        console.error("Upload response is missing file ID:", uploadResponse);
-        throw new Error("Upload response does not contain a valid file ID");
-      }
+      // Update fileIds state with the returned fileId
+      setFileIds((prevFileIds) => [...prevFileIds, fileId]);
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.error("Error in handleAddFile:", error);
+    } finally {
+      setUploadCount((prev) => prev - 1);
     }
   };
+
+  const reportError = (fileId, errorMessage) => {
+    Alert.alert(
+      "Upload Failed",
+      `File upload failed: ${errorMessage}`,
+      [
+        {
+          text: "Retry",
+          onPress: () => {
+            const failedFile = files.find((file) => file.id === fileId);
+            if (failedFile) {
+              handleAddFile(failedFile); // Retry the failed upload
+            }
+          },
+        },
+        {
+          text: "Delete",
+          onPress: () => handleRemoveFile(fileId),
+          style: "destructive",
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   //oh god oh fuck please fix this
   // LOG  Removing file at index: 0
   //LOG  Files: [{"id": "file:///Users/aminmiri/Library/Developer/CoreSimulator/Devices/9BCE7473-F759-42B1-BF12-17FEC2C55D9B/data/Containers/Data/Application/27B93F0C-CF67-4920-AC53-5FC9693895C1/tmp/com.amin04.SRC-Inbox/10MB-TESTFILE.ORG.pdf", "mimeType": "application/pdf", "name": "10MB-TESTFILE.ORG.pdf", "size": 10705702, "uri": "file:///Users/aminmiri/Library/Developer/CoreSimulator/Devices/9BCE7473-F759-42B1-BF12-17FEC2C55D9B/data/Containers/Data/Application/27B93F0C-CF67-4920-AC53-5FC9693895C1/tmp/com.amin04.SRC-Inbox/10MB-TESTFILE.ORG.pdf"}]
@@ -185,7 +218,7 @@ function AssistantEditorScreen2({ navigation, route }) {
       ...prevMap,
       [fileId]: progress,
     }));
-    console.log(`File ID ${fileId}: Progress ${progress}%`);
+    console.log(`Progress ${progress}%`);
   };
 
   const handleDelete = () => {
@@ -308,10 +341,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     alignSelf: "center",
-  },
-  doneButtonText: {
-    color: colors.white,
-    fontSize: 16,
   },
   container: {
     padding: 20,

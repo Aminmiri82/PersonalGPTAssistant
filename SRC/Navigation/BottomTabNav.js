@@ -6,7 +6,7 @@ import Icon from "../Components/Icon";
 import SettingsScreenNav from "./SettingsScreenNav";
 import ChatScreenNav from "./ChatScreenNav";
 import AssistantsScreenNav from "./AssistantsScreenNav";
-import OfflineSearchNav from "./OfflineSearchNav";
+import EmailAnswersNav from "./EmailAnswersNav";
 
 import { useTranslation } from "react-i18next";
 import { CopilotProvider } from "react-native-copilot";
@@ -29,7 +29,7 @@ function BottomTabNav(route) {
             iconName = focused ? "robot" : "robot-outline";
           } else if (route.name === "Settings") {
             iconName = focused ? "cog" : "cog-outline";
-          } else if (route.name === "OfflineSearch") {
+          } else if (route.name === "EmailAnswers") {
             iconName = focused ? "file-search" : "file-search-outline";
           }
 
@@ -51,10 +51,11 @@ function BottomTabNav(route) {
         options={{ headerShown: false, title: t("AssistantsTab") }}
       />
       <Tab.Screen
-        name="OfflineSearch"
-        component={OfflineSearchNav}
-        options={{ headerShown: false, title: t("OfflineSearchTabName") }}
+        name="EmailAnswers"
+        component={EmailAnswersNav}
+        options={{ headerShown: false, title: t("EmailAnswersTab") }}
       />
+    
       <Tab.Screen
         name="Settings"
         component={SettingsScreenNav}

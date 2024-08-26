@@ -1,19 +1,15 @@
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "@env";
 import * as SecureStore from "expo-secure-store";
-import * as FileSystem from "expo-file-system";
+
 import Upload from "react-native-background-upload";
 
 let openai = null;
 
 const initializeOpenAI = async () => {
   try {
-    let apiKey = await SecureStore.getItemAsync("apiKey");
-    console.log("API Key from SecureStore:", apiKey);
-    if (!apiKey) {
-      apiKey = OPENAI_API_KEY;
-    }
-    console.log("API Key:", apiKey);
+    let apiKey = OPENAI_API_KEY;
+    console.log("API Key from env:", apiKey);
     openai = new OpenAI({
       apiKey: apiKey,
       basePath: "https://api.openai.com/v1",
@@ -70,7 +66,7 @@ const createThread = async () => {
 
 const addMessageToThread = async (threadId, message) => {
   try {
-    let apiKey = await SecureStore.getItemAsync("apiKey");
+    let apiKey = OPENAI_API_KEY;
     const messageResponse = await fetch(
       `https://api.openai.com/v1/threads/${threadId}/messages`,
       {
@@ -145,7 +141,7 @@ const uploadIndividualFiles = async (file, onProgress, reportError) => {
 
   const attemptUpload = async () => {
     try {
-      const apiKey = await SecureStore.getItemAsync("apiKey");
+      const apiKey = OPENAI_API_KEY;
       const { name, size, mimeType, uri } = file;
       console.log("Starting upload for file:", { name, size, mimeType, uri });
 

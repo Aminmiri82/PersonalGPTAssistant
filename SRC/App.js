@@ -60,14 +60,13 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator initialRouteName={initialRoute}>
             <Stack.Screen
-              name="WTMainScreen"
-              component={WTMainScreen}
-              options={{ headerShown: false }}
-            />
-
-            <Stack.Screen
               name="Home"
               component={BottomTabNav}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="WTMainScreen"
+              component={WTMainScreen}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>
