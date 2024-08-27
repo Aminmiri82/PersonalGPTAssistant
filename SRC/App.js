@@ -33,7 +33,7 @@ export default function App() {
     };
 
     const checkWalkthroughStatus = async () => {
-      const walkthroughCompleted = false;
+      const walkthroughCompleted = true;
       if (walkthroughCompleted) {
         setInitialRoute("Home");
       } else {
