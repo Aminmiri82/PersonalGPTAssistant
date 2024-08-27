@@ -19,7 +19,7 @@ function WTMainScreen({ navigation }) {
       if (step.order === 3) {
         navigation.navigate("ChooseChatScreen");
       }
-      if (step.order === 6) {
+      if (step.order === 5) {
         navigation.navigate("EmptyCS", { isWalkthrough: true });
       }
       if (step.order === 8) {

@@ -27,8 +27,10 @@ import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import p
 import * as SecureStore from "expo-secure-store";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
+import { Chat } from "openai/resources";
 
 const WalkthroughableView = walkthroughable(View);
+const WalkthroughableChatbubble = walkthroughable(Chatbubble);
 
 const EmptyCS = ({ navigation, route }) => {
   const { start, copilotEvents } = useCopilot();
@@ -46,51 +48,38 @@ const EmptyCS = ({ navigation, route }) => {
   const headerHeight = useHeaderHeight();
   return (
     <Screen>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={
-          Platform.OS === "ios" ? headerHeight : headerHeight * 2
-        } // put the botttom tab nav height here
-        style={styles.container}
+      <ImageBackground
+        source={require("../../assets/background.jpg")}
+        style={styles.background}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ImageBackground
-            source={require("../../assets/background.jpg")}
-            style={styles.background}
-          >
+        <View style={styles.container}>
+          <View style={styles.container}>
             <CopilotStep
               text="After you've pressed on an assitant, you will be redirected to the conversation and can message the chatbot"
-              order={7}
-              name="step7"
+              order={6}
+              name="step6"
             >
-              <WalkthroughableView style={styles.container}>
-                {/* <FlatList
-                ref={flatListRef} // Attach the ref here
-                data={isWalkthrough ? [] : conversation}
-                keyExtractor={(item, index) =>
-                  `${item.threadId}-${item.role}-${index}`
-                }
-                renderItem={({ item }) => <Chatbubble message={item} />}
-                contentContainerStyle={styles.flatListContent}
-                ListFooterComponent={
-                  streamedChunks && !completeResponse ? (
-                    <Chatbubble
-                      message={{
-                        content: streamedChunks,
-                        role: "assistant",
-                        timestamp: new Date(),
-                      }}
-                    />
-                  ) : null
-                }
-              /> */}
-                <AppTextInput style={styles.input} />
-              </WalkthroughableView>
+              <WalkthroughableChatbubble
+                message={{
+                  content:
+                    "hiii",
+                  role: "user",
+                }}
+              />
             </CopilotStep>
-          </ImageBackground>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+            <Chatbubble message={{ content: "hello", role: "assistant" }} />
+          </View>
+          <AppTextInput />
+        </View>
+      </ImageBackground>
 
+      <CopilotStep
+        text="stuff"
+        order={7}
+        name="step7"
+      >
+        <WalkthroughableView></WalkthroughableView>
+      </CopilotStep>
       <CopilotStep
         text="This is the Assitant tab. You can manage your assistants here"
         order={8}
@@ -113,9 +102,7 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
   },
-  input: {
-    marginTop: 10,
-  },
+  CopilotStepcontainer: {},
 });
 
 export default EmptyCS;

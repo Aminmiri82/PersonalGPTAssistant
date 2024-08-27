@@ -16,12 +16,21 @@ function ChooseChatScreen({ navigation }) {
   const { t } = useTranslation();
   const { dbInitialized } = useContext(DatabaseContext);
   const [assistants, setAssistants] = useState([]);
-
   const { start, copilotEvents } = useCopilot();
+  const [OnWalkthrough, setOnWalkthrough] = useState(null);
 
-  // useEffect(() => {
-  //   start(); // Start the walkthrough when this screen is focused
-  // }, [start]);
+  useEffect(() => {
+    const checkWalkthroughStatus = async () => {
+      const walkthroughCompleted = false; // chnage this with secure store
+      if (walkthroughCompleted === true) {
+        setOnWalkthrough(false);
+      } else {
+        setOnWalkthrough(true);
+      }
+    };
+    checkWalkthroughStatus();
+    console.log("1OnWalkthrough status", OnWalkthrough);
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -52,6 +61,7 @@ function ChooseChatScreen({ navigation }) {
   if (!dbInitialized) {
     return <Text>Loading...</Text>;
   }
+  console.log("2Onalkthrough status", OnWalkthrough);
 
   const renderItem = ({ item }) => (
     <AssistantsMenuItem
@@ -67,37 +77,36 @@ function ChooseChatScreen({ navigation }) {
 
   return (
     <Screen>
-      <CopilotStep
-        text="You can select an assistant from here. These are the assistants you've made."
-        order={4}
-        name="step4"
-      >
-        <WalkthroughableView style={styles.container}>
-          <CopilotStep text="This is an assitant" order={5} name="step5">
-            <WalkthroughableAMI
-              title={t("PersianLegalGuide")}
-              onPress={() => {
-                createAndInstertNewThread(
-                  "asst_40ROFN9nKe2V6Eka6bYXSZ2y",
-                  t("PersianLegalGuide")
-                );
-              }}
-              ShowEditButton={false}
-            />
-          </CopilotStep>
-          <FlatList
-            data={assistants}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderItem}
-            numColumns={2}
-            contentContainerStyle={styles.top}
+      <View style={styles.container}>
+        <CopilotStep
+          text="You can select an assistant from here. These are the assistants you've made."
+          order={4}
+          name="step4"
+        >
+          <WalkthroughableAMI
+            title={t("PersianLegalGuide")}
+            onPress={() => {
+              createAndInstertNewThread(
+                "asst_40ROFN9nKe2V6Eka6bYXSZ2y",
+                t("PersianLegalGuide")
+              );
+            }}
+            ShowEditButton={false}
           />
-        </WalkthroughableView>
-      </CopilotStep>
+        </CopilotStep>
+        <FlatList
+          data={assistants}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          numColumns={2}
+          contentContainerStyle={styles.top}
+        />
+      </View>
+
       <CopilotStep
         text="When you press on an assistant, it will create a new conversation."
-        order={6}
-        name="step6"
+        order={5}
+        name="step5"
       >
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>

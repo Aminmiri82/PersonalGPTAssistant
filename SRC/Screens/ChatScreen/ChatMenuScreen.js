@@ -15,6 +15,7 @@ import {
   walkthroughable,
   copilotEvents,
 } from "react-native-copilot";
+import * as SecureStore from "expo-secure-store";
 const WalkthroughableText = walkthroughable(Text);
 const WalkthroughableView = walkthroughable(View);
 const WalkthroughableChatItem = walkthroughable(ChatItem);
@@ -25,12 +26,12 @@ function ChatMenuScreen({ navigation, route }) {
   const [chatItems, setChatItems] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const { start, copilotEvents } = useCopilot();
-  const [OnWalkthrough, setOnWalkthrough] = useState(null); // or true/false depending on your default
+  const [OnWalkthrough, setOnWalkthrough] = useState(null); 
 
   //dear amin please remember that the actal secure store vallue never chnages so you have to manipulate the onwalkthrough state manually
   useEffect(() => {
     const checkWalkthroughStatus = async () => {
-      const walkthroughCompleted = false;
+      const walkthroughCompleted = false; // chnage this with secure store
       if (walkthroughCompleted === true) {
         setOnWalkthrough(false);
       } else {
@@ -105,7 +106,7 @@ function ChatMenuScreen({ navigation, route }) {
   return (
     <>
       <CopilotStep
-        text="This is chats screen. you can add new conversations here. By pressing the plus button you can add a new chat."
+        text="This is chats screen. you can see your conversations here. By pressing the plus button you can add a new conversation."
         order={2}
         name="step2"
       >
