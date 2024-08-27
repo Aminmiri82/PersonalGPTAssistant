@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import {
   View,
   StyleSheet,
@@ -15,52 +15,49 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 
-function ChatItem({
-  title,
-  subTitle,
-  imageUri,
-  IconComponent,
-  onPress,
-  modelname,
-  onDelete,
-}) {
-  const renderRightActions = () => (
-    <TouchableOpacity onPress={onDelete} style={styles.deleteButton}>
-      <Ionicons name="trash-bin" size={24} color="red" />
-    </TouchableOpacity>
-  );
+const ChatItem = forwardRef(
+  (
+    { title, subTitle, imageUri, IconComponent, onPress, modelname, onDelete },
+    ref
+  ) => {
+    const renderRightActions = () => (
+      <TouchableOpacity onPress={onDelete} style={styles.deleteButton}>
+        <Ionicons name="trash-bin" size={24} color="red" />
+      </TouchableOpacity>
+    );
 
-  return (
-    <GestureHandlerRootView>
-      <Swipeable renderRightActions={renderRightActions}>
-        <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
-          <View style={styles.container}>
-            <View style={styles.visualcontainer}>
-              {IconComponent}
-              {imageUri ? (
-                <Image style={styles.image} source={{ uri: imageUri }} />
-              ) : (
-                <Image
-                  style={styles.image}
-                  source={require("../../assets/logo.jpg")}
-                />
-              )}
-              {modelname && (
-                <AppText style={styles.modelstyle}> {modelname} </AppText>
-              )}
+    return (
+      <GestureHandlerRootView>
+        <Swipeable renderRightActions={renderRightActions}>
+          <TouchableHighlight underlayColor={colors.light} onPress={onPress} ref={ref}>
+            <View style={styles.container}>
+              <View style={styles.visualcontainer}>
+                {IconComponent}
+                {imageUri ? (
+                  <Image style={styles.image} source={{ uri: imageUri }} />
+                ) : (
+                  <Image
+                    style={styles.image}
+                    source={require("../../assets/logo.jpg")}
+                  />
+                )}
+                {modelname && (
+                  <AppText style={styles.modelstyle}> {modelname} </AppText>
+                )}
+              </View>
+              <View style={styles.detailContainer}>
+                <AppText style={styles.title}>{title}</AppText>
+                {subTitle && (
+                  <AppText style={styles.subTitle}>{subTitle}</AppText>
+                )}
+              </View>
             </View>
-            <View style={styles.detailContainer}>
-              <AppText style={styles.title}>{title}</AppText>
-              {subTitle && (
-                <AppText style={styles.subTitle}>{subTitle}</AppText>
-              )}
-            </View>
-          </View>
-        </TouchableHighlight>
-      </Swipeable>
-    </GestureHandlerRootView>
-  );
-}
+          </TouchableHighlight>
+        </Swipeable>
+      </GestureHandlerRootView>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {

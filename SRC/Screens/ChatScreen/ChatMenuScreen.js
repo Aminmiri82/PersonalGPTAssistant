@@ -17,6 +17,7 @@ import {
 } from "react-native-copilot";
 const WalkthroughableText = walkthroughable(Text);
 const WalkthroughableView = walkthroughable(View);
+const WalkthroughableChatItem = walkthroughable(ChatItem);
 
 function ChatMenuScreen({ navigation, route }) {
   const { t } = useTranslation();
@@ -26,12 +27,10 @@ function ChatMenuScreen({ navigation, route }) {
   const { start, copilotEvents } = useCopilot();
   const [OnWalkthrough, setOnWalkthrough] = useState(null); // or true/false depending on your default
 
-
-
- //dear amin please remember that the actal secure store vallue never chnages so you have to manipulate the onwalkthrough state manually
+  //dear amin please remember that the actal secure store vallue never chnages so you have to manipulate the onwalkthrough state manually
   useEffect(() => {
     const checkWalkthroughStatus = async () => {
-      const walkthroughCompleted = true;
+      const walkthroughCompleted = false;
       if (walkthroughCompleted === true) {
         setOnWalkthrough(false);
       } else {
@@ -40,7 +39,7 @@ function ChatMenuScreen({ navigation, route }) {
     };
     checkWalkthroughStatus();
     console.log("1OnWalkthrough status", OnWalkthrough);
-  }, []); 
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -110,18 +109,33 @@ function ChatMenuScreen({ navigation, route }) {
         order={2}
         name="step2"
       >
-        <WalkthroughableView style={styles.container}>
-          {chatItems.length === 0 ? (
-            <Text>{t("noChats")}</Text>
-          ) : (
-            <FlatList
-              data={chatItems}
-              keyExtractor={(item) => item.Id.toString()}
-              renderItem={renderItem}
-            />
-          )}
-        </WalkthroughableView>
+        {OnWalkthrough === true ? (
+          <WalkthroughableChatItem
+            title={t("PersianLegalGuide")}
+            subTitle={t("PersianLegalGuide")}
+            imageUri={null}
+            modelname={t("PersianLegalGuide")}
+            onPress={() => console.log("pressed")}
+            showDelete={editMode}
+            onDelete={() => console.log("pressed")}
+          />
+        ) : (
+          <WalkthroughableView></WalkthroughableView>
+        )}
       </CopilotStep>
+
+      <View style={styles.container}>
+        {chatItems.length === 0 && !OnWalkthrough ? (
+          <Text>{t("noChats")}</Text>
+        ) : (
+          <FlatList
+            data={chatItems}
+            keyExtractor={(item) => item.Id.toString()}
+            renderItem={renderItem}
+          />
+        )}
+      </View>
+
       <CopilotStep text="Just press next" order={3} name="step3">
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>

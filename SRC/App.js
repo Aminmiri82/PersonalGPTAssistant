@@ -38,7 +38,7 @@ export default function App() {
         "walkthroughCompleted"
       );
       console.log("RealwalkthroughCompleted", RealwalkthroughCompleted);
-      const walkthroughCompleted = true;
+      const walkthroughCompleted = false; // it took me two hours to understand that changing this does not chnage the secure store value
       if (walkthroughCompleted) {
         setInitialRoute("Home");
       } else {
