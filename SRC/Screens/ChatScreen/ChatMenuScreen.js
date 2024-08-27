@@ -24,22 +24,23 @@ function ChatMenuScreen({ navigation, route }) {
   const [chatItems, setChatItems] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const { start, copilotEvents } = useCopilot();
+  const [OnWalkthrough, setOnWalkthrough] = useState(null); // or true/false depending on your default
 
-  // useEffect(() => {
-  //   const handleStepChange = (step) => {
-  //     if (step.name === "step2") {
-  //       copilotEvents.on("stop", () => {
-  //         navigation.navigate("NextScreen"); // Navigate to the next screen
-  //       });
-  //     }
-  //   };
 
-  //   copilotEvents.on("stepChange", handleStepChange);
 
-  //   return () => {
-  //     copilotEvents.off("stepChange", handleStepChange);
-  //   };
-  // }, [copilotEvents, navigation]);
+ //dear amin please remember that the actal secure store vallue never chnages so you have to manipulate the onwalkthrough state manually
+  useEffect(() => {
+    const checkWalkthroughStatus = async () => {
+      const walkthroughCompleted = true;
+      if (walkthroughCompleted === true) {
+        setOnWalkthrough(false);
+      } else {
+        setOnWalkthrough(true);
+      }
+    };
+    checkWalkthroughStatus();
+    console.log("1OnWalkthrough status", OnWalkthrough);
+  }, []); 
 
   useFocusEffect(
     useCallback(() => {
@@ -101,7 +102,7 @@ function ChatMenuScreen({ navigation, route }) {
   if (!dbInitialized) {
     return <Text>Loading...</Text>;
   }
-
+  console.log("2Onalkthrough status", OnWalkthrough);
   return (
     <>
       <CopilotStep

@@ -13,6 +13,7 @@ import { CopilotProvider } from "react-native-copilot";
 
 import WTMainScreen from "./Screens/WTMainScreen";
 import AssistantMenuScreen from "./Screens/AssistantScreen/AssistantMenuScreen";
+import { set } from "lodash";
 
 const Stack = createNativeStackNavigator();
 // Imporatnt : you can only have one walkthroug in the whole app, so if you want to go to another screen, you need to do what i did in TestScreen.js
@@ -33,7 +34,11 @@ export default function App() {
     };
 
     const checkWalkthroughStatus = async () => {
-      const walkthroughCompleted = false;
+      const RealwalkthroughCompleted = await SecureStore.getItemAsync(
+        "walkthroughCompleted"
+      );
+      console.log("RealwalkthroughCompleted", RealwalkthroughCompleted);
+      const walkthroughCompleted = true;
       if (walkthroughCompleted) {
         setInitialRoute("Home");
       } else {
