@@ -29,7 +29,11 @@ function WTMainScreen({ navigation }) {
         navigation.navigate("AssistantMakerScreen1");
       }
       if (step.order === 14) {
-        navigation.navigate("AssistantMakerScreen2");
+        navigation.navigate("AssistantMakerScreen2", {
+          name: "s",
+          instructions: "s",
+          imageUri: "s",
+        });
       }
       // if (step.order === 17) {
       //   navigation.navigate("Home", { screen: "OfflineSearch" });
