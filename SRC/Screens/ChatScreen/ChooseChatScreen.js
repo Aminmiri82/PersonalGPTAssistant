@@ -79,7 +79,7 @@ function ChooseChatScreen({ navigation }) {
     <Screen>
       <View style={styles.container}>
         <CopilotStep
-          text="You can select an assistant from here. These are the assistants you've made."
+          text={t("step4")}
           order={4}
           name="step4"
         >
@@ -104,7 +104,7 @@ function ChooseChatScreen({ navigation }) {
       </View>
 
       <CopilotStep
-        text="When you press on an assistant, it will create a new conversation."
+        text={t("step5")}
         order={5}
         name="step5"
       >

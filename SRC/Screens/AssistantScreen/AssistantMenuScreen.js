@@ -73,12 +73,11 @@ function AssistantMenuScreen({ navigation }) {
       }
     />
   );
-  console.log("2Onalkthrough status", OnWalkthrough);
   return (
     <>
-    {console.log("30nalkthrough status", OnWalkthrough)}
+    
       <CopilotStep
-        text="You can add assistants here by pressing the button below or the button on the top right corner of the screen"
+        text={t("step9")}
         order={9}
         name="step9"
       >
@@ -118,7 +117,7 @@ function AssistantMenuScreen({ navigation }) {
       </View>
 
       <CopilotStep
-        text="Here you can make the assistant"
+        text={t("step10")}
         order={10}
         name="step10"
       >

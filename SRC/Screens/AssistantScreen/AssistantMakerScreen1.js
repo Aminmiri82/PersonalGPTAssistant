@@ -57,7 +57,7 @@ function AssistantMakerScreen1({ navigation }) {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View>
             <CopilotStep
-              text="You can add an image to your assistant"
+              text={t("step11")}
               order={11}
               name="step11"
             >
@@ -71,7 +71,7 @@ function AssistantMakerScreen1({ navigation }) {
               </WalkthroughableView>
             </CopilotStep>
             <CopilotStep
-              text="You can give your assistant a name"
+              text={t("step12")}
               order={12}
               name="step12"
             >
@@ -88,7 +88,7 @@ function AssistantMakerScreen1({ navigation }) {
               </WalkthroughableView>
             </CopilotStep>
             <CopilotStep
-              text="Give your assistant instructions"
+              text={t("step13")}
               order={13}
               name="step13"
             >
@@ -114,7 +114,7 @@ function AssistantMakerScreen1({ navigation }) {
               textStyle={styles.nextButtonText}
             />
             <CopilotStep
-              text="After you're done, you can go to the next fields"
+              text={t("step14")}
               order={14}
               name="step14"
             >

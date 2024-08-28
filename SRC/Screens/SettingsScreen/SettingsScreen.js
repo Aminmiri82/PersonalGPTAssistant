@@ -56,7 +56,7 @@ function SettingsScreen({ navigation, route }) {
   return (
     <Screen>
       <View style={styles.container}>
-        <CopilotStep text="Choose your language" order={20} name="step20">
+        <CopilotStep text={t("step20")} order={20} name="step20">
           <WalkthroughableSettingsItem
             title={t("Languages")}
             subTitle={selectedLanguage}
@@ -70,21 +70,21 @@ function SettingsScreen({ navigation, route }) {
           onClose={toggleLanguagePrompt}
           onSelectLanguage={handleSelectLanguage}
         />
-        <CopilotStep text="This is the Terms and conditions" order={21} name="step21">
+        <CopilotStep text={t("step21")} order={21} name="step21">
           <WalkthroughableSettingsItem
             title={t("TC")}
             IconComponent={<Icon iconSet="MCI" name="file-document" />}
             onPress={() => navigation.navigate("TermsAndConditionsScreen")}
           />
         </CopilotStep>
-        <CopilotStep text="This is the privacy policy" order={22} name="step22">
+        <CopilotStep text={t("step22")} order={22} name="step22">
           <WalkthroughableSettingsItem
             title={t("PriPol")}
             IconComponent={<Icon iconSet="MCI" name="file-document" />}
             onPress={() => navigation.navigate("PrivacyPolicyScreen")}
           />
         </CopilotStep>
-        <CopilotStep text="This is the about us page" order={23} name="step23">
+        <CopilotStep text={t("step23")} order={23} name="step23">
           <WalkthroughableSettingsItem
             title={t("aboutUs")}
             IconComponent={<Icon iconSet="MCI" name="information" />}

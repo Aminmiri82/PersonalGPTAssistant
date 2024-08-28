@@ -106,7 +106,7 @@ function ChatMenuScreen({ navigation, route }) {
   return (
     <>
       <CopilotStep
-        text="This is chats screen. you can see your conversations here. By pressing the plus button you can add a new conversation."
+        text={t("step2")}
         order={2}
         name="step2"
       >
@@ -137,7 +137,7 @@ function ChatMenuScreen({ navigation, route }) {
         )}
       </View>
 
-      <CopilotStep text="Just press next" order={3} name="step3">
+      <CopilotStep text={t("step3")} order={3} name="step3">
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
     </>

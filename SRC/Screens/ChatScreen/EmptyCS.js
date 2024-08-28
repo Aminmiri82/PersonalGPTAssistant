@@ -28,6 +28,7 @@ import * as SecureStore from "expo-secure-store";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
 import { Chat } from "openai/resources";
+import { useTranslation } from "react-i18next";
 
 const WalkthroughableView = walkthroughable(View);
 const WalkthroughableChatbubble = walkthroughable(Chatbubble);
@@ -35,6 +36,7 @@ const WalkthroughableChatbubble = walkthroughable(Chatbubble);
 const EmptyCS = ({ navigation, route }) => {
   const { start, copilotEvents } = useCopilot();
   const [isWalkthrough, setIsWalkthrough] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const checkWalkthrough = async () => {
@@ -55,33 +57,33 @@ const EmptyCS = ({ navigation, route }) => {
         <View style={styles.container}>
           <View style={styles.container}>
             <CopilotStep
-              text="After you've pressed on an assitant, you will be redirected to the conversation and can message the chatbot"
+              text={t("step6")}
               order={6}
               name="step6"
             >
               <WalkthroughableChatbubble
                 message={{
                   content:
-                    "hiii",
+                    t("step6MessageA"),
                   role: "user",
                 }}
               />
             </CopilotStep>
-            <Chatbubble message={{ content: "hello", role: "assistant" }} />
+            <Chatbubble message={{ content: t("step6MessageB"), role: "assistant" }} />
           </View>
           <AppTextInput />
         </View>
       </ImageBackground>
 
       <CopilotStep
-        text="stuff"
+        text={t("step7")}
         order={7}
         name="step7"
       >
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
       <CopilotStep
-        text="This is the Assitant tab. You can manage your assistants here"
+        text={t("step8")}
         order={8}
         name="step8"
       >

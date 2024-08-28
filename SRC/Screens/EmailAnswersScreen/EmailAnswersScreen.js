@@ -70,7 +70,7 @@ const EmailAnswersScreen = () => {
     <Screen>
       <View style={styles.container}>
         <CopilotStep
-          text="This is the Email Answers screen. You can send an email to the developer with your question and the email address you want to receive the answer."
+          text={t("step18")}
           order={18}
           name="step18"
         >
@@ -113,7 +113,7 @@ const EmailAnswersScreen = () => {
         <TouchableOpacity onPress={handleSendEmail} style={styles.doneButton}>
           <AppText style={styles.doneButtonText}>{t("Send")}</AppText>
         </TouchableOpacity>
-        <CopilotStep text="This is the settings tab" order={19} name="step19">
+        <CopilotStep text={t("step19")} order={19} name="step19">
           <WalkthroughableView></WalkthroughableView>
         </CopilotStep>
       </View>

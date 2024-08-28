@@ -3,11 +3,13 @@ import { View, Text, Button } from "react-native";
 import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
 import Screen from "../Components/Screen";
 import * as SecureStore from "expo-secure-store";
+import { useTranslation } from "react-i18next";
 
 const WalkthroughableText = walkthroughable(Text);
 
 function WTMainScreen({ navigation }) {
   const { start, copilotEvents } = useCopilot();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleStepChange = (step) => {
@@ -65,11 +67,11 @@ function WTMainScreen({ navigation }) {
   return (
     <Screen>
       <View>
-        <CopilotStep text="This is step 1" order={1} name="step1">
+        <CopilotStep text={t("step1")} order={1} name="step1">
           <WalkthroughableText></WalkthroughableText>
         </CopilotStep>
 
-        <Button title="Start Walkthrough" onPress={() => start()} />
+        <Button title={t("StartWalkthrough")} onPress={() => start()} />
       </View>
     </Screen>
   );
