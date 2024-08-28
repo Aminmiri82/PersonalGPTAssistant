@@ -20,6 +20,7 @@ const EmailAnswersScreen = () => {
   const [question, setQuestion] = useState("");
   const [email, setEmail] = useState("");
   const { t } = useTranslation();
+  
 
   const handleSendEmail = async () => {
     if (!name || !question || !email) {

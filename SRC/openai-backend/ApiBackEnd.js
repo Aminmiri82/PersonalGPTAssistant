@@ -8,6 +8,7 @@ let openai = null;
 
 const initializeOpenAI = async () => {
   try {
+    
     let apiKey = OPENAI_API_KEY;
     console.log("API Key from env:", apiKey);
     openai = new OpenAI({
@@ -67,6 +68,7 @@ const createThread = async () => {
 const addMessageToThread = async (threadId, message) => {
   try {
     let apiKey = OPENAI_API_KEY;
+    console.log("API Key from env in addMessageToThread:", apiKey);
     const messageResponse = await fetch(
       `https://api.openai.com/v1/threads/${threadId}/messages`,
       {

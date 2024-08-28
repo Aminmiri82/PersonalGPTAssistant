@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Alert, Button } from "react-native";
+import { View, StyleSheet, Alert,Text, Button } from "react-native";
 import {
   CopilotProvider,
   useCopilot,
@@ -11,7 +11,7 @@ import LanguagesPrompt from "../../Components/SettingsComponents/LanguagesPrompt
 
 import SettingsItem from "../../Components/SettingsComponents/SettingsItem";
 import Icon from "../../Components/Icon";
-
+import { OPENAI_API_KEY } from "@env";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import i18next from "../../services/i18next";
@@ -64,6 +64,7 @@ function SettingsScreen({ navigation, route }) {
             onPress={toggleLanguagePrompt}
           />
         </CopilotStep>
+        <Text style={styles.apiKey}>{OPENAI_API_KEY}</Text>
 
         <LanguagesPrompt
           visible={isLanguagePromptVisible}
