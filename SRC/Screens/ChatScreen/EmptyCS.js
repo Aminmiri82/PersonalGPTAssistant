@@ -56,33 +56,42 @@ const EmptyCS = ({ navigation, route }) => {
       >
         <View style={styles.container}>
           <View style={styles.container}>
-            <CopilotStep
-              text={t("step6")}
-              order={6}
-              name="step6"
-            >
+            <CopilotStep text={t("step6")} order={6} name="step6">
+              <WalkthroughableView>
               <WalkthroughableChatbubble
                 message={{
-                  content:
-                    t("step6MessageA"),
+                  content: t("step6MessageA"),
                   role: "user",
                 }}
               />
+              <WalkthroughableChatbubble
+                message={{ content: t("step6MessageB"), role: "assistant" }}
+              /></WalkthroughableView>
             </CopilotStep>
-            <Chatbubble message={{ content: t("step6MessageB"), role: "assistant" }} />
+
+            <Chatbubble
+              message={{ content: t("step6MessageC"), role: "user" }}
+            />
+            <Chatbubble
+              message={{ content: t("step6MessageD"), role: "assistant" }}
+            />
+            <Chatbubble
+              message={{ content: t("step6MessageE"), role: "user" }}
+            />
+            <Chatbubble
+              message={{ content: t("step6MessageF"), role: "assistant" }}
+            />
+            <Chatbubble
+              message={{ content: t("step6MessageG"), role: "user" }}
+            />
           </View>
           <AppTextInput />
         </View>
       </ImageBackground>
 
-      <CopilotStep
-        text={t("step7")}
-        order={7}
-        name="step7"
-      >
+      <CopilotStep text={t("step7")} order={7} name="step7">
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
-      
     </Screen>
   );
 };

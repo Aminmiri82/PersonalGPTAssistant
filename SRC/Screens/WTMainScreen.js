@@ -60,7 +60,7 @@ function WTMainScreen({ navigation }) {
       await SecureStore.setItemAsync("walkthroughCompleted", "true");
     };
 
-    copilotEvents.on("stop", saveWalkthroughCompletion);
+    copilotEvents.on("stop", saveWalkthroughCompletion); // does this happen when you skip the walkthrough?
     const stepChangeSubscription = copilotEvents.on(
       "stepChange",
       handleStepChange
@@ -76,21 +76,19 @@ function WTMainScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Image source={require("../assets/icon.png")} style={styles.logo} />
-      <Text style={styles.title}>Welcome to Dadafarin</Text>
+      <Text style={styles.title}>{t("WTWelcome")}</Text>
       <Text style={styles.subtitle}>
-        Get instant legal advice with our AI-powered chatbot. Create your own
-        assistants or use our "Persian Legal Guide" to help you with legal
-        questions.
+        {t("WTWelcomeSubtitle")}
       </Text>
 
       <View style={styles.featuresContainer}>
-        <Text style={styles.feature}>⚖️ Get legal answers quickly</Text>
-        <Text style={styles.feature}>🤖 Create custom assistants</Text>
-        <Text style={styles.feature}>🇮🇷 Specialized Persian legal guide</Text>
+        <Text style={styles.feature}>{t("WTFeature1")}</Text>
+        <Text style={styles.feature}>{t("WTFeature2")}</Text>
+        <Text style={styles.feature}>{t("WTFeature3")}</Text>
       </View>
 
       <TouchableOpacity style={styles.button} onPress={() => start()}>
-        <Text style={styles.buttonText}>Start Walkthrough</Text>
+        <Text style={styles.buttonText}>{t("StartWalkthrough")}</Text>
       </TouchableOpacity>
       <CopilotStep text={t("step1")} order={1} name="step1">
         <WalkthroughableView></WalkthroughableView>
