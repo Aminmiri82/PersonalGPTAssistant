@@ -31,7 +31,9 @@ function ChatMenuScreen({ navigation, route }) {
   //dear amin please remember that the actal secure store vallue never chnages so you have to manipulate the onwalkthrough state manually
   useEffect(() => {
     const checkWalkthroughStatus = async () => {
-      const walkthroughCompleted = false; // chnage this with secure store
+      const walkthroughCompleted = await SecureStore.getItemAsync(
+        "walkthroughCompleted"
+      );
       if (walkthroughCompleted === "true") {
         setOnWalkthrough(false);
       } else {

@@ -29,7 +29,9 @@ function AssistantMenuScreen({ navigation }) {
   //dear amin please remember that the actal secure store vallue never chnages so you have to manipulate the onwalkthrough state manually
   useEffect(() => {
     const checkWalkthroughStatus = async () => {
-      const walkthroughCompleted = false;
+      const walkthroughCompleted = await SecureStore.getItemAsync(
+        "walkthroughCompleted"
+      );
       if (walkthroughCompleted === "true") {
         console.log(
           "if walkingthrough completed is true then it is :",
