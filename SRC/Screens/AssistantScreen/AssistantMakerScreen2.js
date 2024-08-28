@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
 
 const WalkthroughableView = walkthroughable(View);
+const WalkthroughableText = walkthroughable(Text);
 
 function AssistantMakerScreen2({ navigation, route }) {
   const { t } = useTranslation();
@@ -207,8 +208,8 @@ function AssistantMakerScreen2({ navigation, route }) {
         textStyle={styles.nextButtonText}
       />
       <Text>{fileIds}</Text>
-      <CopilotStep text="This is the settings tab" order={17} name="step17">
-        <WalkthroughableView></WalkthroughableView>
+      <CopilotStep text="This is the emailanswers tab" order={17} name="step17">
+        <WalkthroughableText></WalkthroughableText>
       </CopilotStep>
     </Screen>
   );

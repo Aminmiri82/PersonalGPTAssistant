@@ -12,8 +12,10 @@ import colors from "../../config/colors";
 import Screen from "../../Components/Screen";
 import AppText from "../../Components/AppText";
 import { useTranslation } from "react-i18next";
+import { CopilotStep, walkthroughable } from "react-native-copilot";
 
-const ContactForm = () => {
+const WalkthroughableView = walkthroughable(View);
+const EmailAnswersScreen = () => {
   const [name, setName] = useState("");
   const [question, setQuestion] = useState("");
   const [email, setEmail] = useState("");
@@ -22,7 +24,7 @@ const ContactForm = () => {
   const handleSendEmail = async () => {
     if (!name || !question || !email) {
       Alert.alert(t("error"), t("emptyfields"));
-      return; 
+      return;
     }
     const postmarkApiUrl = "https://api.postmarkapp.com/email";
     const postmarkServerToken = POSTMARK_API_KEY;
@@ -67,40 +69,53 @@ const ContactForm = () => {
   return (
     <Screen>
       <View style={styles.container}>
-        <Text style={styles.headerText}>{t("EmailAnswersExplanation")}</Text>
+        <CopilotStep
+          text="This is the Email Answers screen. You can send an email to the developer with your question and the email address you want to receive the answer."
+          order={18}
+          name="step18"
+        >
+          <WalkthroughableView style={styles.stepContainer}>
+            <Text style={styles.headerText}>
+              {t("EmailAnswersExplanation")}
+            </Text>
 
-        <Text style={styles.labelText}>{t("UserName")}</Text>
-        <TextInput
-          value={name}
-          onChangeText={setName}
-          placeholder={t("UserNamePlaceholder")}
-          placeholderTextColor="#888"
-          style={styles.input}
-        />
+            <Text style={styles.labelText}>{t("UserName")}</Text>
+            <TextInput
+              value={name}
+              onChangeText={setName}
+              placeholder={t("UserNamePlaceholder")}
+              placeholderTextColor="#888"
+              style={styles.input}
+            />
 
-        <Text style={styles.labelText}>{t("UserQuestion")}</Text>
-        <TextInput
-          value={question}
-          onChangeText={setQuestion}
-          placeholder={t("UserQuestionPlaceholder")}
-          placeholderTextColor="#888"
-          style={styles.questionInput}
-          multiline
-        />
+            <Text style={styles.labelText}>{t("UserQuestion")}</Text>
+            <TextInput
+              value={question}
+              onChangeText={setQuestion}
+              placeholder={t("UserQuestionPlaceholder")}
+              placeholderTextColor="#888"
+              style={styles.questionInput}
+              multiline
+            />
 
-        <Text style={styles.labelText}>{t("EmailToReceiveAnswer")}</Text>
-        <TextInput
-          value={email}
-          onChangeText={setEmail}
-          placeholder={t("EmailToReceiveAnswerPlaceholder")}
-          placeholderTextColor="#888"
-          style={styles.input}
-          keyboardType="email-address"
-        />
+            <Text style={styles.labelText}>{t("EmailToReceiveAnswer")}</Text>
+            <TextInput
+              value={email}
+              onChangeText={setEmail}
+              placeholder={t("EmailToReceiveAnswerPlaceholder")}
+              placeholderTextColor="#888"
+              style={styles.input}
+              keyboardType="email-address"
+            />
+          </WalkthroughableView>
+        </CopilotStep>
 
         <TouchableOpacity onPress={handleSendEmail} style={styles.doneButton}>
           <AppText style={styles.doneButtonText}>{t("Send")}</AppText>
         </TouchableOpacity>
+        <CopilotStep text="This is the settings tab" order={19} name="step19">
+          <WalkthroughableView></WalkthroughableView>
+        </CopilotStep>
       </View>
     </Screen>
   );
@@ -168,6 +183,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  stepContainer: {
+   width: "100%",
+  },
 });
 
-export default ContactForm;
+export default EmailAnswersScreen;

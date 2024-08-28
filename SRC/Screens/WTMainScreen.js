@@ -35,10 +35,12 @@ function WTMainScreen({ navigation }) {
           imageUri: "s",
         });
       }
-      // if (step.order === 17) {
-      //   navigation.navigate("Home", { screen: "OfflineSearch" });
-      // }
       if (step.order === 17) {
+        navigation.navigate("Home", {
+          screen: "EmailAnswers",
+        });
+      }
+      if (step.order === 19) {
         navigation.navigate("Home", { screen: "Settings" });
       }
     };

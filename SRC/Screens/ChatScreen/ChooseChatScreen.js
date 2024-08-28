@@ -22,7 +22,7 @@ function ChooseChatScreen({ navigation }) {
   useEffect(() => {
     const checkWalkthroughStatus = async () => {
       const walkthroughCompleted = false; // chnage this with secure store
-      if (walkthroughCompleted === true) {
+      if (walkthroughCompleted === "true") {
         setOnWalkthrough(false);
       } else {
         setOnWalkthrough(true);
