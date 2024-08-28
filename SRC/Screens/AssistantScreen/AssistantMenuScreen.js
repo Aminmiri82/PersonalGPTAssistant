@@ -29,13 +29,19 @@ function AssistantMenuScreen({ navigation }) {
   //dear amin please remember that the actal secure store vallue never chnages so you have to manipulate the onwalkthrough state manually
   useEffect(() => {
     const checkWalkthroughStatus = async () => {
-      const walkthroughCompleted = false; 
+      const walkthroughCompleted = false;
       if (walkthroughCompleted === "true") {
-        console.log ("if walkingthrough completed is true then it is :" , walkthroughCompleted);
+        console.log(
+          "if walkingthrough completed is true then it is :",
+          walkthroughCompleted
+        );
         setOnWalkthrough(false);
-        console.log ("then OnWalkthrough is false so:" , OnWalkthrough);  
+        console.log("then OnWalkthrough is false so:", OnWalkthrough);
       } else {
-        console.log ("if walkingthrough completed is false then it is :" , walkthroughCompleted);
+        console.log(
+          "if walkingthrough completed is false then it is :",
+          walkthroughCompleted
+        );
         setOnWalkthrough(true);
       }
     };
@@ -75,13 +81,11 @@ function AssistantMenuScreen({ navigation }) {
   );
   return (
     <>
-    
-      <CopilotStep
-        text={t("step9")}
-        order={9}
-        name="step9"
-      >
-        
+      <CopilotStep text={t("step9")} order={9} name="step9">
+        <WalkthroughableView></WalkthroughableView>
+      </CopilotStep>
+
+      <CopilotStep text={t("step8")} order={8} name="step8">
         {OnWalkthrough === true ? (
           <WalkthroughableAMI
             key={0}
@@ -116,11 +120,7 @@ function AssistantMenuScreen({ navigation }) {
         )}
       </View>
 
-      <CopilotStep
-        text={t("step10")}
-        order={10}
-        name="step10"
-      >
+      <CopilotStep text={t("step10")} order={10} name="step10">
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
     </>

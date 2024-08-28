@@ -170,6 +170,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
   },
+  Stepcontainer: {
+    flex: 1,
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
 });
 
 export default ChatMenuScreen;

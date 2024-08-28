@@ -82,13 +82,7 @@ const EmptyCS = ({ navigation, route }) => {
       >
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
-      <CopilotStep
-        text={t("step8")}
-        order={8}
-        name="step8"
-      >
-        <WalkthroughableView></WalkthroughableView>
-      </CopilotStep>
+      
     </Screen>
   );
 };

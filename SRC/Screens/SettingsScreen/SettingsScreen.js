@@ -70,14 +70,14 @@ function SettingsScreen({ navigation, route }) {
           onClose={toggleLanguagePrompt}
           onSelectLanguage={handleSelectLanguage}
         />
-        <CopilotStep text={t("step22")} order={21} name="step21">
+        <CopilotStep text={t("step21")} order={21} name="step21">
           <WalkthroughableSettingsItem
             title={t("PriPol")}
             IconComponent={<Icon iconSet="MCI" name="file-document" />}
             onPress={() => navigation.navigate("PrivacyPolicyScreen")}
           />
         </CopilotStep>
-        <CopilotStep text={t("step23")} order={22} name="step22">
+        <CopilotStep text={t("step22")} order={22} name="step22">
           <WalkthroughableSettingsItem
             title={t("aboutUs")}
             IconComponent={<Icon iconSet="MCI" name="information" />}

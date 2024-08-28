@@ -1,11 +1,20 @@
 import React, { useEffect } from "react";
-import { View, Text, Button } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
 import Screen from "../Components/Screen";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
+import colors from "../config/colors";
 
 const WalkthroughableText = walkthroughable(Text);
+const WalkthroughableView = walkthroughable(View);
 
 function WTMainScreen({ navigation }) {
   const { start, copilotEvents } = useCopilot();
@@ -24,7 +33,7 @@ function WTMainScreen({ navigation }) {
       if (step.order === 5) {
         navigation.navigate("EmptyCS", { isWalkthrough: true });
       }
-      if (step.order === 8) {
+      if (step.order === 7) {
         navigation.navigate("Home", { screen: "Assistants" });
       }
       if (step.order === 10) {
@@ -65,16 +74,78 @@ function WTMainScreen({ navigation }) {
   }, [copilotEvents, navigation]);
 
   return (
-    <Screen>
-      <View>
-        <CopilotStep text={t("step1")} order={1} name="step1">
-          <WalkthroughableText></WalkthroughableText>
-        </CopilotStep>
+    <View style={styles.container}>
+      <Image source={require("../assets/icon.png")} style={styles.logo} />
+      <Text style={styles.title}>Welcome to Dadafarin</Text>
+      <Text style={styles.subtitle}>
+        Get instant legal advice with our AI-powered chatbot. Create your own
+        assistants or use our "Persian Legal Guide" to help you with legal
+        questions.
+      </Text>
 
-        <Button title={t("StartWalkthrough")} onPress={() => start()} />
+      <View style={styles.featuresContainer}>
+        <Text style={styles.feature}>⚖️ Get legal answers quickly</Text>
+        <Text style={styles.feature}>🤖 Create custom assistants</Text>
+        <Text style={styles.feature}>🇮🇷 Specialized Persian legal guide</Text>
       </View>
-    </Screen>
+
+      <TouchableOpacity style={styles.button} onPress={() => start()}>
+        <Text style={styles.buttonText}>Start Walkthrough</Text>
+      </TouchableOpacity>
+      <CopilotStep text={t("step1")} order={1} name="step1">
+        <WalkthroughableView></WalkthroughableView>
+      </CopilotStep>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+    alignItems: "center",
+    justifyContent: "space-around",
+    paddingHorizontal: 20,
+  },
+  logo: {
+    width: "40%",
+    height: "40%",
+    resizeMode: "contain",
+    marginTop: 50,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 20,
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "#6c757d",
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  featuresContainer: {
+    alignItems: "flex-start",
+    marginVertical: 20,
+  },
+  feature: {
+    fontSize: 16,
+    marginVertical: 5,
+  },
+  button: {
+    backgroundColor: colors.niceBlue,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+});
 
 export default WTMainScreen;
