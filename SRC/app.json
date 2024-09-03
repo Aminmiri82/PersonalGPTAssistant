@@ -45,7 +45,11 @@
       "expo-router",
       "expo-document-picker",
       "expo-asset",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you choose the photos you want for your assistant."
+        }
     ],
     "owner": "alirad"
   }

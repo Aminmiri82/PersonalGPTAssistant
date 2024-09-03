@@ -26,21 +26,32 @@ import {
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
 import * as SecureStore from "expo-secure-store";
 import { useHeaderHeight } from "@react-navigation/elements";
-
+import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
 
 const ChatScreen = ({ navigation, route }) => {
   const { dbInitialized } = useContext(DatabaseContext);
+  const headerHeight = useHeaderHeight();
   const [conversation, setConversation] = useState([]);
   const [loading, setLoading] = useState(false);
   const [streamedChunks, setStreamedChunks] = useState("");
   const [completeResponse, setCompleteResponse] = useState(null);
-  const assistantId = route.params.assistantId;
-  const threadId = route.params.threadId; // this can be null
+  const { threadId, assistantId, assistantName } = route.params; //threadId can be null
+  const { start, copilotEvents } = useCopilot();
+  const [isWalkthrough, setIsWalkthrough] = useState(false);
 
   const threadRef = useRef(null);
   const flatListRef = useRef(null); // Reference for FlatList
 
   useEffect(() => {
+    navigation.setOptions({
+      title: assistantName,
+    });
+
+    const checkWalkthrough = async () => {
+      if (route.params?.isWalkthrough) {
+        setIsWalkthrough(true);
+      }
+    };
     const initializeThread = async () => {
       if (!dbInitialized) return; // Wait for the database to be initialized
 
@@ -71,7 +82,8 @@ const ChatScreen = ({ navigation, route }) => {
     };
 
     initializeThread();
-  }, [threadId, dbInitialized]); // Add dbInitialized as a dependency
+    checkWalkthrough();
+  }, [threadId, dbInitialized, navigation, assistantName, isWalkthrough]);
 
   const handleStreamedEvent = (event) => {
     console.log("Streamed event received:", event); // Debugging
@@ -256,15 +268,15 @@ const ChatScreen = ({ navigation, route }) => {
   if (!dbInitialized) {
     return <Text>Loading...</Text>;
   }
-  const headerHeight = useHeaderHeight();
-  
   
 
   return (
     <Screen>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? headerHeight : headerHeight*2 } // put the botttom tab nav height here
+        keyboardVerticalOffset={
+          Platform.OS === "ios" ? headerHeight : headerHeight * 2
+        } 
         style={styles.container}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -275,7 +287,7 @@ const ChatScreen = ({ navigation, route }) => {
             <View style={styles.container}>
               <FlatList
                 ref={flatListRef} // Attach the ref here
-                data={conversation}
+                data={isWalkthrough ? [] : conversation}
                 keyExtractor={(item, index) =>
                   `${item.threadId}-${item.role}-${index}`
                 }

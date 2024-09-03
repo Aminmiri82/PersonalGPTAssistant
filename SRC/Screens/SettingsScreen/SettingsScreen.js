@@ -1,55 +1,49 @@
-import React, { useEffect, useState, useRef } from "react";
-import { View, StyleSheet, Alert } from "react-native";
-import { AppTour, AppTourSequence, AppTourView } from "react-native-app-tour";
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Alert, Button } from "react-native";
+import {
+  CopilotProvider,
+  useCopilot,
+  CopilotStep,
+  walkthroughable,
+} from "react-native-copilot";
 import AppText from "../../Components/AppText";
 import LanguagesPrompt from "../../Components/SettingsComponents/LanguagesPrompt";
-import OpenAIPrompt from "../../Components/SettingsComponents/OpenAIPrompt";
+
 import SettingsItem from "../../Components/SettingsComponents/SettingsItem";
 import Icon from "../../Components/Icon";
-import { OPENAI_API_KEY } from "@env";
+
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import i18next from "../../services/i18next";
 import Screen from "../../Components/Screen";
 
+// Make SettingsItem walkthroughable
+const WalkthroughableSettingsItem = walkthroughable(SettingsItem); // you'll need to make stuff walkthroughable, check out SettingsItem.js i had to add a forwardRef thingy to it. idk why vscode was just yelling at me
+const WalkthroughableView = walkthroughable(View);
+
 function SettingsScreen({ navigation, route }) {
   const { t } = useTranslation();
-
+  const { start } = useCopilot(); // Get the start function from useCopilot
   const [isLanguagePromptVisible, setLanguagePromptVisible] = useState(false);
-  const [isAPIPromptVisible, setAPIPromptVisible] = useState(false);
 
   const [selectedLanguage, setSelectedLanguage] = useState("Select Language");
-  const [apiKey, setApiKey] = useState("Enter API Key");
-
-  // Refs to hold the components to be highlighted
-  const apiKeyRef = useRef();
-  const languageRef = useRef();
 
   useEffect(() => {
-    const fetchApiKey = async () => {
+    const fetchLanguage = async () => {
       try {
-        let storedKey = await SecureStore.getItemAsync("apiKey");
         let storedLanguage = await SecureStore.getItemAsync("selectedLanguage");
-        if (storedKey) {
-          setApiKey(storedKey.slice(7, 14));
-        } else if (OPENAI_API_KEY) {
-          setApiKey(OPENAI_API_KEY.slice(7, 14));
-        }
+
         setSelectedLanguage(storedLanguage);
       } catch (error) {
-        console.error("Error retrieving API key", error);
+        console.error("Error retrieving language", error);
       }
     };
 
-    fetchApiKey();
+    fetchLanguage();
   }, []);
 
   const toggleLanguagePrompt = () => {
     setLanguagePromptVisible(!isLanguagePromptVisible);
-  };
-
-  const toggleAPIPrompt = () => {
-    setAPIPromptVisible(!isAPIPromptVisible);
   };
 
   const handleSelectLanguage = async (lng) => {
@@ -59,93 +53,41 @@ function SettingsScreen({ navigation, route }) {
     setSelectedLanguage(lng);
   };
 
-  const saveApiKey = async (key) => {
-    try {
-      await SecureStore.setItemAsync("apiKey", key);
-      console.log("API key saved successfully");
-    } catch (error) {
-      console.error("Error saving API key", error);
-      Alert.alert("Error", "Failed to save API key");
-    }
-  };
-
-  const handleSetAPIKey = (key) => {
-    setApiKey(key.slice(7, 14));
-    saveApiKey(key);
-  };
-
-  // Start the tour
-  const startTour = () => {
-    const appTourTargets = [];
-
-    if (apiKeyRef.current) {
-      appTourTargets.push(
-        AppTourView.for(apiKeyRef.current, {
-          hintText: "Set your API key here",
-        })
-      );
-    }
-
-    if (languageRef.current) {
-      appTourTargets.push(
-        AppTourView.for(languageRef.current, {
-          hintText: "Choose your language here",
-        })
-      );
-    }
-
-    const sequence = new AppTourSequence();
-
-    appTourTargets.forEach((target) => {
-      sequence.add(target);
-    });
-
-    AppTour.ShowSequence(sequence);
-  };
-
-  useEffect(() => {
-    startTour();
-  }, []);
-
   return (
     <Screen>
       <View style={styles.container}>
-        <AppTourView ref={apiKeyRef} style={{ padding: 10 }}>
-          <SettingsItem
-            title={t("apikey")}
-            subTitle={apiKey}
-            IconComponent={<Icon iconSet="MCI" name="key" />}
-            onPress={toggleAPIPrompt}
-          />
-        </AppTourView>
-        <OpenAIPrompt
-          visible={isAPIPromptVisible}
-          onClose={toggleAPIPrompt}
-          onSumbit={handleSetAPIKey}
-        />
-        <AppTourView ref={languageRef} style={{ padding: 10 }}>
-          <SettingsItem
+        
+
+        
+
+        <CopilotStep text="Choose your language" order={18} name="step18">
+          <WalkthroughableSettingsItem
             title={t("Languages")}
             subTitle={selectedLanguage}
             IconComponent={<Icon iconSet="MCI" name="translate" />}
             onPress={toggleLanguagePrompt}
           />
-        </AppTourView>
+        </CopilotStep>
+
         <LanguagesPrompt
           visible={isLanguagePromptVisible}
           onClose={toggleLanguagePrompt}
           onSelectLanguage={handleSelectLanguage}
         />
-        <SettingsItem
-          title={t("PriPol")}
-          IconComponent={<Icon iconSet="MCI" name="file-document" />}
-          onPress={() => navigation.navigate("PrivacyPolicyScreen")}
-        />
-        <SettingsItem
-          title={t("aboutUs")}
-          IconComponent={<Icon iconSet="MCI" name="information" />}
-          onPress={() => navigation.navigate("AboutUsScreen")}
-        />
+        <CopilotStep text="This is the privacy policy" order={19} name="step19">
+          <WalkthroughableSettingsItem
+            title={t("PriPol")}
+            IconComponent={<Icon iconSet="MCI" name="file-document" />}
+            onPress={() => navigation.navigate("PrivacyPolicyScreen")}
+          />
+        </CopilotStep>
+        <CopilotStep text="This is the about us page" order={20} name="step20">
+          <WalkthroughableSettingsItem
+            title={t("aboutUs")}
+            IconComponent={<Icon iconSet="MCI" name="information" />}
+            onPress={() => navigation.navigate("AboutUsScreen")}
+          />
+        </CopilotStep>
       </View>
     </Screen>
   );

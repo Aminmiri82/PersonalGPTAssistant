@@ -7,11 +7,21 @@ import { useFocusEffect } from "@react-navigation/native";
 import { createThread } from "../../openai-backend/ApiBackEnd";
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
 import { useTranslation } from "react-i18next";
+import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
+const WalkthroughableText = walkthroughable(Text);
+const WalkthroughableView = walkthroughable(View);
+const WalkthroughableAMI = walkthroughable(AssistantsMenuItem);
 
 function ChooseChatScreen({ navigation }) {
   const { t } = useTranslation();
   const { dbInitialized } = useContext(DatabaseContext);
   const [assistants, setAssistants] = useState([]);
+
+  const { start, copilotEvents } = useCopilot();
+
+  // useEffect(() => {
+  //   start(); // Start the walkthrough when this screen is focused
+  // }, [start]);
 
   useFocusEffect(
     useCallback(() => {
@@ -27,7 +37,7 @@ function ChooseChatScreen({ navigation }) {
     }, [dbInitialized])
   );
 
-  const createAndInstertNewThread = async (assistant_id) => {
+  const createAndInstertNewThread = async (assistant_id, assistantName) => {
     const newThread = await createThread();
     console.log("Thread created:", newThread.id);
     await insertChat(newThread.id, assistant_id, null);
@@ -35,6 +45,7 @@ function ChooseChatScreen({ navigation }) {
     navigation.navigate("ChatScreen", {
       assistantId: assistant_id,
       threadId: newThread.id,
+      assistantName: assistantName,
     });
   };
 
@@ -45,10 +56,10 @@ function ChooseChatScreen({ navigation }) {
   const renderItem = ({ item }) => (
     <AssistantsMenuItem
       key={item.id}
-      image={require("../../assets/assistant.jpg")}
+      imageUri={item.profile}
       title={item.name}
       onPress={() => {
-        createAndInstertNewThread(item.id);
+        createAndInstertNewThread(item.id, item.name);
       }}
       ShowEditButton={false}
     />
@@ -56,23 +67,40 @@ function ChooseChatScreen({ navigation }) {
 
   return (
     <Screen>
-      <View style={styles.container}>
-        <AssistantsMenuItem
-          image={require("../../assets/logo.jpg")}
-          title="persian law guide"
-          onPress={() => {
-            createAndInstertNewThread("asst_40ROFN9nKe2V6Eka6bYXSZ2y");
-          }}
-          ShowEditButton={false}
-        />
-        <FlatList
-          data={assistants}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderItem}
-          numColumns={2}
-          contentContainerStyle={styles.top}
-        />
-      </View>
+      <CopilotStep
+        text="You can select an assistant from here. These are the assistants you've made."
+        order={4}
+        name="step4"
+      >
+        <WalkthroughableView style={styles.container}>
+          <CopilotStep text="This is an assitant" order={5} name="step5">
+            <WalkthroughableAMI
+              title={t("PersianLegalGuide")}
+              onPress={() => {
+                createAndInstertNewThread(
+                  "asst_40ROFN9nKe2V6Eka6bYXSZ2y",
+                  t("PersianLegalGuide")
+                );
+              }}
+              ShowEditButton={false}
+            />
+          </CopilotStep>
+          <FlatList
+            data={assistants}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderItem}
+            numColumns={2}
+            contentContainerStyle={styles.top}
+          />
+        </WalkthroughableView>
+      </CopilotStep>
+      <CopilotStep
+        text="When you press on an assistant, it will create a new conversation."
+        order={6}
+        name="step6"
+      >
+        <WalkthroughableView></WalkthroughableView>
+      </CopilotStep>
     </Screen>
   );
 }

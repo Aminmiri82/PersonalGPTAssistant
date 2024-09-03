@@ -1,108 +1,127 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
-  Image,
-  TouchableOpacity,
   TextInput,
-  Button,
   KeyboardAvoidingView,
-  ScrollView,
+  Alert,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Text,
 } from "react-native";
 import AppText from "../../Components/AppText";
 import Screen from "../../Components/Screen";
 import colors from "../../config/colors";
-import { useState, useEffect } from "react";
 import AppButton from "../../Components/AppButton";
+import AppImagePicker from "../../Components/AssistantsComponents/AppImagePicker";
 import { useTranslation } from "react-i18next";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
+import { Circle } from "react-native-svg";
 
+const WalkthroughableView = walkthroughable(View);
+const WalkthroughableText = walkthroughable(Text);
 function AssistantMakerScreen1({ navigation }) {
   const { t } = useTranslation();
+  const headerHeight = useHeaderHeight();
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
+  const [imageUri, setImageUri] = useState("");
 
+  const handleImagePicked = (uri) => {
+    setImageUri(uri);
+    console.log("Image URI:", uri);
+  };
   const handleNext = () => {
-    if (!name || !instructions) {
-      console.log("Name or instructions are missing");
+    if (!name || !instructions || !imageUri) {
+      Alert.alert(t("error"), t("emptyfields"));
       return;
     }
     navigation.navigate("AssistantMakerScreen2", {
       name,
       instructions,
+      imageUri,
     });
   };
 
   return (
     <Screen>
       <KeyboardAvoidingView
-        behavior="padding"
-        keyboardVerticalOffset={50} // Adjust the offset as needed
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={
+          Platform.OS === "ios" ? headerHeight : headerHeight * 2
+        }
+        style={styles.container}
       >
-        <ScrollView contentContainerStyle={styles.container}>
-          <View style={styles.topContainer}>
-            <View style={styles.pictureContainer}>
-              <View style={styles.pictureTipContainer}>
-                <AppText style={styles.pictureTip}>
-                  {t("choosingPhotoForAssistant")}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View>
+            <CopilotStep
+              text="You can add an image to your assistant"
+              order={11}
+              name="step11"
+            >
+              <WalkthroughableView>
+                <AppImagePicker
+                  tipText={t("choosingPhotoForAssistant")}
+                  editText={t("edit")}
+                  onImagePicked={handleImagePicked}
+                  prepickedUri={require("../../assets/assistant.jpg")}
+                />
+              </WalkthroughableView>
+            </CopilotStep>
+            <CopilotStep
+              text="You can give your assistant a name"
+              order={12}
+              name="step12"
+            >
+              <WalkthroughableView style={styles.middleContainer}>
+                <AppText style={styles.midTitle}>
+                  {t("choosingNameForAssistant")}
                 </AppText>
-              </View>
-              <View style={styles.pictureWrapper}>
-                <TouchableOpacity
-                  style={styles.picture}
-                  onPress={() => {
-                    console.log("edit");
-                  }}
-                >
-                  <Image
-                    style={styles.picture}
-                    source={require("../../assets/assistant.jpg")}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.pictureButton}
-                  onPress={() => {
-                    console.log("edit");
-                  }}
-                >
-                  <AppText style={styles.pictureButtonText}>
-                    {t("edit")}
-                  </AppText>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-          <View style={styles.middleContainer}>
-            <AppText style={styles.midTitle}>
-              {t("choosingNameForAssistant")}
-            </AppText>
-            <TextInput
-              style={styles.midInput}
-              placeholder={t("enterName")}
-              value={name}
-              onChangeText={setName}
+                <TextInput
+                  style={styles.midInput}
+                  placeholder={t("enterName")}
+                  value={name}
+                  onChangeText={setName}
+                />
+              </WalkthroughableView>
+            </CopilotStep>
+            <CopilotStep
+              text="Give your assistant instructions"
+              order={13}
+              name="step13"
+            >
+              <WalkthroughableView style={styles.bottomContainer}>
+                <AppText style={styles.bottomTitle}>
+                  {t("giveAssistantInstruction")}
+                </AppText>
+                <TextInput
+                  style={styles.bottomInput}
+                  placeholder={t("enterInstructions")}
+                  value={instructions}
+                  onChangeText={setInstructions}
+                  multiline
+                  numberOfLines={5}
+                  scrollEnabled
+                />
+              </WalkthroughableView>
+            </CopilotStep>
+            <AppButton
+              title={t("next")}
+              onPress={handleNext}
+              style={styles.nextButton}
+              textStyle={styles.nextButtonText}
             />
+            <CopilotStep
+              text="After you're done, you can go to the next fields"
+              order={14}
+              name="step14"
+            >
+              <WalkthroughableView></WalkthroughableView>
+            </CopilotStep>
           </View>
-          <View style={styles.bottomContainer}>
-            <AppText style={styles.bottomTitle}>
-              {t("giveAssistantInstruction")}
-            </AppText>
-            <TextInput
-              style={styles.bottomInput}
-              placeholder={t("enterInstructions")}
-              value={instructions}
-              onChangeText={setInstructions}
-              multiline
-              numberOfLines={5}
-              scrollEnabled
-            />
-          </View>
-          <AppButton
-            title={t("next")}
-            onPress={handleNext}
-            style={styles.nextButton}
-            textStyle={styles.nextButtonText}
-          />
-        </ScrollView>
+        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </Screen>
   );
@@ -111,47 +130,6 @@ function AssistantMakerScreen1({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "center",
-  },
-  topContainer: {
-    alignItems: "center",
-    marginTop: 20,
-    padding: 10,
-  },
-  pictureContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "80%",
-  },
-  pictureTipContainer: {
-    width: "40%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 10,
-    padding: 10,
-  },
-  pictureTip: {
-    color: colors.dark,
-    fontSize: 16,
-    textAlign: "center",
-  },
-  pictureWrapper: {
-    alignItems: "center",
-  },
-  picture: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  pictureButton: {
-    marginTop: 5,
-    padding: 5,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  pictureButtonText: {
-    fontSize: 12,
-    color: colors.blue,
   },
   middleContainer: {
     marginTop: 20,

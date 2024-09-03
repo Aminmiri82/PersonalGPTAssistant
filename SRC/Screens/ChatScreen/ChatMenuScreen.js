@@ -5,16 +5,41 @@ import AppText from "../../Components/AppText";
 import colors from "../../config/colors";
 import { fetchChatItems, deleteChatItemById } from "../../database";
 import { useFocusEffect } from "@react-navigation/native";
-import Screen from "../../Components/Screen";
 import AppButton from "../../Components/AppButton";
-import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
+import { DatabaseContext } from "../../DatabaseProvider";
 import { useTranslation } from "react-i18next";
+import {
+  CopilotProvider,
+  useCopilot,
+  CopilotStep,
+  walkthroughable,
+  copilotEvents,
+} from "react-native-copilot";
+const WalkthroughableText = walkthroughable(Text);
+const WalkthroughableView = walkthroughable(View);
 
-function ChatMenuScreen({ navigation }) {
+function ChatMenuScreen({ navigation, route }) {
   const { t } = useTranslation();
   const { dbInitialized } = useContext(DatabaseContext);
   const [chatItems, setChatItems] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const { start, copilotEvents } = useCopilot();
+
+  // useEffect(() => {
+  //   const handleStepChange = (step) => {
+  //     if (step.name === "step2") {
+  //       copilotEvents.on("stop", () => {
+  //         navigation.navigate("NextScreen"); // Navigate to the next screen
+  //       });
+  //     }
+  //   };
+
+  //   copilotEvents.on("stepChange", handleStepChange);
+
+  //   return () => {
+  //     copilotEvents.off("stepChange", handleStepChange);
+  //   };
+  // }, [copilotEvents, navigation]);
 
   useFocusEffect(
     useCallback(() => {
@@ -22,7 +47,8 @@ function ChatMenuScreen({ navigation }) {
         if (dbInitialized) {
           try {
             const data = await fetchChatItems();
-            setChatItems(data.reverse());
+            console.log("chat items", data);
+            setChatItems(data);
           } catch (error) {
             console.log("Error fetching ChatItems: ", error);
           }
@@ -31,6 +57,7 @@ function ChatMenuScreen({ navigation }) {
 
       console.log("loading chat items");
       loadChatItems();
+      console.log(chatItems);
     }, [dbInitialized])
   );
 
@@ -39,6 +66,7 @@ function ChatMenuScreen({ navigation }) {
     navigation.navigate("ChatScreen", {
       threadId: chat.threadId,
       assistantId: chat.assistantId,
+      assistantName: chat.assistantName || t("PersianLegalGuide"),
     });
   };
 
@@ -56,12 +84,12 @@ function ChatMenuScreen({ navigation }) {
 
   const renderItem = ({ item }) => (
     <ChatItem
-      title={item.assistantName || "Legal Guide"}
+      title={item.assistantName || t("PersianLegalGuide")}
       subTitle={item.lastMessage}
-      image={
+      imageUri={
         item.assistantId === "asst_40ROFN9nKe2V6Eka6bYXSZ2y"
-          ? require("../../assets/logo.jpg")
-          : require("../../assets/assistant.jpg")
+          ? null
+          : item.profile
       }
       modelname={item.assistantModel}
       onPress={() => handlePress(item)}
@@ -75,25 +103,36 @@ function ChatMenuScreen({ navigation }) {
   }
 
   return (
-    <Screen>
-      <View style={styles.container}>
-        {chatItems.length === 0 ? (
-          <Text>{t("noChats")}</Text>
-        ) : (
-          <FlatList
-            data={chatItems}
-            keyExtractor={(item) => item.Id.toString()}
-            renderItem={renderItem}
-          />
-        )}
-      
-      </View>
-    </Screen>
+    <>
+      <CopilotStep
+        text="This is chats screen. you can add new conversations here. By pressing the plus button you can add a new chat."
+        order={2}
+        name="step2"
+      >
+        <WalkthroughableView style={styles.container}>
+          {chatItems.length === 0 ? (
+            <Text>{t("noChats")}</Text>
+          ) : (
+            <FlatList
+              data={chatItems}
+              keyExtractor={(item) => item.Id.toString()}
+              renderItem={renderItem}
+            />
+          )}
+        </WalkthroughableView>
+      </CopilotStep>
+      <CopilotStep text="Just press next" order={3} name="step3">
+        <WalkthroughableView></WalkthroughableView>
+      </CopilotStep>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  container2: {
     flex: 1,
   },
   bottomContainer: {
