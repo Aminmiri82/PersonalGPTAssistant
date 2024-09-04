@@ -40,7 +40,7 @@ function BottomTabNav(route) {
         },
       })}
     >
-      <Tab.Screen name="Test" component={TestScreen} options={{ headerShown: false, title: t("Test") }} />
+      {/* <Tab.Screen name="Test" component={TestScreen} options={{ headerShown: false, title: t("Test") }} /> */}
       <Tab.Screen
         name="Chat"
         component={ChatScreenNav}
@@ -57,7 +57,7 @@ function BottomTabNav(route) {
         component={EmailAnswersNav}
         options={{ headerShown: false, title: t("EmailAnswersTab") }}
       />
-    
+
       <Tab.Screen
         name="Settings"
         component={SettingsScreenNav}
