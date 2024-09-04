@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "@env";
 import * as SecureStore from "expo-secure-store";
-
+import axios from "axios";
 import Upload from "react-native-background-upload";
 
 let openai = null;
@@ -155,7 +155,7 @@ const uploadIndividualFiles = async (file, onProgress, reportError) => {
         throw new Error("Failed to create upload");
       }
 
-      // Step 2: Upload File using react-native-background-upload
+      // Step 2: Upload File
       const partResponse = await startBackgroundUpload(
         upload.id,
         uri,
@@ -164,7 +164,7 @@ const uploadIndividualFiles = async (file, onProgress, reportError) => {
         apiKey,
         onProgress
       );
-      const partId = JSON.parse(partResponse).id;
+      const partId = partResponse.id; // No need to parse JSON here
       console.log("Part uploaded:", partId);
 
       if (!partId) {
@@ -182,7 +182,7 @@ const uploadIndividualFiles = async (file, onProgress, reportError) => {
       console.log("Upload Complete, File ID:", completion.file.id);
       return completion.file.id;
     } catch (error) {
-      console.error("Error uploading files:", error);
+      console.error("Error uploading files: here", error);
 
       if (retriesLeft > 0) {
         retriesLeft--;
@@ -250,39 +250,42 @@ const startBackgroundUpload = async (
   apiKey,
   onProgress
 ) => {
-  return new Promise((resolve, reject) => {
-    const options = {
-      url: `${UPLOAD_URL}/${uploadId}/parts`,
-      path: fileUri,
-      method: "POST",
-      type: "multipart",
-      field: "data", // The form field name for the file
+  try {
+    const formData = new FormData();
+    formData.append('data', {
+      uri: fileUri,
+      name: filename,
+      type: mimeType,
+    });
+
+    const response = await axios.post(`${UPLOAD_URL}/${uploadId}/parts`, formData, {
       headers: {
         Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
-    };
+      onUploadProgress: (progressEvent) => {
+        const totalLength = progressEvent.lengthComputable
+          ? progressEvent.total
+          : progressEvent.target.getResponseHeader('content-length') ||
+            progressEvent.target.getResponseHeader('x-decompressed-content-length');
 
-    Upload.startUpload(options)
-      .then((uploadId) => {
-        console.log("Upload started with ID:", uploadId);
-        Upload.addListener("progress", uploadId, (data) => {
-          onProgress(data.progress);
-        });
-        Upload.addListener("error", uploadId, (data) => {
-          console.error("Upload error:", data.error);
-          reject(new Error(data.error));
-        });
-        Upload.addListener("completed", uploadId, (data) => {
-          console.log("Upload completed:", data);
-          resolve(data.responseBody); // Returning response body for part ID
-        });
-      })
-      .catch((err) => {
-        console.error("Upload start error:", err);
-        reject(err);
-      });
-  });
+        if (totalLength) {
+          const progress = Math.round((progressEvent.loaded * 100) / totalLength);
+          onProgress(progress);
+        }
+      },
+    });
+
+    console.log('Upload completed:', response.data);
+
+    return response.data; // Already parsed as JSON
+  } catch (error) {
+    console.error('Upload error:', error.message);
+    console.error('Error response data:', error.response?.data);
+    console.error('Error response status:', error.response?.status);
+    console.error('Error response headers:', error.response?.headers);
+    throw error;
+  }
 };
 
 const completeUpload = async (uploadId, partIds, apiKey) => {

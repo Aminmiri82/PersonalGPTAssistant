@@ -1,57 +1,70 @@
-import React, { useEffect } from "react";
-import { View, Text, Button } from "react-native";
-import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
-import Screen from "../Components/Screen";
-import { useTranslation } from "react-i18next";
+import React, { useState } from 'react';
+import { View, Button, Text, Platform } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
+import * as FileSystem from 'expo-file-system';
 
-const WalkthroughableText = walkthroughable(Text);
+const FileUploadScreen = () => {
+  const [progress, setProgress] = useState(0);
+  const [fileUrl, setFileUrl] = useState('');
 
-function TestScreen({ navigation }) {
-  const { t } = useTranslation();
-  const { start, copilotEvents } = useCopilot();
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-  useEffect(() => {
-    const handleStepChange = (step) => {
-      console.log("Current Step:", step); // Debugging line
+    if (!result.canceled) {
+      uploadFile(result.assets[0].uri);
+    }
+  };
 
-      if (step.order === 4) {
-        navigation.navigate("Home", { screen: "Settings" });
-      }
-    };
+  const uploadFile = async (uri) => {
+    const fileUri = await FileSystem.getInfoAsync(uri);
+    const formData = new FormData();
 
-    const stepChangeSubscription = copilotEvents.on(
-      "stepChange",
-      handleStepChange
-    );
+    formData.append('file', {
+      uri: fileUri.uri,
+      name: 'test.jpg',
+      type: 'image/jpeg',
+    });
 
-    // Cleanup on component unmount
-    return () => {
-      stepChangeSubscription.remove();
-    };
-  }, [copilotEvents, navigation]);
+    axios.post('https://file.io', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      onUploadProgress: (progressEvent) => {
+        const totalLength = progressEvent.lengthComputable
+          ? progressEvent.total
+          : progressEvent.target.getResponseHeader('content-length') ||
+            progressEvent.target.getResponseHeader('x-decompressed-content-length');
+
+        if (totalLength) {
+          const progress = Math.round((progressEvent.loaded * 100) / totalLength);
+          setProgress(progress);
+        }
+      },
+    })
+    .then(response => {
+      setFileUrl(response.data.link);
+      console.log('Upload successful', response.data);
+    })
+    .catch(error => {
+      console.error('Upload failed', error);
+    });
+  };
 
   return (
-    <Screen>
-      <View>
-        {/* <CopilotStep text="This is step 1" order={1} name="step1">
-          <WalkthroughableText>Step 1</WalkthroughableText>
-        </CopilotStep>
-
-        <CopilotStep text="This is step 2" order={2} name="step2">
-          <WalkthroughableText>Step 2</WalkthroughableText>
-        </CopilotStep>
-
-        <CopilotStep text="This is step 3" order={3} name="step3">
-          <WalkthroughableText>Step 3</WalkthroughableText>
-        </CopilotStep>
-        <CopilotStep text="This is settings screen" order={4} name="step4">
-          <View></View>
-        </CopilotStep> */}
-        <Text>To start the walkthrough, press the button below</Text>
-        <Button title="Start Walkthrough" onPress={handleStartWalkthrough} />
-      </View>
-    </Screen>
+    <View style={{ padding: 20 }}>
+      <Button title="Pick an Image" onPress={pickImage} />
+      <Text>Upload Progress: {progress}%</Text>
+      {fileUrl ? (
+        <Text style={{ marginTop: 20 }}>File URL: {fileUrl}</Text>
+      ) : null}
+    </View>
   );
-}
+};
 
-export default TestScreen;
+export default FileUploadScreen;
