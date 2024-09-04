@@ -27,12 +27,16 @@ import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import p
 import * as SecureStore from "expo-secure-store";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
+import { Chat } from "openai/resources";
+import { useTranslation } from "react-i18next";
 
 const WalkthroughableView = walkthroughable(View);
+const WalkthroughableChatbubble = walkthroughable(Chatbubble);
 
 const EmptyCS = ({ navigation, route }) => {
   const { start, copilotEvents } = useCopilot();
   const [isWalkthrough, setIsWalkthrough] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const checkWalkthrough = async () => {
@@ -46,56 +50,46 @@ const EmptyCS = ({ navigation, route }) => {
   const headerHeight = useHeaderHeight();
   return (
     <Screen>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={
-          Platform.OS === "ios" ? headerHeight : headerHeight * 2
-        } // put the botttom tab nav height here
-        style={styles.container}
+      <ImageBackground
+        source={require("../../assets/background.jpg")}
+        style={styles.background}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ImageBackground
-            source={require("../../assets/background.jpg")}
-            style={styles.background}
-          >
-            <CopilotStep
-              text="After you've pressed on an assitant, you will be redirected to the conversation and can message the chatbot"
-              order={7}
-              name="step7"
-            >
-              <WalkthroughableView style={styles.container}>
-                {/* <FlatList
-                ref={flatListRef} // Attach the ref here
-                data={isWalkthrough ? [] : conversation}
-                keyExtractor={(item, index) =>
-                  `${item.threadId}-${item.role}-${index}`
-                }
-                renderItem={({ item }) => <Chatbubble message={item} />}
-                contentContainerStyle={styles.flatListContent}
-                ListFooterComponent={
-                  streamedChunks && !completeResponse ? (
-                    <Chatbubble
-                      message={{
-                        content: streamedChunks,
-                        role: "assistant",
-                        timestamp: new Date(),
-                      }}
-                    />
-                  ) : null
-                }
-              /> */}
-                <AppTextInput style={styles.input} />
-              </WalkthroughableView>
+        <View style={styles.container}>
+          <View style={styles.container}>
+            <CopilotStep text={t("step6")} order={6} name="step6">
+              <WalkthroughableView>
+              <WalkthroughableChatbubble
+                message={{
+                  content: t("step6MessageA"),
+                  role: "user",
+                }}
+              />
+              <WalkthroughableChatbubble
+                message={{ content: t("step6MessageB"), role: "assistant" }}
+              /></WalkthroughableView>
             </CopilotStep>
-          </ImageBackground>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
 
-      <CopilotStep
-        text="This is the Assitant tab. You can manage your assistants here"
-        order={8}
-        name="step8"
-      >
+            <Chatbubble
+              message={{ content: t("step6MessageC"), role: "user" }}
+            />
+            <Chatbubble
+              message={{ content: t("step6MessageD"), role: "assistant" }}
+            />
+            <Chatbubble
+              message={{ content: t("step6MessageE"), role: "user" }}
+            />
+            <Chatbubble
+              message={{ content: t("step6MessageF"), role: "assistant" }}
+            />
+            <Chatbubble
+              message={{ content: t("step6MessageG"), role: "user" }}
+            />
+          </View>
+          <AppTextInput />
+        </View>
+      </ImageBackground>
+
+      <CopilotStep text={t("step7")} order={7} name="step7">
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
     </Screen>
@@ -113,9 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
   },
-  input: {
-    marginTop: 10,
-  },
+  CopilotStepcontainer: {},
 });
 
 export default EmptyCS;

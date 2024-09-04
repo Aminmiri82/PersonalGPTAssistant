@@ -12,8 +12,8 @@ export const languageResources = {
 
 i18next.use(initReactI18next).init({
   compatibilityJSON: "v3",
-  lng: "en",
-  fallbackLng: "en",
+  lng: "fa",
+  fallbackLng: "fa",
   resources: languageResources,
 });
 

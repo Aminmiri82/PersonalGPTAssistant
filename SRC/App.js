@@ -12,28 +12,13 @@ import * as SecureStore from "expo-secure-store";
 import { CopilotProvider } from "react-native-copilot";
 
 import WTMainScreen from "./Screens/WTMainScreen";
-import AssistantMenuScreen from "./Screens/AssistantScreen/AssistantMenuScreen";
+import { useTranslation } from "react-i18next";
 
 const Stack = createNativeStackNavigator();
-// Imporatnt : you can only have one walkthroug in the whole app, so if you want to go to another screen, you need to do what i did in TestScreen.js
 
 export default function App() {
-  const [onboarded, setOnboarded] = useState();
-
-  useEffect(() => {
-    getStorage();
-  }, []);
-
-  const getStorage = async () => {
-    const onboarded = await AsyncStorage.getItem("ONBOARDED");
-    setOnboarded(JSON.parse(onboarded));
-  };
-
-  // useEffect(() => {
-  //   SplashScreen.hide();
-  // }, []);
-
   const [initialRoute, setInitialRoute] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchLanguage = async () => {
@@ -44,7 +29,13 @@ export default function App() {
     };
 
     const checkWalkthroughStatus = async () => {
-      const walkthroughCompleted = true;
+      const RealwalkthroughCompleted = await SecureStore.getItemAsync(
+        "walkthroughCompleted"
+      );
+      console.log("RealwalkthroughCompleted", RealwalkthroughCompleted);
+      const walkthroughCompleted = await SecureStore.getItemAsync(
+        "walkthroughCompleted"
+      );
       if (walkthroughCompleted) {
         setInitialRoute("Home");
       } else {
@@ -64,7 +55,12 @@ export default function App() {
   return (
     <DatabaseProvider>
       <CopilotProvider
-        tooltipStyle={Platform.OS === "android" ? { top: 50 } : null}
+        labels={{
+          previous: t("wtPrevious"),
+          next: t("wtNext"),
+          skip: t("wtSkip"),
+          finish: t("wtFinish"),
+        }}
       >
         <NavigationContainer>
           <Stack.Navigator initialRouteName={initialRoute}>
