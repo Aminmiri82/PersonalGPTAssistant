@@ -1,13 +1,32 @@
-import React from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import React, { useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import OnBoarding from "react-native-onboarding-swiper";
 import LottieView from "lottie-react-native";
+import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 
 const { width, height } = Dimensions.get("window");
 
-export default function OnBoarding() {
-  const handleDone = () => {
-    console.log("Done");
+export default function testOBS() {
+  const navigation = useNavigation();
+
+  const handleDone = async () => {
+    await SecureStore.setItemAsync("onboardingCompleted", "true");
+    navigation.navigate("WTMainScreen");
+  };
+
+  const donebutton = ({ ...props }) => {
+    return (
+      <TouchableOpacity style={styles.doneButton} {...props}>
+        <Text>Done</Text>
+      </TouchableOpacity>
+    );
   };
 
   return (
@@ -15,6 +34,8 @@ export default function OnBoarding() {
       <OnBoarding
         onDone={handleDone}
         onSkip={handleDone}
+        DoneButtonComponent={donebutton}
+        bottomBarHighlight={false}
         containerStyles={{ paddingHorizontal: 15 }}
         pages={[
           {
@@ -52,5 +73,11 @@ const styles = StyleSheet.create({
   lottie: {
     width: width * 0.9,
     height: width,
+  },
+  doneButton: {
+    padding: 20,
+    backgroundColor: "#00FF9D",
+    borderTopLeftRadius: "100%",
+    borderBottomLeftRadius: "100%",
   },
 });

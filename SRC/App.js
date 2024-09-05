@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import BottomTabNav from "./Navigation/BottomTabNav";
+import testOBS from "./Screens/OBS/testOBS";
 
 import { DatabaseProvider } from "./DatabaseProvider"; // Adjust the import path
 import i18next from "./services/i18next";
@@ -28,22 +29,32 @@ export default function App() {
       }
     };
 
-    const checkWalkthroughStatus = async () => {
-      const RealwalkthroughCompleted = await SecureStore.getItemAsync(
-        "walkthroughCompleted"
+    // const checkWalkthroughStatus = async () => {
+    //   const RealwalkthroughCompleted = await SecureStore.getItemAsync(
+    //     "walkthroughCompleted"
+    //   );
+    //   console.log("RealwalkthroughCompleted", RealwalkthroughCompleted);
+    //   const walkthroughCompleted = await SecureStore.getItemAsync(
+    //     "walkthroughCompleted"
+    //   );
+    //   if (walkthroughCompleted) {
+    //     setInitialRoute("Home");
+    //   } else {
+    //     setInitialRoute("WTMainScreen");
+    //   }
+    // };
+    const checkOnboardingStatus = async () => {
+      const onboardingCompleted = await SecureStore.getItemAsync(
+        "onboardingCompleted"
       );
-      console.log("RealwalkthroughCompleted", RealwalkthroughCompleted);
-      const walkthroughCompleted = await SecureStore.getItemAsync(
-        "walkthroughCompleted"
-      );
-      if (walkthroughCompleted) {
-        setInitialRoute("Home");
+      if (onboardingCompleted === "true") {
+        setInitialRoute("Home"); // Go to home screen if onboarding is done
       } else {
-        setInitialRoute("WTMainScreen");
+        setInitialRoute("OnBoarding"); // Show onboarding if not done
       }
     };
-
-    checkWalkthroughStatus();
+    checkOnboardingStatus();
+    // checkWalkthroughStatus();
     fetchLanguage();
   }, []);
 
@@ -64,6 +75,11 @@ export default function App() {
       >
         <NavigationContainer>
           <Stack.Navigator initialRouteName={initialRoute}>
+            <Stack.Screen
+              name="OnBoarding"
+              component={testOBS}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="Home"
               component={BottomTabNav}
