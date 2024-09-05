@@ -10,11 +10,13 @@ import OnBoarding from "react-native-onboarding-swiper";
 import LottieView from "lottie-react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
+import { useTranslation } from "react-i18next";
 
 const { width, height } = Dimensions.get("window");
 
 export default function TestOBS() {
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   const handleDone = async () => {
     await SecureStore.setItemAsync("onboardingCompleted", "true");
@@ -50,18 +52,38 @@ export default function TestOBS() {
                 />
               </View>
             ),
-            title: "We make it easy for you to",
-            subtitle: "You can avoid paying for lawyers and get help for free",
+            title: t("obs1Title"),
+            subtitle: t("obs1Subtitle"),
           },
           {
             backgroundColor: "#fef3c7",
             image: (
               <View>
-                <Text>Hello</Text>
+                <LottieView
+                  source={require("../../assets/animations/judge.json")}
+                  autoPlay
+                  loop
+                  style={{ width: width * 0.9, height: width }}
+                />
               </View>
             ),
-            title: "second title",
-            subtitle: "second sub",
+            title: t("obs2Title"),
+            subtitle: t("obs2Subtitle"),
+          },
+          {
+            backgroundColor: "#a7f3d0",
+            image: (
+              <View>
+                <LottieView
+                  source={require("../../assets/animations/phone.json")}
+                  autoPlay
+                  loop
+                  style={{ width: width * 0.9, height: width }}
+                />
+              </View>
+            ),
+            title: t("obs3Title"),
+            subtitle: t("obs3Subtitle"),
           },
         ]}
       />
