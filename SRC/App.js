@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import BottomTabNav from "./Navigation/BottomTabNav";
-import testOBS from "./Screens/OBS/testOBS";
+import TestOBS from "./Screens/OBS/TestOBS";
 
 import { DatabaseProvider } from "./DatabaseProvider"; // Adjust the import path
 import i18next from "./services/i18next";
@@ -77,7 +77,7 @@ export default function App() {
           <Stack.Navigator initialRouteName={initialRoute}>
             <Stack.Screen
               name="OnBoarding"
-              component={testOBS}
+              component={TestOBS}
               options={{ headerShown: false }}
             />
             <Stack.Screen

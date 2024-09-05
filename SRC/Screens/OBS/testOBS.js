@@ -13,7 +13,7 @@ import * as SecureStore from "expo-secure-store";
 
 const { width, height } = Dimensions.get("window");
 
-export default function testOBS() {
+export default function TestOBS() {
   const navigation = useNavigation();
 
   const handleDone = async () => {
@@ -41,11 +41,12 @@ export default function testOBS() {
           {
             backgroundColor: "#a7f3d0",
             image: (
-              <View style={styles.lottie}>
+              <View>
                 <LottieView
-                  source={require("../../assets/animations/1.json")}
+                  source={require("../../assets/animations/chatbot.json")}
                   autoPlay
                   loop
+                  style={{ width: width * 0.9, height: width }}
                 />
               </View>
             ),
@@ -69,7 +70,11 @@ export default function testOBS() {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   lottie: {
     width: width * 0.9,
     height: width,
@@ -77,7 +82,7 @@ const styles = StyleSheet.create({
   doneButton: {
     padding: 20,
     backgroundColor: "#00FF9D",
-    borderTopLeftRadius: "100%",
-    borderBottomLeftRadius: "100%",
+    borderTopLeftRadius: 500,
+    borderBottomLeftRadius: 500,
   },
 });

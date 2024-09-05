@@ -1,6 +1,6 @@
 import React from "react";
 import OnBoardingScreen from "./OnBoardingScreen";
-import testOBS from "./testOBS";
+import testOBS from "./TestOBS";
 
 function OnboardingScreen2({ navigation }) {
   return (
