@@ -11,16 +11,74 @@ import LottieView from "lottie-react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
+import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
+
+const WalkthroughableText = walkthroughable(Text);
+const WalkthroughableView = walkthroughable(View);
 
 const { width, height } = Dimensions.get("window");
 
 export default function TestOBS() {
+  const { start, copilotEvents } = useCopilot();
   const navigation = useNavigation();
   const { t } = useTranslation();
 
+  useEffect(() => {
+    const handleStepChange = (step) => {
+      console.log("Current Step:", step); // Debugging line
+      if (step.order === 1) {
+        navigation.navigate("Home", { screen: "ChatMenuScreen" });
+      }
+      // fuck me this is so dumb
+      if (step.order === 3) {
+        navigation.navigate("ChooseChatScreen");
+      }
+      if (step.order === 5) {
+        navigation.navigate("EmptyCS", { isWalkthrough: true });
+      }
+      if (step.order === 7) {
+        navigation.navigate("Home", { screen: "Assistants" });
+      }
+      if (step.order === 10) {
+        navigation.navigate("AssistantMakerScreen1");
+      }
+      if (step.order === 14) {
+        navigation.navigate("AssistantMakerScreen2", {
+          name: "s",
+          instructions: "s",
+          imageUri: "s",
+        });
+      }
+      if (step.order === 17) {
+        navigation.navigate("Home", {
+          screen: "EmailAnswers",
+        });
+      }
+      if (step.order === 19) {
+        navigation.navigate("Home", { screen: "Settings" });
+      }
+    };
+
+    const saveWalkthroughCompletion = async () => {
+      await SecureStore.setItemAsync("walkthroughCompleted", "true");
+    };
+
+    copilotEvents.on("stop", saveWalkthroughCompletion); // does this happen when you skip the walkthrough?
+    const stepChangeSubscription = copilotEvents.on(
+      "stepChange",
+      handleStepChange
+    );
+
+    // Cleanup on component unmount
+    return () => {
+      stepChangeSubscription.remove();
+      copilotEvents.off("stop", saveWalkthroughCompletion);
+    };
+  }, [copilotEvents, navigation]);
+
   const handleDone = async () => {
     await SecureStore.setItemAsync("onboardingCompleted", "true");
-    navigation.navigate("WTMainScreen");
+    start();
   };
 
   const donebutton = ({ ...props }) => {
@@ -87,6 +145,9 @@ export default function TestOBS() {
           },
         ]}
       />
+      <CopilotStep text={t("step1")} order={1} name="step1">
+        <WalkthroughableView></WalkthroughableView>
+      </CopilotStep>
     </View>
   );
 }
@@ -94,8 +155,8 @@ export default function TestOBS() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
   },
   lottie: {
     width: width * 0.9,
