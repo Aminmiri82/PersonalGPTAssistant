@@ -17,7 +17,6 @@ import { useTranslation } from "react-i18next";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  
   const [initialRoute, setInitialRoute] = useState(null);
   const { t } = useTranslation();
 
@@ -30,13 +29,10 @@ export default function App() {
     };
 
     const checkWalkthroughStatus = async () => {
-      const RealwalkthroughCompleted = await SecureStore.getItemAsync(
-        "walkthroughCompleted"
-      );
-      console.log("RealwalkthroughCompleted", RealwalkthroughCompleted);
       const walkthroughCompleted = await SecureStore.getItemAsync(
         "walkthroughCompleted"
       );
+      console.log("walkthroughCompleted status:", walkthroughCompleted);
       if (walkthroughCompleted) {
         setInitialRoute("Home");
       } else {
@@ -56,13 +52,12 @@ export default function App() {
   return (
     <DatabaseProvider>
       <CopilotProvider
-      labels={{
-        previous: t("wtPrevious"),
-        next: t("wtNext"),
-        skip: t("wtSkip"),
-        finish: t("wtFinish"),
-      }}
-        
+        labels={{
+          previous: t("wtPrevious"),
+          next: t("wtNext"),
+          skip: t("wtSkip"),
+          finish: t("wtFinish"),
+        }}
       >
         <NavigationContainer>
           <Stack.Navigator initialRouteName={initialRoute}>
