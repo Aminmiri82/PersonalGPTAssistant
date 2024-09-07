@@ -20,6 +20,8 @@
     "selectModel": "انتخاب مدل",
     "fileUploadReq": "اگر میخواهید فایل آپلود بکنید، مدل پایه gpt 4 turbo را انتخاب کنید",
     "fileUpload": "فایل pdf یا word و یا txt آپلود کنید",
+    "uploading": "در حال آپلود...",
+    "uploadComplete": "آپلود شد",
     "uploadInProgress": "آپلود در حال انجام",
     "pleaseWait": "لطفاً قبل از ذخیره دستیار صبر کنید تا بارگذاری همه فایل ها تمام شود.",
     "saveAssistant": "ذخیره راهنما",

@@ -15,7 +15,7 @@ import { insertAssistant, initDB } from "../database";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useTranslation } from "react-i18next";
 import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
-import { set } from "lodash";
+
 
 const WalkthroughableView = walkthroughable(View);
 const WalkthroughableText = walkthroughable(Text);
@@ -31,7 +31,7 @@ function AssistantMakerScreen2({ navigation, route }) {
   const [isUploading, setIsUploading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
   const [progressMap, setProgressMap] = useState({});
-  const [uploadCount, setUploadCount] = useState(0);
+  
 
   const assistantList = [
     { label: "GPT-4o-mini", value: "gpt-4o-mini" },
@@ -52,7 +52,7 @@ function AssistantMakerScreen2({ navigation, route }) {
     const uniqueId = file.uri || Date.now().toString();
     console.log("Unique ID:", uniqueId);
     setFiles((prevFiles) => [...prevFiles, { ...file, id: uniqueId }]);
-    
+
     setIsUploading(true);
 
     try {
@@ -100,14 +100,10 @@ function AssistantMakerScreen2({ navigation, route }) {
 
   const handleRemoveFile = (uniqueId) => {
     setFiles((prevFiles) => prevFiles.filter((file) => file.id !== uniqueId));
-    setFileIds((prevFileIds) => prevFileIds.filter((file) => file.appId !== uniqueId));
+    setFileIds((prevFileIds) =>
+      prevFileIds.filter((file) => file.appId !== uniqueId)
+    );
   };
-
-  useEffect(() => {
-    if (uploadCount === 0) {
-      setIsUploading(false);
-    }
-  }, [uploadCount]);
 
   const onProgress = (fileId, progress) => {
     setProgressMap((prevMap) => ({
@@ -140,7 +136,6 @@ function AssistantMakerScreen2({ navigation, route }) {
       if (fileIds.length > 0) {
         console.log("Adding files to assistant and creating vector store");
         const fileIdsOnly = fileIds.map((file) => file.fileId); // Extract only the fileId
-
         await addFilesToAssistant(assistant.assistantId, fileIdsOnly);
       }
 

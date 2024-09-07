@@ -20,6 +20,8 @@
     "selectModel": "Select a model",
     "fileUploadReq": "If you want to upload files for the knowledge base you need to choose gpt 4 turbo ",
     "fileUpload": "Upload pdf, word and text files to your assistant",
+    "uploading": "Uploading...",
+    "uploadComplete": "Uploaded",
     "uploadInProgress": "Upload in Progress",
     "pleaseWait": "Please wait until all files have finished uploading before saving the assistant.",
     "saveAssistant": "Save assistant",

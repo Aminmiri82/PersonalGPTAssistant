@@ -1,15 +1,69 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   View,
   StyleSheet,
   FlatList,
   Image,
   TouchableOpacity,
+  Animated,
 } from "react-native";
 import { ProgressView } from "@react-native-community/progress-view";
 import AppText from "../AppText";
 import colors from "../../config/colors";
 import DocumentPicker from "react-native-document-picker";
+import { useTranslation } from "react-i18next";
+
+const ProgressBar = ({ progress }) => {
+  // Create an animated value for throbbing effect
+  const { t } = useTranslation();
+  const textScale = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    if (progress === 0) {
+      // Start subtle throbbing animation if uploading
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(textScale, {
+            toValue: 1.05, // Smaller scale value for subtler effect
+            duration: 600, // Longer duration for a more gradual animation
+            useNativeDriver: true,
+          }),
+          Animated.timing(textScale, {
+            toValue: 1,
+            duration: 600,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+    } else {
+      // Stop animation when done
+      textScale.stopAnimation();
+    }
+  }, [progress]);
+
+  const progressText = progress === 0 ? t("uploading") : t("uploadComplete");
+
+  return (
+    <View style={styles.progressBarContainer}>
+      <ProgressView
+        progressTintColor={colors.primary}
+        trackTintColor={colors.lightGrey}
+        progress={progress} // Directly use progress as it's either 0 or 1
+        style={styles.progressBar}
+      />
+      <Animated.Text
+        style={[
+          styles.progressText,
+          {
+            transform: [{ scale: textScale }],
+          },
+        ]}
+      >
+        {progressText}
+      </Animated.Text>
+    </View>
+  );
+};
 
 function AppDocumentPicker({ files, onAddFile, onRemoveFile, progressMap }) {
   const pickDocument = async () => {
@@ -52,17 +106,7 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile, progressMap }) {
 
   const renderProgressBar = (fileId) => {
     const progress = progressMap[fileId] || 0;
-    return (
-      <View style={styles.progressBarContainer}>
-        <ProgressView
-          progressTintColor={colors.primary}
-          trackTintColor={colors.lightGrey}
-          progress={progress / 100}
-          style={styles.progressBar}
-        />
-        <AppText style={styles.progressText}>{Math.floor(progress)}%</AppText>
-      </View>
-    );
+    return <ProgressBar progress={progress} />;
   };
 
   return (

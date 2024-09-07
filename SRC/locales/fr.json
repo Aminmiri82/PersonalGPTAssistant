@@ -20,6 +20,8 @@
     "selectModel": "Sélectionnez un modèle",
     "fileUploadReq": "Si vous souhaitez télécharger des fichiers pour la base de connaissances, vous devez choisir gpt 4 turbo ",
     "fileUpload": "Téléchargez des fichiers pdf, word et texte pour votre assistant",
+    "uploading": "Téléchargement...",
+    "uploadComplete": "Téléchargé",
     "saveAssistant": "Enregistrer l'assistant",
     "uploadInProgress": "Téléchargement en cours",
     "pleaseWait": "Veuillez attendre que tous les fichiers soient téléchargés avant de sauvegarder l'assistant.",
