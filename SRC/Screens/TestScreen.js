@@ -15,6 +15,7 @@ import { insertAssistant, initDB } from "../database";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useTranslation } from "react-i18next";
 import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
+import { set } from "lodash";
 
 const WalkthroughableView = walkthroughable(View);
 const WalkthroughableText = walkthroughable(Text);
@@ -51,7 +52,7 @@ function AssistantMakerScreen2({ navigation, route }) {
     const uniqueId = file.uri || Date.now().toString();
     console.log("Unique ID:", uniqueId);
     setFiles((prevFiles) => [...prevFiles, { ...file, id: uniqueId }]);
-    setUploadCount((prev) => prev + 1);
+    
     setIsUploading(true);
 
     try {
@@ -62,11 +63,14 @@ function AssistantMakerScreen2({ navigation, route }) {
       );
 
       // Update fileIds state with the returned fileId
-      setFileIds((prevFileIds) => [...prevFileIds, fileId]);
+      setFileIds((prevFileIds) => [
+        ...prevFileIds,
+        { fileId: fileId, appId: uniqueId }, // Assuming `uniqueId` is the same as `file.id`
+      ]);
     } catch (error) {
       console.error("Error in handleAddFile:", error);
     } finally {
-      setUploadCount((prev) => prev - 1);
+      setIsUploading(false);
     }
   };
 
@@ -94,9 +98,9 @@ function AssistantMakerScreen2({ navigation, route }) {
     );
   };
 
-  const handleRemoveFile = (index) => {
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
-    setFileIds((prevFileIds) => prevFileIds.filter((_, i) => i !== index));
+  const handleRemoveFile = (uniqueId) => {
+    setFiles((prevFiles) => prevFiles.filter((file) => file.id !== uniqueId));
+    setFileIds((prevFileIds) => prevFileIds.filter((file) => file.appId !== uniqueId));
   };
 
   useEffect(() => {
@@ -135,7 +139,9 @@ function AssistantMakerScreen2({ navigation, route }) {
 
       if (fileIds.length > 0) {
         console.log("Adding files to assistant and creating vector store");
-        await addFilesToAssistant(assistant.assistantId, fileIds);
+        const fileIdsOnly = fileIds.map((file) => file.fileId); // Extract only the fileId
+
+        await addFilesToAssistant(assistant.assistantId, fileIdsOnly);
       }
 
       if (assistant.error) {
@@ -201,7 +207,7 @@ function AssistantMakerScreen2({ navigation, route }) {
         style={styles.nextButton}
         textStyle={styles.nextButtonText}
       />
-      <Text>{fileIds}</Text>
+      <Text>{fileIds.map((file) => file.fileId)}</Text>
       <CopilotStep text={t("step17")} order={17} name="step17">
         <WalkthroughableText></WalkthroughableText>
       </CopilotStep>

@@ -70,7 +70,7 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile, progressMap }) {
       <View style={styles.generalFileContainer}>
         <FlatList
           data={files}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.id.toString()} // Use item.id instead of index
           numColumns={3}
           renderItem={({ item, index }) => (
             <View style={styles.fileContainer}>
@@ -85,7 +85,7 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile, progressMap }) {
               {renderProgressBar(item.id)}
               <TouchableOpacity
                 style={styles.deleteButton}
-                onPress={() => onRemoveFile(index)}
+                onPress={() => onRemoveFile(item.id)} // Use item.id for deletion
               >
                 <AppText style={styles.deleteButtonText}>X</AppText>
               </TouchableOpacity>
