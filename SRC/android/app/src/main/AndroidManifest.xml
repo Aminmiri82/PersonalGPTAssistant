@@ -32,6 +32,7 @@
         <data android:scheme="com.amin04.SRC"/>
         <data android:scheme="exp+dadafarin"/>
       </intent-filter>
+      
     </activity>
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="false"/>
   </application>

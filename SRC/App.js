@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import BottomTabNav from "./Navigation/BottomTabNav";
+import TestOBS from "./Screens/OBS/TestOBS";
 
 import { DatabaseProvider } from "./DatabaseProvider"; // Adjust the import path
 import i18next from "./services/i18next";
@@ -12,17 +13,13 @@ import * as SecureStore from "expo-secure-store";
 import { CopilotProvider } from "react-native-copilot";
 
 import WTMainScreen from "./Screens/WTMainScreen";
-import AssistantMenuScreen from "./Screens/AssistantScreen/AssistantMenuScreen";
+import { useTranslation } from "react-i18next";
 
 const Stack = createNativeStackNavigator();
-// Imporatnt : you can only have one walkthroug in the whole app, so if you want to go to another screen, you need to do what i did in TestScreen.js
 
 export default function App() {
-  // useEffect(() => {
-  //   SplashScreen.hide();
-  // }, []);
-
   const [initialRoute, setInitialRoute] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchLanguage = async () => {
@@ -32,16 +29,32 @@ export default function App() {
       }
     };
 
-    const checkWalkthroughStatus = async () => {
-      const walkthroughCompleted = true;
-      if (walkthroughCompleted) {
-        setInitialRoute("Home");
+    // const checkWalkthroughStatus = async () => {
+    //   const RealwalkthroughCompleted = await SecureStore.getItemAsync(
+    //     "walkthroughCompleted"
+    //   );
+    //   console.log("RealwalkthroughCompleted", RealwalkthroughCompleted);
+    //   const walkthroughCompleted = await SecureStore.getItemAsync(
+    //     "walkthroughCompleted"
+    //   );
+    //   if (walkthroughCompleted) {
+    //     setInitialRoute("Home");
+    //   } else {
+    //     setInitialRoute("WTMainScreen");
+    //   }
+    // };
+    const checkOnboardingStatus = async () => {
+      const onboardingCompleted = await SecureStore.getItemAsync(
+        "onboardingCompleted"
+      );
+      if (onboardingCompleted === "true") {
+        setInitialRoute("Home"); // Go to home screen if onboarding is done
       } else {
-        setInitialRoute("WTMainScreen");
+        setInitialRoute("OnBoarding"); // Show onboarding if not done
       }
     };
-
-    checkWalkthroughStatus();
+    checkOnboardingStatus();
+    // checkWalkthroughStatus();
     fetchLanguage();
   }, []);
 
@@ -53,10 +66,20 @@ export default function App() {
   return (
     <DatabaseProvider>
       <CopilotProvider
-        tooltipStyle={Platform.OS === "android" ? { top: 50 } : null}
+        labels={{
+          previous: t("wtPrevious"),
+          next: t("wtNext"),
+          skip: t("wtSkip"),
+          finish: t("wtFinish"),
+        }}
       >
         <NavigationContainer>
           <Stack.Navigator initialRouteName={initialRoute}>
+            <Stack.Screen
+              name="OnBoarding"
+              component={TestOBS}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="Home"
               component={BottomTabNav}

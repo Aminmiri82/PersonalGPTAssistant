@@ -7,6 +7,7 @@ import SettingsScreenNav from "./SettingsScreenNav";
 import ChatScreenNav from "./ChatScreenNav";
 import AssistantsScreenNav from "./AssistantsScreenNav";
 import EmailAnswersNav from "./EmailAnswersNav";
+import TestScreen from "../Screens/TestScreen";
 
 import { useTranslation } from "react-i18next";
 import { CopilotProvider } from "react-native-copilot";
@@ -39,6 +40,7 @@ function BottomTabNav(route) {
         },
       })}
     >
+      {/* <Tab.Screen name="Test" component={TestScreen} options={{ headerShown: false, title: t("Test") }} /> */}
       <Tab.Screen
         name="Chat"
         component={ChatScreenNav}
@@ -55,7 +57,7 @@ function BottomTabNav(route) {
         component={EmailAnswersNav}
         options={{ headerShown: false, title: t("EmailAnswersTab") }}
       />
-    
+
       <Tab.Screen
         name="Settings"
         component={SettingsScreenNav}

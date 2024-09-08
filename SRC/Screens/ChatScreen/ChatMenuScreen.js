@@ -15,8 +15,10 @@ import {
   walkthroughable,
   copilotEvents,
 } from "react-native-copilot";
+import * as SecureStore from "expo-secure-store";
 const WalkthroughableText = walkthroughable(Text);
 const WalkthroughableView = walkthroughable(View);
+const WalkthroughableChatItem = walkthroughable(ChatItem);
 
 function ChatMenuScreen({ navigation, route }) {
   const { t } = useTranslation();
@@ -24,22 +26,23 @@ function ChatMenuScreen({ navigation, route }) {
   const [chatItems, setChatItems] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const { start, copilotEvents } = useCopilot();
+  const [OnWalkthrough, setOnWalkthrough] = useState(null); 
 
-  // useEffect(() => {
-  //   const handleStepChange = (step) => {
-  //     if (step.name === "step2") {
-  //       copilotEvents.on("stop", () => {
-  //         navigation.navigate("NextScreen"); // Navigate to the next screen
-  //       });
-  //     }
-  //   };
-
-  //   copilotEvents.on("stepChange", handleStepChange);
-
-  //   return () => {
-  //     copilotEvents.off("stepChange", handleStepChange);
-  //   };
-  // }, [copilotEvents, navigation]);
+  //dear amin please remember that the actal secure store vallue never chnages so you have to manipulate the onwalkthrough state manually
+  useEffect(() => {
+    const checkWalkthroughStatus = async () => {
+      const walkthroughCompleted = await SecureStore.getItemAsync(
+        "walkthroughCompleted"
+      );
+      if (walkthroughCompleted === "true") {
+        setOnWalkthrough(false);
+      } else {
+        setOnWalkthrough(true);
+      }
+    };
+    checkWalkthroughStatus();
+    console.log("1OnWalkthrough status", OnWalkthrough);
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -101,27 +104,42 @@ function ChatMenuScreen({ navigation, route }) {
   if (!dbInitialized) {
     return <Text>Loading...</Text>;
   }
-
+  console.log("2Onalkthrough status", OnWalkthrough);
   return (
     <>
       <CopilotStep
-        text="This is chats screen. you can add new conversations here. By pressing the plus button you can add a new chat."
+        text={t("step2")}
         order={2}
         name="step2"
       >
-        <WalkthroughableView style={styles.container}>
-          {chatItems.length === 0 ? (
-            <Text>{t("noChats")}</Text>
-          ) : (
-            <FlatList
-              data={chatItems}
-              keyExtractor={(item) => item.Id.toString()}
-              renderItem={renderItem}
-            />
-          )}
-        </WalkthroughableView>
+        {OnWalkthrough === true ? (
+          <WalkthroughableChatItem
+            title={t("PersianLegalGuide")}
+            subTitle={t("PersianLegalGuide")}
+            imageUri={null}
+            modelname={t("PersianLegalGuide")}
+            onPress={() => console.log("pressed")}
+            showDelete={editMode}
+            onDelete={() => console.log("pressed")}
+          />
+        ) : (
+          <WalkthroughableView></WalkthroughableView>
+        )}
       </CopilotStep>
-      <CopilotStep text="Just press next" order={3} name="step3">
+
+      <View style={styles.container}>
+        {chatItems.length === 0 && !OnWalkthrough ? (
+          <Text>{t("noChats")}</Text>
+        ) : (
+          <FlatList
+            data={chatItems}
+            keyExtractor={(item) => item.Id.toString()}
+            renderItem={renderItem}
+          />
+        )}
+      </View>
+
+      <CopilotStep text={t("step3")} order={3} name="step3">
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
     </>
@@ -153,6 +171,11 @@ const styles = StyleSheet.create({
     color: colors.dark,
     fontSize: 18,
     textAlign: "center",
+  },
+  Stepcontainer: {
+    flex: 1,
+    justifyContent: "space-around",
+    alignItems: "center",
   },
 });
 

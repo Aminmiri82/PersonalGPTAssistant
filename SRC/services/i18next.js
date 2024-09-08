@@ -1,5 +1,6 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
+import * as RNLocalize from "react-native-localize";
 import en from "../locales/en.json";
 import fa from "../locales/fa.json";
 import fr from "../locales/fr.json";
@@ -10,9 +11,20 @@ export const languageResources = {
   fr: { translation: fr },
 };
 
+const detectLanguage = () => {
+  const locales = RNLocalize.getLocales();
+  if (Array.isArray(locales)) {
+    const phoneLang = locales[0]?.languageCode;
+    if (phoneLang) {
+      return phoneLang; // e.g., 'en', 'fa', 'fr'
+    }
+  }
+  return "en"; // Fallback to English if detection fails
+};
+
 i18next.use(initReactI18next).init({
   compatibilityJSON: "v3",
-  lng: "en",
+  lng: detectLanguage(),
   fallbackLng: "en",
   resources: languageResources,
 });

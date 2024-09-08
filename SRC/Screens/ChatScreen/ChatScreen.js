@@ -23,6 +23,7 @@ import {
   insertChat,
   updateChatItemById,
 } from "../../database";
+import { OPENAI_API_KEY } from "@env";
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
 import * as SecureStore from "expo-secure-store";
 import { useHeaderHeight } from "@react-navigation/elements";
@@ -177,7 +178,7 @@ const ChatScreen = ({ navigation, route }) => {
   };
 
   const callAssistant = async (message, assistantId) => {
-    const apiKey = await SecureStore.getItemAsync("apiKey");
+    const apiKey = OPENAI_API_KEY;
     setLoading(true);
     setStreamedChunks("");
     setCompleteResponse(null);

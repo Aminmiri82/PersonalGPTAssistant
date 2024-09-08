@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Alert, Button } from "react-native";
+import { View, StyleSheet, Alert,Text, Button } from "react-native";
 import {
   CopilotProvider,
   useCopilot,
@@ -11,7 +11,6 @@ import LanguagesPrompt from "../../Components/SettingsComponents/LanguagesPrompt
 
 import SettingsItem from "../../Components/SettingsComponents/SettingsItem";
 import Icon from "../../Components/Icon";
-
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import i18next from "../../services/i18next";
@@ -54,13 +53,9 @@ function SettingsScreen({ navigation, route }) {
   };
 
   return (
-    <Screen>
+    
       <View style={styles.container}>
-        
-
-        
-
-        <CopilotStep text="Choose your language" order={18} name="step18">
+        <CopilotStep text={t("step20")} order={20} name="step20">
           <WalkthroughableSettingsItem
             title={t("Languages")}
             subTitle={selectedLanguage}
@@ -68,20 +63,21 @@ function SettingsScreen({ navigation, route }) {
             onPress={toggleLanguagePrompt}
           />
         </CopilotStep>
+        
 
         <LanguagesPrompt
           visible={isLanguagePromptVisible}
           onClose={toggleLanguagePrompt}
           onSelectLanguage={handleSelectLanguage}
         />
-        <CopilotStep text="This is the privacy policy" order={19} name="step19">
+        <CopilotStep text={t("step21")} order={21} name="step21">
           <WalkthroughableSettingsItem
             title={t("PriPol")}
             IconComponent={<Icon iconSet="MCI" name="file-document" />}
             onPress={() => navigation.navigate("PrivacyPolicyScreen")}
           />
         </CopilotStep>
-        <CopilotStep text="This is the about us page" order={20} name="step20">
+        <CopilotStep text={t("step22")} order={22} name="step22">
           <WalkthroughableSettingsItem
             title={t("aboutUs")}
             IconComponent={<Icon iconSet="MCI" name="information" />}
@@ -89,7 +85,7 @@ function SettingsScreen({ navigation, route }) {
           />
         </CopilotStep>
       </View>
-    </Screen>
+    
   );
 }
 

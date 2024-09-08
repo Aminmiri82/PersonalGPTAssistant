@@ -1,8 +1,8 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { View, Text, StyleSheet, Platform, TextInput } from "react-native";
 import colors from "../../config/colors";
 
-const Chatbubble = ({ message }) => {
+const Chatbubble = forwardRef(({ message }, ref) => {
   const isUser = message.role === "user";
 
   return (
@@ -11,6 +11,7 @@ const Chatbubble = ({ message }) => {
         styles.bubble,
         isUser ? styles.userBubble : styles.assistantBubble,
       ]}
+      ref={ref}
     >
       {Platform.OS === "ios" ? (
         <TextInput
@@ -27,7 +28,7 @@ const Chatbubble = ({ message }) => {
       )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   bubble: {

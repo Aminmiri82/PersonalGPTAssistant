@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
 
 const WalkthroughableView = walkthroughable(View);
+const WalkthroughableText = walkthroughable(Text);
 
 function AssistantMakerScreen2({ navigation, route }) {
   const { t } = useTranslation();
@@ -164,7 +165,7 @@ function AssistantMakerScreen2({ navigation, route }) {
         textStyle={styles.spinnerTextStyle}
       />
       <CopilotStep
-        text="You can choose the model you want to use for your assistant."
+        text={t("step15")}
         order={15}
         name="step15"
       >
@@ -184,7 +185,7 @@ function AssistantMakerScreen2({ navigation, route }) {
         </WalkthroughableView>
       </CopilotStep>
       <CopilotStep
-        text="You can upload files to your assistant."
+        text={t("step16")}
         order={16}
         name="step16"
       >
@@ -207,8 +208,8 @@ function AssistantMakerScreen2({ navigation, route }) {
         textStyle={styles.nextButtonText}
       />
       <Text>{fileIds}</Text>
-      <CopilotStep text="This is the settings tab" order={17} name="step17">
-        <WalkthroughableView></WalkthroughableView>
+      <CopilotStep text={t("step17")} order={17} name="step17">
+        <WalkthroughableText></WalkthroughableText>
       </CopilotStep>
     </Screen>
   );
