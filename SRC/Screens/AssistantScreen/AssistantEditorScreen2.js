@@ -19,6 +19,7 @@ import {
   addFilesToAssistant,
 } from "../../openai-backend/ApiBackEnd";
 import { useTranslation } from "react-i18next";
+import { set } from "lodash";
 
 function AssistantEditorScreen2({ navigation, route }) {
   const { t } = useTranslation();
@@ -32,7 +33,6 @@ function AssistantEditorScreen2({ navigation, route }) {
   const [uploadCount, setUploadCount] = useState(0);
   const [model, setModel] = useState("GPT-4o-mini");
 
-  
   const assistantList = [
     { label: "GPT-4o-mini", value: "gpt-4o-mini" },
     { label: "GPT-4o", value: "gpt-4o" },
@@ -112,7 +112,8 @@ function AssistantEditorScreen2({ navigation, route }) {
 
       if (fileIds.length > 0) {
         console.log("Adding files to assistant and creating vector store");
-        await addFilesToAssistant(assistant.assistantId, fileIds);
+        const fileIdsOnly = fileIds.map((file) => file.fileId); // Extract only the fileId
+        await addFilesToAssistant(assistant.assistantId, fileIdsOnly);
       }
 
       if (assistant.error) {
@@ -159,7 +160,7 @@ function AssistantEditorScreen2({ navigation, route }) {
     const uniqueId = file.uri || Date.now().toString();
     console.log("Unique ID:", uniqueId);
     setFiles((prevFiles) => [...prevFiles, { ...file, id: uniqueId }]);
-    setUploadCount((prev) => prev + 1);
+
     setIsUploading(true);
 
     try {
@@ -170,11 +171,14 @@ function AssistantEditorScreen2({ navigation, route }) {
       );
 
       // Update fileIds state with the returned fileId
-      setFileIds((prevFileIds) => [...prevFileIds, fileId]);
+      setFileIds((prevFileIds) => [
+        ...prevFileIds,
+        { fileId: fileId, appId: uniqueId }, // Assuming `uniqueId` is the same as `file.id`
+      ]);
     } catch (error) {
       console.error("Error in handleAddFile:", error);
     } finally {
-      setUploadCount((prev) => prev - 1);
+      setIsUploading(false);
     }
   };
 
@@ -202,15 +206,11 @@ function AssistantEditorScreen2({ navigation, route }) {
     );
   };
 
-  //oh god oh fuck please fix this
-  // LOG  Removing file at index: 0
-  //LOG  Files: [{"id": "file:///Users/aminmiri/Library/Developer/CoreSimulator/Devices/9BCE7473-F759-42B1-BF12-17FEC2C55D9B/data/Containers/Data/Application/27B93F0C-CF67-4920-AC53-5FC9693895C1/tmp/com.amin04.SRC-Inbox/10MB-TESTFILE.ORG.pdf", "mimeType": "application/pdf", "name": "10MB-TESTFILE.ORG.pdf", "size": 10705702, "uri": "file:///Users/aminmiri/Library/Developer/CoreSimulator/Devices/9BCE7473-F759-42B1-BF12-17FEC2C55D9B/data/Containers/Data/Application/27B93F0C-CF67-4920-AC53-5FC9693895C1/tmp/com.amin04.SRC-Inbox/10MB-TESTFILE.ORG.pdf"}]
-  //LOG  File IDs: ["file-NCsWm2Wc7XsgpM9oTFXc0WoX"]
-  // it doesnt work when the files are finished uploading in diffrent order
-  //oh god oh fuck
-  const handleRemoveFile = (index) => {
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
-    setFileIds((prevFileIds) => prevFileIds.filter((_, i) => i !== index));
+  const handleRemoveFile = (uniqueId) => {
+    setFiles((prevFiles) => prevFiles.filter((file) => file.id !== uniqueId));
+    setFileIds((prevFileIds) =>
+      prevFileIds.filter((file) => file.appId !== uniqueId)
+    );
   };
 
   const onProgress = (fileId, progress) => {

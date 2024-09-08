@@ -72,6 +72,12 @@ export default function App() {
           skip: t("wtSkip"),
           finish: t("wtFinish"),
         }}
+        labels={{
+          previous: t("wtPrevious"),
+          next: t("wtNext"),
+          skip: t("wtSkip"),
+          finish: t("wtFinish"),
+        }}
       >
         <NavigationContainer>
           <Stack.Navigator initialRouteName={initialRoute}>

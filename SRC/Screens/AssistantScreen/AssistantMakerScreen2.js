@@ -28,7 +28,6 @@ function AssistantMakerScreen2({ navigation, route }) {
   const [isUploading, setIsUploading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
   const [progressMap, setProgressMap] = useState({});
-  const [uploadCount, setUploadCount] = useState(0);
 
   const assistantList = [
     { label: "GPT-4o-mini", value: "gpt-4o-mini" },
@@ -49,7 +48,7 @@ function AssistantMakerScreen2({ navigation, route }) {
     const uniqueId = file.uri || Date.now().toString();
     console.log("Unique ID:", uniqueId);
     setFiles((prevFiles) => [...prevFiles, { ...file, id: uniqueId }]);
-    setUploadCount((prev) => prev + 1);
+
     setIsUploading(true);
 
     try {
@@ -60,11 +59,14 @@ function AssistantMakerScreen2({ navigation, route }) {
       );
 
       // Update fileIds state with the returned fileId
-      setFileIds((prevFileIds) => [...prevFileIds, fileId]);
+      setFileIds((prevFileIds) => [
+        ...prevFileIds,
+        { fileId: fileId, appId: uniqueId }, // Assuming `uniqueId` is the same as `file.id`
+      ]);
     } catch (error) {
       console.error("Error in handleAddFile:", error);
     } finally {
-      setUploadCount((prev) => prev - 1);
+      setIsUploading(false);
     }
   };
 
@@ -92,16 +94,12 @@ function AssistantMakerScreen2({ navigation, route }) {
     );
   };
 
-  const handleRemoveFile = (index) => {
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
-    setFileIds((prevFileIds) => prevFileIds.filter((_, i) => i !== index));
+  const handleRemoveFile = (uniqueId) => {
+    setFiles((prevFiles) => prevFiles.filter((file) => file.id !== uniqueId));
+    setFileIds((prevFileIds) =>
+      prevFileIds.filter((file) => file.appId !== uniqueId)
+    );
   };
-
-  useEffect(() => {
-    if (uploadCount === 0) {
-      setIsUploading(false);
-    }
-  }, [uploadCount]);
 
   const onProgress = (fileId, progress) => {
     setProgressMap((prevMap) => ({
@@ -133,7 +131,8 @@ function AssistantMakerScreen2({ navigation, route }) {
 
       if (fileIds.length > 0) {
         console.log("Adding files to assistant and creating vector store");
-        await addFilesToAssistant(assistant.assistantId, fileIds);
+        const fileIdsOnly = fileIds.map((file) => file.fileId); // Extract only the fileId
+        await addFilesToAssistant(assistant.assistantId, fileIdsOnly);
       }
 
       if (assistant.error) {
@@ -164,11 +163,7 @@ function AssistantMakerScreen2({ navigation, route }) {
         textContent="Initializing assistant..."
         textStyle={styles.spinnerTextStyle}
       />
-      <CopilotStep
-        text={t("step15")}
-        order={15}
-        name="step15"
-      >
+      <CopilotStep text={t("step15")} order={15} name="step15">
         <WalkthroughableView style={styles.topContainer}>
           <View style={styles.topTipContainer}>
             <AppText style={styles.topTip}>{t("chooseModel")}</AppText>
@@ -184,11 +179,7 @@ function AssistantMakerScreen2({ navigation, route }) {
           </View>
         </WalkthroughableView>
       </CopilotStep>
-      <CopilotStep
-        text={t("step16")}
-        order={16}
-        name="step16"
-      >
+      <CopilotStep text={t("step16")} order={16} name="step16">
         <WalkthroughableView style={styles.bottomContainer}>
           <View style={styles.bottomTipContainer}>
             <AppText style={styles.bottomTip}>{t("fileUpload")}</AppText>
@@ -207,7 +198,7 @@ function AssistantMakerScreen2({ navigation, route }) {
         style={styles.nextButton}
         textStyle={styles.nextButtonText}
       />
-      <Text>{fileIds}</Text>
+      <Text>{fileIds.map((file) => file.fileId)}</Text>
       <CopilotStep text={t("step17")} order={17} name="step17">
         <WalkthroughableText></WalkthroughableText>
       </CopilotStep>

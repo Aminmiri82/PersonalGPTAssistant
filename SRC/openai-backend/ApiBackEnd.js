@@ -1,8 +1,8 @@
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "@env";
-import * as SecureStore from "expo-secure-store";
+
 import axios from "axios";
-import Upload from "react-native-background-upload";
+
 
 let openai = null;
 
@@ -251,6 +251,7 @@ const startBackgroundUpload = async (
   onProgress
 ) => {
   try {
+    onProgress(0);
     const formData = new FormData();
     formData.append('data', {
       uri: fileUri,
@@ -263,18 +264,9 @@ const startBackgroundUpload = async (
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'multipart/form-data',
       },
-      onUploadProgress: (progressEvent) => {
-        const totalLength = progressEvent.lengthComputable
-          ? progressEvent.total
-          : progressEvent.target.getResponseHeader('content-length') ||
-            progressEvent.target.getResponseHeader('x-decompressed-content-length');
-
-        if (totalLength) {
-          const progress = Math.round((progressEvent.loaded * 100) / totalLength);
-          onProgress(progress);
-        }
-      },
+      
     });
+    onProgress(1);
 
     console.log('Upload completed:', response.data);
 
