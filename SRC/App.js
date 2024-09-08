@@ -29,20 +29,6 @@ export default function App() {
       }
     };
 
-    // const checkWalkthroughStatus = async () => {
-    //   const RealwalkthroughCompleted = await SecureStore.getItemAsync(
-    //     "walkthroughCompleted"
-    //   );
-    //   console.log("RealwalkthroughCompleted", RealwalkthroughCompleted);
-    //   const walkthroughCompleted = await SecureStore.getItemAsync(
-    //     "walkthroughCompleted"
-    //   );
-    //   if (walkthroughCompleted) {
-    //     setInitialRoute("Home");
-    //   } else {
-    //     setInitialRoute("WTMainScreen");
-    //   }
-    // };
     const checkOnboardingStatus = async () => {
       const onboardingCompleted = await SecureStore.getItemAsync(
         "onboardingCompleted"
@@ -66,12 +52,6 @@ export default function App() {
   return (
     <DatabaseProvider>
       <CopilotProvider
-        labels={{
-          previous: t("wtPrevious"),
-          next: t("wtNext"),
-          skip: t("wtSkip"),
-          finish: t("wtFinish"),
-        }}
         labels={{
           previous: t("wtPrevious"),
           next: t("wtNext"),

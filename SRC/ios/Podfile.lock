@@ -323,6 +323,29 @@ PODS:
   - FBLazyVector (0.74.5)
   - fmt (9.1.0)
   - glog (0.3.5)
+  - lottie-ios (4.4.1)
+  - lottie-react-native (6.7.2):
+    - DoubleConversion
+    - glog
+    - lottie-ios (= 4.4.1)
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1493,6 +1516,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNLocalize (3.2.1):
+    - React-Core
   - RNScreens (3.34.0):
     - DoubleConversion
     - glog
@@ -1581,6 +1606,7 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - lottie-react-native (from `../node_modules/lottie-react-native`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -1637,6 +1663,7 @@ DEPENDENCIES:
   - ReactNativeLocalization (from `../node_modules/react-native-localization`)
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -1644,6 +1671,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - lottie-ios
     - ReachabilitySwift
     - SocketRocket
     - sqlite3
@@ -1709,6 +1737,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/fmt.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  lottie-react-native:
+    :path: "../node_modules/lottie-react-native"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -1817,6 +1847,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-picker/picker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSVG:
@@ -1857,6 +1889,8 @@ SPEC CHECKSUMS:
   FBLazyVector: ac12dc084d1c8ec4cc4d7b3cf1b0ebda6dab85af
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
+  lottie-ios: e047b1d2e6239b787cc5e9755b988869cf190494
+  lottie-react-native: 6f3cad55a643c3be38aa6a35afe6942e15881992
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: 3afceddffa65aee666dafd6f0116f1d975db1584
   RCTRequired: ec1239bc9d8bf63e10fb92bd8b26171a9258e0c1
@@ -1912,6 +1946,7 @@ SPEC CHECKSUMS:
   ReactNativeLocalization: fb171138cdc80d5d0d4f20243d2fc82c2b3cc48f
   RNCPicker: 3e2c37a8328f368ce14da050cdc8231deb5fc9f9
   RNGestureHandler: 9508b860b3709d658dda7a701363a318e329d04b
+  RNLocalize: 4f22418187ecd5ca693231093ff1d912d1b3c9bc
   RNScreens: 83f0de0b3589f55dd46d4d4614d4770d5951caed
   RNSVG: 5da7a24f31968ec74f0b091e3440080f347e279b
   RNVectorIcons: c6689df230427641f2313e35365855eb4cd1a0dd
