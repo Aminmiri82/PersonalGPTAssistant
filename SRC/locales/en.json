@@ -43,6 +43,7 @@
     "ChatMenuScreen" : "Chats",
     "ChatScreen" : "Chat screen",
     "PersianLegalGuide": "Persian Legal Guide",
+    "loading": "Loading",
     "AppTextInputPlaceholder" : "Type here",
     "ChooseChatScreen" : "Choose assistant",
     "AssistantMenuScreen" : "Assistants",

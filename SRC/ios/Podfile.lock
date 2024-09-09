@@ -1495,6 +1495,27 @@ PODS:
     - React-Core
   - RNCPicker (2.7.5):
     - React-Core
+  - RNFlashList (1.7.1):
+    - DoubleConversion
+    - glog
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNGestureHandler (2.16.2):
     - DoubleConversion
     - glog
@@ -1662,6 +1683,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeLocalization (from `../node_modules/react-native-localization`)
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
+  - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -1845,6 +1867,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-localization"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
+  RNFlashList:
+    :path: "../node_modules/@shopify/flash-list"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNLocalize:
@@ -1945,6 +1969,7 @@ SPEC CHECKSUMS:
   ReactCommon: bfd464c8f774a0acb93cf2a45afa80b763431f1b
   ReactNativeLocalization: fb171138cdc80d5d0d4f20243d2fc82c2b3cc48f
   RNCPicker: 3e2c37a8328f368ce14da050cdc8231deb5fc9f9
+  RNFlashList: e8e747524488f4264e8ca57b2d4b92eed0667a8b
   RNGestureHandler: 9508b860b3709d658dda7a701363a318e329d04b
   RNLocalize: 4f22418187ecd5ca693231093ff1d912d1b3c9bc
   RNScreens: 83f0de0b3589f55dd46d4d4614d4770d5951caed

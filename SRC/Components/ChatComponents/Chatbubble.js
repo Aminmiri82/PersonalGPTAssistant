@@ -1,9 +1,13 @@
 import React, { forwardRef } from "react";
-import { View, Text, StyleSheet, Platform, TextInput } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import colors from "../../config/colors";
+import LottieView from "lottie-react-native";
+import { useTranslation } from "react-i18next";
 
 const Chatbubble = forwardRef(({ message }, ref) => {
+  const { t } = useTranslation();
   const isUser = message.role === "user";
+  const isDuringLoading = message.isDuringLoading;
 
   return (
     <View
@@ -13,14 +17,18 @@ const Chatbubble = forwardRef(({ message }, ref) => {
       ]}
       ref={ref}
     >
-      {Platform.OS === "ios" ? (
-        <TextInput
-          style={styles.text}
-          multiline={true}
-          selectable={true}
-          editable={false}
-          value={message.content}
-        />
+      {isDuringLoading ? (
+        <View style={styles.loadingContainer}>
+          {/* this needs to be reversed if the language is right to left */}
+          <Text style={styles.loadingText}>{t("loading")}</Text>   
+          <LottieView
+            source={require("../../assets/animations/loading-dots.json")}
+            autoPlay
+            loop
+            style={styles.lottie}
+          />
+          
+        </View>
       ) : (
         <Text style={styles.text} selectable={true}>
           {message.content}
@@ -49,6 +57,22 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colors.dark,
+  },
+  loadingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center", // Center horizontally
+    marginTop: 5,
+    width: 120,
+    height: 20,
+  },
+  lottie: {
+    width: 40,
+    height: 40,
+  },
+  loadingText: {
+    marginLeft: 10, // Adjust margin as needed
+    color: colors.dark, // Adjust text color if necessary
   },
 });
 

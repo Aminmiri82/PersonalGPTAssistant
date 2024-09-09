@@ -25,9 +25,8 @@ import {
 } from "../../database";
 import { OPENAI_API_KEY } from "@env";
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
-import * as SecureStore from "expo-secure-store";
 import { useHeaderHeight } from "@react-navigation/elements";
-import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
+import { useTranslation } from "react-i18next";
 
 const ChatScreen = ({ navigation, route }) => {
   const { dbInitialized } = useContext(DatabaseContext);
@@ -37,8 +36,8 @@ const ChatScreen = ({ navigation, route }) => {
   const [streamedChunks, setStreamedChunks] = useState("");
   const [completeResponse, setCompleteResponse] = useState(null);
   const { threadId, assistantId, assistantName } = route.params; //threadId can be null
-  const { start, copilotEvents } = useCopilot();
-  const [isWalkthrough, setIsWalkthrough] = useState(false);
+
+  const { t } = useTranslation();
 
   const threadRef = useRef(null);
   const flatListRef = useRef(null); // Reference for FlatList
@@ -48,11 +47,6 @@ const ChatScreen = ({ navigation, route }) => {
       title: assistantName,
     });
 
-    const checkWalkthrough = async () => {
-      if (route.params?.isWalkthrough) {
-        setIsWalkthrough(true);
-      }
-    };
     const initializeThread = async () => {
       if (!dbInitialized) return; // Wait for the database to be initialized
 
@@ -83,8 +77,7 @@ const ChatScreen = ({ navigation, route }) => {
     };
 
     initializeThread();
-    checkWalkthrough();
-  }, [threadId, dbInitialized, navigation, assistantName, isWalkthrough]);
+  }, [threadId, dbInitialized, navigation, assistantName]);
 
   const handleStreamedEvent = (event) => {
     console.log("Streamed event received:", event); // Debugging
@@ -93,6 +86,9 @@ const ChatScreen = ({ navigation, route }) => {
       case "thread.message.delta":
         if (event.delta.content) {
           const content = event.delta.content[0].text.value;
+          if (loading) {
+            setLoading(false);
+          }
           setStreamedChunks((prevChunks) => prevChunks + content);
           console.log("Updated streamedChunks:", streamedChunks + content); // Debugging
         }
@@ -162,6 +158,7 @@ const ChatScreen = ({ navigation, route }) => {
 
       const simulateStream = async (text) => {
         const lines = text.split("\n");
+
         for (const line of lines) {
           if (line) {
             handleStreamedResponse(line);
@@ -169,7 +166,7 @@ const ChatScreen = ({ navigation, route }) => {
           }
         }
       };
-
+      setStreamedChunks("");
       await simulateStream(responseText);
     } catch (error) {
       console.error("Error running thread:", error);
@@ -269,7 +266,6 @@ const ChatScreen = ({ navigation, route }) => {
   if (!dbInitialized) {
     return <Text>Loading...</Text>;
   }
-  
 
   return (
     <Screen>
@@ -277,7 +273,7 @@ const ChatScreen = ({ navigation, route }) => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={
           Platform.OS === "ios" ? headerHeight : headerHeight * 2
-        } 
+        }
         style={styles.container}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -288,15 +284,24 @@ const ChatScreen = ({ navigation, route }) => {
             <View style={styles.container}>
               <FlatList
                 ref={flatListRef} // Attach the ref here
-                data={isWalkthrough ? [] : conversation}
+                data={conversation}
                 keyExtractor={(item, index) =>
                   `${item.threadId}-${item.role}-${index}`
                 }
                 renderItem={({ item }) => <Chatbubble message={item} />}
                 contentContainerStyle={styles.flatListContent}
                 ListFooterComponent={
-                  streamedChunks && !completeResponse ? (
+                  loading && !streamedChunks ? (
                     <Chatbubble
+                      message={{
+                        content: "",
+                        role: "assistant",
+                        isDuringLoading: true,
+                      }}
+                    />
+                  ) : streamedChunks && !completeResponse ? (
+                    <Chatbubble
+                    
                       message={{
                         content: streamedChunks,
                         role: "assistant",
