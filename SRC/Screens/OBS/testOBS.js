@@ -84,7 +84,21 @@ export default function TestOBS() {
   const donebutton = ({ ...props }) => {
     return (
       <TouchableOpacity style={styles.doneButton} {...props}>
-        <Text>Done</Text>
+        <Text>{t("done")}</Text>
+      </TouchableOpacity>
+    );
+  };
+  const nextbutton = ({ ...props }) => {
+    return (
+      <TouchableOpacity style={styles.doneButton} {...props}>
+        <Text>{t("next")}</Text>
+      </TouchableOpacity>
+    );
+  };
+  const skipbutton = ({ ...props }) => {
+    return (
+      <TouchableOpacity style={styles.skipButton} {...props}>
+        <Text>{t("skip")}</Text>
       </TouchableOpacity>
     );
   };
@@ -95,6 +109,8 @@ export default function TestOBS() {
         onDone={handleDone}
         onSkip={handleDone}
         DoneButtonComponent={donebutton}
+        SkipButtonComponent={skipbutton}  
+        NextButtonComponent={nextbutton}
         bottomBarHighlight={false}
         containerStyles={{ paddingHorizontal: 15 }}
         pages={[
@@ -167,5 +183,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#00FF9D",
     borderTopLeftRadius: 500,
     borderBottomLeftRadius: 500,
+  },
+  skipButton: {
+    padding: 20,
+    backgroundColor: "#00FF9D",
+    borderTopRightRadius: 500,
+    borderBottomRightRadius: 500,
   },
 });

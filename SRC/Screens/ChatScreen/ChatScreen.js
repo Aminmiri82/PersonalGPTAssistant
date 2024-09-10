@@ -277,10 +277,7 @@ const ChatScreen = ({ navigation, route }) => {
         style={styles.container}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ImageBackground
-            source={require("../../assets/background.jpg")}
-            style={styles.background}
-          >
+          
             <View style={styles.container}>
               <FlatList
                 ref={flatListRef} // Attach the ref here
@@ -313,7 +310,7 @@ const ChatScreen = ({ navigation, route }) => {
               />
               <AppTextInput onSubmit={handleSetMessage} />
             </View>
-          </ImageBackground>
+         
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </Screen>
