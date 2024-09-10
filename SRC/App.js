@@ -30,7 +30,7 @@ export default function App() {
     };
 
     const checkOnboardingStatus = async () => {
-      const onboardingCompleted = await SecureStore.getItemAsync("onboardingCompleted");
+      const onboardingCompleted = false;
       if (onboardingCompleted === "true") {
         setInitialRoute("Home"); // Go to home screen if onboarding is done
       } else {

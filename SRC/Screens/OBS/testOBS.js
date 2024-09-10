@@ -98,7 +98,7 @@ export default function TestOBS() {
   const skipbutton = ({ ...props }) => {
     return (
       <TouchableOpacity style={styles.skipButton} {...props}>
-        <Text>{t("skip")}</Text>
+        <Text>{t("wtSkip")}</Text>
       </TouchableOpacity>
     );
   };
