@@ -14,6 +14,7 @@ import { CopilotProvider } from "react-native-copilot";
 
 import WTMainScreen from "./Screens/WTMainScreen";
 import { useTranslation } from "react-i18next";
+import { ThemeProvider } from "./themes/ThemeProvidor";
 
 const Stack = createNativeStackNavigator();
 
@@ -48,36 +49,38 @@ export default function App() {
   }
 
   return (
-    <DatabaseProvider>
-      <CopilotProvider
-        labels={{
-          previous: t("wtPrevious"),
-          next: t("wtNext"),
-          skip: t("wtSkip"),
-          finish: t("wtFinish"),
-        }}
-      >
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName={initialRoute}>
-            <Stack.Screen
-              name="OnBoarding"
-              component={TestOBS}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Home"
-              component={BottomTabNav}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="WTMainScreen"
-              component={WTMainScreen}
-              options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </CopilotProvider>
-    </DatabaseProvider>
+    <ThemeProvider>
+      <DatabaseProvider>
+        <CopilotProvider
+          labels={{
+            previous: t("wtPrevious"),
+            next: t("wtNext"),
+            skip: t("wtSkip"),
+            finish: t("wtFinish"),
+          }}
+        >
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName={initialRoute}>
+              <Stack.Screen
+                name="OnBoarding"
+                component={TestOBS}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Home"
+                component={BottomTabNav}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="WTMainScreen"
+                component={WTMainScreen}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </CopilotProvider>
+      </DatabaseProvider>
+    </ThemeProvider>
   );
 }
 

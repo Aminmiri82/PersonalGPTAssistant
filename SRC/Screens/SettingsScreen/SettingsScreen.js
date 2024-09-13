@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Alert,Text, Button } from "react-native";
+import { View, StyleSheet, Alert, Text, Button } from "react-native";
 import {
   CopilotProvider,
   useCopilot,
@@ -15,6 +15,7 @@ import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import i18next from "../../services/i18next";
 import Screen from "../../Components/Screen";
+import { useTheme } from "../../themes/ThemeProvidor";
 
 // Make SettingsItem walkthroughable
 const WalkthroughableSettingsItem = walkthroughable(SettingsItem); // you'll need to make stuff walkthroughable, check out SettingsItem.js i had to add a forwardRef thingy to it. idk why vscode was just yelling at me
@@ -26,6 +27,11 @@ function SettingsScreen({ navigation, route }) {
   const [isLanguagePromptVisible, setLanguagePromptVisible] = useState(false);
 
   const [selectedLanguage, setSelectedLanguage] = useState("Select Language");
+
+  const { dark, colorsTh, setScheme } = useTheme();
+  const toggleTheme = () => {
+    dark ? setScheme("light") : setScheme("dark");
+  };
 
   useEffect(() => {
     const fetchLanguage = async () => {
@@ -53,46 +59,50 @@ function SettingsScreen({ navigation, route }) {
   };
 
   return (
-    
-      <View style={styles.container}>
-        <CopilotStep text={t("step20")} order={20} name="step20">
-          <WalkthroughableSettingsItem
-            title={t("Languages")}
-            subTitle={selectedLanguage}
-            IconComponent={<Icon iconSet="MCI" name="translate" />}
-            onPress={toggleLanguagePrompt}
-          />
-        </CopilotStep>
-        
-
-        <LanguagesPrompt
-          visible={isLanguagePromptVisible}
-          onClose={toggleLanguagePrompt}
-          onSelectLanguage={handleSelectLanguage}
+    <View style={styles.container}>
+      <CopilotStep text={t("step20")} order={20} name="step20">
+        <WalkthroughableSettingsItem
+          title={t("Languages")}
+          subTitle={selectedLanguage}
+          IconComponent={<Icon iconSet="MCI" name="translate" />}
+          onPress={toggleLanguagePrompt}
         />
-        <CopilotStep text={t("step21")} order={21} name="step21">
-          <WalkthroughableSettingsItem
-            title={t("PriPol")}
-            IconComponent={<Icon iconSet="MCI" name="file-document" />}
-            onPress={() => navigation.navigate("PrivacyPolicyScreen")}
-          />
-        </CopilotStep>
-        <CopilotStep text={t("step22")} order={22} name="step22">
-          <WalkthroughableSettingsItem
-            title={t("aboutUs")}
-            IconComponent={<Icon iconSet="MCI" name="information" />}
-            onPress={() => navigation.navigate("AboutUsScreen")}
-          />
-        </CopilotStep>
-      </View>
-    
+      </CopilotStep>
+
+      <LanguagesPrompt
+        visible={isLanguagePromptVisible}
+        onClose={toggleLanguagePrompt}
+        onSelectLanguage={handleSelectLanguage}
+      />
+      <CopilotStep text={t("step21")} order={21} name="step21">
+        <WalkthroughableSettingsItem
+          title={t("PriPol")}
+          IconComponent={<Icon iconSet="MCI" name="file-document" />}
+          onPress={() => navigation.navigate("PrivacyPolicyScreen")}
+        />
+      </CopilotStep>
+      <CopilotStep text={t("step22")} order={22} name="step22">
+        <WalkthroughableSettingsItem
+          title={t("aboutUs")}
+          IconComponent={<Icon iconSet="MCI" name="information" />}
+          onPress={() => navigation.navigate("AboutUsScreen")}
+        />
+      </CopilotStep>
+      <CopilotStep text="23" order={23} name="step23">
+        <WalkthroughableSettingsItem
+          title={"theme"}
+          IconComponent={<Icon iconSet="MCI" name="theme-light-dark" />}
+          onPress={toggleTheme}
+        />
+      </CopilotStep>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: colors.background,
   },
 });
 

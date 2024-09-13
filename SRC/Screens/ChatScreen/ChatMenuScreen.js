@@ -15,18 +15,24 @@ import {
   walkthroughable,
   copilotEvents,
 } from "react-native-copilot";
+import { useTheme } from "../../themes/ThemeProvidor";
 import * as SecureStore from "expo-secure-store";
 const WalkthroughableText = walkthroughable(Text);
 const WalkthroughableView = walkthroughable(View);
 const WalkthroughableChatItem = walkthroughable(ChatItem);
 
 function ChatMenuScreen({ navigation, route }) {
+  const { dark, colors, setScheme } = useTheme();
+  const toggleTheme = () => {
+    dark ? setScheme("light") : setScheme("dark");
+  };
+
   const { t } = useTranslation();
   const { dbInitialized } = useContext(DatabaseContext);
   const [chatItems, setChatItems] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const { start, copilotEvents } = useCopilot();
-  const [OnWalkthrough, setOnWalkthrough] = useState(null); 
+  const [OnWalkthrough, setOnWalkthrough] = useState(null);
 
   //dear amin please remember that the actal secure store vallue never chnages so you have to manipulate the onwalkthrough state manually
   useEffect(() => {
@@ -107,11 +113,7 @@ function ChatMenuScreen({ navigation, route }) {
   console.log("2Onalkthrough status", OnWalkthrough);
   return (
     <>
-      <CopilotStep
-        text={t("step2")}
-        order={2}
-        name="step2"
-      >
+      <CopilotStep text={t("step2")} order={2} name="step2">
         {OnWalkthrough === true ? (
           <WalkthroughableChatItem
             title={t("PersianLegalGuide")}

@@ -14,6 +14,7 @@ import {
   Swipeable,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
+import { useTheme } from "../../themes/ThemeProvidor";
 
 const ChatItem = forwardRef(
   (
@@ -25,11 +26,16 @@ const ChatItem = forwardRef(
         <Ionicons name="trash-bin" size={24} color="red" />
       </TouchableOpacity>
     );
+    const { dark, colors, setScheme } = useTheme();
 
     return (
       <GestureHandlerRootView>
         <Swipeable renderRightActions={renderRightActions}>
-          <TouchableHighlight underlayColor={colors.light} onPress={onPress} ref={ref}>
+          <TouchableHighlight
+            underlayColor={colors.light}
+            onPress={onPress}
+            ref={ref}
+          >
             <View style={styles.container}>
               <View style={styles.visualcontainer}>
                 {IconComponent}
@@ -91,7 +97,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   deleteButton: {
-    backgroundColor: colors.light,
+    backgroundColor: colors.background,
     justifyContent: "center",
     alignItems: "center",
     width: 70,
