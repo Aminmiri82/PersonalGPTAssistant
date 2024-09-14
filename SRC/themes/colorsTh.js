@@ -1,4 +1,4 @@
-import { colors } from "../config/colors";
+import colors from "../config/colors";
 
 export const lightColors = {
   primary: colors.primary,
@@ -15,6 +15,7 @@ export const lightColors = {
   lightGrey: colors.lightGrey,
   blue: colors.blue,
   medium: colors.medium,
+  light: colors.light,
 };
 
 export const darkColors = {
@@ -32,4 +33,5 @@ export const darkColors = {
   lightGrey: colors.lightGrey,
   blue: colors.blue,
   medium: colors.medium,
+  light: colors.light,
 };

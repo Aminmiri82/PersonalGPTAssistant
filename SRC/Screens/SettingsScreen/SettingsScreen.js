@@ -102,7 +102,7 @@ function SettingsScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: "#f8f8f8"
   },
 });
 

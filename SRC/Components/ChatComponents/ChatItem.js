@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import AppText from "../AppText";
 import colors from "../../config/colors";
+import colorsTh from "../../themes/colorsTh";
 import Icon from "../Icon";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -26,13 +27,14 @@ const ChatItem = forwardRef(
         <Ionicons name="trash-bin" size={24} color="red" />
       </TouchableOpacity>
     );
-    const { dark, colors, setScheme } = useTheme();
+    const { dark, colorsTh, setScheme } = useTheme();
+    console.log("colorsTh :",colorsTh);
 
     return (
       <GestureHandlerRootView>
         <Swipeable renderRightActions={renderRightActions}>
           <TouchableHighlight
-            underlayColor={colors.light}
+            underlayColor={colorsTh.light}
             onPress={onPress}
             ref={ref}
           >
