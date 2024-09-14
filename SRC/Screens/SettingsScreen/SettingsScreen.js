@@ -90,7 +90,7 @@ function SettingsScreen({ navigation, route }) {
       </CopilotStep>
       <CopilotStep text="23" order={23} name="step23">
         <WalkthroughableSettingsItem
-          title={"theme"}
+          title="Theme"
           IconComponent={<Icon iconSet="MCI" name="theme-light-dark" />}
           onPress={toggleTheme}
         />
@@ -102,7 +102,7 @@ function SettingsScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f8f8"
+    backgroundColor: "#f8f8f8",
   },
 });
 
