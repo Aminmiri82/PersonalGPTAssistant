@@ -3,13 +3,23 @@ import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import AppText from "../AppText";
 
 import colors from "../../config/colors";
+import { useTheme } from "../../themes/ThemeProvidor";
 
 const AssistantsMenuItem = forwardRef(
   ({ imageUri, title, onPress, ShowEditButton = true }, ref) => {
+    const { colorsTh } = useTheme();
     return (
-      <View style={styles.TopContainer}>
+      <View
+        style={[
+          styles.TopContainer,
+          {
+            backgroundColor: colorsTh.white,
+            borderBottomColor: colorsTh.light,
+          },
+        ]}
+      >
         <View style={styles.ImageContainer}>
-          <TouchableOpacity  onPress={onPress} ref={ref}>
+          <TouchableOpacity onPress={onPress} ref={ref}>
             {imageUri ? (
               <Image style={styles.image} source={{ uri: imageUri }} />
             ) : (
@@ -25,7 +35,9 @@ const AssistantsMenuItem = forwardRef(
         </View>
         {ShowEditButton && (
           <TouchableOpacity onPress={onPress}>
-            <AppText style={styles.edit}>edit</AppText>
+            <AppText style={[styles.edit, { color: colorsTh.blue }]}>
+              edit
+            </AppText>
           </TouchableOpacity>
         )}
       </View>
@@ -36,11 +48,9 @@ const AssistantsMenuItem = forwardRef(
 const styles = StyleSheet.create({
   TopContainer: {
     flexDirection: "column",
-    backgroundColor: colors.white,
     padding: 10,
     borderBottomWidth: 1,
     borderRadius: 20,
-    borderBottomColor: colors.light,
     width: "45%", // Set width to less than half to fit two items per row
     margin: "2.5%", // Set margin to space items out
   },
@@ -51,7 +61,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   edit: {
-    color: colors.blue,
     fontSize: 10,
     fontWeight: "bold",
     textAlign: "right",

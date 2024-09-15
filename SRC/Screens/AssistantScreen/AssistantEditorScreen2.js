@@ -20,8 +20,10 @@ import {
 } from "../../openai-backend/ApiBackEnd";
 import { useTranslation } from "react-i18next";
 import { set } from "lodash";
+import { useTheme } from "../../themes/ThemeProvidor";
 
 function AssistantEditorScreen2({ navigation, route }) {
+  const { colorsTh } = useTheme();
   const { t } = useTranslation();
   const { id, name, instructions, imageUri } = route.params;
   const [files, setFiles] = useState([]);

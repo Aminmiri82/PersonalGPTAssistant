@@ -17,6 +17,8 @@ import AppImagePicker from "../../Components/AssistantsComponents/AppImagePicker
 import { fetchAssistantById, deleteAssistantById } from "../../database";
 import { useTranslation } from "react-i18next";
 import { useHeaderHeight } from "@react-navigation/elements";
+import { useTheme } from "../../themes/ThemeProvidor";
+import AppButton from "../../Components/AppButton";
 
 function AssistantEditorScreen1({ navigation, route }) {
   const { t } = useTranslation();
@@ -25,6 +27,7 @@ function AssistantEditorScreen1({ navigation, route }) {
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
   const [imageUri, setImageUri] = useState("");
+  const { colorsTh } = useTheme();
 
   useEffect(() => {
     fetchAssistantById(id) // could've pickeck these up from route params
@@ -67,62 +70,71 @@ function AssistantEditorScreen1({ navigation, route }) {
   };
 
   return (
-    <Screen>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={
-          Platform.OS === "ios" ? headerHeight : headerHeight * 2
-        }
-        style={styles.container}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View>
-            <AppImagePicker
-              tipText={t("choosingPhotoForAssistant")}
-              editText={t("edit")}
-              onImagePicked={handleImagePicked}
-              prepickedUri={{ uri: imageUri }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={
+        Platform.OS === "ios" ? headerHeight : headerHeight * 2
+      }
+      style={[styles.container, { backgroundColor: colorsTh.background }]}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View>
+          <AppImagePicker
+            tipText={t("choosingPhotoForAssistant")}
+            editText={t("edit")}
+            onImagePicked={handleImagePicked}
+            prepickedUri={{ uri: imageUri }}
+          />
+          <View style={styles.middleContainer}>
+            <AppText style={styles.midTitle}>
+              {t("choosingNameForAssistant")}
+            </AppText>
+            <TextInput
+              style={[
+                styles.midInput,
+                { color: name ? colorsTh.text : colorsTh.placeholder },
+              ]}
+              placeholder={t("enterName")}
+              value={name}
+              onChangeText={setName}
+              placeholderTextColor={colorsTh.placeholder}
             />
-            <View style={styles.middleContainer}>
-              <AppText style={styles.midTitle}>
-                {t("choosingNameForAssistant")}
-              </AppText>
-              <TextInput
-                style={styles.midInput}
-                placeholder={t("enterName")}
-                value={name}
-                onChangeText={setName}
-              />
-            </View>
-            <View style={styles.bottomContainer}>
-              <AppText style={styles.bottomTitle}>
-                {t("giveAssistantInstruction")}
-              </AppText>
-              <TextInput
-                style={styles.bottomInput}
-                placeholder={t("enterInstructions")}
-                value={instructions}
-                onChangeText={setInstructions}
-                multiline
-                numberOfLines={5}
-                scrollEnabled
-              />
-            </View>
-            <View style={styles.ButtonContainer}>
-              <TouchableOpacity
-                onPress={handleDelete}
-                style={styles.deleteAssistantButton}
-              >
-                <AppText style={styles.deleteButtonText}>{t("delete")}</AppText>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleNext} style={styles.nextButton}>
-                <AppText style={styles.nextButtonText}>{t("next")}</AppText>
-              </TouchableOpacity>
-            </View>
           </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </Screen>
+          <View style={styles.bottomContainer}>
+            <AppText style={styles.bottomTitle}>
+              {t("giveAssistantInstruction")}
+            </AppText>
+            <TextInput
+              style={[
+                styles.bottomInput,
+                { color: name ? colorsTh.text : colorsTh.placeholder },
+              ]}
+              placeholder={t("enterInstructions")}
+              value={instructions}
+              onChangeText={setInstructions}
+              multiline
+              numberOfLines={5}
+              scrollEnabled
+              placeholderTextColor={colorsTh.placeholder}
+            />
+          </View>
+          <View style={styles.ButtonContainer}>
+            <AppButton
+              title={t("delete")}
+              onPress={handleDelete}
+              style={styles.deleteAssistantButton}
+              textStyle={[styles.deleteButtonText, { color: colorsTh.text }]}
+            />
+            <AppButton
+              title={t("next")}
+              onPress={handleNext}
+              style={styles.nextButton}
+              textStyle={[styles.nextButtonText, { color: colorsTh.text }]}
+            />
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -143,7 +155,6 @@ const styles = StyleSheet.create({
   },
   midTitle: {
     fontSize: 20,
-    color: colors.dark,
     marginBottom: 10,
     textAlign: "center",
   },
@@ -163,7 +174,6 @@ const styles = StyleSheet.create({
   },
   bottomTitle: {
     fontSize: 20,
-    color: colors.dark,
     marginBottom: 10,
     textAlign: "center",
   },
@@ -192,7 +202,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   deleteButtonText: {
-    color: colors.white,
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
@@ -206,7 +215,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   nextButtonText: {
-    color: colors.white,
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",

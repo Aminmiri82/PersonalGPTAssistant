@@ -19,10 +19,12 @@ import { useTranslation } from "react-i18next";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
 import { Circle } from "react-native-svg";
+import { useTheme } from "../../themes/ThemeProvidor";
 
 const WalkthroughableView = walkthroughable(View);
 const WalkthroughableText = walkthroughable(Text);
 function AssistantMakerScreen1({ navigation }) {
+  const { colorsTh } = useTheme();
   const { t } = useTranslation();
   const headerHeight = useHeaderHeight();
   const [name, setName] = useState("");
@@ -46,21 +48,17 @@ function AssistantMakerScreen1({ navigation }) {
   };
 
   return (
-    <Screen>
+    <>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={
           Platform.OS === "ios" ? headerHeight : headerHeight * 2
         }
-        style={styles.container}
+        style={[styles.container, { backgroundColor: colorsTh.background }]}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View>
-            <CopilotStep
-              text={t("step11")}
-              order={11}
-              name="step11"
-            >
+            <CopilotStep text={t("step11")} order={11} name="step11">
               <WalkthroughableView>
                 <AppImagePicker
                   tipText={t("choosingPhotoForAssistant")}
@@ -70,40 +68,40 @@ function AssistantMakerScreen1({ navigation }) {
                 />
               </WalkthroughableView>
             </CopilotStep>
-            <CopilotStep
-              text={t("step12")}
-              order={12}
-              name="step12"
-            >
+            <CopilotStep text={t("step12")} order={12} name="step12">
               <WalkthroughableView style={styles.middleContainer}>
                 <AppText style={styles.midTitle}>
                   {t("choosingNameForAssistant")}
                 </AppText>
                 <TextInput
-                  style={styles.midInput}
+                  style={[
+                    styles.midInput,
+                    { color: name ? colorsTh.text : colorsTh.placeholder },
+                  ]}
                   placeholder={t("enterName")}
                   value={name}
                   onChangeText={setName}
+                  placeholderTextColor={colorsTh.placeholder}
                 />
               </WalkthroughableView>
             </CopilotStep>
-            <CopilotStep
-              text={t("step13")}
-              order={13}
-              name="step13"
-            >
+            <CopilotStep text={t("step13")} order={13} name="step13">
               <WalkthroughableView style={styles.bottomContainer}>
                 <AppText style={styles.bottomTitle}>
                   {t("giveAssistantInstruction")}
                 </AppText>
                 <TextInput
-                  style={styles.bottomInput}
+                  style={[
+                    styles.bottomInput,
+                    { color: name ? colorsTh.text : colorsTh.placeholder },
+                  ]}
                   placeholder={t("enterInstructions")}
                   value={instructions}
                   onChangeText={setInstructions}
                   multiline
                   numberOfLines={5}
                   scrollEnabled
+                  placeholderTextColor={colorsTh.placeholder}
                 />
               </WalkthroughableView>
             </CopilotStep>
@@ -111,25 +109,22 @@ function AssistantMakerScreen1({ navigation }) {
               title={t("next")}
               onPress={handleNext}
               style={styles.nextButton}
-              textStyle={styles.nextButtonText}
+              textStyle={[styles.nextButtonText, { color: colorsTh.text }]}
             />
-            <CopilotStep
-              text={t("step14")}
-              order={14}
-              name="step14"
-            >
+            <CopilotStep text={t("step14")} order={14} name="step14">
               <WalkthroughableView></WalkthroughableView>
             </CopilotStep>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    </Screen>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
+    paddingTop: 10,
   },
   middleContainer: {
     marginTop: 20,
@@ -139,7 +134,6 @@ const styles = StyleSheet.create({
   },
   midTitle: {
     fontSize: 20,
-    color: colors.dark,
     marginBottom: 10,
     textAlign: "center",
   },
@@ -159,7 +153,6 @@ const styles = StyleSheet.create({
   },
   bottomTitle: {
     fontSize: 20,
-    color: colors.dark,
     marginBottom: 10,
     textAlign: "center",
   },
@@ -177,15 +170,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.niceBlue,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 100,
     elevation: 2,
     marginLeft: 10,
     position: "relative",
     left: "28%",
+    marginTop: 20,
   },
   nextButtonText: {
     color: colors.white,
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
   },

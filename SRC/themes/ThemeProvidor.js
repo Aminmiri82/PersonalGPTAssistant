@@ -9,8 +9,8 @@ const ThemeContext = createContext({
 });
 
 export const ThemeProvider = (props) => {
-  const [isDark, setDark] = useState(colorScheme == "dark");
   const colorScheme = useColorScheme();
+  const [isDark, setDark] = useState(colorScheme == "dark");
 
   useEffect(() => {
     setDark(colorScheme === "dark");

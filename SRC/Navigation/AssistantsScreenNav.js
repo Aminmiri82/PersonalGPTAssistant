@@ -10,11 +10,13 @@ import AssistantEditorScreen1 from "../Screens/AssistantScreen/AssistantEditorSc
 import AssistantEditorScreen2 from "../Screens/AssistantScreen/AssistantEditorScreen2";
 import { useTranslation } from "react-i18next";
 import Icon from "../Components/Icon";
+import { useTheme } from "../themes/ThemeProvidor";
 
 const AssistantsStack = createNativeStackNavigator();
 
 function AssistantsScreenNav() {
   const { t } = useTranslation();
+  const { colorsTh } = useTheme();
 
   const makeNewAssistantButton = (navigation) => (
     <Icon
@@ -26,7 +28,17 @@ function AssistantsScreenNav() {
   );
 
   return (
-    <AssistantsStack.Navigator>
+    <AssistantsStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colorsTh.background, // Set header background based on theme
+        },
+        headerTintColor: colorsTh.text, // Set header text color based on theme
+        headerTitleStyle: {
+          fontWeight: "bold", // Optional: Customize the title style
+        },
+      }}
+    >
       <AssistantsStack.Screen
         name="AssistantMenuScreen" // Use static names for screens
         component={AssistantMenuScreen}

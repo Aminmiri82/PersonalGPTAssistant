@@ -59,7 +59,7 @@ function SettingsScreen({ navigation, route }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colorsTh.light }]}>
       <CopilotStep text={t("step20")} order={20} name="step20">
         <WalkthroughableSettingsItem
           title={t("Languages")}
@@ -102,7 +102,7 @@ function SettingsScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f8f8",
+    // backgroundColor: colorsTh.light,
   },
 });
 
