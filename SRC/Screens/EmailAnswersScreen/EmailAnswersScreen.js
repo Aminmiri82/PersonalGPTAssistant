@@ -14,6 +14,7 @@ import AppText from "../../Components/AppText";
 import { useTranslation } from "react-i18next";
 import { CopilotStep, walkthroughable } from "react-native-copilot";
 import { useTheme } from "../../themes/ThemeProvidor";
+import AppButton from "../../Components/AppButton";
 
 const WalkthroughableView = walkthroughable(View);
 const EmailAnswersScreen = () => {
@@ -83,8 +84,14 @@ const EmailAnswersScreen = () => {
             value={name}
             onChangeText={setName}
             placeholder={t("UserNamePlaceholder")}
-            placeholderTextColor="#888"
-            style={styles.input}
+            placeholderTextColor={colorsTh.placeholder}
+            style={[
+              styles.input,
+              {
+                backgroundColor: colorsTh.background,
+                color: name ? colorsTh.text : colorsTh.placeholder,
+              },
+            ]}
           />
 
           <Text style={[styles.labelText, { color: colorsTh.text }]}>
@@ -94,8 +101,14 @@ const EmailAnswersScreen = () => {
             value={question}
             onChangeText={setQuestion}
             placeholder={t("UserQuestionPlaceholder")}
-            placeholderTextColor="#888"
-            style={styles.questionInput}
+            placeholderTextColor={colorsTh.placeholder}
+            style={[
+              styles.questionInput,
+              {
+                backgroundColor: colorsTh.background,
+                color: question ? colorsTh.text : colorsTh.placeholder,
+              },
+            ]}
             multiline
           />
 
@@ -106,19 +119,24 @@ const EmailAnswersScreen = () => {
             value={email}
             onChangeText={setEmail}
             placeholder={t("EmailToReceiveAnswerPlaceholder")}
-            placeholderTextColor="#888"
-            style={styles.input}
+            placeholderTextColor={colorsTh.placeholder}
+            style={[
+              styles.input,
+              {
+                backgroundColor: colorsTh.background,
+                color: name ? colorsTh.email : colorsTh.placeholder,
+              },
+            ]}
             keyboardType="email-address"
           />
         </WalkthroughableView>
       </CopilotStep>
-
-      <TouchableOpacity
+      <AppButton
+        title={t("Send")}
         onPress={handleSendEmail}
         style={[styles.doneButton, { color: colorsTh.blue }]}
-      >
-        <AppText style={styles.doneButtonText}>{t("Send")}</AppText>
-      </TouchableOpacity>
+        textStyle={styles.doneButtonText}
+      />
       <CopilotStep text={t("step19")} order={19} name="step19">
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
@@ -149,7 +167,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: "#ddd",
+    borderColor: "gray",
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
@@ -161,7 +179,7 @@ const styles = StyleSheet.create({
   },
   questionInput: {
     height: 120,
-    borderColor: "#ddd",
+    borderColor: "gray",
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
@@ -177,7 +195,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.niceBlue,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 100,
     marginTop: 20,
   },
   doneButtonText: {

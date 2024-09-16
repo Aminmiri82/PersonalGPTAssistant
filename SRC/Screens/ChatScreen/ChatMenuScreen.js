@@ -22,10 +22,7 @@ const WalkthroughableView = walkthroughable(View);
 const WalkthroughableChatItem = walkthroughable(ChatItem);
 
 function ChatMenuScreen({ navigation, route }) {
-  const { dark, colors, setScheme } = useTheme();
-  const toggleTheme = () => {
-    dark ? setScheme("light") : setScheme("dark");
-  };
+  const { dark, colorsTh, setScheme } = useTheme();
 
   const { t } = useTranslation();
   const { dbInitialized } = useContext(DatabaseContext);
@@ -129,9 +126,11 @@ function ChatMenuScreen({ navigation, route }) {
         )}
       </CopilotStep>
 
-      <View style={styles.container}>
+      <View
+        style={[styles.container, { backgroundColor: colorsTh.background }]}
+      >
         {chatItems.length === 0 && !OnWalkthrough ? (
-          <Text>{t("noChats")}</Text>
+          <AppText>{t("noChats")}</AppText>
         ) : (
           <FlatList
             data={chatItems}

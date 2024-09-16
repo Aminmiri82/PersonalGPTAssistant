@@ -22,4 +22,8 @@ export default {
   placeholder: "#9E9E9E",
   docPicker: "#121212",
   grey2: "#333333",
+  text_input_light: "#FAFAFA",
+  text_input_dark: "#070C1B",
+  assistant_text: "#BBBBBB",
+  dark_bubble: "#1F1F27",
 };

@@ -109,7 +109,7 @@ export default function TestOBS() {
         onDone={handleDone}
         onSkip={handleDone}
         DoneButtonComponent={donebutton}
-        SkipButtonComponent={skipbutton}  
+        SkipButtonComponent={skipbutton}
         NextButtonComponent={nextbutton}
         bottomBarHighlight={false}
         containerStyles={{ paddingHorizontal: 15 }}

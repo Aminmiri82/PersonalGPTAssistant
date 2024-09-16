@@ -8,11 +8,13 @@ import { createThread } from "../../openai-backend/ApiBackEnd";
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
 import { useTranslation } from "react-i18next";
 import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
+import { useTheme } from "../../themes/ThemeProvidor";
 const WalkthroughableText = walkthroughable(Text);
 const WalkthroughableView = walkthroughable(View);
 const WalkthroughableAMI = walkthroughable(AssistantsMenuItem);
 
 function ChooseChatScreen({ navigation }) {
+  const { colorsTh } = useTheme();
   const { t } = useTranslation();
   const { dbInitialized } = useContext(DatabaseContext);
   const [assistants, setAssistants] = useState([]);
@@ -76,13 +78,13 @@ function ChooseChatScreen({ navigation }) {
   );
 
   return (
-    <Screen>
-      <View style={styles.container}>
-        <CopilotStep
-          text={t("step4")}
-          order={4}
-          name="step4"
-        >
+    <Screen
+      style={[styles.container, { backgroundColor: colorsTh.background }]}
+    >
+      <View
+        style={[styles.container, { backgroundColor: colorsTh.background }]}
+      >
+        <CopilotStep text={t("step4")} order={4} name="step4">
           <WalkthroughableAMI
             title={t("PersianLegalGuide")}
             onPress={() => {
@@ -103,11 +105,7 @@ function ChooseChatScreen({ navigation }) {
         />
       </View>
 
-      <CopilotStep
-        text={t("step5")}
-        order={5}
-        name="step5"
-      >
+      <CopilotStep text={t("step5")} order={5} name="step5">
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
     </Screen>

@@ -22,6 +22,9 @@ export const lightColors = {
   button_blue: colors.niceBlue,
   placeholder: colors.placeholder,
   docPicker: colors.light,
+  text_input: colors.text_input_light,
+  assistant_bubble: colors.light,
+  assistant_text: colors.dark,
 };
 
 export const darkColors = {
@@ -45,4 +48,7 @@ export const darkColors = {
   placeholder: colors.placeholder,
   docPicker: colors.docPicker,
   assistangbg: colors.grey2,
+  text_input: colors.text_input_dark,
+  assistant_bubble: colors.dark_bubble,
+  assistant_text: colors.dark_dark,
 };

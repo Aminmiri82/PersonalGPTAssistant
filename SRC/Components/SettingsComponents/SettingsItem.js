@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     // backgroundColor: colors.white,
     alignItems: "center",
     borderBottomWidth: 1,
-    borderBottomColor: colors.light,
+    borderBottomColor: "gray",
   },
   iconContainer: {
     marginRight: 15,

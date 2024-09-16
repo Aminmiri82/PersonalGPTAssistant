@@ -3,8 +3,10 @@ import { View, Text, StyleSheet } from "react-native";
 import colors from "../../config/colors";
 import LottieView from "lottie-react-native";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../themes/ThemeProvidor";
 
 const Chatbubble = forwardRef(({ message }, ref) => {
+  const { colorsTh } = useTheme();
   const { t } = useTranslation();
   const isUser = message.role === "user";
   const isDuringLoading = message.isDuringLoading;
@@ -13,24 +15,35 @@ const Chatbubble = forwardRef(({ message }, ref) => {
     <View
       style={[
         styles.bubble,
-        isUser ? styles.userBubble : styles.assistantBubble,
+        isUser
+          ? [styles.userBubble, { backgroundColor: colorsTh.blue }]
+          : [
+              styles.assistantBubble,
+              { backgroundColor: colorsTh.assistant_bubble },
+            ],
       ]}
       ref={ref}
     >
       {isDuringLoading ? (
         <View style={styles.loadingContainer}>
           {/* this needs to be reversed if the language is right to left */}
-          <Text style={styles.loadingText}>{t("loading")}</Text>   
+          <Text style={styles.loadingText}>{t("loading")}</Text>
           <LottieView
             source={require("../../assets/animations/loading-dots.json")}
             autoPlay
             loop
             style={styles.lottie}
           />
-          
         </View>
       ) : (
-        <Text style={styles.text} selectable={true}>
+        <Text
+          style={[
+            isUser
+              ? [{ color: colorsTh.white }]
+              : [{ color: colorsTh.assistant_text }],
+          ]}
+          selectable={true}
+        >
           {message.content}
         </Text>
       )}

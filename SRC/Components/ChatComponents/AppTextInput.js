@@ -13,9 +13,10 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import defaultStyles from "../../config/Styles";
 import { useTranslation } from "react-i18next";
-
+import { useTheme } from "../../themes/ThemeProvidor";
 
 const AppTextInput = ({ onSubmit }) => {
+  const { colorsTh } = useTheme();
   const [text, setText] = useState("");
   const { t } = useTranslation();
 
@@ -28,17 +29,28 @@ const AppTextInput = ({ onSubmit }) => {
   };
 
   return (
-    <View style={styles.AppTextInput}>
-      
+    <View style={[styles.AppTextInput, { backgroundColor: colorsTh.icon }]}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.textInputContainer}>
+        <View
+          style={[
+            styles.textInputContainer,
+            { backgroundColor: colorsTh.background },
+          ]}
+        >
           <TextInput
-            style={styles.input}
             onChangeText={setText}
             value={text}
             placeholder={t("AppTextInputPlaceholder")}
+            placeholderTextColor={colorsTh.placeholder}
             multiline
             blurOnSubmit={false}
+            style={[
+              styles.input,
+              {
+                backgroundColor: colorsTh.docPicker,
+                color: text ? colorsTh.text : colorsTh.placeholder,
+              },
+            ]}
           />
           <View style={styles.button}>
             <TouchableOpacity onPress={handleSend}>
@@ -82,7 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: defaultStyles.colors.light,
     borderRadius: 25,
     padding: 10,
-    shadowColor: "#000",
+    shadowColor: "#9E9E9E",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
     shadowOpacity: 0.1,

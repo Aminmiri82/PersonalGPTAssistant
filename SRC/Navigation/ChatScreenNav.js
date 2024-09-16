@@ -13,10 +13,12 @@ import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
 import TestScreen from "../Screens/TestScreen";
 import AppButton from "../Components/AppButton";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../themes/ThemeProvidor"; // Import useTheme
 
 const ChatStack = createNativeStackNavigator();
 
 function ChatScreenNav(props, route) {
+  const { colorsTh } = useTheme(); // Get theme colors
   const { t } = useTranslation();
   const startWalkthrough = route.params?.startWalkthrough;
 
@@ -30,7 +32,18 @@ function ChatScreenNav(props, route) {
   );
 
   return (
-    <ChatStack.Navigator>
+    <ChatStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colorsTh.background, // Set header background based on theme
+        },
+        headerTintColor: colorsTh.text, // Set header text color based on theme
+        headerTitleStyle: {
+          fontWeight: "bold", // Optional: Customize the title style
+        },
+        // borderBottomColor: "white",
+      }}
+    >
       <ChatStack.Screen
         name="ChatMenuScreen" // Use a static name for referencing the screen
         component={ChatMenuScreen}

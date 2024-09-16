@@ -27,8 +27,10 @@ import { OPENAI_API_KEY } from "@env";
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../themes/ThemeProvidor";
 
 const ChatScreen = ({ navigation, route }) => {
+  const { colorsTh } = useTheme();
   const { dbInitialized } = useContext(DatabaseContext);
   const headerHeight = useHeaderHeight();
   const [conversation, setConversation] = useState([]);
@@ -274,43 +276,40 @@ const ChatScreen = ({ navigation, route }) => {
         keyboardVerticalOffset={
           Platform.OS === "ios" ? headerHeight : headerHeight * 2
         }
-        style={styles.container}
+        style={[styles.container, { backgroundColor: colorsTh.background }]}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          
-            <View style={styles.container}>
-              <FlatList
-                ref={flatListRef} // Attach the ref here
-                data={conversation}
-                keyExtractor={(item, index) =>
-                  `${item.threadId}-${item.role}-${index}`
-                }
-                renderItem={({ item }) => <Chatbubble message={item} />}
-                contentContainerStyle={styles.flatListContent}
-                ListFooterComponent={
-                  loading && !streamedChunks ? (
-                    <Chatbubble
-                      message={{
-                        content: "",
-                        role: "assistant",
-                        isDuringLoading: true,
-                      }}
-                    />
-                  ) : streamedChunks && !completeResponse ? (
-                    <Chatbubble
-                    
-                      message={{
-                        content: streamedChunks,
-                        role: "assistant",
-                        timestamp: new Date(),
-                      }}
-                    />
-                  ) : null
-                }
-              />
-              <AppTextInput onSubmit={handleSetMessage} />
-            </View>
-         
+          <View style={styles.container}>
+            <FlatList
+              ref={flatListRef} // Attach the ref here
+              data={conversation}
+              keyExtractor={(item, index) =>
+                `${item.threadId}-${item.role}-${index}`
+              }
+              renderItem={({ item }) => <Chatbubble message={item} />}
+              contentContainerStyle={styles.flatListContent}
+              ListFooterComponent={
+                loading && !streamedChunks ? (
+                  <Chatbubble
+                    message={{
+                      content: "",
+                      role: "assistant",
+                      isDuringLoading: true,
+                    }}
+                  />
+                ) : streamedChunks && !completeResponse ? (
+                  <Chatbubble
+                    message={{
+                      content: streamedChunks,
+                      role: "assistant",
+                      timestamp: new Date(),
+                    }}
+                  />
+                ) : null
+              }
+            />
+            <AppTextInput onSubmit={handleSetMessage} />
+          </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </Screen>

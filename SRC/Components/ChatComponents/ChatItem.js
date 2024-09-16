@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import AppText from "../AppText";
 import colors from "../../config/colors";
-import colorsTh from "../../themes/colorsTh";
+import colorsTh from "../../themes/colorsTh.js";
 import Icon from "../Icon";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -28,7 +28,6 @@ const ChatItem = forwardRef(
       </TouchableOpacity>
     );
     const { dark, colorsTh, setScheme } = useTheme();
-    console.log("colorsTh :",colorsTh);
 
     return (
       <GestureHandlerRootView>
@@ -38,7 +37,12 @@ const ChatItem = forwardRef(
             onPress={onPress}
             ref={ref}
           >
-            <View style={styles.container}>
+            <View
+              style={[
+                styles.container,
+                { backgroundColor: colorsTh.background },
+              ]}
+            >
               <View style={styles.visualcontainer}>
                 {IconComponent}
                 {imageUri ? (
@@ -71,8 +75,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     padding: 10,
-    backgroundColor: colors.white,
-    borderBottomColor: colors.dark,
+    borderBottomColor: "grey",
     borderWidth: 0.2,
   },
   detailContainer: {
@@ -88,9 +91,6 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "500",
   },
-  subTitle: {
-    color: colors.medium,
-  },
   visualcontainer: {
     flexDirection: "column",
   },
@@ -99,7 +99,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   deleteButton: {
-    backgroundColor: colors.background,
     justifyContent: "center",
     alignItems: "center",
     width: 70,
