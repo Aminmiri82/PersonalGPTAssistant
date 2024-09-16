@@ -21,7 +21,9 @@ function ChooseChatScreen({ navigation }) {
 
   useEffect(() => {
     const checkWalkthroughStatus = async () => {
-      const walkthroughCompleted = false; // chnage this with secure store
+      const walkthroughCompleted = await SecureStore.getItemAsync(
+        "walkthroughCompleted"
+      );
       if (walkthroughCompleted === "true") {
         setOnWalkthrough(false);
       } else {
@@ -78,11 +80,7 @@ function ChooseChatScreen({ navigation }) {
   return (
     <Screen>
       <View style={styles.container}>
-        <CopilotStep
-          text={t("step4")}
-          order={4}
-          name="step4"
-        >
+        <CopilotStep text={t("step4")} order={4} name="step4">
           <WalkthroughableAMI
             title={t("PersianLegalGuide")}
             onPress={() => {
@@ -103,11 +101,7 @@ function ChooseChatScreen({ navigation }) {
         />
       </View>
 
-      <CopilotStep
-        text={t("step5")}
-        order={5}
-        name="step5"
-      >
+      <CopilotStep text={t("step5")} order={5} name="step5">
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
     </Screen>

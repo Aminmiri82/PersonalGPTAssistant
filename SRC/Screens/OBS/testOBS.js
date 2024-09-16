@@ -78,6 +78,7 @@ export default function TestOBS() {
 
   const handleDone = async () => {
     await SecureStore.setItemAsync("onboardingCompleted", "true");
+    await SecureStore.setItemAsync("walkthroughCompleted", "false");//// bug fix ughhhh
     start();
   };
 
