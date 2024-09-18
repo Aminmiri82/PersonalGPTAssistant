@@ -2,11 +2,11 @@ export default ({ config }) => ({
     ...config,
     name: "Dadafarin",
     slug: "dadafarin",
-    version: "1.0.1",
-    runtimeVersion: "1.0.4",
+    version: "1.0.0",
+    runtimeVersion: "1.0.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
-    userInterfaceStyle: "light",
+    userInterfaceStyle: "light",// what?
     splash: {
       image: "./assets/splash.png",
       resizeMode: "contain",
@@ -15,7 +15,7 @@ export default ({ config }) => ({
     assetBundlePatterns: ["**/*"],
     ios: {
       supportsTablet: true,
-      usesIcloudStorage: true,
+      usesIcloudStorage: false,
       bundleIdentifier: "com.amin04.SRC",
     },
     android: {

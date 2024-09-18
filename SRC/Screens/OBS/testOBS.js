@@ -5,6 +5,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Text,
+  Button,
 } from "react-native";
 import OnBoarding from "react-native-onboarding-swiper";
 import LottieView from "lottie-react-native";
@@ -12,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
+import RNRestart from 'react-native-restart';
 
 const WalkthroughableText = walkthroughable(Text);
 const WalkthroughableView = walkthroughable(View);
@@ -61,6 +63,7 @@ export default function TestOBS() {
 
     const saveWalkthroughCompletion = async () => {
       await SecureStore.setItemAsync("walkthroughCompleted", "true");
+      RNRestart.Restart();
     };
 
     copilotEvents.on("stop", saveWalkthroughCompletion); // does this happen when you skip the walkthrough?
@@ -80,6 +83,7 @@ export default function TestOBS() {
     await SecureStore.setItemAsync("onboardingCompleted", "true");
     start();
   };
+  
 
   const donebutton = ({ ...props }) => {
     return (
@@ -145,6 +149,21 @@ export default function TestOBS() {
             subtitle: t("obs2Subtitle"),
           },
           {
+            backgroundColor: "#fef3c7",//color not final
+            image: (
+              <View>
+                <LottieView
+                  source={require("../../assets/animations/shecan.json")}
+                  autoPlay
+                  loop
+                  style={{ width: width * 0.9, height: width }}
+                />
+              </View>
+            ),
+            title: t("obs3Title"),
+            subtitle: t("obs3Subtitle"),
+          },
+          {
             backgroundColor: "#a7f3d0",
             image: (
               <View>
@@ -156,14 +175,15 @@ export default function TestOBS() {
                 />
               </View>
             ),
-            title: t("obs3Title"),
-            subtitle: t("obs3Subtitle"),
+            title: t("obs4Title"),
+            subtitle: t("obs4Subtitle"),
           },
         ]}
       />
       <CopilotStep text={t("step1")} order={1} name="step1">
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
+      
     </View>
   );
 }
@@ -175,6 +195,7 @@ const styles = StyleSheet.create({
     // alignItems: "center",
   },
   lottie: {
+    // where is this even used ? i gotta audit your code for real
     width: width * 0.9,
     height: width,
   },

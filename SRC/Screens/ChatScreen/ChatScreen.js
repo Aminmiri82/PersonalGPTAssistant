@@ -279,37 +279,42 @@ const ChatScreen = ({ navigation, route }) => {
         style={[styles.container, { backgroundColor: colorsTh.background }]}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.container}>
-            <FlatList
-              ref={flatListRef} // Attach the ref here
-              data={conversation}
-              keyExtractor={(item, index) =>
-                `${item.threadId}-${item.role}-${index}`
-              }
-              renderItem={({ item }) => <Chatbubble message={item} />}
-              contentContainerStyle={styles.flatListContent}
-              ListFooterComponent={
-                loading && !streamedChunks ? (
-                  <Chatbubble
-                    message={{
-                      content: "",
-                      role: "assistant",
-                      isDuringLoading: true,
-                    }}
-                  />
-                ) : streamedChunks && !completeResponse ? (
-                  <Chatbubble
-                    message={{
-                      content: streamedChunks,
-                      role: "assistant",
-                      timestamp: new Date(),
-                    }}
-                  />
-                ) : null
-              }
-            />
-            <AppTextInput onSubmit={handleSetMessage} />
-          </View>
+          <ImageBackground
+            source={require("../../assets/background.jpg")}
+            style={styles.background}
+          >
+            <View style={styles.container}>
+              <FlatList
+                ref={flatListRef} // Attach the ref here
+                data={conversation}
+                keyExtractor={(item, index) =>
+                  `${item.threadId}-${item.role}-${index}`
+                }
+                renderItem={({ item }) => <Chatbubble message={item} />}
+                contentContainerStyle={styles.flatListContent}
+                ListFooterComponent={
+                  loading && !streamedChunks ? (
+                    <Chatbubble
+                      message={{
+                        content: "",
+                        role: "assistant",
+                        isDuringLoading: true,
+                      }}
+                    />
+                  ) : streamedChunks && !completeResponse ? (
+                    <Chatbubble
+                      message={{
+                        content: streamedChunks,
+                        role: "assistant",
+                        timestamp: new Date(),
+                      }}
+                    />
+                  ) : null
+                }
+              />
+              <AppTextInput onSubmit={handleSetMessage} />
+            </View>
+          </ImageBackground>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </Screen>

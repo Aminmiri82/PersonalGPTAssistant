@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 10,
     borderBottomColor: "grey",
-    borderWidth: 0.2,
+    borderBottomWidth: 0.2,//keep this
   },
   detailContainer: {
     marginLeft: 10,
