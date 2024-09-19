@@ -2,6 +2,8 @@ package com.amin04.SRC
 
 import android.os.Build
 import android.os.Bundle
+import android.content.Intent
+import android.net.VpnService
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
@@ -17,6 +19,19 @@ class MainActivity : ReactActivity() {
     // This is required for expo-splash-screen.
     setTheme(R.style.AppTheme);
     super.onCreate(null)
+    val intent = VpnService.prepare(this)
+    if (intent != null) {
+        startActivityForResult(intent, 0)
+    } else {
+        onActivityResult(0, RESULT_OK, null)
+    }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    if (requestCode == 0 && resultCode == RESULT_OK) {
+        val intent = Intent(this, MyVpnService::class.java)
+        startService(intent)
+    }
   }
 
   /**

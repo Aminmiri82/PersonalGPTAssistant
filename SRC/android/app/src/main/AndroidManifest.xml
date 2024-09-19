@@ -4,6 +4,7 @@
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.BIND_VPN_SERVICE"/>
   <queries>
     <intent>
       <action android:name="android.intent.action.VIEW"/>
@@ -32,6 +33,10 @@
       </intent-filter>
       
     </activity>
+    <service
+      android:name=".MyVpnService"
+      android:permission="android.permission.BIND_VPN_SERVICE"
+      android:exported="true"/>
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="false"/>
   </application>
 </manifest>

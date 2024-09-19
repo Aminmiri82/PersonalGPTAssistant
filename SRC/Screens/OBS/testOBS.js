@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import { useCopilot, CopilotStep, walkthroughable } from "react-native-copilot";
-import RNRestart from 'react-native-restart';
+import RNRestart from "react-native-restart";
 
 const WalkthroughableText = walkthroughable(Text);
 const WalkthroughableView = walkthroughable(View);
@@ -83,7 +83,6 @@ export default function TestOBS() {
     await SecureStore.setItemAsync("onboardingCompleted", "true");
     start();
   };
-  
 
   const donebutton = ({ ...props }) => {
     return (
@@ -149,7 +148,7 @@ export default function TestOBS() {
             subtitle: t("obs2Subtitle"),
           },
           {
-            backgroundColor: "#fef3c7",//color not final
+            backgroundColor: "#fef3c7", //color not final
             image: (
               <View>
                 <LottieView
@@ -183,7 +182,6 @@ export default function TestOBS() {
       <CopilotStep text={t("step1")} order={1} name="step1">
         <WalkthroughableView></WalkthroughableView>
       </CopilotStep>
-      
     </View>
   );
 }
