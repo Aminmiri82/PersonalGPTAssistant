@@ -16,7 +16,7 @@ export default function AppImagePicker({
 
   // Request permission to access the media library
   const requestPermission = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();// test
     if (status !== "granted") {
       Alert.alert(
         "Permission required",
