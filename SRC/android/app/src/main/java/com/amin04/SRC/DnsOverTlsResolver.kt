@@ -13,7 +13,11 @@ class DnsOverTlsResolver {
         // Use Google's DoT server as an example
         val dns = DnsOverHttps.Builder()
             .client(OkHttpClient())
-            .url(HttpUrl.get("https://free.shecan.ir/dns-query"))  // Fix: Convert string to HttpUrl
+            .url(HttpUrl.Builder()
+                .scheme("https")
+                .host("free.shecan.ir")
+                .addPathSegment("dns-query")
+                .build()) // Proper way to construct HttpUrl  // Fix: Convert string to HttpUrl
             .includeIPv6(true)
             .build()
 
