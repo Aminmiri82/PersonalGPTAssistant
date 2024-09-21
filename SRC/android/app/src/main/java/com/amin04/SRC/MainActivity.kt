@@ -11,6 +11,7 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate
 import expo.modules.ReactActivityDelegateWrapper
 import okhttp3.OkHttpClient
 import java.net.InetAddress
+import com.amin04.SRC.DnsOverTlsResolver
 
 class MainActivity : ReactActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
