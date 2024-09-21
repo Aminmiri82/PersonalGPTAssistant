@@ -219,7 +219,6 @@ function AssistantMakerScreen2({ navigation, route }) {
         style={[styles.nextButton, { backgroundColor: colorsTh.button_blue }]}
         textStyle={styles.nextButtonText}
       />
-      <Text>{fileIds.map((file) => file.fileId)}</Text>
       <CopilotStep text={t("step17")} order={17} name="step17">
         <WalkthroughableText></WalkthroughableText>
       </CopilotStep>

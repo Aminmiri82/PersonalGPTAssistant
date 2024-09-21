@@ -7592,11 +7592,6 @@ react-native-animated-dots@^0.0.4:
   resolved "https://registry.npmjs.org/react-native-animated-dots/-/react-native-animated-dots-0.0.4.tgz"
   integrity sha512-o++NAUqy5V5vE9a+YpT0G4TedDb32WC3GUW2h0c/tqBxpLzCjD6TgtQ1unmuSWOVX0rlXq2i0MAwdPgPlAp03w==
 
-"react-native-background-upload@git+https://github.com/Aminmiri82/react-native-background-upload.git":
-  version "6.6.0"
-  resolved "git+ssh://git@github.com/Aminmiri82/react-native-background-upload.git"
-  integrity sha512-33b4F0FWIEtbJl9TZibJgBx+nkEc89S63CJyEJMYQ2mIGEgT72lp0RVd+JbdKW+ngCz3Jqi/+1VZSlhrFjpu/w==
-
 react-native-copilot@^3.3.2:
   version "3.3.2"
   resolved "https://registry.npmjs.org/react-native-copilot/-/react-native-copilot-3.3.2.tgz"
@@ -7751,7 +7746,7 @@ react-native-web@^0.19.12:
     postcss-value-parser "^4.2.0"
     styleq "^0.1.3"
 
-react-native@*, "react-native@>= 0.30.0", react-native@>=0.14.0, react-native@>=0.46, react-native@>=0.47.0, react-native@>=0.59.0, react-native@>=0.59.5, react-native@>=0.60.0, react-native@>=0.70.0, react-native@>0.64, react-native@0.74.5:
+react-native@*, "react-native@>= 0.30.0", react-native@>=0.14.0, react-native@>=0.46, react-native@>=0.59.0, react-native@>=0.59.5, react-native@>=0.60.0, react-native@>=0.70.0, react-native@>0.64, react-native@0.74.5:
   version "0.74.5"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.74.5.tgz"
   integrity sha512-Bgg2WvxaGODukJMTZFTZBNMKVaROHLwSb8VAGEdrlvKwfb1hHg/3aXTUICYk7dwgAnb+INbGMwnF8yeAgIUmqw==
