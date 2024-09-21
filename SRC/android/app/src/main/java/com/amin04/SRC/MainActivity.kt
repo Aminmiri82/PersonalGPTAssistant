@@ -4,13 +4,13 @@ import android.os.Build
 import android.os.Bundle
 import android.content.Intent
 import android.net.VpnService
-
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
-
 import expo.modules.ReactActivityDelegateWrapper
+import okhttp3.OkHttpClient
+import java.net.InetAddress
 
 class MainActivity : ReactActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,14 +25,38 @@ class MainActivity : ReactActivity() {
     } else {
         onActivityResult(0, RESULT_OK, null)
     }
+
+    resolveDnsOverTls("free.shecan.ir")
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == 0 && resultCode == RESULT_OK) {
         val intent = Intent(this, MyVpnService::class.java)
+
+        intent.putExtra("185.51.200.2", "8.8.8.8")
         startService(intent)
     }
   }
+
+  /**
+     * Function to resolve DNS over TLS using DnsOverTlsResolver
+     */
+    private fun resolveDnsOverTls(hostname: String) {
+        val resolver = DnsOverTlsResolver()
+
+        // Resolve the hostname asynchronously to avoid blocking the UI thread
+        Thread {
+            try {
+                val resolvedAddresses: List<InetAddress> = resolver.resolve(hostname)
+                resolvedAddresses.forEach { address ->
+                    println("Resolved IP for $hostname: ${address.hostAddress}")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                println("DNS-over-TLS resolution failed: ${e.message}")
+            }
+        }.start() // Start a new thread to perform the DNS lookup
+    }
 
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
