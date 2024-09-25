@@ -69,7 +69,7 @@ function ChooseChatScreen({ navigation }) {
       });
     } catch (error) {
       console.error("Error in createAndInsertNewThread:", error);
-      Alert.alert("Error", "Failed to create a new thread. Please try again.");
+      Alert.alert(t("error"), t("shecanError"));
     }
   };
 

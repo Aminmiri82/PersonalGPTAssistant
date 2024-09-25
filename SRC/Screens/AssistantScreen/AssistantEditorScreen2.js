@@ -138,6 +138,7 @@ function AssistantEditorScreen2({ navigation, route }) {
       navigation.navigate("AssistantMenuScreen");
     } catch (error) {
       console.log("Error saving assistant:", error);
+      Alert.alert(t("error"), t("shecanError"));
     } finally {
       setIsInitializing(false);
     }

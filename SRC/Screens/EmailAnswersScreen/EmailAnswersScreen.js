@@ -40,7 +40,7 @@ const EmailAnswersScreen = () => {
 
     const emailData = {
       From: "Outgoing@dadafarin.net",
-      To: "Incoming@dadafarin.net",
+      To: "amin@dadafarin.net",
       Subject: "User Question",
       TextBody: emailBody,
       MessageStream: "outbound",
@@ -66,6 +66,7 @@ const EmailAnswersScreen = () => {
       }
     } catch (error) {
       Alert.alert(t("error"), `${t("EmailFailed")}: ${error.message}`);
+      console.log("Error sending email:", error);
     }
   };
 
