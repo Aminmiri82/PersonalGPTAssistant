@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
-import { View, StyleSheet, FlatList, Text } from "react-native";
+import { View, StyleSheet, FlatList, Text, Alert } from "react-native";
 import AssistantsMenuItem from "../../Components/AssistantsComponents/AssistantsMenuItem";
 import Screen from "../../Components/Screen";
 import { fetchAssistants, insertChat } from "../../database";
@@ -49,15 +49,28 @@ function ChooseChatScreen({ navigation }) {
   );
 
   const createAndInstertNewThread = async (assistant_id, assistantName) => {
-    const newThread = await createThread();
-    console.log("Thread created:", newThread.id);
-    await insertChat(newThread.id, assistant_id, null);
-    console.log("Inserted chat", newThread.id, assistant_id, null);
-    navigation.navigate("ChatScreen", {
-      assistantId: assistant_id,
-      threadId: newThread.id,
-      assistantName: assistantName,
-    });
+    try {
+      const newThread = await createThread();
+
+      // Handle case where newThread is null (if createThread fails)
+      if (!newThread) {
+        throw new Error("Failed to create a new thread.");
+      }
+
+      console.log("Thread created:", newThread.id);
+
+      await insertChat(newThread.id, assistant_id, null);
+      console.log("Inserted chat", newThread.id, assistant_id, null);
+
+      navigation.navigate("ChatScreen", {
+        assistantId: assistant_id,
+        threadId: newThread.id,
+        assistantName: assistantName,
+      });
+    } catch (error) {
+      console.error("Error in createAndInsertNewThread:", error);
+      Alert.alert("Error", "Failed to create a new thread. Please try again.");
+    }
   };
 
   if (!dbInitialized) {

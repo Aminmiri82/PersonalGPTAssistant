@@ -61,6 +61,7 @@ const createThread = async () => {
     console.error("Error creating thread:", error);
     return null;
   }
+  
 };
 
 const addMessageToThread = async (threadId, message) => {
