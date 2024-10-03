@@ -3,12 +3,10 @@ import { OPENAI_API_KEY } from "@env";
 
 import axios from "axios";
 
-
 let openai = null;
 
 const initializeOpenAI = async () => {
   try {
-    
     let apiKey = OPENAI_API_KEY;
     console.log("API Key from env:", apiKey);
     openai = new OpenAI({
@@ -63,6 +61,7 @@ const createThread = async () => {
     console.error("Error creating thread:", error);
     return null;
   }
+  
 };
 
 const addMessageToThread = async (threadId, message) => {
@@ -253,29 +252,32 @@ const startBackgroundUpload = async (
   try {
     onProgress(0);
     const formData = new FormData();
-    formData.append('data', {
+    formData.append("data", {
       uri: fileUri,
       name: filename,
       type: mimeType,
     });
 
-    const response = await axios.post(`${UPLOAD_URL}/${uploadId}/parts`, formData, {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'multipart/form-data',
-      },
-      
-    });
+    const response = await axios.post(
+      `${UPLOAD_URL}/${uploadId}/parts`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     onProgress(1);
 
-    console.log('Upload completed:', response.data);
+    console.log("Upload completed:", response.data);
 
     return response.data; // Already parsed as JSON
   } catch (error) {
-    console.error('Upload error:', error.message);
-    console.error('Error response data:', error.response?.data);
-    console.error('Error response status:', error.response?.status);
-    console.error('Error response headers:', error.response?.headers);
+    console.error("Upload error:", error.message);
+    console.error("Error response data:", error.response?.data);
+    console.error("Error response status:", error.response?.status);
+    console.error("Error response headers:", error.response?.headers);
     throw error;
   }
 };

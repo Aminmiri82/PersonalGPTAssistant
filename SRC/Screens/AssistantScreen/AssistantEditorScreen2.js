@@ -20,8 +20,11 @@ import {
 } from "../../openai-backend/ApiBackEnd";
 import { useTranslation } from "react-i18next";
 import { set } from "lodash";
+import { useTheme } from "../../themes/ThemeProvidor";
+import AppButton from "../../Components/AppButton";
 
 function AssistantEditorScreen2({ navigation, route }) {
+  const { colorsTh } = useTheme();
   const { t } = useTranslation();
   const { id, name, instructions, imageUri } = route.params;
   const [files, setFiles] = useState([]);
@@ -135,6 +138,7 @@ function AssistantEditorScreen2({ navigation, route }) {
       navigation.navigate("AssistantMenuScreen");
     } catch (error) {
       console.log("Error saving assistant:", error);
+      Alert.alert(t("error"), t("shecanError"));
     } finally {
       setIsInitializing(false);
     }
@@ -232,7 +236,9 @@ function AssistantEditorScreen2({ navigation, route }) {
   };
 
   return (
-    <Screen>
+    <Screen
+      style={[styles.container, { backgroundColor: colorsTh.background }]}
+    >
       <Spinner
         visible={isInitializing}
         textContent={"Initializing assistant..."}
@@ -240,23 +246,40 @@ function AssistantEditorScreen2({ navigation, route }) {
       />
       <View style={styles.topContainer}>
         <View style={styles.topTipContainer}>
-          <AppText style={styles.topTip}>{t("chooseModel")}</AppText>
+          <AppText style={[styles.topTip, { color: colorsTh.text }]}>
+            {t("chooseModel")}
+          </AppText>
         </View>
         <View style={styles.topPickerContainer}>
           <RNPickerSelect
             onValueChange={(value) => setModel(value)}
             items={assistantList}
             value={model}
+            style={{
+              inputIOS: [styles.pickerIOS, { color: colorsTh.text }],
+              inputAndroid: [styles.pickerAndroid, { color: colorsTh.text }],
+              placeholder: {
+                color: colorsTh.text, // Customize placeholder color
+                fontSize: 16,
+              },
+            }}
+            useNativeAndroidPickerStyle={false} // Disable native styling for Android
+            placeholder={{ label: "Select a model", value: null }}
+            placeholderTextColor={colorsTh.text}
           />
         </View>
         <View style={styles.gp4TipContainer}>
-          <AppText style={styles.middleTip}>{t("fileUploadReq")}</AppText>
+          <AppText style={[styles.middleTip, { color: colorsTh.text }]}>
+            {t("fileUploadReq")}
+          </AppText>
         </View>
       </View>
 
       <View style={styles.bottomContainer}>
         <View style={styles.bottomTipContainer}>
-          <AppText style={styles.bottomTip}>{t("fileUpload")}</AppText>
+          <AppText style={[styles.bottomTip, { color: colorsTh.text }]}>
+            {t("fileUpload")}
+          </AppText>
         </View>
         <AppDocumentPicker
           files={files}
@@ -266,21 +289,27 @@ function AssistantEditorScreen2({ navigation, route }) {
         />
       </View>
       <View style={styles.ButtonContainer}>
-        <TouchableOpacity
+        <AppButton
+          title={t("delete")}
           onPress={handleDelete}
           style={styles.deleteAssistantButton}
-        >
-          <AppText style={styles.deleteButtonText}>{t("delete")}</AppText>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleSave} style={styles.doneButton}>
-          <AppText style={styles.doneButtonText}>{t("done")}</AppText>
-        </TouchableOpacity>
+          textStyle={[styles.deleteButtonText, { color: colorsTh.text }]}
+        />
+        <AppButton
+          title={t("next")}
+          onPress={handleSave}
+          style={styles.doneButton}
+          textStyle={[styles.doneButtonText, { color: colorsTh.text }]}
+        />
       </View>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   topContainer: {
     alignItems: "center",
     padding: 10,
@@ -293,7 +322,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   topTip: {
-    color: colors.dark,
     fontSize: 30,
     textAlign: "center",
   },
@@ -313,7 +341,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   middleTip: {
-    color: colors.dark,
     fontSize: 16,
     textAlign: "center",
   },
@@ -328,15 +355,14 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 10,
   },
   bottomTip: {
-    color: colors.dark,
     fontSize: 18,
     textAlign: "center",
   },
   doneButtonContainer: {
     marginTop: 10,
-    backgroundColor: colors.primary,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -361,7 +387,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.deleteRed,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 100,
     elevation: 2, // For a slight shadow effect
     marginRight: 10, // Add margin to the right for spacing
   },
@@ -375,7 +401,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.niceBlue,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 100,
     elevation: 2,
     marginLeft: 10,
   },

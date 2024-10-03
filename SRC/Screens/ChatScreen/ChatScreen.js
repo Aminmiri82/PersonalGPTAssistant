@@ -27,8 +27,10 @@ import { OPENAI_API_KEY } from "@env";
 import { DatabaseContext } from "../../DatabaseProvider"; // Adjust the import path
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../themes/ThemeProvidor";
 
 const ChatScreen = ({ navigation, route }) => {
+  const { colorsTh } = useTheme();
   const { dbInitialized } = useContext(DatabaseContext);
   const headerHeight = useHeaderHeight();
   const [conversation, setConversation] = useState([]);
@@ -274,10 +276,13 @@ const ChatScreen = ({ navigation, route }) => {
         keyboardVerticalOffset={
           Platform.OS === "ios" ? headerHeight : headerHeight * 2
         }
-        style={styles.container}
+        style={[styles.container, { backgroundColor: colorsTh.background }]}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          
+          <ImageBackground
+            source={require("../../assets/background.jpg")}
+            style={styles.background}
+          >
             <View style={styles.container}>
               <FlatList
                 ref={flatListRef} // Attach the ref here
@@ -298,7 +303,6 @@ const ChatScreen = ({ navigation, route }) => {
                     />
                   ) : streamedChunks && !completeResponse ? (
                     <Chatbubble
-                    
                       message={{
                         content: streamedChunks,
                         role: "assistant",
@@ -310,7 +314,7 @@ const ChatScreen = ({ navigation, route }) => {
               />
               <AppTextInput onSubmit={handleSetMessage} />
             </View>
-         
+          </ImageBackground>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </Screen>

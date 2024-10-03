@@ -31,6 +31,7 @@
     "apikey": "Clé API OpenAI",
     "enterAPIKey": "Entrez la clé API",
     "error": "Erreur",
+    "shecanError":"Il y a eu un problème avec votre connexion, veuillez vous assurer que vous utilisez le service ‘shecan’ et réessayez",
     "invalidAPIKey": "Clé API invalide",
     "Languages": "Langues",
     "selectLang": "Sélectionnez les langues",
@@ -53,7 +54,7 @@
     "AssistantEditorScreen2" : "Éditer l'assistant",
     "EmailAnswersTab" : " Réponses par email",
     "EmailAnswersScreen" : "Réponses par email",
-    "EmailAnswersExplanation" : "Demandez n'importe quelle question légale que vous avez, et l'un de nos experts vous répondra dans moins de 15 minutes.",
+    "EmailAnswersExplanation" : "Demandez n'importe quelle question légale que vous avez, et l'un de nos experts vous répondra dans moins de 45 minutes.",
     "UserName" : "Votre nom :",
     "UserNamePlaceholder" : "Entrez votre nom",
     "UserQuestion" : "Votre question :",
@@ -120,6 +121,8 @@
 "obs1Subtitle": "Vous pouvez accéder rapidement et facilement à des conseils juridiques",
 "obs2Title": "Rapide et économique",
 "obs2Subtitle": "Obtenez des réponses à vos questions juridiques avec moins de coûts et plus de précision en moins de temps",
-"obs3Title": "Nous espérons que vous aurez une bonne expérience",
-"obs3Subtitle": "Pour l'utilisation par le public et la création d'une justice universelle"
+"obs3Title": "Utilisez le service 'chekan' pour utiliser l’application",
+"obs3Subtitle": "Chekan est un service de contournement des sanctions internationales, téléchargeable depuis Cafe Bazaar, qui vous permet de contourner les sanctions étrangères imposées à notre pays.",
+"obs4Title": "Nous espérons que vous aurez une bonne expérience",
+"obs4Subtitle": "Pour l'utilisation par le public et la création d'une justice universelle"
 }

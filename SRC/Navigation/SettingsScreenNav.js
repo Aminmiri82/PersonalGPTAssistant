@@ -1,43 +1,50 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SettingsScreen from "../Screens/SettingsScreen/SettingsScreen";
 import AboutUsScreen from "../Screens/SettingsScreen/AboutUsScreen";
 import TermsAndConditionsScreen from "../Screens/SettingsScreen/TermsAndConditionsScreen";
 import PrivacyPolicyScreen from "../Screens/SettingsScreen/PrivacyPolicyScreen";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../themes/ThemeProvidor"; // Import useTheme
 
 const SettingsStack = createNativeStackNavigator();
 
 export default function SettingsScreenNav() {
   const { t } = useTranslation();
+  const { colorsTh } = useTheme(); // Get theme colors
 
   return (
-    <SettingsStack.Navigator>
+    <SettingsStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colorsTh.background, // Set header background based on theme
+        },
+        headerTintColor: colorsTh.text, // Set header text color based on theme
+        headerTitleStyle: {
+          fontWeight: "bold", // Optional: Customize the title style
+        },
+      }}
+    >
       <SettingsStack.Screen
-        name="SettingsScreen" // Use static name for the screen
+        name="SettingsScreen"
         component={SettingsScreen}
-        options={{ title: t("SettingsScreen") }} // Set translated title
+        options={{ title: t("SettingsScreen") }}
       />
       <SettingsStack.Screen
-        name="AboutUsScreen" // Use static name for the screen
+        name="AboutUsScreen"
         component={AboutUsScreen}
-        options={{ title: t("AboutUsScreen") }} // Set translated title
+        options={{ title: t("AboutUsScreen") }}
       />
       <SettingsStack.Screen
-        name="TermsAndConditionsScreen" // Use static name for the screen
+        name="TermsAndConditionsScreen"
         component={TermsAndConditionsScreen}
-        options={{ title: t("TermsAndConditionsScreen") }} // Set translated title
+        options={{ title: t("TermsAndConditionsScreen") }}
       />
       <SettingsStack.Screen
-        name="PrivacyPolicyScreen" // Use static name for the screen
+        name="PrivacyPolicyScreen"
         component={PrivacyPolicyScreen}
-        options={{ title: t("PrivacyPolicyScreen") }} // Set translated title
+        options={{ title: t("PrivacyPolicyScreen") }}
       />
     </SettingsStack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {},
-});

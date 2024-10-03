@@ -12,8 +12,10 @@ import AppText from "../AppText";
 import colors from "../../config/colors";
 import DocumentPicker from "react-native-document-picker";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../themes/ThemeProvidor";
 
 const ProgressBar = ({ progress }) => {
+  const { colorsTh } = useTheme();
   // Create an animated value for throbbing effect
   const { t } = useTranslation();
   const textScale = useRef(new Animated.Value(1)).current;
@@ -46,16 +48,17 @@ const ProgressBar = ({ progress }) => {
   return (
     <View style={styles.progressBarContainer}>
       <ProgressView
-        progressTintColor={colors.primary}
-        trackTintColor={colors.lightGrey}
+        progressTintColor={colorsTh.blue}
+        trackTintColor={colors.grey}
         progress={progress} // Directly use progress as it's either 0 or 1
-        style={styles.progressBar}
+        style={[styles.progressBar, { color: colorsTh.blue }]}
       />
       <Animated.Text
         style={[
           styles.progressText,
           {
             transform: [{ scale: textScale }],
+            color: colorsTh.text,
           },
         ]}
       >
@@ -109,18 +112,30 @@ function AppDocumentPicker({ files, onAddFile, onRemoveFile, progressMap }) {
     return <ProgressBar progress={progress} />;
   };
 
+  const { colorsTh } = useTheme();
+
   return (
     <>
-      <View style={styles.generalFileContainer}>
+      <View
+        style={[
+          styles.generalFileContainer,
+          { backgroundColor: colorsTh.docPicker, shadowColor: colorsTh.text },
+        ]}
+      >
         <FlatList
           data={files}
           keyExtractor={(item) => item.id.toString()} // Use item.id instead of index
           numColumns={3}
           renderItem={({ item, index }) => (
-            <View style={styles.fileContainer}>
+            <View
+              style={[
+                styles.fileContainer,
+                { backgroundColor: colorsTh.fileBackground },
+              ]}
+            >
               {renderThumbnail(item)}
               <AppText
-                style={styles.fileName}
+                style={[styles.fileName, colorsTh.text]}
                 numberOfLines={2}
                 ellipsizeMode="tail"
               >
@@ -155,9 +170,7 @@ const styles = StyleSheet.create({
     borderColor: colors.lightGrey,
     borderWidth: 1,
     borderRadius: 10,
-    backgroundColor: colors.light,
     padding: 10,
-    shadowColor: colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
@@ -172,8 +185,6 @@ const styles = StyleSheet.create({
     width: 100,
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: colors.white,
-    shadowColor: colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -189,7 +200,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 2,
     fontSize: 12,
-    color: colors.dark,
   },
   deleteButton: {
     position: "absolute",
@@ -235,7 +245,6 @@ const styles = StyleSheet.create({
   progressText: {
     marginTop: 2,
     fontSize: 12,
-    color: colors.grey,
   },
 });
 

@@ -19,13 +19,14 @@ const detectLanguage = () => {
       return phoneLang; // e.g., 'en', 'fa', 'fr'
     }
   }
-  return "en"; // Fallback to English if detection fails
+  return "fa"; // Fallback to farsi if detection fails
+  //change for international version
 };
 
 i18next.use(initReactI18next).init({
   compatibilityJSON: "v3",
   lng: detectLanguage(),
-  fallbackLng: "en",
+  fallbackLng: "fa",
   resources: languageResources,
 });
 

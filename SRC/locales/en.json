@@ -31,6 +31,7 @@
     "apikey": "OpenAI API Key",
     "enterAPIKey": "Enter API key",
     "error": "Error",
+    "shecanError": "There was a problem with your connection, please make sure you are using the 'shecan' service and try again.",
     "invalidAPIKey": "Invalid API key",
     "Languages": "Languages",
     "selectLang": "Select Languages",
@@ -53,7 +54,7 @@
     "AssistantEditorScreen2" : "Edit Assistant",
     "EmailAnswersTab" : " Email Answers",
     "EmailAnswersScreen" : "Email Answers",
-    "EmailAnswersExplanation" : "Ask any legal question you have, and one of our experts will return to you with the answer in less than 15 minutes.",
+    "EmailAnswersExplanation" : "Ask any legal question you have, and one of our experts will return to you with the answer in less than 45 minutes.",
     "UserName" : "Your Name:",
     "UserNamePlaceholder" : "Enter your name",
     "UserQuestion" : "Your Question:",
@@ -120,7 +121,9 @@
     "obs1Subtitle": "You can get access to legal guidance for free",
     "obs2Title": "Cheaper and faster",
     "obs2Subtitle": "Get legal guidance fast and quick with just the press of a button",
-    "obs3Title": "We hope the best",
-    "obs3Subtitle": "For the use by the people and bringing justice to the world"
+    "obs3Title":  "Use the 'shecan' service to use the app.",
+    "obs3Subtitle": "Shecan is a service that bypasses international sanctions and can be downloaded from Cafe Bazaar, allowing you to bypass foreign sanctions imposed on our country",
+    "obs4Title": "We hope the best",
+    "obs4Subtitle": "For the use by the people and bringing justice to the world"
 }
   

@@ -15,11 +15,13 @@ import { insertAssistant, initDB } from "../../database";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useTranslation } from "react-i18next";
 import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
+import { useTheme } from "../../themes/ThemeProvidor";
 
 const WalkthroughableView = walkthroughable(View);
 const WalkthroughableText = walkthroughable(Text);
 
 function AssistantMakerScreen2({ navigation, route }) {
+  const { colorsTh } = useTheme();
   const { t } = useTranslation();
   const { name, instructions, imageUri } = route.params;
   const [files, setFiles] = useState([]);
@@ -151,13 +153,16 @@ function AssistantMakerScreen2({ navigation, route }) {
       navigation.navigate("AssistantMenuScreen");
     } catch (error) {
       console.log("Error saving assistant:", error);
+      Alert.alert(t("error"), t("shecanError"));
     } finally {
       setIsInitializing(false);
     }
   };
 
   return (
-    <Screen>
+    <Screen
+      style={[styles.container, { backgroundColor: colorsTh.background }]}
+    >
       <Spinner
         visible={isInitializing}
         textContent="Initializing assistant..."
@@ -166,23 +171,40 @@ function AssistantMakerScreen2({ navigation, route }) {
       <CopilotStep text={t("step15")} order={15} name="step15">
         <WalkthroughableView style={styles.topContainer}>
           <View style={styles.topTipContainer}>
-            <AppText style={styles.topTip}>{t("chooseModel")}</AppText>
+            <AppText style={[styles.topTip, { color: colorsTh.text }]}>
+              {t("chooseModel")}
+            </AppText>
           </View>
           <View style={styles.topPickerContainer}>
             <RNPickerSelect
               onValueChange={(value) => setModel(value)}
               items={assistantList}
+              style={{
+                inputIOS: [styles.pickerIOS, { color: colorsTh.text }],
+                inputAndroid: [styles.pickerAndroid, { color: colorsTh.text }],
+                placeholder: {
+                  color: colorsTh.text, // Customize placeholder color
+                  fontSize: 16,
+                },
+              }}
+              useNativeAndroidPickerStyle={false} // Disable native styling for Android
+              placeholder={{ label: "Select a model", value: null }}
+              placeholderTextColor={colorsTh.text}
             />
           </View>
           <View style={styles.gp4TipContainer}>
-            <AppText style={styles.middleTip}>{t("fileUploadReq")}</AppText>
+            <AppText style={[styles.middleTip, { color: colorsTh.text }]}>
+              {t("fileUploadReq")}
+            </AppText>
           </View>
         </WalkthroughableView>
       </CopilotStep>
       <CopilotStep text={t("step16")} order={16} name="step16">
         <WalkthroughableView style={styles.bottomContainer}>
           <View style={styles.bottomTipContainer}>
-            <AppText style={styles.bottomTip}>{t("fileUpload")}</AppText>
+            <AppText style={[styles.bottomTip, { color: colorsTh.text }]}>
+              {t("fileUpload")}
+            </AppText>
           </View>
           <AppDocumentPicker
             files={files}
@@ -195,10 +217,9 @@ function AssistantMakerScreen2({ navigation, route }) {
       <AppButton
         title={t("saveAssistant")}
         onPress={handleSave}
-        style={styles.nextButton}
+        style={[styles.nextButton, { backgroundColor: colorsTh.button_blue }]}
         textStyle={styles.nextButtonText}
       />
-      <Text>{fileIds.map((file) => file.fileId)}</Text>
       <CopilotStep text={t("step17")} order={17} name="step17">
         <WalkthroughableText></WalkthroughableText>
       </CopilotStep>
@@ -207,6 +228,9 @@ function AssistantMakerScreen2({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   topContainer: {
     alignItems: "center",
     padding: 10,
@@ -219,7 +243,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   topTip: {
-    color: colors.dark,
     fontSize: 30,
     textAlign: "center",
   },
@@ -238,7 +261,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   middleTip: {
-    color: colors.dark,
     fontSize: 16,
     textAlign: "center",
   },
@@ -253,20 +275,19 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 10,
   },
   bottomTip: {
-    color: colors.dark,
     fontSize: 18,
     textAlign: "center",
   },
   nextButton: {
-    backgroundColor: colors.niceBlue,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 30,
     elevation: 2,
     marginLeft: "auto",
-    marginRight: 20,
+    marginRight: "auto",
     width: "30%",
   },
   nextButtonText: {
@@ -277,6 +298,21 @@ const styles = StyleSheet.create({
   },
   spinnerTextStyle: {
     color: "#FFF",
+  },
+  pickerIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+  },
+  pickerAndroid: {
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderRadius: 5,
+    width: "100%",
   },
 });
 

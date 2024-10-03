@@ -15,6 +15,8 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { CopilotStep, useCopilot, walkthroughable } from "react-native-copilot";
 import * as SecureStore from "expo-secure-store";
+import { useTheme } from "../../themes/ThemeProvidor";
+import AppButton from "../../Components/AppButton";
 
 const { height } = Dimensions.get("window");
 
@@ -22,6 +24,7 @@ const WalkthroughableView = walkthroughable(View);
 const WalkthroughableAMI = walkthroughable(AssistantsMenuItem);
 const WalkthroughableText = walkthroughable(Text);
 function AssistantMenuScreen({ navigation }) {
+  const { colorsTh } = useTheme();
   const [assistants, setAssistants] = useState([]);
   const { t } = useTranslation();
   const [OnWalkthrough, setOnWalkthrough] = useState(null);
@@ -99,16 +102,18 @@ function AssistantMenuScreen({ navigation }) {
           <WalkthroughableView></WalkthroughableView>
         )}
       </CopilotStep>
-      <View style={styles.container}>
+      <View
+        style={[styles.container, { backgroundColor: colorsTh.background }]}
+      >
         {assistants.length === 0 && !OnWalkthrough ? (
           <View style={styles.noAss}>
             <AppText style={styles.text}>{t("emptyassistant")}</AppText>
-            <Button
+            <AppButton
               title={t("statrtBuldingAssistant")}
               onPress={() => navigation.navigate("AssistantMakerScreen1")}
-              style={styles.button}
-              textStyle={styles.buttonText}
-              color="#3E84F7"
+              style={[styles.button, { backgroundColor: colorsTh.button_blue }]}
+              textStyle={{ color: colorsTh.text }}
+              // color="#3E84F7"
             />
           </View>
         ) : (
@@ -149,10 +154,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: "auto",
     height: "auto",
-    borderRadius: height * 0.03,
-    backgroundColor: "blue",
+    borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
+    padding: 15,
   },
   listContainer: {
     paddingVertical: 10,

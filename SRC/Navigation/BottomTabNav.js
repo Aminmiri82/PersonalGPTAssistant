@@ -11,9 +11,11 @@ import TestScreen from "../Screens/TestScreen";
 
 import { useTranslation } from "react-i18next";
 import { CopilotProvider } from "react-native-copilot";
+import { useTheme } from "../themes/ThemeProvidor";
 
 const Tab = createBottomTabNavigator();
 function BottomTabNav(route) {
+  const { dark, colorsTh, setScheme } = useTheme();
   const { t } = useTranslation();
   const startWalkthrough = route.params?.startWalkthrough;
 
@@ -37,6 +39,11 @@ function BottomTabNav(route) {
           return (
             <Icon name={iconName} iconSet={iconSet} color={color} size={size} />
           );
+        },
+        tabBarActiveTintColor: colorsTh.blue, // Colors for focused icons
+        tabBarInactiveTintColor: colorsTh.icon, // Colors for unfocused icons
+        tabBarStyle: {
+          backgroundColor: colorsTh.background, // Themed background for the tab bar
         },
       })}
     >

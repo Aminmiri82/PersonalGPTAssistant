@@ -6,16 +6,18 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import colors from "../../config/colors";
 import Icon from "../Icon";
+import { useTheme } from "../../themes/ThemeProvidor";
 
 const SettingsItem = forwardRef(
   ({ title, subTitle, IconComponent, onPress }, ref) => {
+    const { colorsTh } = useTheme();
     return (
       <TouchableHighlight
         ref={ref}
         underlayColor={colors.light}
         onPress={onPress}
       >
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: colorsTh.white }]}>
           <View style={styles.iconContainer}>{IconComponent}</View>
 
           <View style={styles.detailsContainer}>
@@ -32,7 +34,8 @@ const SettingsItem = forwardRef(
               iconSet="MCI"
               name="chevron-right"
               size={25}
-              color={colors.medium}
+              color={colorsTh.icon}
+              iconColor={colorsTh.icon}
               style={styles.arrow}
             />
           </View>
@@ -46,10 +49,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     padding: 15,
-    backgroundColor: colors.white,
+    // backgroundColor: colors.white,
     alignItems: "center",
     borderBottomWidth: 1,
-    borderBottomColor: colors.light,
+    borderBottomColor: "gray",
   },
   iconContainer: {
     marginRight: 15,

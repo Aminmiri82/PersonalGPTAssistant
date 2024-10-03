@@ -2,15 +2,17 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import Screen from "../../Components/Screen";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../themes/ThemeProvidor";
 
 function PrivacyPolicyScreen(props) {
   const { t } = useTranslation();
+  const { colorsTh } = useTheme();
   return (
-    <Screen>
-    <View style={styles.container}>
-      <Text style={styles.text}>{t("PrivacyPolicyText")}</Text>
+    <View style={[styles.container, { backgroundColor: colorsTh.background }]}>
+      <Text style={[styles.text, { color: colorsTh.text }]}>
+        {t("PrivacyPolicyText")}
+      </Text>
     </View>
-    </Screen> 
   );
 }
 
@@ -23,8 +25,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16, // Adjusts the font size for readability
     lineHeight: 24, // Increases the space between lines of text
-     // Aligns text to the left; change to 'justify' if needed
-    color: "#333", // A dark gray color for the text
+    // Aligns text to the left; change to 'justify' if needed
   },
 });
 

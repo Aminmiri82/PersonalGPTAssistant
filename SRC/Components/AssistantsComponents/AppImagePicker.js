@@ -3,6 +3,7 @@ import { View, Image, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import AppText from "../AppText";
 import colors from "../../config/colors";
+import { useTheme } from "../../themes/ThemeProvidor";
 
 export default function AppImagePicker({
   tipText,
@@ -11,10 +12,11 @@ export default function AppImagePicker({
   prepickedUri = null,
 }) {
   const [imageUri, setImageUri] = useState(null);
+  const { colorsTh } = useTheme();
 
   // Request permission to access the media library
   const requestPermission = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();// test
     if (status !== "granted") {
       Alert.alert(
         "Permission required",
@@ -47,7 +49,9 @@ export default function AppImagePicker({
     <View style={styles.topContainer}>
       <View style={styles.pictureContainer}>
         <View style={styles.pictureTipContainer}>
-          <AppText style={styles.pictureTip}>{tipText}</AppText>
+          <AppText style={[styles.pictureTip, { color: colorsTh.text }]}>
+            {tipText}
+          </AppText>
         </View>
         <View style={styles.pictureWrapper}>
           <TouchableOpacity style={styles.picture} onPress={pickImage}>
@@ -57,7 +61,11 @@ export default function AppImagePicker({
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.pictureButton} onPress={pickImage}>
-            <AppText style={styles.pictureButtonText}>{editText}</AppText>
+            <AppText
+              style={[styles.pictureButtonText, { color: colorsTh.blue }]}
+            >
+              {editText}
+            </AppText>
           </TouchableOpacity>
         </View>
       </View>
@@ -84,7 +92,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   pictureTip: {
-    color: colors.dark,
     fontSize: 16,
     textAlign: "center",
   },
@@ -104,6 +111,5 @@ const styles = StyleSheet.create({
   },
   pictureButtonText: {
     fontSize: 12,
-    color: colors.blue,
   },
 });
