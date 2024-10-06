@@ -40,7 +40,7 @@ const ChatItem = forwardRef(
             <View
               style={[
                 styles.container,
-                { backgroundColor: colorsTh.background },
+                { backgroundColor: colorsTh.chatItemBackground },
               ]}
             >
               <View style={styles.visualcontainer}>
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 10,
     borderBottomColor: "grey",
-    borderBottomWidth: 0.2,//keep this
+    borderBottomWidth: 0.2,//keep this, fr
   },
   detailContainer: {
     marginLeft: 10,
@@ -86,13 +86,16 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 35,
-    marginRight: 10,
+    marginRight: 5,
+    marginLeft:5
   },
   title: {
     fontWeight: "500",
   },
   visualcontainer: {
     flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modelstyle: {
     alignSelf: "center",

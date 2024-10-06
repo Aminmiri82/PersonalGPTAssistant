@@ -112,8 +112,8 @@ function AssistantMenuScreen({ navigation }) {
               title={t("statrtBuldingAssistant")}
               onPress={() => navigation.navigate("AssistantMakerScreen1")}
               style={[styles.button, { backgroundColor: colorsTh.button_blue }]}
-              textStyle={{ color: colorsTh.text }}
-              // color="#3E84F7"
+              textStyle={{ color: colorsTh.white }}
+              
             />
           </View>
         ) : (

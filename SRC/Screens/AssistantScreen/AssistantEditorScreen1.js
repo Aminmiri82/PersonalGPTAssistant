@@ -123,13 +123,13 @@ function AssistantEditorScreen1({ navigation, route }) {
               title={t("delete")}
               onPress={handleDelete}
               style={styles.deleteAssistantButton}
-              textStyle={[styles.deleteButtonText, { color: colorsTh.text }]}
+              textStyle={[styles.deleteButtonText, { color: colorsTh.white }]}
             />
             <AppButton
               title={t("next")}
               onPress={handleNext}
               style={styles.nextButton}
-              textStyle={[styles.nextButtonText, { color: colorsTh.text }]}
+              textStyle={[styles.nextButtonText, { color: colorsTh.white }]}
             />
           </View>
         </View>

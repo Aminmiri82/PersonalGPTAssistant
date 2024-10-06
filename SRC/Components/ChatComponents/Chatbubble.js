@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import colors from "../../config/colors";
 import LottieView from "lottie-react-native";
@@ -6,10 +6,24 @@ import { useTranslation } from "react-i18next";
 import { useTheme } from "../../themes/ThemeProvidor";
 
 const Chatbubble = forwardRef(({ message }, ref) => {
+  const [loadingDots, setLoadingDots] = useState("");
   const { colorsTh } = useTheme();
   const { t } = useTranslation();
   const isUser = message.role === "user";
   const isDuringLoading = message.isDuringLoading;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLoadingDots((prev) => {
+        if (prev === "") return ".";
+        if (prev === ".") return "..";
+        if (prev === "..") return "...";
+        return "";
+      });
+    }, 500); // Update every 500ms
+
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, []);
 
   return (
     <View
@@ -25,15 +39,10 @@ const Chatbubble = forwardRef(({ message }, ref) => {
       ref={ref}
     >
       {isDuringLoading ? (
-        <View style={styles.loadingContainer}>
-          {/* this needs to be reversed if the language is right to left */}
-          <Text style={styles.loadingText}>{t("loading")}</Text>
-          <LottieView
-            source={require("../../assets/animations/loading-dots.json")}
-            autoPlay
-            loop
-            style={styles.lottie}
-          />
+        <View style={styles.assistantBubble}>
+          <Text style={[styles.loadingText, { color: colorsTh.text }]}>
+          {`${t("loading")}${loadingDots}`}
+          </Text>
         </View>
       ) : (
         <Text
@@ -82,10 +91,10 @@ const styles = StyleSheet.create({
   lottie: {
     width: 40,
     height: 40,
+    color: "green",
   },
   loadingText: {
     marginLeft: 10, // Adjust margin as needed
-    color: colors.dark, // Adjust text color if necessary
   },
 });
 

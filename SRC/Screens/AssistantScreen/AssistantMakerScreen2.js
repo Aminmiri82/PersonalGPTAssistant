@@ -11,6 +11,7 @@ import {
   addFilesToAssistant,
 } from "../../openai-backend/ApiBackEnd";
 import AppButton from "../../Components/AppButton";
+import List from "../../assets/gptModels.json";
 import { insertAssistant, initDB } from "../../database";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useTranslation } from "react-i18next";
@@ -31,13 +32,8 @@ function AssistantMakerScreen2({ navigation, route }) {
   const [isInitializing, setIsInitializing] = useState(false);
   const [progressMap, setProgressMap] = useState({});
 
-  const assistantList = [
-    { label: "GPT-4o-mini", value: "gpt-4o-mini" },
-    { label: "GPT-4o", value: "gpt-4" },
-    { label: "GPT-4 Turbo", value: "gpt-4-turbo" },
-    { label: "GPT-4", value: "gpt-4" },
-    { label: "GPT-3.5", value: "gpt-3.5-turbo" },
-  ];
+  const assistantList = List.models;
+  
 
   useEffect(() => {
     initDB().catch((error) => {
@@ -165,8 +161,8 @@ function AssistantMakerScreen2({ navigation, route }) {
     >
       <Spinner
         visible={isInitializing}
-        textContent="Initializing assistant..."
-        textStyle={styles.spinnerTextStyle}
+        textContent= {t("InitializingAssistant")}
+        textStyle={{color:colorsTh.white}}
       />
       <CopilotStep text={t("step15")} order={15} name="step15">
         <WalkthroughableView style={styles.topContainer}>
@@ -295,9 +291,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
-  },
-  spinnerTextStyle: {
-    color: "#FFF",
   },
   pickerIOS: {
     fontSize: 16,

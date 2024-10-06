@@ -14,7 +14,7 @@ import Icon from "../../Components/Icon";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import i18next from "../../services/i18next";
-import Screen from "../../Components/Screen";
+
 import { useTheme } from "../../themes/ThemeProvidor";
 
 // Make SettingsItem walkthroughable
@@ -89,8 +89,9 @@ function SettingsScreen({ navigation, route }) {
         />
       </CopilotStep>
       <CopilotStep text="23" order={23} name="step23">
+        {/* i'd fix this 23 thing but we're gonna be removing this shit fot the actual release anyways*/}
         <WalkthroughableSettingsItem
-          title="Theme"
+          title={t("theme")}
           IconComponent={<Icon iconSet="MCI" name="theme-light-dark" />}
           onPress={toggleTheme}
         />

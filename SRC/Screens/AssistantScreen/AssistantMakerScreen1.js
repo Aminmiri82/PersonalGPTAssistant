@@ -109,7 +109,7 @@ function AssistantMakerScreen1({ navigation }) {
               title={t("next")}
               onPress={handleNext}
               style={styles.nextButton}
-              textStyle={[styles.nextButtonText, { color: colorsTh.text }]}
+              textStyle={[styles.nextButtonText, { color: colorsTh.white }]}
             />
             <CopilotStep text={t("step14")} order={14} name="step14">
               <WalkthroughableView></WalkthroughableView>

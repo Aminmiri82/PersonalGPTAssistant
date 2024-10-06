@@ -97,7 +97,7 @@ function ChatMenuScreen({ navigation, route }) {
           ? null
           : item.profile
       }
-      modelname={item.assistantModel}
+      modelname={item.assistantModel|| "gpt-4o"}
       onPress={() => handlePress(item)}
       showDelete={editMode}
       onDelete={() => handleDelete(item.Id)}

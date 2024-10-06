@@ -18,6 +18,7 @@ import {
   initializeAssistant,
   addFilesToAssistant,
 } from "../../openai-backend/ApiBackEnd";
+import List from "../../assets/gptModels.json";
 import { useTranslation } from "react-i18next";
 import { set } from "lodash";
 import { useTheme } from "../../themes/ThemeProvidor";
@@ -36,13 +37,7 @@ function AssistantEditorScreen2({ navigation, route }) {
   const [uploadCount, setUploadCount] = useState(0);
   const [model, setModel] = useState("GPT-4o-mini");
 
-  const assistantList = [
-    { label: "GPT-4o-mini", value: "gpt-4o-mini" },
-    { label: "GPT-4o", value: "gpt-4o" },
-    { label: "GPT-4 Turbo", value: "gpt-4-turbo" },
-    { label: "GPT-4", value: "gpt-4" },
-    { label: "GPT-3.5", value: "gpt-3.5-turbo" },
-  ];
+  const assistantList = List.models;
   const isUploadingRef = useRef(false);
 
   useEffect(() => {
@@ -241,8 +236,8 @@ function AssistantEditorScreen2({ navigation, route }) {
     >
       <Spinner
         visible={isInitializing}
-        textContent={"Initializing assistant..."}
-        textStyle={styles.spinnerTextStyle}
+        textContent={t("InitializingAssistant")}
+        textStyle={{color:colorsTh.text}}
       />
       <View style={styles.topContainer}>
         <View style={styles.topTipContainer}>
@@ -293,13 +288,13 @@ function AssistantEditorScreen2({ navigation, route }) {
           title={t("delete")}
           onPress={handleDelete}
           style={styles.deleteAssistantButton}
-          textStyle={[styles.deleteButtonText, { color: colorsTh.text }]}
+          textStyle={[styles.deleteButtonText, { color: colorsTh.white }]}
         />
         <AppButton
-          title={t("next")}
+          title={t("done")}
           onPress={handleSave}
           style={styles.doneButton}
-          textStyle={[styles.doneButtonText, { color: colorsTh.text }]}
+          textStyle={[styles.doneButtonText, { color: colorsTh.white }]}
         />
       </View>
     </Screen>
