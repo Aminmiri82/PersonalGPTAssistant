@@ -56,7 +56,7 @@ target 'Dadafarin' do
       :mac_catalyst_enabled => false,
       :ccache_enabled => podfile_properties['apple.ccacheEnabled'] == 'true',
     )
-
+    pod 'RNFS', :path => '../node_modules/react-native-fs'  #rnfs stuff i hope this
     # This is necessary for Xcode 14, because it signs resource bundles by default
     # when building for devices.
     installer.target_installation_results.pod_target_installation_results
