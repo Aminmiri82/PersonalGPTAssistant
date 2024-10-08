@@ -1,47 +1,87 @@
-import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, Alert } from 'react-native';
-import RNFS from 'react-native-fs';
-import DocumentPicker from 'react-native-document-picker';
+import React, { useState, useEffect } from 'react';
+import { View, Button, Text, StyleSheet } from 'react-native';
+import { Audio } from 'expo-av';
 
-const TestFsScreen = () => {
-  const [fileContent, setFileContent] = useState('');
-  const [fileName, setFileName] = useState('');
+const AudioRecorderScreen = () => {
+  const [recording, setRecording] = useState();
+  const [sound, setSound] = useState();
+  const [recordingUri, setRecordingUri] = useState(null);  // Store the recording URI
+  const [permissionResponse, requestPermission] = Audio.usePermissions();
 
-  const pickFile = async () => {
+  const startRecording = async () => {
     try {
-      // Pick a file using the document picker
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles], // Adjust the type as needed
+      if (permissionResponse.status !== 'granted') {
+        console.log('Requesting permission..');
+        await requestPermission();
+      }
+
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
       });
 
-      // Access the first item in the array
-      const file = res[0]; // This retrieves the first file
-
-      // Check if the uri is available
-      if (file.uri) {
-        // Read the file
-        const contents = await RNFS.readFile(file.uri, 'utf8');
-        setFileContent(contents);
-        setFileName(file.name); // Store the name of the file
-        Alert.alert('File Read', `Successfully read ${file.name}`);
-      } else {
-        Alert.alert('Error', 'Selected file does not have a valid URI');
-      }
+      console.log('Starting recording..');
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY
+      );
+      setRecording(recording);
+      console.log('Recording started');
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        Alert.alert('Canceled', 'File picking was canceled');
-      } else {
-        Alert.alert('Error', `Failed to read the file: ${err.message}`);
-      }
+      console.error('Failed to start recording', err);
     }
   };
 
+  const stopRecording = async () => {
+    console.log('Stopping recording..');
+    setRecording(undefined);
+    await recording.stopAndUnloadAsync();
+
+    const uri = recording.getURI();
+    console.log('Recording stopped and stored at', uri);
+    setRecordingUri(uri);  // Set the recording URI for playback
+
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: false,
+    });
+  };
+
+  const playSound = async () => {
+    if (!recordingUri) {
+      console.log('No recording available to play.');
+      return;
+    }
+
+    console.log('Loading Sound from URI:', recordingUri);
+    const { sound } = await Audio.Sound.createAsync({ uri: recordingUri });
+    setSound(sound);
+
+    console.log('Playing Sound');
+    await sound.playAsync();
+  };
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          console.log('Unloading Sound');
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Test react-native-document-picker</Text>
-      <Text>Selected File: {fileName || 'No file selected'}</Text>
-      <Text>File Content: {fileContent || 'No content yet.'}</Text>
-      <Button title="Pick a File" onPress={pickFile} />
+      <Button
+        title={recording ? 'Stop Recording' : 'Start Recording'}
+        onPress={recording ? stopRecording : startRecording}
+      />
+      {recording && <Text>Recording...</Text>}
+      {recordingUri && (
+        <Button
+          title="Play Last Recording"
+          onPress={playSound}
+        />
+      )}
     </View>
   );
 };
@@ -50,13 +90,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
+    backgroundColor: '#ecf0f1',
+    padding: 10,
   },
 });
 
-export default TestFsScreen;
+export default AudioRecorderScreen;
