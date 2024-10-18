@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import EmailAnswersScreen from "../Screens/EmailAnswersScreen/EmailAnswersScreen";
-
+import OfflineSearchScreen from "../Screens/EmailAnswersScreen/OfflineSearchScreen";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../themes/ThemeProvidor"; // Import useTheme
 
@@ -25,9 +25,12 @@ function EmailAnswersScreenNav() {
       }}
     >
       <EmailAnswersNav.Screen
-        name="EmailAnswersScreen"
-        component={EmailAnswersScreen}
-        options={{ title: t("EmailAnswersScreen") }}
+        name= "OfflineSearch"
+        component={OfflineSearchScreen}
+        options={{
+          title: t("OfflineSearchScreenName"),
+          headerShown: true,
+        }}
       />
     </EmailAnswersNav.Navigator>
   );

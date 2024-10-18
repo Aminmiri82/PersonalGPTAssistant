@@ -47,21 +47,11 @@ function BottomTabNav(route) {
         },
       })}
     >
-      <Tab.Screen
-        name="Chat"
-        component={ChatScreenNav}
-        initialParams={{ startWalkthrough }}
-        options={{ headerShown: false, title: t("ChatTab") }}
-      />
-      <Tab.Screen
-        name="Assistants"
-        component={AssistantsScreenNav}
-        options={{ headerShown: false, title: t("AssistantsTab") }}
-      />
+      
       <Tab.Screen
         name="EmailAnswers"
         component={EmailAnswersNav}
-        options={{ headerShown: false, title: t("EmailAnswersTab") }}
+        options={{ headerShown: false, title: t("OfflineSearchTabName") }}
       />
 
       <Tab.Screen
